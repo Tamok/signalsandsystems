@@ -1,0 +1,70 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+
+// In a real application, this data would come from a content collection or API
+const seriesArticles = [
+  {
+    title: "Devlog #1: Setting Up Our Publishing Platform",
+    slug: "1-platform-setup",
+    description: "Exploring how we established Signals & Systems, the technologies involved, and the decisions behind them.",
+    publishDate: new Date('2025-05-21'),
+    order: 1
+  }
+  // Future articles will be added here
+];
+
+// Sort articles by order
+const sortedArticles = [...seriesArticles].sort((a, b) => a.order - b.order);
+---
+
+<BaseLayout 
+  title="Devlog Series | Signals & Systems"
+  description="Follow along as we document the creation and evolution of the Signals & Systems publishing platform."
+>
+  <Nav slot="header" />
+  
+  <div class="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+      <header class="mb-12 text-center">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Devlog Series</h1>
+        <p class="text-xl text-gray-600">
+          A behind-the-scenes look at building the Signals & Systems platform, including technical decisions, 
+          challenges, and ethical considerations around vibecoding.
+        </p>
+      </header>
+      
+      <div class="space-y-10">
+        {sortedArticles.map((article) => (
+          <article class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-6">
+              <h2 class="text-2xl font-bold mb-2">
+                <a href={`/devlog/${article.slug}`} class="text-blue-600 hover:text-blue-800">
+                  {article.title}
+                </a>
+              </h2>
+              <p class="text-gray-600 mb-4">{article.description}</p>
+              <div class="flex items-center justify-between">
+                <div class="text-sm text-gray-500">
+                  <time datetime={article.publishDate.toISOString()}>
+                    {article.publishDate.toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })}
+                  </time>
+                </div>
+                <a href={`/devlog/${article.slug}`} class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                  Read article →
+                </a>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+  
+  <Footer slot="footer" />
+</BaseLayout>

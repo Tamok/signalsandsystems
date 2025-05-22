@@ -1,0 +1,90 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import SeriesNav from '../components/SeriesNav.astro';
+
+interface SeriesArticle {
+  title: string;
+  slug: string;
+  order: number;
+  publishDate: Date;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  publishDate: Date;
+  updatedDate?: Date;
+  coverImage?: string;
+  ogImage?: string;
+  canonicalURL?: string;
+  seriesTitle: string;
+  seriesSlug: string;
+  seriesArticles: SeriesArticle[];
+  currentArticleSlug: string;
+}
+
+const { 
+  title, 
+  description, 
+  publishDate,
+  updatedDate,
+  coverImage,
+  ogImage = coverImage || "/images/og-default.svg",
+  canonicalURL = Astro.url,
+  seriesTitle,
+  seriesSlug,
+  seriesArticles,
+  currentArticleSlug
+} = Astro.props;
+
+// Find the current article in the series
+const currentIndex = seriesArticles.findIndex(article => article.slug === currentArticleSlug);
+const prevArticle = currentIndex > 0 ? seriesArticles[currentIndex - 1] : null;
+const nextArticle = currentIndex < seriesArticles.length - 1 ? seriesArticles[currentIndex + 1] : null;
+---
+
+<BaseLayout 
+  title={`${title} | ${seriesTitle} Series`}
+  description={description}
+  ogImage={ogImage}
+  canonicalURL={canonicalURL}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="mb-8">
+      <a href={`/series/${seriesSlug}`} class="text-blue-600 hover:text-blue-800 text-sm">
+        ← Back to {seriesTitle} Series
+      </a>
+      <h2 class="text-2xl font-bold mt-2">{seriesTitle} Series</h2>
+    </div>
+    
+    <article class="prose lg:prose-xl mx-auto">
+      <header class="mb-8">
+        <h1 class="text-4xl font-bold mb-4">{title}</h1>
+        <p class="text-gray-600 mb-4">{description}</p>
+        
+        {coverImage && (
+          <div class="mt-6">
+            <img 
+              src={coverImage} 
+              alt={`Cover image for ${title}`} 
+              class="rounded-lg shadow-md w-full object-cover"
+            />
+          </div>
+        )}
+      </header>      <div class="article-content prose prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4">
+        <slot />
+      </div>
+      
+      <div class="mt-12">
+        <SeriesNav 
+          seriesTitle={seriesTitle} 
+          seriesSlug={seriesSlug} 
+          prevArticle={prevArticle} 
+          nextArticle={nextArticle}
+          allArticles={seriesArticles}
+          currentSlug={currentArticleSlug}
+        />
+      </div>
+    </article>
+  </div>
+</BaseLayout>

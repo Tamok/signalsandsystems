@@ -1,16 +1,66 @@
 ---
-
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Signals & Systems - A personal publishing platform">
+  <Nav slot="header" />
+  
+  <div class="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
+    <section class="text-center mb-16">
+      <h1 class="text-5xl font-extrabold text-gray-900 mb-6">Signals & Systems</h1>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+        A personal, self-hosted publishing platform designed for long-form, markdown-native articles enriched with interactive elements.
+      </p>
+    </section>
+    
+    <section class="max-w-5xl mx-auto mb-16">
+      <h2 class="text-3xl font-bold text-gray-800 mb-6">Latest Articles</h2>
+      
+      <div class="grid gap-8 md:grid-cols-2">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2">
+              <a href="/devlog/1-platform-setup" class="text-blue-600 hover:text-blue-800">
+                Devlog #1: Setting Up Our Publishing Platform
+              </a>
+            </h3>
+            <p class="text-gray-600 mb-4">
+              Exploring how we established this specific platform, the technologies involved, and the decisions behind them.
+            </p>
+            <div class="flex items-center text-sm text-gray-500">
+              <span>May 21, 2025</span>
+              <span class="mx-2">•</span>
+              <span>JELL</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="max-w-5xl mx-auto">
+      <h2 class="text-3xl font-bold text-gray-800 mb-6">Series</h2>
+      
+      <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-2">
+            <a href="/series/devlog" class="text-blue-600 hover:text-blue-800">
+              Devlog Series
+            </a>
+          </h3>
+          <p class="text-gray-600 mb-4">
+            A series of articles detailing the development process of this platform, including technical decisions, challenges, and ethical considerations around vibecoding.
+          </p>
+          <div class="flex items-center text-sm text-gray-500">
+            <span>1 Article</span>
+            <span class="mx-2">•</span>
+            <span>Started May 21, 2025</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+  <Footer slot="footer" />
+</BaseLayout>

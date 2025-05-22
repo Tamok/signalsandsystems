@@ -1,0 +1,72 @@
+---
+import "../styles/global.css";
+
+// Props interface
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  canonicalURL?: string;
+}
+
+// Default values for props
+const {
+  title = "Signals & Systems",
+  description = "A personal, self-hosted publishing platform for long-form content with interactive elements.",
+  ogImage = "/images/og-default.svg",
+  canonicalURL = Astro.url,
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={ogImage} />
+    
+    <!-- Google Tag Manager -->
+    <!-- Add GTM script here when ready -->
+    
+    <slot name="head" />
+  </head>
+  <body class="min-h-screen bg-gray-50 text-gray-900 flex flex-col">
+    <header>
+      <!-- Navigation will be inserted here -->
+      <slot name="header" />
+    </header>
+    
+    <main class="flex-grow">
+      <slot />
+    </main>
+
+    <footer class="mt-auto">
+      <!-- Footer content will be inserted here -->
+      <slot name="footer" />
+    </footer>
+    
+    <!-- Additional scripts -->
+    <slot name="after-footer" />
+  </body>
+</html>

@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+/* Additional global styles */
+.article-content h2 {
+  position: relative;
+  padding-bottom: 0.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1.25rem;
+}
+
+.article-content h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: #4338CA;
+}
+
+.lead {
+  font-size: 1.125rem;
+  line-height: 1.75;
+  color: #4B5563;
+  margin-bottom: 2rem;
+}

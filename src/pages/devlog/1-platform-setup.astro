@@ -1,0 +1,200 @@
+---
+import ArticleLayout from "../../layouts/ArticleLayout.astro";
+import CalloutBox from "../../components/CalloutBox.astro";
+import ChartComponent from "../../components/ChartComponent.astro";
+
+const publishDate = new Date('2025-05-21');
+const chartData = {
+  labels: ['Astro', 'Tailwind CSS', 'MDX', 'Google Analytics'],
+  datasets: [
+    {
+      label: 'Technology Adoption',
+      data: [95, 90, 80, 70],
+      backgroundColor: 'rgba(59, 130, 246, 0.5)',
+      borderColor: 'rgb(59, 130, 246)',
+      borderWidth: 1
+    }
+  ]
+};
+---
+
+<ArticleLayout
+  title="Devlog #1: Setting Up Our Publishing Platform"
+  description="Exploring how we established Signals & Systems, the technologies involved, and the decisions behind them."
+  publishDate={publishDate}
+  coverImage="/images/devlog-1-cover.svg"
+>
+  <p class="lead">
+    Today marks the beginning of a new journey. I'm excited to share the creation process of <em>Signals &amp; Systems</em>, 
+    a personal publishing platform I'm building from the ground up to host long-form, interactive content.
+  </p>
+
+  <h2>The Vision</h2>
+  
+  <p>
+    As both an educator and technologist, I've always found myself at the intersection of content creation and 
+    technical implementation. I wanted a platform that would give me complete control over how my articles appear, 
+    how they function, and how they evolve over time. More importantly, I wanted a canvas for experimentation—a place 
+    where I could seamlessly blend written content with interactive elements.
+  </p>
+
+  <CalloutBox type="tip">
+    <p>
+      When creating your own publishing platform, start with a clear vision of what you want to accomplish. 
+      This will guide your technical decisions and help you avoid unnecessary complexity.
+    </p>
+  </CalloutBox>
+
+  <h2>Technology Choices</h2>
+
+  <p>
+    After evaluating several options, I settled on a tech stack that prioritizes performance, simplicity, and 
+    developer experience:
+  </p>
+
+  <ul>
+    <li><strong>Astro</strong>: A modern static site generator that delivers excellent performance by default, with minimal JavaScript.</li>
+    <li><strong>MDX</strong>: Markdown with JSX support, allowing me to embed interactive components directly in my writing.</li>
+    <li><strong>Tailwind CSS</strong>: A utility-first CSS framework that makes styling straightforward and consistent.</li>
+    <li><strong>Google Analytics</strong>: For basic audience insights while respecting privacy concerns.</li>
+  </ul>
+
+  <ChartComponent 
+    type="bar" 
+    data={chartData} 
+    title="Technology Selection Confidence" 
+    description="My confidence level (0-100) in each technology choice for this platform."
+  />
+
+  <h2>Project Structure</h2>
+
+  <p>
+    I've organized the project with a focus on modularity and maintainability:
+  </p>
+
+  <pre><code>
+signals-and-systems/
+├── src/
+│   ├── components/    # Reusable UI components
+│   ├── layouts/       # Page layout templates
+│   ├── pages/         # Route definitions
+│   └── styles/        # Global styles and Tailwind config
+├── public/            # Static assets
+└── astro.config.mjs   # Astro configuration
+  </code></pre>
+
+  <h2>The Design Philosophy</h2>
+
+  <p>
+    For this platform, I'm embracing a minimalist design approach with a focus on readability and content hierarchy. 
+    The typography is carefully chosen to ensure comfortable reading for long-form articles, and the color palette 
+    is subtle yet distinctive.
+  </p>
+
+  <p>
+    A key principle I'm following is "progressive enhancement"—ensuring that content is accessible and functional 
+    even without JavaScript, then layering interactivity for browsers that support it.
+  </p>
+
+  <CalloutBox type="info">
+    <p>
+      The interactive elements in this platform are built with a "load on demand" approach to maintain fast initial page loads.
+    </p>
+  </CalloutBox>
+
+  <h2>The Ethical Considerations</h2>
+
+  <p>
+    As I build this platform, I'm constantly thinking about the ethical dimensions of digital publishing:
+  </p>
+
+  <ul>
+    <li><strong>Privacy</strong>: Minimizing data collection and being transparent about what's collected.</li>
+    <li><strong>Accessibility</strong>: Ensuring content is accessible to all readers, regardless of ability.</li>
+    <li><strong>Sustainability</strong>: Building a platform with minimal environmental impact through efficient code and assets.</li>
+    <li><strong>Vibecoding</strong>: Exploring the balance between technical optimization and human-centered design.</li>
+  </ul>
+  <h2>What's Next</h2>
+
+  <p>
+    This is just the beginning. In the next devlog entry, I'll dive deeper into the implementation details of the components 
+    I've created, particularly focusing on the interactive elements and how they're integrated with MDX. Here's a preview of what's coming:
+  </p>
+
+  <ul>
+    <li><strong>Interactive Components Deep Dive</strong> - A closer look at Chart.js integration and dynamic content</li>
+    <li><strong>Enhanced Code Syntax Highlighting</strong> - Adding better code blocks with language support</li>
+    <li><strong>Dark Mode Implementation</strong> - Creating a toggleable dark theme with consistent styling</li>
+    <li><strong>Search Functionality</strong> - Adding client-side search capabilities</li>
+  </ul>
+
+  <p>
+    I'll also start exploring the concept of "vibecoding" more thoroughly—what does it mean to code with a focus on the 
+    overall feel and experience rather than just technical specifications? This approach aims to balance technical excellence with 
+    emotional resonance, creating systems that feel good to use.
+  </p>
+  <CalloutBox type="tip" title="Join the Conversation">
+    <p>
+      Have thoughts on this approach or suggestions for future devlog topics? I'd love to hear from you! 
+      Connect with me on <a href="https://github.com/Tamok" class="text-blue-600 hover:text-blue-800">GitHub</a> or
+      <a href="https://www.linkedin.com/in/jonathan-engeln/" class="text-blue-600 hover:text-blue-800">LinkedIn</a>.
+    </p>
+  </CalloutBox>
+  <h2>Visual Design Evolution</h2>
+  
+  <p>
+    One of the key aspects of this platform is the visual design. I wanted to create a clean, distraction-free reading experience that 
+    still allows for interactive elements when needed. After experimenting with various approaches, I settled on:
+  </p>
+  
+  <ul>
+    <li><strong>SVG-based graphics</strong> - Vector graphics provide crisp visuals at any resolution while keeping file sizes small</li>
+    <li><strong>Custom author images</strong> - Designed with integrated social media links to GitHub and LinkedIn</li>
+    <li><strong>Visual hierarchy</strong> - Typography scales and spacing to guide the reader through content</li>
+    <li><strong>Interactive charts</strong> - Data visualization that enhances written content without overwhelming it</li>
+    <li><strong>Subtle animations</strong> - Used sparingly to provide feedback and draw attention where appropriate</li>
+  </ul>
+    <CalloutBox type="info" title="Design Philosophy">
+    <p>
+      The platform's design aims to prioritize content readability above all else. Interactive components should enhance 
+      the narrative, not distract from it. This philosophy guides all design decisions from typography to component behaviors.
+    </p>
+  </CalloutBox>
+
+  <h2>Technical Implementation Highlights</h2>
+
+  <p>
+    Some of the more interesting technical aspects of this implementation include:
+  </p>
+
+  <ul>
+    <li><strong>Astro's Islands Architecture</strong> - Allows us to ship minimal JavaScript while still enabling interactive components</li>
+    <li><strong>MDX Integration</strong> - Seamlessly mix Markdown with React components</li>
+    <li><strong>Dynamic Chart Rendering</strong> - Asynchronously loads Chart.js only when needed to optimize page performance</li>
+    <li><strong>Responsive Typography</strong> - Scales beautifully across device sizes using Tailwind's responsive utilities</li>
+    <li><strong>Build-time SEO Optimization</strong> - Leverages Astro's static generation for optimal search visibility</li>
+  </ul>
+
+  <h2>Changelog</h2>
+
+  <pre class="text-sm bg-gray-100 p-4 rounded overflow-auto">
+<code>2025-05-21 18:25 - Project initialized with Astro and basic dependencies #setup #astro
+2025-05-21 18:30 - Configured Tailwind CSS with Vite plugin #styling #tailwind
+2025-05-21 18:40 - Created base layout structure #layout #components
+2025-05-21 19:00 - Implemented main navigation and footer components #components #ui
+2025-05-21 19:15 - Created ArticleLayout and SeriesLayout for content #layout #content
+2025-05-21 19:30 - Developed key components: AuthorBio, CalloutBox, SeriesNav, SGEO #components
+2025-05-21 19:45 - Added ChartComponent for interactive data visualization #components #interactive
+2025-05-21 20:00 - Built homepage with featured content sections #pages #ui
+2025-05-21 20:15 - Created first devlog article #content #devlog
+2025-05-21 20:30 - Implemented series and articles listing pages #pages #content
+2025-05-21 20:45 - Added about page with author information #pages #content
+2025-05-21 21:00 - Created basic placeholder images and assets #assets
+
+2025-05-22 10:30 - Updated README with comprehensive project documentation #docs
+2025-05-22 15:00 - Fixed ChartJS integration for better interactive charts #bugfix #interactive
+2025-05-22 15:30 - Created high-quality SVG images for devlog covers #assets #branding
+2025-05-22 16:00 - Updated social links to use GitHub and LinkedIn #social #profile
+2025-05-22 19:00 - Enhanced AuthorBio component with social media links #components #social</code>
+  </pre>
+</ArticleLayout>

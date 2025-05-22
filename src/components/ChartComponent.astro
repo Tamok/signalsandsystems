@@ -1,0 +1,122 @@
+---
+interface ChartData {
+  labels: string[];
+  datasets: {
+    label: string;
+    data: number[];
+    backgroundColor?: string | string[];
+    borderColor?: string | string[];
+    borderWidth?: number;
+    tension?: number;
+    fill?: boolean;
+  }[];
+}
+
+interface Props {
+  type: 'line' | 'bar' | 'pie' | 'doughnut';
+  data: ChartData;
+  title?: string;
+  description?: string;
+  height?: number;
+  width?: number;
+  id?: string;
+  options?: Record<string, any>;
+}
+
+const {
+  type,
+  data,
+  title,
+  description,
+  height = 400,
+  width = 600,
+  id = `chart-${Math.random().toString(36).substring(2, 9)}`,
+  options = {}
+} = Astro.props;
+
+// Stringify the chart data and options for use in client-side JS
+const chartData = JSON.stringify(data);
+const chartOptions = JSON.stringify({
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    title: {
+      display: !!title,
+      text: title || '',
+      font: {
+        size: 16
+      }
+    },
+    tooltip: {
+      enabled: true
+    },
+    legend: {
+      display: true,
+      position: 'top'
+    }
+  },
+  ...options
+});
+---
+
+<figure class="chart-container mb-8">
+  {title && <h3 class="text-lg font-semibold mb-2">{title}</h3>}
+  {description && <p class="text-gray-600 text-sm mb-4">{description}</p>}
+    <div class="bg-white p-4 border border-gray-200 rounded-lg shadow-sm" style={`height: ${height}px; width: 100%; max-width: ${width}px; margin: 0 auto;`}>
+    <canvas id={id}></canvas>
+  </div>
+  
+  <!-- Load Chart.js with the defer attribute to ensure it loads properly -->
+  <script is:inline src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+  
+  <script define:vars={{ id, type, chartData, chartOptions }}>
+    // Function to initialize the chart
+    function initializeChart() {
+      if (typeof Chart === 'undefined') {
+        // If Chart.js hasn't loaded yet, wait and try again
+        console.log('Chart.js not loaded yet, waiting...');
+        setTimeout(initializeChart, 100);
+        return;
+      }
+      
+      try {
+        // Get the canvas element
+        const canvas = document.getElementById(id);
+        if (!canvas) {
+          console.error(`Canvas with id ${id} not found`);
+          return;
+        }
+        
+        const ctx = canvas.getContext('2d');
+        
+        // Parse the data and options
+        const data = JSON.parse(chartData);
+        const options = JSON.parse(chartOptions);
+        
+        // Create the chart
+        new Chart(ctx, {
+          type: type,
+          data: data,
+          options: options
+        });
+        
+        console.log(`Chart ${id} initialized successfully`);
+      } catch (error) {
+        console.error('Failed to create chart:', error);
+        document.getElementById(id).parentNode.innerHTML = `
+          <div class="flex items-center justify-center h-full">
+            <div class="text-red-500">Failed to load chart. Please try again later.</div>
+          </div>
+        `;
+      }
+    }
+    
+    // Start the initialization process when the page loads
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeChart);
+    } else {
+      // DOM already loaded, run the function directly
+      initializeChart();
+    }
+  </script>
+</figure>

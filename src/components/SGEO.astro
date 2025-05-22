@@ -1,0 +1,45 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  canonicalURL?: string;
+  publishDate?: Date;
+  type?: 'website' | 'article';
+}
+
+const {
+  title,
+  description = "Signals & Systems - A personal, self-hosted publishing platform",
+  image = "/images/og-default.svg",
+  canonicalURL = Astro.url,
+  publishDate,
+  type = "website"
+} = Astro.props;
+---
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+{description && <meta name="description" content={description} />}
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+{description && <meta property="og:description" content={description} />}
+{image && <meta property="og:image" content={new URL(image, Astro.site)} />}
+
+<!-- LinkedIn -->
+<meta property="og:site_name" content="Signals & Systems" />
+<meta name="linkedin:title" content={title} />
+{description && <meta name="linkedin:description" content={description} />}
+{image && <meta name="linkedin:image" content={new URL(image, Astro.site)} />}
+
+<!-- Article Published/Modified Time (for articles) -->
+{type === 'article' && publishDate && (
+  <meta property="article:published_time" content={publishDate.toISOString()} />
+)}
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />

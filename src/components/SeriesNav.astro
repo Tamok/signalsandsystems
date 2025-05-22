@@ -1,0 +1,88 @@
+---
+import { format } from 'date-fns';
+
+interface SeriesArticle {
+  title: string;
+  slug: string;
+  order: number;
+  publishDate: Date;
+}
+
+interface Props {
+  seriesTitle: string;
+  seriesSlug: string;
+  prevArticle: SeriesArticle | null;
+  nextArticle: SeriesArticle | null;
+  allArticles: SeriesArticle[];
+  currentSlug: string;
+}
+
+const { 
+  seriesTitle, 
+  seriesSlug, 
+  prevArticle, 
+  nextArticle,
+  allArticles,
+  currentSlug
+} = Astro.props;
+
+// Sort articles by order for the nav
+const sortedArticles = [...allArticles].sort((a, b) => a.order - b.order);
+---
+
+<div class="series-navigation">
+  <div class="mb-6">
+    <h3 class="text-lg font-medium text-gray-900 mb-3">{seriesTitle} Series</h3>
+    <ul class="space-y-2">
+      {sortedArticles.map((article) => (
+        <li class="flex items-center">
+          {article.slug === currentSlug ? (
+            <span class="text-blue-600 font-medium">
+              → {article.title}
+              <span class="text-sm text-gray-500 ml-2">
+                ({format(article.publishDate, 'MMM d, yyyy')})
+              </span>
+            </span>
+          ) : (
+            <a href={`/series/${seriesSlug}/${article.slug}`} class="text-gray-700 hover:text-blue-600">
+              {article.title}
+              <span class="text-sm text-gray-500 ml-2">
+                ({format(article.publishDate, 'MMM d, yyyy')})
+              </span>
+            </a>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="flex justify-between items-center pt-6 border-t border-gray-200">
+    {prevArticle ? (
+      <a 
+        href={`/series/${seriesSlug}/${prevArticle.slug}`} 
+        class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Previous: {prevArticle.title}
+      </a>
+    ) : (
+      <div></div>
+    )}
+    
+    {nextArticle ? (
+      <a 
+        href={`/series/${seriesSlug}/${nextArticle.slug}`} 
+        class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+      >
+        Next: {nextArticle.title}
+        <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 -mr-1 h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    ) : (
+      <div></div>
+    )}
+  </div>
+</div>
