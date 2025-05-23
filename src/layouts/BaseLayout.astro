@@ -24,9 +24,7 @@ const {
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="generator" content={Astro.generator} />
-    
+
     <!-- Primary Meta Tags -->
     <title>{title}</title>
     <meta name="title" content={title} />
@@ -48,18 +46,74 @@ const {
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={ogImage} />
     
-    <!-- Google Tag Manager -->
-    <!-- Add GTM script here when ready -->    <!-- Code Syntax Highlighting -->
+    <!-- Code Syntax Highlighting -->
     {includeSyntaxHighlighting && (
       <>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fira-code@6.2.0/distr/fira_code.css" />
-        <script src="/scripts/copyCode.js"></script>
+        <script src="/scripts/copyCode.js" is:inline></script>
       </>
     )}
     
     <slot name="head" />
+    <!-- GTM will be injected dynamically after consent -->
   </head>
   <body class="min-h-screen bg-gray-50 text-gray-900 flex flex-col">
+    <!-- Consent Popup and GTM loader -->
+    <div id="consent-root"></div>
+    <script type="module">
+      // Minimal consent logic and GTM loader
+      const consentKey = 'ss-analytics-consent';
+      function loadGTM() {
+        if (document.getElementById('gtm-script')) return;
+        const s = document.createElement('script');
+        s.id = 'gtm-script';
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-T7M99JBN';
+        document.head.appendChild(s);
+        // noscript fallback
+        const iframe = document.createElement('iframe');
+        iframe.src = 'https://www.googletagmanager.com/ns.html?id=GTM-T7M99JBN';
+        iframe.height = 0;
+        iframe.width = 0;
+        iframe.style.display = 'none';
+        iframe.style.visibility = 'hidden';
+        iframe.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(iframe);
+      }
+      function showConsent() {
+        const root = document.getElementById('consent-root');
+        if (!root) return;
+        root.innerHTML = `
+          <div class='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60'>
+            <div class='bg-white rounded-lg shadow-lg p-6 max-w-md w-full text-gray-900' role='dialog' aria-modal='true' aria-labelledby='consent-title'>
+              <h2 id='consent-title' class='text-lg font-semibold mb-2'>Analytics Consent</h2>
+              <p class='mb-4'>We use Google Tag Manager to collect analytics data to improve your experience. You can opt out at any time.</p>
+              <div class='flex gap-2 justify-end'>
+                <button id='decline-btn' class='px-4 py-2 rounded bg-gray-200 hover:bg-gray-300'>Decline</button>
+                <button id='accept-btn' class='px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700'>Accept</button>
+              </div>
+            </div>
+          </div>
+        `;
+        document.getElementById('accept-btn').onclick = () => {
+          localStorage.setItem(consentKey, 'granted');
+          root.innerHTML = '';
+          loadGTM();
+        };
+        document.getElementById('decline-btn').onclick = () => {
+          localStorage.setItem(consentKey, 'denied');
+          root.innerHTML = '';
+        };
+      }
+      if (typeof window !== 'undefined') {
+        const consent = localStorage.getItem(consentKey);
+        if (consent === 'granted') {
+          loadGTM();
+        } else if (!consent) {
+          showConsent();
+        }
+      }
+    </script>
     <header>
       <!-- Navigation will be inserted here -->
       <slot name="header" />
