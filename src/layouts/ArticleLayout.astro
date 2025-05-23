@@ -83,8 +83,8 @@ const formattedUpdatedDate = updatedDate ? format(updatedDate, 'MMMM d, yyyy') :
       </header>
       <slot />
       <hr class="my-12 border-gray-200" />
-      <AuthorBio />      {seriesArticles && seriesTitle && seriesSlug && currentArticleSlug && (
-        <nav class="mt-12" aria-label={`Articles in the ${seriesTitle} series`} tabindex="0">
+      {seriesArticles && seriesTitle && seriesSlug && currentArticleSlug && (
+        <nav class="mt-12" aria-label={`Articles in the ${seriesTitle} series`}>
           <SeriesNav
             seriesTitle={seriesTitle}
             seriesSlug={seriesSlug}
@@ -95,6 +95,7 @@ const formattedUpdatedDate = updatedDate ? format(updatedDate, 'MMMM d, yyyy') :
           />
         </nav>
       )}
+      <AuthorBio />
     </article>
   </div>
   <Footer slot="footer" />

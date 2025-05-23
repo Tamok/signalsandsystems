@@ -172,7 +172,7 @@ import CodeBlock from '../../components/CodeBlock.astro';
 </p>
 <CalloutBox type="warning">
   <p>
-    <strong>Root Cause:</strong> Slugs were stored as <code>/devlog/{slug}</code> and then <code>/devlog/</code> was prepended again in links.
+    <strong>Root Cause:</strong> Slugs were stored as <code>/devlog/&#123;slug&#125;</code> and then <code>/devlog/</code> was prepended again in links.
   </p>
   <p>
     <strong>Solution:</strong> We changed to store only the filename as slug and prepend <code>/devlog/</code> only in UI components.

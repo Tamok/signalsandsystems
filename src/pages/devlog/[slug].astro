@@ -42,7 +42,7 @@ if (seriesSlug) {
     publishDate
   }));
   
-  const currentIndex = sortedArticles.findIndex(a => a.slug.endsWith(currentArticleSlug));
+  const currentIndex = sortedArticles.findIndex(a => a.slug === currentArticleSlug);
   prevArticle = currentIndex > 0 ? sortedArticles[currentIndex - 1] : null;
   nextArticle = currentIndex < sortedArticles.length - 1 ? sortedArticles[currentIndex + 1] : null;
 }
