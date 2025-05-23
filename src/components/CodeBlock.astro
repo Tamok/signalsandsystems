@@ -48,7 +48,7 @@ if (showLineNumbers) {
 
 <div class="code-block">
   {filename && (
-    <div class="code-filename px-4 py-2 text-sm bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 rounded-t-md">
+    <div class="code-filename" aria-label="Filename: {filename}">
       {filename}
     </div>
   )}
@@ -57,54 +57,11 @@ if (showLineNumbers) {
   </div>
 </div>
 
-<style is:global>
-  .code-block {
-    margin: 1.5rem 0;
-    font-family: 'Fira Code', monospace;
-    font-size: 0.875rem;
-  }
-
-  .code-block-wrapper {
-    position: relative;
-  }
-
-  .code-with-line-numbers {
-    display: flex;
-  }
-
-  .line-numbers-container {
-    display: flex;
-    flex-direction: column;
-    padding: 1rem 0.5rem;
-    background-color: rgba(0, 0, 0, 0.05);
-    border-right: 1px solid rgba(0, 0, 0, 0.1);
-    color: #888;
-    text-align: right;
-    user-select: none;
-  }
-
-  .line-number {
-    font-size: 0.75rem;
-    line-height: 1.5;
-    padding-right: 0.5rem;
-  }
-
-  .dark .code-block-wrapper pre {
-    background-color: #0d1117 !important;
-  }
-
-  .code-block pre {
-    margin: 0;
-    padding: 1rem;
-    overflow-x: auto;
-    border-radius: 0.375rem;
-  }
-
-  .code-block code {
-    font-family: 'Fira Code', monospace;
-    font-size: 0.875rem;
-    line-height: 1.5;
-  }
-</style>
-
-<!-- Script is loaded in BaseLayout instead of per component -->
+<!--
+  Styles for .code-block, .code-filename, .copy-button, etc. have been moved to global.css.
+  Ensure all color, spacing, and font styles are handled via Tailwind classes or CSS variables.
+  Accessibility:
+    - .code-filename has aria-label for screen readers.
+    - .code-content is focusable and has an aria-label.
+    - The copy button (injected by addCopyButtons) should have aria-label and visible focus styles.
+-->

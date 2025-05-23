@@ -1,5 +1,14 @@
 # Signals & Systems Changelog
 
+## 2025-05-21
+08:58:08 - Project initialized with Astro and TypeScript configuration #setup #astro
+20:30:00 - Created basic component structure #components #structure
+21:15:00 - Implemented initial page layouts #layout #structure
+22:00:00 - Set up navigation and basic routing #navigation #structure
+22:45:00 - Created placeholder content for main pages #content #structure
+23:15:00 - Added base styling with Tailwind CSS integration #styling #tailwind
+23:40:00 - Established project organization and folder structure #structure #organization
+
 ## 2025-05-22
 00:34:04 - Updated package dependencies and configuration #setup #dependencies
 00:52:24 - Configured Astro with MDX support #setup #integration
@@ -39,12 +48,14 @@
 20:42:00 - Updated global.css to ensure all prose headings match the preferred article style, including about page and all articles #css #design
 20:43:00 - Fixed canonicalURL prop type error in SeriesLayout.astro for Astro v5+ compatibility #bugfix #astro
 20:44:00 - Updated devlog #1 to document these design and technical decisions for future reference #docs #devlog
+21:55:10 - Created new SVG cover image for devlog 1 in a style matching devlog 2, themed for platform setup #assets #media
+21:56:00 - Updated devlog 1 to use new cover image; archived old cover #content #assets
+21:57:00 - Replaced MDX section in devlog 2 with Astro components section; made data visualization more creative and unique #content #refactor
+21:58:00 - Moved all code block styles from CodeBlock.astro to global.css for maintainability and theming #refactor #styling
+21:58:30 - Improved accessibility for code blocks: added aria-labels, focusable containers, and visible focus states #a11y #ui
+21:59:00 - Updated articles.astro and series/devlog.astro to reflect new articles and metadata #content #structure
+21:59:30 - Removed all hardcoded styles from components; ensured all styles are in global.css or Tailwind classes #refactor #styling
+21:59:45 - Improved color contrast and keyboard accessibility for code block copy button and filename bar #a11y #ui
 
-## 2025-05-21
-08:58:08 - Project initialized with Astro and TypeScript configuration #setup #astro
-20:30:00 - Created basic component structure #components #structure
-21:15:00 - Implemented initial page layouts #layout #structure
-22:00:00 - Set up navigation and basic routing #navigation #structure
-22:45:00 - Created placeholder content for main pages #content #structure
-23:15:00 - Added base styling with Tailwind CSS integration #styling #tailwind
-23:40:00 - Established project organization and folder structure #structure #organization
+
+
