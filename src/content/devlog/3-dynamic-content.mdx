@@ -37,7 +37,24 @@ import CodeBlock from '../../components/CodeBlock.astro';
 <h2 class="text-2xl font-bold mt-8 mb-4">Content Flow Architecture</h2>
 <p>Here's a visualization of how content now flows through our platform:</p>
 <div class="my-8">
-  <ChartComponent description="Path of content from definition through display" />
+  <ChartComponent 
+    type="bar" 
+    data={{
+      labels: ['Content Source', 'Utility Functions', 'Pages', 'Components', 'User Interface'],
+      datasets: [
+        {
+          label: 'Data Flow',
+          data: [100, 85, 70, 60, 50],
+          backgroundColor: 'rgba(52, 152, 219, 0.5)',
+          borderColor: 'rgb(52, 152, 219)',
+          borderWidth: 1
+        }
+      ]
+    }}
+    height={300}
+    title="Content Flow Through Platform Architecture"
+    description="Path of content from definition through display"
+  />
 </div>
 
 <h2 class="text-2xl font-bold mt-8 mb-4">Type-Safe Content Utilities</h2>
@@ -46,13 +63,24 @@ import CodeBlock from '../../components/CodeBlock.astro';
   <code class="bg-gray-100 px-2 py-1 rounded">content.ts</code>:
 </p>
 <div class="my-6">
-  <CodeBlock filename="src/utils/content.ts" />
+  <CodeBlock
+    code={`// Utility functions for dynamic content sourcing\nexport interface Article {\n  title: string;\n  slug: string;\n  description: string;\n  publishDate: Date;\n  series?: string;\n  order?: number;\n}\n\nexport interface Series {\n  title: string;\n  slug: string;\n  description: string;\n  articleCount: number;\n  startDate: Date;\n}\n\nexport async function getAllArticles(): Promise<Article[]> {\n  // Dynamic import from content collections\n  return [ /* articles */ ];\n}\n\nexport async function getAllSeries(): Promise<Series[]> {\n  // Dynamic import from content collections\n  return [ /* series */ ];\n}\n\nexport async function getSeriesArticles(seriesSlug: string): Promise<Article[]> {\n  // Filter articles by series\n  const all = await getAllArticles();\n  return all.filter(a => a.series && \n    a.series.toLowerCase() === seriesSlug.toLowerCase());\n}`}
+    lang="typescript"
+    filename="src/utils/content.ts"
+  />
 </div>
 <p class="mt-4">
   These interfaces ensure that all our content adheres to a consistent structure, while the utility functions 
   provide a clean API for fetching content across the site.
 </p>
-<CalloutBox type="info"></CalloutBox>
+<CalloutBox type="info">
+  <p>
+    <strong>Future Enhancement:</strong> This implementation is designed to transition seamlessly to 
+    <a href="https://docs.astro.build/en/guides/content-collections/" class="text-blue-600 hover:underline">Astro Content Collections</a> 
+    when we're ready, which will give us even more powerful content management capabilities while maintaining 
+    our current API design.
+  </p>
+</CalloutBox>
 
 <h2 class="text-2xl font-bold mt-8 mb-4">Series Navigation</h2>
 <p>
@@ -60,7 +88,11 @@ import CodeBlock from '../../components/CodeBlock.astro';
   previous and next articles. Now, we can derive this information from the content structure:
 </p>
 <div class="bg-gray-50 rounded-md p-4 my-6 overflow-auto">
-  <CodeBlock filename="src/pages/devlog/3-dynamic-content.astro" />
+  <CodeBlock
+    code={`const articles = await getSeriesArticles(seriesSlug);\nconst seriesArticles = articles.map(({ title, slug, order = 0, publishDate }) => \n  ({ title, slug: slug.replace(/^\\//, ''), order, publishDate })\n);\nconst currentIndex = seriesArticles.findIndex(a => a.slug.endsWith(currentArticleSlug));\nconst prevArticle = currentIndex > 0 ? seriesArticles[currentIndex - 1] : null;\nconst nextArticle = currentIndex < seriesArticles.length - 1 ? seriesArticles[currentIndex + 1] : null;`}
+    lang="astro"
+    filename="src/pages/devlog/3-dynamic-content.astro"
+  />
 </div>
 <p class="mt-4">
   This code automatically calculates the previous and next articles in a series based on the article's position, 
@@ -72,7 +104,23 @@ import CodeBlock from '../../components/CodeBlock.astro';
   Let's look at the relative complexity of implementing each part of our architecture:
 </p>
 <div class="my-8">
-  <ChartComponent description="Relative effort required for each system component" />
+  <ChartComponent 
+    type="bar" 
+    data={{
+      labels: ['TypeScript Interfaces', 'Content Utils', 'Dynamic Loading', 'Series Navigation', 'Layout Integration'],
+      datasets: [
+        {
+          label: 'Implementation Complexity',
+          data: [25, 45, 60, 50, 40],
+          backgroundColor: 'rgba(46, 204, 113, 0.5)',
+          borderColor: 'rgb(46, 204, 113)',
+          borderWidth: 1
+        }
+      ]
+    }}
+    title="Implementation Complexity"
+    description="Relative effort required for each system component"
+  />
 </div>
 
 <h2 class="text-2xl font-bold mt-8 mb-4">Key Benefits</h2>
@@ -102,12 +150,42 @@ import CodeBlock from '../../components/CodeBlock.astro';
 <p>
   One challenge we faced was inconsistent path formats between our content definitions (which use absolute paths 
   like <code class="bg-gray-100 px-2 py-1 rounded">/devlog/1-platform-setup</code>) and the URL structure in 
-  Astro. The solution was to normalize paths for routing.
+  Astro (which expects relative paths like <code class="bg-gray-100 px-2 py-1 rounded">devlog/1-platform-setup</code>).
 </p>
+<p class="mt-2">
+  To solve this, we standardized on absolute paths in our content definitions and added normalization when 
+  passing data to components:
+</p>
+<div class="bg-gray-50 rounded-md p-4 my-4 overflow-auto">
+  <CodeBlock
+    code={`// Convert absolute paths to relative for Astro routing\nconst seriesArticles = articles.map(({ title, slug, order = 0, publishDate }) => \n  ({ title, slug: slug.replace(/^\\//, ''), order, publishDate })\n);`}
+    lang="typescript"
+    filename="src/pages/devlog/3-dynamic-content.astro"
+  />
+</div>
+
 <h3 class="text-xl font-semibold mt-6 mb-2">Article Order</h3>
-<p></p>
+<p>
+  Another challenge was maintaining the correct order of articles in a series. We solved this by adding an 
+  explicit <code class="bg-gray-100 px-2 py-1 rounded">order</code> field to our article interface, allowing 
+  us to sort articles consistently regardless of their publish dates or file names.
+</p>
 
 <h2 class="text-2xl font-bold mt-8 mb-4">Next Steps</h2>
-<ul class="list-disc pl-6 mt-4 space-y-2"></ul>
-<p class="mt-6"></p>
-<CalloutBox type="info"></CalloutBox>
+<ul class="list-disc pl-6 mt-4 space-y-2">
+  <li>Migrating to Astro Content Collections for even more powerful content management</li>
+  <li>Implementing tag-based browsing across article categories</li>
+  <li>Adding related article suggestions based on content similarity</li>
+  <li>Building a search functionality leveraging our centralized content structure</li>
+</ul>
+<p class="mt-6">
+  These dynamic content utilities have transformed how we manage and present articles on Signals & Systems, 
+  making it much easier to maintain a growing library of interconnected content while ensuring a smooth, 
+  intuitive reading experience.
+</p>
+
+<CalloutBox type="tip" title="Join the Conversation">
+  <p>
+    Have thoughts or feedback? Connect on <a href="https://github.com/Tamok" class="text-blue-600 hover:text-blue-800">GitHub</a> or <a href="https://www.linkedin.com/in/jonathan-engeln/" class="text-blue-600 hover:text-blue-800">LinkedIn</a>.
+  </p>
+</CalloutBox>

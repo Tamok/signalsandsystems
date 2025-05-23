@@ -1,0 +1,62 @@
+---
+title: "<Title of Article>"
+description: "<Short summary of the article>"
+publishDate: YYYY-MM-DD
+series: "<Series Name>"
+order: <number>
+coverImage: "/images/<cover-image>.svg"
+# tags: ["optional", "tags", "here"]
+# draft: false
+---
+
+import CalloutBox from '../../components/CalloutBox.astro';
+import ChartComponent from '../../components/ChartComponent.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+{/*
+Optionally define chart data or code snippets here:
+export const chartData = { ... };
+export const codeExample = `...`;
+*/}
+
+<p class="lead">
+  <em>Optional lead paragraph introducing the article and its main theme.</em>
+</p>
+
+<h2 class="text-2xl font-bold mt-8 mb-4">Section Title</h2>
+<p>
+  Main content for this section goes here. Use <strong>HTML</strong> tags for formatting, and Astro components for interactivity.
+</p>
+
+<CalloutBox type="info">
+  <p>Use callouts to highlight important information, tips, or warnings.</p>
+</CalloutBox>
+
+<ul>
+  <li>Bullet points for lists</li>
+  <li>Another item</li>
+</ul>
+
+<ChartComponent 
+  type="bar" 
+  data={chartData} 
+  title="" 
+  description="Chart description here."
+/>
+
+<CodeBlock 
+  code={codeExample} 
+  lang="js" 
+  filename="example.js" 
+/>
+
+<h2 class="text-2xl font-bold mt-8 mb-4">Another Section</h2>
+<p>
+  Continue with more content, components, and sections as needed.
+</p>
+
+<CalloutBox type="tip" title="Join the Conversation">
+  <p>
+    Invite readers to connect, comment, or share feedback.
+  </p>
+</CalloutBox>
