@@ -2,20 +2,10 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
+import { getAllArticles, getAllSeries } from "../utils/content";
 
-// In a real application, this data would come from a content collection or API
-const articles = [
-  {
-    title: "Devlog #1: Setting Up Our Publishing Platform",
-    slug: "/devlog/1-platform-setup",
-    description: "Exploring how we established Signals & Systems, the technologies involved, and the decisions behind them.",
-    publishDate: new Date('2025-05-21'),
-    series: "Devlog"
-  }
-  // Future articles will be added here
-];
-
-// Sort articles by publish date (newest first)
+const articles = await getAllArticles();
+const series = await getAllSeries();
 const sortedArticles = [...articles].sort((a, b) => b.publishDate.getTime() - a.publishDate.getTime());
 ---
 
@@ -47,9 +37,8 @@ const sortedArticles = [...articles].sort((a, b) => b.publishDate.getTime() - a.
                 {!article.series && (
                   <span>Article</span>
                 )}
-              </div>
-              <h2 class="text-2xl font-bold mb-2">
-                <a href={article.slug} class="text-gray-900 hover:text-blue-600">
+              </div>              <h2 class="text-2xl font-bold mb-2">
+                <a href={`/devlog/${article.slug}`} class="text-gray-900 hover:text-blue-600">
                   {article.title}
                 </a>
               </h2>
@@ -58,13 +47,12 @@ const sortedArticles = [...articles].sort((a, b) => b.publishDate.getTime() - a.
                 <div class="text-sm text-gray-500">
                   <time datetime={article.publishDate.toISOString()}>
                     {article.publishDate.toLocaleDateString('en-US', { 
-                      year: 'numeric', 
+                      year: 'numeric',
                       month: 'long', 
-                      day: 'numeric' 
-                    })}
+                      day: 'numeric'                    })}
                   </time>
                 </div>
-                <a href={article.slug} class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                <a href={`/devlog/${article.slug}`} class="text-blue-600 hover:text-blue-800 text-sm font-medium">
                   Read article →
                 </a>
               </div>

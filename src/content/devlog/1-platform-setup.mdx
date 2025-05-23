@@ -1,0 +1,145 @@
+---
+title: "Devlog #1: Setting Up Our Publishing Platform"
+description: "Exploring how we established Signals & Systems, the technologies involved, and the decisions behind them."
+publishDate: 2025-05-21
+series: "Devlog"
+order: 1
+coverImage: "/images/devlog-1-cover.svg"
+---
+
+import CalloutBox from '../../components/CalloutBox.astro';
+import ChartComponent from '../../components/ChartComponent.astro';
+
+<p class="lead">
+  Today marks the beginning of a new journey. I'm excited to share the creation process of <em>Signals &amp; Systems</em>,
+  a personal publishing platform I'm building from the ground up to host long-form, interactive content.
+</p>
+
+## The Vision
+
+As both an educator and technologist, I've always found myself at the intersection of content creation and technical implementation. I wanted a platform that would give me complete control over how my articles appear, how they function, and how they evolve over time. More importantly, I wanted a canvas for experimentation—a place where I could seamlessly blend written content with interactive elements.
+
+<CalloutBox type="tip">
+  When creating your own publishing platform, start with a clear vision of what you want to accomplish. This will guide your technical decisions and help you avoid unnecessary complexity.
+</CalloutBox>
+
+## Technology Choices
+
+After evaluating several options, I settled on a tech stack that prioritizes performance, simplicity, and developer experience:
+
+- **Astro**: A modern static site generator that delivers excellent performance by default, with minimal JavaScript.
+- **Astro Components**: Using Astro's component system for creating reusable UI elements with HTML-like syntax.
+- **MDX (Future)**: Planning to explore Markdown with JSX support for simpler content writing workflow.
+- **Tailwind CSS**: A utility-first CSS framework that makes styling straightforward and consistent.
+- **Google Analytics**: For basic audience insights while respecting privacy concerns.
+
+<div class="my-8">
+  <p class="text-lg font-medium text-gray-700 mb-2">Technology Selection Confidence</p>
+  <ChartComponent description="My confidence level (0-100) in each technology choice for this platform." />
+</div>
+
+## Project Structure
+
+I've organized the project with a focus on modularity and maintainability:
+
+```
+signals-and-systems/
+├── src/
+│   ├── components/    # Reusable UI components
+│   ├── layouts/       # Page layout templates
+│   ├── pages/         # Route definitions
+│   └── styles/        # Global styles and Tailwind config
+├── public/            # Static assets
+└── astro.config.mjs   # Astro configuration
+```
+
+## The Design Philosophy
+
+For this platform, I'm embracing a minimalist design approach with a focus on readability and content hierarchy. The typography is carefully chosen to ensure comfortable reading for long-form articles, and the color palette is subtle yet distinctive.
+
+A key principle I'm following is "progressive enhancement"—ensuring that content is accessible and functional even without JavaScript, then layering interactivity for browsers that support it.
+
+<CalloutBox type="info">
+  Progressive enhancement is about building a solid foundation first, then adding features for capable browsers.
+</CalloutBox>
+
+## The Ethical Considerations
+
+As I build this platform, I'm constantly thinking about the ethical dimensions of digital publishing:
+
+- **Privacy**: Minimizing data collection and being transparent about what's collected.
+- **Accessibility**: Ensuring content is accessible to all readers, regardless of ability.
+- **Sustainability**: Building a platform with minimal environmental impact through efficient code and assets.
+- **Vibecoding**: Exploring the balance between technical optimization and human-centered design.
+
+## Visual Design Evolution
+
+One of the key aspects of this platform is the visual design. I wanted to create a clean, distraction-free reading experience that still allows for interactive elements when needed. After experimenting with various approaches, I settled on:
+
+- **SVG-based graphics** - Vector graphics provide crisp visuals at any resolution while keeping file sizes small
+- **Custom author images** - Designed with integrated social media links to GitHub and LinkedIn
+- **Visual hierarchy** - Typography scales and spacing to guide the reader through content
+- **Subtle animations** - Used sparingly to provide feedback and draw attention where appropriate
+
+<CalloutBox type="info" title="Design Philosophy">
+  For this platform, I'm embracing a minimalist design approach with a focus on readability and content hierarchy. The typography is carefully chosen to ensure comfortable reading for long-form articles, and the color palette is subtle yet distinctive.
+
+  A key principle I'm following is "progressive enhancement"—ensuring that content is accessible and functional even without JavaScript, then layering interactivity for browsers that support it.
+</CalloutBox>
+
+## Technical Implementation Highlights
+
+- Project initialized with Astro and TypeScript configuration
+- Created basic component structure
+- Implemented initial page layouts
+- Set up navigation and basic routing
+- Created placeholder content for main pages
+- Added base styling with Tailwind CSS integration
+- Established project organization and folder structure
+- Updated package dependencies and configuration
+- Configured Astro with MDX support
+- Updated BaseLayout with metadata and SEO improvements
+- Implemented ChartComponent for data visualization
+- Added initial image assets for articles and profiles
+- Created high-quality SVG versions of all site graphics
+- Updated README with comprehensive project documentation
+- Created first devlog article documenting platform setup
+- Enhanced Footer and AuthorBio components
+- Updated navigation with consistent site structure
+
+## Changelog
+
+<pre class="text-sm bg-gray-100 p-4 rounded overflow-auto">
+<code>2025-05-21 08:58 - Project initialized with Astro and TypeScript configuration #setup #astro
+2025-05-21 20:30 - Created basic component structure #components #structure
+2025-05-21 21:15 - Implemented initial page layouts #layout #structure
+2025-05-21 22:00 - Set up navigation and basic routing #navigation #structure
+2025-05-21 22:45 - Created placeholder content for main pages #content #structure
+2025-05-21 23:15 - Added base styling with Tailwind CSS integration #styling #tailwind
+2025-05-21 23:40 - Established project organization and folder structure #structure #organization
+2025-05-22 00:34 - Updated package dependencies and configuration #setup #dependencies
+2025-05-22 00:52 - Configured Astro with MDX support #setup #integration
+2025-05-22 04:00 - Updated BaseLayout with metadata and SEO improvements #layout #seo
+2025-05-22 04:45 - Implemented ChartComponent for data visualization #components #interactive
+2025-05-22 15:55 - Added initial image assets for articles and profiles #assets #media
+2025-05-22 16:00 - Created high-quality SVG versions of all site graphics #assets #svg
+2025-05-22 16:15 - Updated README with comprehensive project documentation #docs
+2025-05-22 16:46 - Created first devlog article documenting platform setup #content #devlog
+2025-05-22 16:48 - Enhanced Footer and AuthorBio components #components #navigation
+2025-05-22 18:30 - Updated navigation with consistent site structure #navigation #ux</code>
+</pre>
+
+## What's Next
+
+- Add more interactive components
+- Continue refining the design
+- Document development principles
+- Explore new features and approaches
+
+<CalloutBox type="info" title="Development Principles">
+  Stay tuned for more updates and insights as the platform evolves!
+</CalloutBox>
+
+<CalloutBox type="tip" title="Join the Conversation">
+  Share your thoughts and feedback!
+</CalloutBox>

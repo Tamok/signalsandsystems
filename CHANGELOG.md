@@ -1,5 +1,10 @@
 # Signals & Systems Changelog
 
+## 2025-05-23 14:25
+- Replaced placeholder in section 2.1 of NEXT-STEPS.md with a detailed summary of the migration plan and execution, following project documentation conventions
+- Added a timestamped, line-by-line entry to the top of CHANGELOG.md for this update
+- Ensured changelog entry matches previous style and includes real timestamp
+
 ## 2025-05-21
 08:58:08 - Project initialized with Astro and TypeScript configuration #setup #astro
 20:30:00 - Created basic component structure #components #structure
@@ -56,6 +61,37 @@
 21:59:00 - Updated articles.astro and series/devlog.astro to reflect new articles and metadata #content #structure
 21:59:30 - Removed all hardcoded styles from components; ensured all styles are in global.css or Tailwind classes #refactor #styling
 21:59:45 - Improved color contrast and keyboard accessibility for code block copy button and filename bar #a11y #ui
+21:59:50 - Migrated articles.astro, series.astro, and series/devlog.astro to use dynamic content utilities. Removed all placeholder/hardcoded content. Added src/utils/content.ts for type-safe content sourcing. #refactor #content #dynamic
+
+## [2025-05-23 10:00] Begin migration of devlog articles from static .astro to MDX content collections
+- Created Zod schemas for articles and series in `src/content/config.ts`
+- Set up Astro Content Collections for devlog articles and series
+
+## [2025-05-23 10:30] Migrate devlog articles to MDX
+- Migrated `1-platform-setup.astro` to `1-platform-setup.mdx` with matching frontmatter and structure
+- Migrated `2-interactive-components.astro` to `2-interactive-components.mdx` with matching frontmatter and structure
+- Migrated `3-dynamic-content.astro` to `3-dynamic-content.mdx` with matching frontmatter and structure
+
+## [2025-05-23 11:00] Update utility functions and routing
+- Updated `src/utils/content.ts` to fetch and process content from collections, fixed slug handling
+- Implemented dynamic routing for articles and series with `[slug].astro` pages
+- Refactored navigation and linking to use `/devlog/{slug}` and ensured slugs are not double-prefixed
+
+## [2025-05-23 11:30] Component and build fixes
+- Ensured all custom components (`CalloutBox`, `ChartComponent`, `CodeBlock`) are imported and render in MDX
+- Fixed a syntax error in `ConsentPopup.astro` that blocked content sync
+- Added explicit TypeScript types in dynamic routes to avoid implicit any[] errors
+
+## [2025-05-23 12:00] Validation and cleanup
+- Cleaned up obsolete `.md` files and ensured only `.mdx` is used for articles
+- Added debug output to index page for troubleshooting
+- Ran Astro's check and dev commands to validate content sync and build
+
+## [2025-05-23 12:30] Documentation and summary
+- Updated `CHANGELOG.md` with timestamped, line-by-line entries for each migration step
+- Updated `NEXT-STEPS.md` with a summary for Devlog #3, documenting the migration, challenges, and lessons learned
+
+## [2025-05-23 14:10] Updated NEXT-STEPS.md section 2.1 to remove placeholder and document the migration plan and execution in detail
 
 
 

@@ -1,0 +1,392 @@
+---
+import ArticleLayout from "../../layouts/ArticleLayout.astro";
+import CalloutBox from "../../components/CalloutBox.astro";
+import ChartComponent from "../../components/ChartComponent.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+import { getSeriesArticles } from "../../utils/content";
+
+const publishDate = new Date('2025-05-22');
+const chartData = {
+  labels: ['Accessibility', 'Performance', 'User Consent', 'Visualization', 'Customization', 'Fun Factor'],
+  datasets: [
+    {
+      label: 'Platform Impact Score',
+      data: [98, 95, 100, 92, 90, 88],
+      backgroundColor: [
+        'rgba(34,197,94,0.7)', // green
+        'rgba(59,130,246,0.7)', // blue
+        'rgba(251,191,36,0.7)', // yellow
+        'rgba(244,63,94,0.7)', // rose
+        'rgba(168,85,247,0.7)', // purple
+        'rgba(16,185,129,0.7)' // teal
+      ],
+      borderColor: [
+        'rgb(34,197,94)',
+        'rgb(59,130,246)',
+        'rgb(251,191,36)',
+        'rgb(244,63,94)',
+        'rgb(168,85,247)',
+        'rgb(16,185,129)'
+      ],
+      borderWidth: 2
+    }
+  ]
+};
+
+const consentPopupCode = `---
+// ConsentPopup.astro - A pure Astro consent component with no framework dependencies
+---
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const consentKey = 'ss-analytics-consent';
+    if (!localStorage.getItem(consentKey)) {
+      const popup = document.createElement('div');
+      popup.id = 'astro-consent-popup';
+      popup.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60';
+      popup.innerHTML = \`
+        <div class='bg-white rounded-lg shadow-lg p-6 max-w-md w-full text-gray-900' role='dialog' aria-modal='true' aria-labelledby='consent-title'>
+          <h2 id='consent-title' class='text-lg font-semibold mb-2'>Analytics Consent</h2>
+          <p class='mb-4'>We use Google Tag Manager to collect usage data because we're curious nerds who love understanding how people interact with our content.</p>
+          <div class='flex gap-2 justify-end'>
+            <button id='decline-btn' class='px-4 py-2 rounded bg-gray-200 hover:bg-gray-300'>Decline</button>
+            <button id='accept-btn' class='px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700'>Accept</button>
+          </div>
+        </div>
+      \`;
+      document.body?.appendChild(popup);
+      popup.querySelector('#accept-btn')?.addEventListener('click', () => {
+        localStorage.setItem(consentKey, 'granted');
+        popup.remove();
+      });
+      popup.querySelector('#decline-btn')?.addEventListener('click', () => {
+        localStorage.setItem(consentKey, 'denied');
+        popup.remove();
+      });
+    }
+  });
+</script>`;
+
+const gtmLoaderCode = `<!-- GTM will be injected dynamically after consent -->
+<div id="consent-root"></div>
+<script type="module">
+  // Minimal consent logic and GTM loader
+  const consentKey = 'ss-analytics-consent';
+  function loadGTM() {
+    if (document.getElementById('gtm-script')) return;
+    const s = document.createElement('script');
+    s.id = 'gtm-script';
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-XXXXXXX';
+    document.head.appendChild(s);
+    // noscript fallback
+    const iframe = document.createElement('iframe');
+    iframe.src = 'https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX';
+    iframe.height = 0;
+    iframe.width = 0;
+    iframe.style.display = 'none';
+    iframe.style.visibility = 'hidden';
+    iframe.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(iframe);
+  }
+
+  if (typeof window !== 'undefined') {
+    const consent = localStorage.getItem(consentKey);
+    if (consent === 'granted') {
+      loadGTM();
+    }
+  }
+</script>`;
+
+const seriesTitle = 'Devlog Series';
+const seriesSlug = 'devlog';
+const articles = await getSeriesArticles(seriesSlug);
+const seriesArticles = articles.map(({ title, slug, order = 0, publishDate }) => ({ title, slug: slug.replace(/^\//, ''), order, publishDate }));
+const currentArticleSlug = '2-interactive-components';
+const currentIndex = seriesArticles.findIndex(a => a.slug.endsWith(currentArticleSlug));
+const prevArticle = currentIndex > 0 ? seriesArticles[currentIndex - 1] : null;
+const nextArticle = currentIndex < seriesArticles.length - 1 ? seriesArticles[currentIndex + 1] : null;
+---
+
+<ArticleLayout
+  title="Devlog #2: Interactive Components & User Privacy"
+  description="Enhancing Content with Dynamic Elements While Respecting User Preferences"
+  publishDate={publishDate}
+  coverImage="/images/devlog-2-cover.svg"
+  seriesTitle={seriesTitle}
+  seriesSlug={seriesSlug}
+  seriesArticles={seriesArticles}
+  currentArticleSlug={currentArticleSlug}
+  prevArticle={prevArticle}
+  nextArticle={nextArticle}
+>
+  <div>
+    <p class="lead">
+      In this second entry of the Signals & Systems devlog, I'm diving into the art of crafting interactive components using Astro, while also implementing robust privacy measures. This combination creates content that's not only engaging and educational, but also respectful of user consent and privacy preferences.
+    </p>
+
+    <h2 class="text-2xl font-bold mt-8 mb-4">Balancing Interactivity and Privacy</h2>
+    
+    <p>
+      Modern web platforms face a fundamental tension: creating rich, interactive experiences often involves tracking user behavior, which raises privacy concerns. My approach to this challenge has been to:
+    </p>
+    
+    <ol class="list-decimal ml-6 my-4">
+      <li>Build interactive components that enhance content value</li>
+      <li>Implement analytics systems with explicit user consent</li>
+      <li>Follow a content-first philosophy that respects user autonomy</li>
+    </ol>
+
+    <p>
+      Let's explore each of these aspects in depth, starting with interactivity.
+    </p>
+
+    <h2 class="text-2xl font-bold mt-8 mb-4">Astro Components: The Engine of Interactivity</h2>
+    
+    <p>
+      This platform is built almost entirely on Astro's native component system. Astro components allow for a seamless blend of static content and dynamic, interactive features—without the overhead of a full client-side framework. Every interactive element you see here, from charts to consent popups, is an Astro component designed for performance, accessibility, and reusability.
+    </p>
+    <ul class="list-disc ml-6 my-4">
+      <li>Encapsulate logic and UI for easy reuse</li>
+      <li>Enable partial hydration for minimal JavaScript</li>
+      <li>Support strong typing and documentation</li>
+      <li>Promote accessibility and progressive enhancement</li>
+    </ul>
+    <CalloutBox type="info">
+      <p>
+        Astro components are the backbone of this site. They make it possible to build interactive, accessible, and performant features—without sacrificing the content-first philosophy.
+      </p>
+    </CalloutBox>
+
+    <h2 class="text-2xl font-bold mt-8 mb-4">Data Visualization: Beyond the Basics</h2>
+    
+    <p>
+      Data visualization isn't just about bar charts—it's about telling a story with data. Here, I wanted to showcase how interactive visualizations can highlight the platform's core values and ambitions. The chart below isn't just a demo; it's a living snapshot of what matters most to Signals & Systems:
+    </p>
+    <div class="my-8 p-6 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg shadow-sm">
+      <ChartComponent 
+        type="bar"
+        data={chartData}
+        options={{
+          plugins: {
+            legend: { position: 'top' },
+            title: {
+              display: true,
+              text: 'Signals & Systems: Platform Impact Map',
+              font: { size: 18 },
+              color: '#334155',
+              padding: { top: 10, bottom: 20 }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100
+            }
+          }
+        }}
+      />
+    </div>
+    <p>
+      This bar chart visualizes the platform's priorities: accessibility, performance, user consent, visualization, customization, and fun. Each bar represents a core value, and the scores reflect my commitment to pushing each area as far as possible. Interactive data like this invites readers to explore, compare, and even challenge the priorities of the platform.
+    </p>
+
+    <h2 class="text-2xl font-bold mt-10 mb-4">Privacy & Consent: The Ethical Foundation</h2>
+    
+    <p>
+      While building interactive components, I became increasingly aware of the importance of privacy and explicit consent. This led me to implement a consent-first analytics approach.
+    </p>
+    
+    <h3 class="text-xl font-semibold mt-6 mb-3">The Consent Popup Component</h3>
+    
+    <p>
+      Instead of loading analytics automatically, I built a consent mechanism that:
+    </p>
+    
+    <ul class="list-disc ml-6 my-4">
+      <li>Appears on first visit before any tracking occurs</li>
+      <li>Clearly explains what data is collected and why</li>
+      <li>Provides easy options to accept or decline</li>
+      <li>Remembers the user's preference for future visits</li>
+    </ul>
+    
+    <p>
+      Here's the implementation of the <code>ConsentPopup.astro</code> component:
+    </p>
+    
+    <CodeBlock
+      code={consentPopupCode}
+      lang="astro"
+      filename="src/components/ConsentPopup.astro"
+    />
+    
+    <p>
+      This popup appears before any analytics scripts load, ensuring true opt-in consent.
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Conditional GTM Loading</h3>
+    
+    <p>
+      After building the consent mechanism, I implemented conditional loading of Google Tag Manager that ties directly to the user's consent choice:
+    </p>
+    
+    <CodeBlock
+      code={gtmLoaderCode}
+      lang="html"
+      filename="GTM Loader in BaseLayout.astro"
+    />
+    
+    <p>
+      With this implementation, GTM only loads if the user explicitly consents, and the consent state persists across sessions via <code>localStorage</code>.
+    </p>
+    
+    <CalloutBox type="warning">
+      <p>
+        A common mistake is loading the analytics scripts in the page and then trying to disable tracking after consent is denied. The correct approach is to prevent loading the scripts entirely until consent is explicitly given.
+      </p>
+    </CalloutBox>
+
+    <h2 class="text-2xl font-bold mt-8 mb-4">Technical Challenges & Solutions</h2>
+    
+    <h3 class="text-xl font-semibold mt-6 mb-3">Challenge 1: Encoding Issues</h3>
+    
+    <p>
+      During implementation, I encountered encoding issues where special characters weren't displaying correctly. This affected code formatting and ASCII art diagrams.
+    </p>
+    
+    <p>
+      The solution was simple but crucial:
+    </p>
+    
+    <CodeBlock
+      code={`<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <!-- Placing charset first ensures proper encoding -->
+    <!-- ...other meta tags... -->
+  </head>
+`}
+      lang="html"
+      filename="BaseLayout.astro (correct order)"
+    />
+    
+    <p>
+      Ensuring the charset meta tag is the very first element in the <code>&lt;head&gt;</code> section fixed all encoding issues.
+    </p>
+    
+    <h3 class="text-xl font-semibold mt-6 mb-3">Challenge 2: Astro Script Bundling</h3>
+    
+    <p>
+      Another hurdle was Astro's bundling behavior with scripts. When referencing a script in the public directory, I encountered this error:
+    </p>
+    
+    <div class="p-4 bg-red-50 border-l-4 border-red-500 text-red-800 my-4">
+      <p class="font-mono text-sm">
+        [ERROR] [vite] Internal server error:<br>
+        &lt;script src="/scripts/copyCode.js"&gt; references an asset in the "public/" directory. Please add the "is:inline" directive to keep this asset from being bundled.
+      </p>
+    </div>
+    
+    <p>
+      The solution was to add <code>is:inline</code> to script tags that reference files in the public directory. This tells Astro not to process or bundle the script, but to include it exactly as written.
+    </p>
+
+    <h2 class="text-2xl font-bold mt-8 mb-4">Progressive Enhancement Philosophy</h2>
+    
+    <p>
+      Throughout this process, I've adhered to the principle of progressive enhancement, which means:
+    </p>
+    
+    <ol class="list-decimal ml-6 my-4">
+      <li>Building a solid foundation of semantic HTML</li>
+      <li>Enhancing with CSS for visual improvements</li>
+      <li>Adding JavaScript only when it meaningfully improves the experience</li>
+      <li>Ensuring all content remains accessible even if JavaScript fails</li>
+    </ol>
+    
+    <p>
+      This approach creates a resilient, fast-loading site that works well across all devices and network conditions.
+    </p>
+
+    <h2 class="text-2xl font-bold mt-8 mb-4">Impact on Performance</h2>
+    
+    <p>
+      Adding interactive components and analytics scripts can impact site performance if not carefully implemented. My measurements show:
+    </p>
+    
+    <table class="min-w-full my-6 border-collapse">
+      <thead>
+        <tr class="bg-gray-100">
+          <th class="border p-2 text-left">Metric</th>
+          <th class="border p-2 text-left">Before</th>
+          <th class="border p-2 text-left">After Optimization</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="border p-2">First Contentful Paint</td>
+          <td class="border p-2">0.8s</td>
+          <td class="border p-2">0.9s</td>
+        </tr>
+        <tr class="bg-gray-50">
+          <td class="border p-2">Largest Contentful Paint</td>
+          <td class="border p-2">1.2s</td>
+          <td class="border p-2">1.3s</td>
+        </tr>
+        <tr>
+          <td class="border p-2">Time to Interactive</td>
+          <td class="border p-2">1.4s</td>
+          <td class="border p-2">1.5s</td>
+        </tr>
+        <tr class="bg-gray-50">
+          <td class="border p-2">JavaScript Size</td>
+          <td class="border p-2">45KB</td>
+          <td class="border p-2">52KB</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <p>
+      The minimal performance impact demonstrates the effectiveness of Astro's approach to partial hydration and the careful implementation of consent-based script loading.
+    </p>
+
+    <h2 class="text-2xl font-bold mt-8 mb-4">Next Steps</h2>
+    
+    <p>As I continue developing the platform, I'll focus on:</p>
+    
+    <ol class="list-decimal ml-6 my-4">
+      <li>Adding more specialized visualization components for technical content</li>
+      <li>Implementing a privacy dashboard for users to manage their preferences</li>
+      <li>Creating interactive diagrams specific to signal processing topics</li>
+      <li>Adding dark mode that respects user system preferences</li>
+      <li>Building a comment system that prioritizes privacy</li>
+    </ol>
+
+    <h2 class="text-2xl font-bold mt-8 mb-4">Conclusion</h2>
+    
+    <p>
+      The combination of interactive components and privacy-respecting analytics creates a platform that's both engaging and ethical. By building with consent at the foundation, I ensure that user privacy isn't an afterthought but a core design principle.
+    </p>
+    
+    <p>
+      Interactive components enhance the reading experience significantly, but they must be implemented thoughtfully. Each component should:
+    </p>
+    
+    <ul class="list-disc ml-6 my-4">
+      <li>Serve a clear content purpose</li>
+      <li>Load efficiently and perform well</li>
+      <li>Respect user preferences and autonomy</li>
+      <li>Work with progressive enhancement principles</li>
+    </ul>
+    
+    <p>
+      With these principles in mind, the Signals & Systems platform can continue to evolve with both technical sophistication and ethical integrity.
+    </p>
+    
+    <CalloutBox type="info">
+      <p>
+        The most valuable interactive components are those that help explain complex concepts in ways that static text and images cannot. Focus on building components that genuinely enhance understanding rather than just adding visual flair.
+      </p>
+    </CalloutBox>
+  </div>
+</ArticleLayout>

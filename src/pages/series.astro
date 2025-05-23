@@ -2,18 +2,9 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
+import { getAllSeries } from "../utils/content";
 
-// In a real application, this data would come from a content collection or API
-const series = [
-  {
-    title: "Devlog Series",
-    slug: "devlog",
-    description: "A behind-the-scenes look at building the Signals & Systems platform, including technical decisions, challenges, and ethical considerations around vibecoding.",
-    articleCount: 1,
-    startDate: new Date('2025-05-21')
-  }
-  // Future series will be added here
-];
+const series = await getAllSeries();
 ---
 
 <BaseLayout 

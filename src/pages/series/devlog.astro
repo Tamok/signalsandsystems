@@ -2,28 +2,12 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
+import { getSeriesArticles } from "../../utils/content";
 
-// In a real application, this data would come from a content collection or API
-const seriesArticles = [
-  {
-    title: "Devlog #1: Setting Up Our Publishing Platform",
-    slug: "1-platform-setup",
-    description: "Exploring how we established Signals & Systems, the technologies involved, and the decisions behind them.",
-    publishDate: new Date('2025-05-21'),
-    order: 1
-  },
-  {
-    title: "Devlog #2: Interactive Components & User Privacy",
-    slug: "2-interactive-components",
-    description: "Enhancing Content with Dynamic Elements While Respecting User Preferences",
-    publishDate: new Date('2025-05-22'),
-    order: 2
-  }
-  // Future articles will be added here
-];
-
-// Sort articles by order
-const sortedArticles = [...seriesArticles].sort((a, b) => a.order - b.order);
+const seriesArticles = await getSeriesArticles("devlog");
+const sortedArticles = [...seriesArticles].sort(
+  (a, b) => (a.order ?? 0) - (b.order ?? 0)
+);
 ---
 
 <BaseLayout 
@@ -45,8 +29,7 @@ const sortedArticles = [...seriesArticles].sort((a, b) => a.order - b.order);
       <div class="space-y-10">
         {sortedArticles.map((article) => (
           <article class="bg-white rounded-lg shadow-md overflow-hidden">
-            <div class="p-6">
-              <h2 class="text-2xl font-bold mb-2">
+            <div class="p-6">              <h2 class="text-2xl font-bold mb-2">
                 <a href={`/devlog/${article.slug}`} class="text-blue-600 hover:text-blue-800">
                   {article.title}
                 </a>

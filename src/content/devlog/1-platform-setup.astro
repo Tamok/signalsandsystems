@@ -2,6 +2,7 @@
 import ArticleLayout from "../../layouts/ArticleLayout.astro";
 import CalloutBox from "../../components/CalloutBox.astro";
 import ChartComponent from "../../components/ChartComponent.astro";
+import { getSeriesArticles } from "../../utils/content";
 
 const publishDate = new Date('2025-05-21');
 const chartData = {
@@ -16,6 +17,15 @@ const chartData = {
     }
   ]
 };
+
+const seriesTitle = 'Devlog Series';
+const seriesSlug = 'devlog';
+const articles = await getSeriesArticles(seriesSlug);
+const seriesArticles = articles.map(({ title, slug, order = 0, publishDate }) => ({ title, slug: slug.replace(/^\//, ''), order, publishDate }));
+const currentArticleSlug = '1-platform-setup';
+const currentIndex = seriesArticles.findIndex(a => a.slug.endsWith(currentArticleSlug));
+const prevArticle = currentIndex > 0 ? seriesArticles[currentIndex - 1] : null;
+const nextArticle = currentIndex < seriesArticles.length - 1 ? seriesArticles[currentIndex + 1] : null;
 ---
 
 <ArticleLayout
@@ -23,6 +33,12 @@ const chartData = {
   description="Exploring how we established Signals & Systems, the technologies involved, and the decisions behind them."
   publishDate={publishDate}
   coverImage="/images/devlog-1-cover.svg"
+  seriesTitle={seriesTitle}
+  seriesSlug={seriesSlug}
+  seriesArticles={seriesArticles}
+  currentArticleSlug={currentArticleSlug}
+  prevArticle={prevArticle}
+  nextArticle={nextArticle}
 >
   <p class="lead">
     Today marks the beginning of a new journey. I'm excited to share the creation process of <em>Signals &amp; Systems</em>, 

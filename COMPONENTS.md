@@ -161,3 +161,17 @@ This document serves as a reference guide for all components and layouts in the 
 ### About
 - **File:** `/src/pages/about.astro`
 - **Description:** Information about the author and platform.
+
+## Utilities
+
+### getAllArticles
+- **File:** `/src/utils/content.ts`
+- **Description:** Returns all articles as an array of Article objects. Replace with Astro content collections for production.
+
+### getAllSeries
+- **File:** `/src/utils/content.ts`
+- **Description:** Returns all series as an array of Series objects. Replace with Astro content collections for production.
+
+### getSeriesArticles
+- **File:** `/src/utils/content.ts`
+- **Description:** Returns all articles in a given series. Replace with Astro content collections for production.

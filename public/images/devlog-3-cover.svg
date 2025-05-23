@@ -1,0 +1,53 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#f8fafc"/>
+  <!-- Grid Pattern -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+  </pattern>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <!-- Decorative Elements -->
+  <circle cx="180" cy="140" r="80" fill="#60a5fa" opacity="0.18"/>
+  <circle cx="1000" cy="500" r="110" fill="#10b981" opacity="0.18"/>
+  <rect x="850" y="120" width="120" height="120" rx="15" fill="#f59e0b" opacity="0.18"/>
+  <rect x="220" y="410" width="90" height="90" rx="10" fill="#8b5cf6" opacity="0.18"/>
+  <!-- Central Window for Content Flow Diagram -->
+  <g transform="translate(400, 200)">
+    <rect x="0" y="0" width="400" height="250" rx="10" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+    <!-- Window Header -->
+    <rect x="0" y="0" width="400" height="30" rx="10 10 0 0" fill="#3b82f6"/>
+    <circle cx="20" cy="15" r="5" fill="#f87171"/>
+    <circle cx="40" cy="15" r="5" fill="#fbbf24"/>
+    <circle cx="60" cy="15" r="5" fill="#34d399"/>
+    <!-- Content Flow Diagram (Boxes and Arrows) -->
+    <!-- Content Source -->
+    <rect x="40" y="70" width="80" height="38" rx="7" fill="#2563eb"/>
+    <text x="80" y="93" font-family="Arial" font-size="15" text-anchor="middle" fill="#fff">Content</text>
+    <!-- Arrow to Utils -->
+    <polygon points="120,89 140,89 135,84 135,94" fill="#64748b"/>
+    <!-- Utils -->
+    <rect x="140" y="70" width="80" height="38" rx="7" fill="#059669"/>
+    <text x="180" y="93" font-family="Arial" font-size="15" text-anchor="middle" fill="#fff">Utils</text>
+    <!-- Arrow to Pages -->
+    <polygon points="220,89 240,89 235,84 235,94" fill="#64748b"/>
+    <!-- Pages -->
+    <rect x="240" y="70" width="80" height="38" rx="7" fill="#f59e42"/>
+    <text x="280" y="93" font-family="Arial" font-size="15" text-anchor="middle" fill="#fff">Pages</text>
+    <!-- Arrow to Components -->
+    <polygon points="320,89 340,89 335,84 335,94" fill="#64748b"/>
+    <!-- Components -->
+    <rect x="340" y="70" width="80" height="38" rx="7" fill="#a21caf"/>
+    <text x="380" y="93" font-family="Arial" font-size="15" text-anchor="middle" fill="#fff">Components</text>
+    <!-- TypeScript Icon -->
+    <rect x="170" y="150" width="60" height="60" rx="12" fill="#3178C6"/>
+    <text x="200" y="190" font-family="Arial" font-size="32" font-weight="bold" text-anchor="middle" fill="#fff">TS</text>
+    <!-- Code Motif -->
+    <rect x="60" y="200" width="110" height="24" rx="4" fill="#e0e7ef"/>
+    <text x="115" y="217" font-family="Fira Mono, monospace" font-size="13" fill="#334155" text-anchor="middle">interface Article</text>
+    <rect x="230" y="200" width="110" height="24" rx="4" fill="#e0e7ef"/>
+    <text x="285" y="217" font-family="Fira Mono, monospace" font-size="13" fill="#334155" text-anchor="middle">getSeriesArticles()</text>
+  </g>
+  <!-- Title and Subtitle at Bottom -->
+  <text x="600" y="500" font-family="Arial" font-size="36" font-weight="bold" text-anchor="middle" fill="#0f172a">Dynamic Content Mapping</text>
+  <text x="600" y="540" font-family="Arial" font-size="24" text-anchor="middle" fill="#475569">Signals &amp; Systems Devlog #3</text>
+</svg>

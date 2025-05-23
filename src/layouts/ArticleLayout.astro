@@ -4,6 +4,14 @@ import AuthorBio from '../components/AuthorBio.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { format } from 'date-fns';
+import SeriesNav from '../components/SeriesNav.astro';
+
+interface SeriesArticle {
+  title: string;
+  slug: string;
+  order: number;
+  publishDate: Date;
+}
 
 interface Props {
   title: string;
@@ -13,6 +21,13 @@ interface Props {
   coverImage?: string;
   ogImage?: string;
   canonicalURL?: string;
+  // Series navigation props (optional)
+  seriesTitle?: string;
+  seriesSlug?: string;
+  seriesArticles?: SeriesArticle[];
+  currentArticleSlug?: string;
+  prevArticle?: SeriesArticle | null;
+  nextArticle?: SeriesArticle | null;
 }
 
 const { 
@@ -23,6 +38,12 @@ const {
   coverImage,
   ogImage = coverImage || "/images/og-default.svg",
   canonicalURL = Astro.url,
+  seriesTitle,
+  seriesSlug,
+  seriesArticles,
+  currentArticleSlug,
+  prevArticle,
+  nextArticle
 } = Astro.props;
 
 const formattedPublishDate = format(publishDate, 'MMMM d, yyyy');
@@ -62,7 +83,18 @@ const formattedUpdatedDate = updatedDate ? format(updatedDate, 'MMMM d, yyyy') :
       </header>
       <slot />
       <hr class="my-12 border-gray-200" />
-      <AuthorBio />
+      <AuthorBio />      {seriesArticles && seriesTitle && seriesSlug && currentArticleSlug && (
+        <nav class="mt-12" aria-label={`Articles in the ${seriesTitle} series`} tabindex="0">
+          <SeriesNav
+            seriesTitle={seriesTitle}
+            seriesSlug={seriesSlug}
+            prevArticle={prevArticle ?? null}
+            nextArticle={nextArticle ?? null}
+            allArticles={seriesArticles}
+            currentSlug={currentArticleSlug}
+          />
+        </nav>
+      )}
     </article>
   </div>
   <Footer slot="footer" />

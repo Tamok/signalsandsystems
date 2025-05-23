@@ -1,0 +1,64 @@
+---
+import { getCollection } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import CalloutBox from '../../components/CalloutBox.astro';
+import ChartComponent from '../../components/ChartComponent.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import { getSeriesArticles } from '../../utils/content';
+
+interface SeriesArticle {
+  title: string;
+  slug: string;
+  order: number;
+  publishDate: Date;
+}
+
+// Generate static paths for all devlog articles
+export async function getStaticPaths() {
+  const devlogEntries = await getCollection('devlog');
+  return devlogEntries.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry }
+  }));
+}
+
+// Get the entry from props for this specific page
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+// Series navigation setup
+const seriesSlug = entry.data.series?.toLowerCase();
+const currentArticleSlug = entry.slug;
+let prevArticle = null;
+let nextArticle = null;
+let sortedArticles: SeriesArticle[] = [];
+
+if (seriesSlug) {
+  const seriesArticles = await getSeriesArticles(seriesSlug);
+  sortedArticles = seriesArticles.map(({ title, slug, order = 0, publishDate }) => ({
+    title,
+    slug: slug.replace(/^\//, ''),
+    order,
+    publishDate
+  }));
+  
+  const currentIndex = sortedArticles.findIndex(a => a.slug.endsWith(currentArticleSlug));
+  prevArticle = currentIndex > 0 ? sortedArticles[currentIndex - 1] : null;
+  nextArticle = currentIndex < sortedArticles.length - 1 ? sortedArticles[currentIndex + 1] : null;
+}
+---
+
+<ArticleLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  publishDate={entry.data.publishDate}
+  coverImage={entry.data.coverImage}
+  seriesTitle={entry.data.series}
+  seriesSlug={seriesSlug}
+  seriesArticles={sortedArticles}
+  currentArticleSlug={currentArticleSlug}
+  prevArticle={prevArticle}
+  nextArticle={nextArticle}
+>
+  <Content />
+</ArticleLayout>

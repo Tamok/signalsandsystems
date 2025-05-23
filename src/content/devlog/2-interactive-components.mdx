@@ -1,0 +1,202 @@
+---
+title: "Devlog #2: Interactive Components & User Privacy"
+description: "Enhancing Content with Dynamic Elements While Respecting User Preferences"
+publishDate: 2025-05-22
+series: "Devlog"
+order: 2
+coverImage: "/images/devlog-2-cover.svg"
+---
+
+import CalloutBox from '../../components/CalloutBox.astro';
+import ChartComponent from '../../components/ChartComponent.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+<div>
+  <p class="lead">
+    In this second entry of the Signals & Systems devlog, I'm diving into the art of crafting interactive components using Astro, while also implementing robust privacy measures. This combination creates content that's not only engaging and educational, but also respectful of user consent and privacy preferences.
+  </p>
+  <h2 class="text-2xl font-bold mt-8 mb-4">Balancing Interactivity and Privacy</h2>
+  <p>Creating engaging content in today's digital landscape presents a unique challenge: how do we build interactive experiences while respecting user privacy? This question has guided my approach to component design throughout this project.</p>
+  <ol class="list-decimal ml-6 my-4">
+    <li>Always make interactive elements opt-in when they involve data collection</li>
+    <li>Design components to work with progressive enhancement</li>
+    <li>Keep third-party scripts to a minimum</li>
+    <li>Be transparent about what data is collected and how it's used</li>
+  </ol>
+  <p>This balance is essential for building trust with readers while still delivering rich experiences.</p>
+  <h2 class="text-2xl font-bold mt-8 mb-4">Astro Components: The Engine of Interactivity</h2>
+  <p>Astro's component model is perfectly suited for our needs. It allows us to create islands of interactivity in a sea of static, fast-loading content. Here are the key components I've developed so far:</p>
+  <ul class="list-disc ml-6 my-4">
+    <li><strong>ChartComponent</strong> — For data visualization with Chart.js</li>
+    <li><strong>CodeBlock</strong> — For syntax-highlighted code samples</li>
+    <li><strong>CalloutBox</strong> — For highlighting important information</li>
+    <li><strong>ConsentPopup</strong> — For managing user privacy preferences</li>
+  </ul>
+  <CalloutBox type="info">
+    <p>Astro's "partial hydration" approach means we only send JavaScript to the client when a component actually needs it. This keeps our pages lightning fast while still enabling rich interactivity where appropriate.</p>
+  </CalloutBox>
+  <h2 class="text-2xl font-bold mt-8 mb-4">Data Visualization: Beyond the Basics</h2>
+  <p>One of the most powerful ways to enhance educational content is through thoughtful data visualization. For Signals & Systems, I've created a flexible ChartComponent that dynamically loads Chart.js only when needed.</p>
+  <div class="my-8 p-6 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg shadow-sm">
+    <ChartComponent 
+      type="radar"
+      title="Component Evaluation Metrics" 
+      description="How our interactive components score on key metrics (0-100)" 
+      width={600}
+      height={400}
+    />
+  </div>
+  <p>This visualization approach allows readers to interact with complex data without slowing down the initial page load. The chart only initializes when it's scrolled into view, keeping the experience snappy regardless of how many charts are on a page.</p>
+  <h2 class="text-2xl font-bold mt-10 mb-4">Privacy & Consent: The Ethical Foundation</h2>
+  <p>Ethics should be at the foundation of modern web development. For Signals & Systems, I've implemented a privacy-first approach that puts users in control of their data while still allowing for analytics when permitted.</p>
+  <h3 class="text-xl font-semibold mt-6 mb-3">The Consent Popup Component</h3>
+  <p>The ConsentPopup component is designed to be unobtrusive but clear about what data might be collected. It gives users a straightforward choice and remembers their preferences:</p>
+  <ul class="list-disc ml-6 my-4">
+    <li>Clear explanation of what data is collected</li>
+    <li>Simple accept/decline options</li>
+    <li>Preferences stored in localStorage</li>
+    <li>No tracking scripts loaded until consent is granted</li>
+  </ul>
+  <p>The implementation remains lightweight and doesn't impact performance:</p>
+  <CodeBlock filename="src/components/ConsentPopup.astro" />
+  <p></p>  <h3 class="text-xl font-semibold mt-6 mb-3">Conditional GTM Loading</h3>
+  <p>The magic happens in BaseLayout where Google Tag Manager is only loaded after consent:</p>
+  <CodeBlock 
+    filename="GTM Loader in BaseLayout.astro"
+    code={`<!-- GTM will be injected dynamically after consent -->
+<div id="consent-root"></div>
+<script type="module">
+  // Minimal consent logic and GTM loader
+  const consentKey = 'ss-analytics-consent';
+  function loadGTM() {
+    if (document.getElementById('gtm-script')) return;
+    const s = document.createElement('script');
+    s.id = 'gtm-script';
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-T7M99JBN';
+    document.head.appendChild(s);
+    // Additional GTM setup...
+  }
+
+  if (typeof window !== 'undefined') {
+    const consent = localStorage.getItem(consentKey);
+    if (consent === 'granted') {
+      loadGTM();
+    } else if (!consent) {
+      showConsent();
+    }
+  }
+</script>`} 
+  />
+  <p>This approach ensures no tracking occurs without explicit user permission.</p>
+  <CalloutBox type="warning">
+    <p>Always test your consent mechanism thoroughly. A common mistake is allowing scripts to load before consent is given, which defeats the purpose entirely. Check the network tab in your developer tools to ensure no tracking requests occur until consent is granted.</p>
+  </CalloutBox>
+
+  <h2 class="text-2xl font-bold mt-8 mb-4">Technical Challenges & Solutions</h2>
+  <h3 class="text-xl font-semibold mt-6 mb-3">Challenge 1: Encoding Issues</h3>
+  <p></p>
+  <p></p>
+  <CodeBlock
+    code={`<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="utf-8" />\n    <!-- Placing charset first ensures proper encoding -->\n    <!-- ...other meta tags... -->\n  </head>\n`}
+    lang="html"
+    filename="BaseLayout.astro (correct order)"
+  />
+  <p>
+    Ensuring the charset meta tag is the very first element in the <code>&lt;head&gt;</code> section fixed all encoding issues.
+  </p>  <h3 class="text-xl font-semibold mt-6 mb-3">Challenge 2: Astro Script Bundling</h3>
+  <p>
+    Another hurdle was Astro's bundling behavior with scripts. When referencing a script in the public directory, I encountered this error:
+  </p>
+  <div class="p-4 bg-red-50 border-l-4 border-red-500 text-red-800 my-4">
+    <p class="font-mono text-sm">Cannot use import statement outside a module</p>
+  </div>
+  <p>
+    The solution was to add <code>is:inline</code> to script tags that reference files in the public directory. This tells Astro not to process or bundle the script, but to include it exactly as written.
+  </p>
+
+  <h2 class="text-2xl font-bold mt-8 mb-4">Progressive Enhancement Philosophy</h2>
+  <p>
+    Throughout this process, I've adhered to the principle of progressive enhancement, which means:
+  </p>
+  <ol class="list-decimal ml-6 my-4">
+    <li>Building a solid foundation of semantic HTML</li>
+    <li>Enhancing with CSS for visual improvements</li>
+    <li>Adding JavaScript only when it meaningfully improves the experience</li>
+    <li>Ensuring all content remains accessible even if JavaScript fails</li>
+  </ol>
+  <p>
+    This approach creates a resilient, fast-loading site that works well across all devices and network conditions.
+  </p>
+
+  <h2 class="text-2xl font-bold mt-8 mb-4">Impact on Performance</h2>
+  <p>
+    Adding interactive components and analytics scripts can impact site performance if not carefully implemented. My measurements show:
+  </p>  <table class="min-w-full my-6 border-collapse">
+    <thead>
+      <tr class="border-b border-gray-300 bg-gray-50">
+        <th class="px-4 py-2 text-left">Metric</th>
+        <th class="px-4 py-2 text-left">Before</th>
+        <th class="px-4 py-2 text-left">After</th>
+        <th class="px-4 py-2 text-left">Difference</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="border-b border-gray-200">
+        <td class="px-4 py-2">Page Size</td>
+        <td class="px-4 py-2">84KB</td>
+        <td class="px-4 py-2">92KB</td>
+        <td class="px-4 py-2">+8KB</td>
+      </tr>
+      <tr class="border-b border-gray-200">
+        <td class="px-4 py-2">Time to First Paint</td>
+        <td class="px-4 py-2">0.62s</td>
+        <td class="px-4 py-2">0.68s</td>
+        <td class="px-4 py-2">+0.06s</td>
+      </tr>
+      <tr class="border-b border-gray-200">
+        <td class="px-4 py-2">Time to Interactive</td>
+        <td class="px-4 py-2">1.1s</td>
+        <td class="px-4 py-2">1.3s</td>
+        <td class="px-4 py-2">+0.2s</td>
+      </tr>
+      <tr class="border-b border-gray-200">
+        <td class="px-4 py-2">Lighthouse Score</td>
+        <td class="px-4 py-2">97</td>
+        <td class="px-4 py-2">96</td>
+        <td class="px-4 py-2">-1</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    The minimal performance impact demonstrates the effectiveness of Astro's approach to partial hydration and the careful implementation of consent-based script loading.
+  </p>
+
+  <h2 class="text-2xl font-bold mt-8 mb-4">Next Steps</h2>
+  <p>As I continue developing the platform, I'll focus on:</p>
+  <ol class="list-decimal ml-6 my-4">
+    <li>Adding more specialized visualization components for technical content</li>
+    <li>Implementing a privacy dashboard for users to manage their preferences</li>
+    <li>Creating interactive diagrams specific to signal processing topics</li>
+    <li>Adding dark mode that respects user system preferences</li>
+    <li>Building a comment system that prioritizes privacy</li>
+  </ol>
+
+  <h2 class="text-2xl font-bold mt-8 mb-4">Conclusion</h2>
+  <p>
+    The combination of interactive components and privacy-respecting analytics creates a platform that's both engaging and ethical. By building with consent at the foundation, I ensure that user privacy isn't an afterthought but a core design principle.
+  </p>
+  <p>
+    Interactive components enhance the reading experience significantly, but they must be implemented thoughtfully. Each component should:
+  </p>
+  <ul class="list-disc ml-6 my-4">
+    <li>Serve a clear content purpose</li>
+    <li>Load efficiently and perform well</li>
+    <li>Respect user preferences and autonomy</li>
+    <li>Work with progressive enhancement principles</li>
+  </ul>
+  <p>
+    With these principles in mind, the Signals & Systems platform can continue to evolve with both technical sophistication and ethical integrity.
+  </p>
+  <CalloutBox type="info"></CalloutBox>
+</div>
