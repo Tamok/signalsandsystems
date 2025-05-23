@@ -1,0 +1,192 @@
+---
+import ArticleLayout from "../../layouts/ArticleLayout.astro";
+import CalloutBox from "../../components/CalloutBox.astro";
+import ChartComponent from "../../components/ChartComponent.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+
+const publishDate = new Date('2025-05-22');
+const chartData = {
+  labels: ['Astro Components', 'MDX', 'Chart.js', 'Interactive Code Editors', 'SVG Animation'],
+  datasets: [
+    {
+      label: 'Confidence Level',
+      data: [92, 65, 80, 45, 70],
+      backgroundColor: 'rgba(59, 130, 246, 0.5)',
+      borderColor: 'rgb(59, 130, 246)',
+      borderWidth: 1
+    }
+  ]
+};
+
+const mdxConfigCode = `import { defineConfig } from 'astro/config';
+import mdx from '@astrojs/mdx';
+
+export default defineConfig({
+  integrations: [mdx()],
+});`;
+---
+
+<ArticleLayout
+  title="Devlog #2: Interactive Components"
+  description="Enhancing Content with Dynamic Elements"
+  publishDate={publishDate}
+  coverImage="/images/devlog-2-cover.svg"
+>
+  <p class="lead">
+    In this second entry of the Signals & Systems devlog, I'll be exploring how to enhance content with interactive components using Astro and MDX. While static content forms the backbone of most articles, interactive elements can significantly improve reader engagement and understanding, especially for complex technical topics.
+  </p>
+
+  <h2 class="text-2xl font-bold mt-8 mb-4">The Power of Interactive Content</h2>
+  
+  <p>
+    Traditional blog platforms limit authors to static text and images. However, modern web technologies enable us to embed interactive elements directly within our content, creating more engaging and educational experiences. Some benefits include:
+  </p>
+  
+  <ul class="list-disc ml-6 my-4">
+    <li><strong>Improved conceptual understanding</strong> through visualization and manipulation</li>
+    <li><strong>Increased reader engagement</strong> with content they can interact with</li>
+    <li><strong>Enhanced learning outcomes</strong> through experiential elements</li>
+    <li><strong>Better retention</strong> of complex information</li>
+  </ul>
+
+  <h2 class="text-2xl font-bold mt-8 mb-4">MDX Integration in Astro</h2>
+  
+  <p>
+    <a href="https://mdxjs.com/" class="text-blue-600 hover:text-blue-800">MDX</a> extends Markdown by allowing JSX components to be embedded directly within content. This integration provides the best of both worlds: the simplicity of Markdown for text-heavy content and the power of React components for interactive elements.
+  </p>
+
+  <h3 class="text-xl font-semibold mt-6 mb-3">Setting Up MDX in Astro</h3>
+  
+  <p>The first step was installing the MDX integration for Astro:</p>
+  
+  <CodeBlock
+    code="pnpm add @astrojs/mdx"
+    lang="bash"
+    filename="Terminal"
+  />
+  
+  <p>Then configuring it in the <code>astro.config.mjs</code> file:</p>
+  
+  <CodeBlock
+    code={mdxConfigCode}
+    lang="javascript"
+    filename="astro.config.mjs"
+  />
+  
+  <p>This setup allows me to use <code>.mdx</code> files in the project with full component support.</p>
+
+  <h2 class="text-2xl font-bold mt-8 mb-4">Interactive Chart Components</h2>
+  
+  <p>
+    Data visualization is one of the most compelling use cases for interactive components. Using Chart.js within Astro components, I can create responsive, animated charts that readers can interact with.
+  </p>
+
+  <h3 class="text-xl font-semibold mt-6 mb-3">Basic Chart Component</h3>
+  
+  <p>Here's the structure of the <code>ChartComponent.astro</code> that powers the visualizations on this site:</p>
+  
+  <CodeBlock
+    code={`---
+// Chart component implementation will go here
+---
+
+<div class="chart-container">
+  <!-- Chart implementation with Chart.js -->
+</div>
+
+<script>
+  // Dynamic chart initialization code
+</script>`}
+    lang="astro"
+    filename="ChartComponent.astro"
+  />
+
+  <h3 class="text-xl font-semibold mt-6 mb-3">Implementation Details</h3>
+  
+  <p>The implementation includes:</p>
+  
+  <ol class="list-decimal ml-6 my-4">
+    <li>Client-side hydration using <code>client:load</code> directive</li>
+    <li>Props for customizing chart appearance and behavior</li>
+    <li>Responsive design that adapts to viewport size</li>
+    <li>Accessibility considerations for screen readers</li>
+  </ol>
+
+  <h2 class="text-2xl font-bold mt-8 mb-4">Code Playground Components</h2>
+  
+  <p>
+    Another powerful interactive element is live code playgrounds. These allow readers to experiment with code examples directly within articles, making technical concepts more tangible.
+  </p>
+
+  <h3 class="text-xl font-semibold mt-6 mb-3">Implementation Considerations</h3>
+  
+  <p>For code playgrounds, I need to balance:</p>
+  
+  <ul class="list-disc ml-6 my-4">
+    <li><strong>Performance</strong>: Ensuring the editor loads efficiently</li>
+    <li><strong>Functionality</strong>: Providing enough features for meaningful interaction</li>
+    <li><strong>Simplicity</strong>: Maintaining a clean, distraction-free interface</li>
+    <li><strong>Scope</strong>: Determining which languages and features to support</li>
+  </ul>
+
+  <h2 class="text-2xl font-bold mt-8 mb-4">Progressive Enhancement</h2>
+  
+  <p>
+    A key principle in my approach to interactive components is progressive enhancement. Each component should:
+  </p>
+  
+  <ol class="list-decimal ml-6 my-4">
+    <li>Provide basic functionality without JavaScript</li>
+    <li>Enhance the experience when JavaScript is available</li>
+    <li>Never become a critical dependency for understanding content</li>
+  </ol>
+
+  <h2 class="text-2xl font-bold mt-8 mb-4">Chart Data Confidence Survey</h2>
+  
+  <p>Here's a look at my confidence levels with various technologies used in this project:</p>
+  
+  <div class="my-8">
+    <ChartComponent 
+      type="bar"
+      data={chartData}
+      options={{
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100
+          }
+        }
+      }}
+    />
+  </div>
+
+  <h2 class="text-2xl font-bold mt-8 mb-4">Next Steps</h2>
+  
+  <p>As I continue developing interactive components for the platform, I'll focus on:</p>
+  
+  <ol class="list-decimal ml-6 my-4">
+    <li>Refining the Chart.js integration with more customization options</li>
+    <li>Implementing code playground components with syntax highlighting</li>
+    <li>Creating interactive diagrams for technical explanations</li>
+    <li>Developing custom visualization components for specific topic areas</li>
+  </ol>
+
+  <h2 class="text-2xl font-bold mt-8 mb-4">Conclusion</h2>
+  
+  <p>
+    Interactive components represent a significant enhancement to the traditional blogging experience. By thoughtfully integrating these elements, I'm creating a platform that not only informs but engages readers in a more meaningful way.
+  </p>
+  
+  <p>
+    The balance between performance, accessibility, and interactivity remains crucial. Each component added to the platform must serve a clear purpose and enhance the content without becoming a distraction or burden.
+  </p>
+  
+  <p>
+    In the next devlog, I'll explore the implementation of dark mode and discuss the accessibility considerations that guide the platform's development.
+  </p>
+  <CalloutBox type="info">
+    <p>
+      Remember that interactive components should always enhance the content, not replace it. Always provide fallbacks and ensure your content makes sense even without the interactive elements.
+    </p>
+  </CalloutBox>
+</ArticleLayout>

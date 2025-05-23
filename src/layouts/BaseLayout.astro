@@ -7,6 +7,7 @@ interface Props {
   description?: string;
   ogImage?: string;
   canonicalURL?: string;
+  includeSyntaxHighlighting?: boolean;
 }
 
 // Default values for props
@@ -15,6 +16,7 @@ const {
   description = "A personal, self-hosted publishing platform for long-form content with interactive elements.",
   ogImage = "/images/og-default.svg",
   canonicalURL = Astro.url,
+  includeSyntaxHighlighting = false,
 } = Astro.props;
 ---
 
@@ -47,7 +49,13 @@ const {
     <meta property="twitter:image" content={ogImage} />
     
     <!-- Google Tag Manager -->
-    <!-- Add GTM script here when ready -->
+    <!-- Add GTM script here when ready -->    <!-- Code Syntax Highlighting -->
+    {includeSyntaxHighlighting && (
+      <>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fira-code@6.2.0/distr/fira_code.css" />
+        <script src="/scripts/copyCode.js"></script>
+      </>
+    )}
     
     <slot name="head" />
   </head>

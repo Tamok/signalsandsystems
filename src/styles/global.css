@@ -1,26 +1,52 @@
 @import "tailwindcss";
 
-/* Additional global styles */
-.article-content h2 {
+/* Generalized prose heading underline for h2 */
+.prose h2 {
   position: relative;
   padding-bottom: 0.5rem;
   margin-top: 2rem;
   margin-bottom: 1.25rem;
+  font-weight: 700;
+  font-size: 1.5rem; /* 2xl */
 }
 
-.article-content h2::after {
+.prose h2::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
   width: 60px;
   height: 3px;
-  background-color: #4338CA;
+  background-color: #4338CA; /* Indigo-700 */
 }
 
+/* Ensure h1, h3, h4 are bold and have consistent sizing as in articles */
+.prose h1 {
+  font-size: 2.25rem; /* 4xl */
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+.prose h3 {
+  font-size: 1.25rem; /* xl */
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+.prose h4 {
+  font-size: 1.125rem; /* lg */
+  font-weight: 700;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Lead paragraph style for intro text */
 .lead {
   font-size: 1.125rem;
   line-height: 1.75;
   color: #4B5563;
   margin-bottom: 2rem;
 }
+
+/* Remove old .article-content h2 style if present */
+/* .article-content h2 { ... } and .article-content h2::after { ... } are now replaced by .prose h2 */

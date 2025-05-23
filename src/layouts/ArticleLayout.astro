@@ -1,6 +1,8 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import AuthorBio from '../components/AuthorBio.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
 import { format } from 'date-fns';
 
 interface Props {
@@ -31,39 +33,37 @@ const formattedUpdatedDate = updatedDate ? format(updatedDate, 'MMMM d, yyyy') :
   title={title}
   description={description}
   ogImage={ogImage}
-  canonicalURL={canonicalURL}
+  canonicalURL={typeof canonicalURL === 'string' ? canonicalURL : canonicalURL.toString()}
+  includeSyntaxHighlighting={true}
 >
+  <Nav slot="header" />
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <article class="prose lg:prose-xl mx-auto">
       <header class="mb-8">
         <h1 class="text-4xl font-bold mb-4">{title}</h1>
         <p class="text-gray-600 mb-4">{description}</p>
-        
         <div class="flex items-center text-sm text-gray-500">
           <time datetime={publishDate.toISOString()}>Published: {formattedPublishDate}</time>
-          {formattedUpdatedDate && (
+          {formattedUpdatedDate && updatedDate && (
             <span class="ml-4">
               Updated: <time datetime={updatedDate.toISOString()}>{formattedUpdatedDate}</time>
             </span>
           )}
         </div>
-        
         {coverImage && (
           <div class="mt-6">
             <img 
               src={coverImage} 
-              alt={`Cover image for ${title}`} 
+              alt={title} 
               class="rounded-lg shadow-md w-full object-cover"
             />
           </div>
         )}
-      </header>      <div class="article-content prose prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4">
-        <slot />
-      </div>
-
+      </header>
+      <slot />
       <hr class="my-12 border-gray-200" />
-      
       <AuthorBio />
     </article>
   </div>
+  <Footer slot="footer" />
 </BaseLayout>

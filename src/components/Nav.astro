@@ -1,4 +1,6 @@
 ---
+// Component for site navigation
+// No props required as this is a global component
 ---
 
 <nav class="bg-white shadow">
@@ -24,10 +26,9 @@
             About
           </a>
         </div>
-      </div>
-      <div class="hidden sm:ml-6 sm:flex sm:items-center">
+      </div>      <div class="hidden sm:ml-6 sm:flex sm:items-center">
         <div class="ml-3 relative">
-          <a href="https://github.com/yourusername/signals-and-systems" target="_blank" rel="noopener noreferrer" class="p-1 rounded-full text-gray-600 hover:text-gray-800 focus:outline-none">
+          <a href="https://github.com/Tamok" target="_blank" rel="noopener noreferrer" class="p-1 rounded-full text-gray-600 hover:text-gray-800 focus:outline-none">
             <span class="sr-only">GitHub</span>
             <!-- GitHub Icon -->
             <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -73,7 +74,7 @@
       
       // Toggle aria-expanded
       const expanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
-      mobileMenuButton.setAttribute('aria-expanded', !expanded);
+      mobileMenuButton.setAttribute('aria-expanded', String(!expanded));
       
       // Toggle button icon
       const blockIcon = mobileMenuButton.querySelector('.block');

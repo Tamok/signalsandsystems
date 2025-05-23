@@ -1,0 +1,130 @@
+---
+import CodeBlock from './CodeBlock.astro';
+
+interface Props {
+  language?: string;
+  showLineNumbers?: boolean;
+  theme?: 'github-light' | 'github-dark';
+  filename?: string;
+}
+
+const { 
+  language = 'javascript',
+  showLineNumbers = false,
+  theme = 'github-light',
+  filename
+} = Astro.props;
+
+// Example code for each language
+const examples = {
+  javascript: `// Example JavaScript function
+function fibonacci(n) {
+  if (n <= 1) return n;
+  return fibonacci(n-1) + fibonacci(n-2);
+}
+
+// Generate the first 10 Fibonacci numbers
+const fibSequence = [];
+for (let i = 0; i < 10; i++) {
+  fibSequence.push(fibonacci(i));
+}
+
+console.log(fibSequence);`,
+
+  typescript: `// Example TypeScript interface and class
+interface Person {
+  name: string;
+  age: number;
+  greet(): void;
+}
+
+class Student implements Person {
+  constructor(
+    public name: string,
+    public age: number,
+    private studentId: string
+  ) {}
+
+  greet(): void {
+    console.log(\`Hello, my name is \${this.name}\`);
+  }
+
+  study(subject: string): void {
+    console.log(\`\${this.name} is studying \${subject}\`);
+  }
+}`,
+
+  astro: `---
+// Example Astro component
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Default description' } = Astro.props;
+---
+
+<div class="card">
+  <h2>{title}</h2>
+  {description && <p>{description}</p>}
+</div>
+
+<style>
+  .card {
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    padding: 1rem;
+  }
+</style>`,
+
+  python: `# Example Python function
+def is_prime(n):
+    """
+    Check if a number is prime.
+    
+    Args:
+        n: The number to check
+        
+    Returns:
+        bool: True if the number is prime, False otherwise
+    """
+    if n <= 1:
+        return False
+    if n <= 3:
+        return True
+    
+    if n % 2 == 0 or n % 3 == 0:
+        return False
+    
+    i = 5
+    while i * i <= n:
+        if n % i == 0 or n % (i + 2) == 0:
+            return False
+        i += 6
+    
+    return True
+
+# Print the first 10 prime numbers
+primes = []
+num = 2
+while len(primes) < 10:
+    if is_prime(num):
+        primes.append(num)
+    num += 1
+    
+print(primes)`
+};
+
+// Get the example code based on the language
+const code = examples[language as keyof typeof examples] || examples.javascript;
+---
+
+<div class="code-sample">
+  <CodeBlock
+    code={code}
+    lang={language}
+    theme={theme}
+    showLineNumbers={showLineNumbers}
+    filename={filename}
+  />
+</div>

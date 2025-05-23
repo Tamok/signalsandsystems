@@ -4,17 +4,33 @@ This document outlines the planned development roadmap for the Signals & Systems
 
 ## Immediate Tasks (Next Session)
 
-1. **Create Devlog #2: Interactive Components**
-   - Focus on MDX integration details
-   - Showcase more complex Chart.js examples
-   - Demonstrate live code editing components
-   - Estimated time: 2-3 hours
+Urgent bugs and tasks that need to be addressed in the next session:
+0. **Important Fixes** ✓ (Completed on May 22, 2025)
+   - ✓ Ensure all instances of Twitter links and icons are updated to LinkedIn
+   - ✓ footer.astro href should not be empty
+   - ✓ devlog 1 Redundant text in alt attribute fixed. Changed from "Cover image for ${title}" to just "${title}"
+   - ✓ in authorbio.astro, added loading="lazy" to the author IMG tag to improve performance
+   - ✓ about.astro links updated with proper URLs and LinkedIn references
+   - ✓ Added navigation to ArticleLayout with header and footer for consistent site navigation
 
-2. **Enhance Code Syntax Highlighting**
-   - Add Prism.js or Shiki for improved code blocks
-   - Support for more programming languages
-   - Add copy-to-clipboard functionality
-   - Estimated time: 1-2 hours
+0.1. **Documentation** ✓ (Completed on May 22, 2025)
+   - ✓ Create copilot-instructions.md with detailed development guidelines and project principles
+
+0.2. **Bug fixes** ✓ (Completed on May 22, 2025)
+   - ✓ Fixed devlog 2 to use Astro component format instead of MDX
+   - ✓ Fixed script paths for code highlighting components
+   - ✓ Added proper SVG cover image for devlog 2
+   - ✓ Fixed file structure and script loading for code components
+
+1. **Create Devlog #2: Interactive Components** ✓ (Completed on May 22, 2025)
+   - ✓ Focus on MDX integration details
+   - ✓ Showcase more complex Chart.js examples
+   - ✓ Demonstrate live code editing components
+
+2. **Enhance Code Syntax Highlighting** ✓ (Completed on May 22, 2025)
+   - ✓ Add Shiki for improved code blocks
+   - ✓ Support for more programming languages
+   - ✓ Add copy-to-clipboard functionality
 
 3. **Implement Dark Mode**
    - Create toggle component

@@ -54,6 +54,8 @@ A personal, self-hosted publishing platform designed for long-form, markdown-nat
 │       └── global.css    # Import for Tailwind CSS
 ├── CHANGELOG.md          # Detailed changelog with timestamps
 ├── COMPONENTS.md         # Component index and documentation
+├── copilot-instructions.md # Development guidelines for GitHub Copilot
+├── NEXT-STEPS.md         # Development roadmap and future plans
 ├── astro.config.mjs      # Astro configuration
 └── package.json          # Project dependencies
 ```

@@ -1,37 +1,50 @@
 # Signals & Systems Changelog
 
-## 2025-05-21
-18:25:00 - Project initialized with Astro #setup #astro
-18:30:00 - Configured Tailwind CSS with Vite plugin #styling #tailwind
-18:40:00 - Created base layout structure #layout #components
-19:00:00 - Implemented main navigation and footer components #components #ui
-19:15:00 - Created ArticleLayout and SeriesLayout for content #layout #content
-19:30:00 - Developed key components: AuthorBio, CalloutBox, SeriesNav, SGEO #components
-19:45:00 - Added ChartComponent for interactive data visualization #components #interactive
-20:00:00 - Built homepage with featured content sections #pages #ui
-20:15:00 - Created first devlog article #content #devlog
-20:30:00 - Implemented series and articles listing pages #pages #content
-20:45:00 - Added about page with author information #pages #content
-21:00:00 - Created basic placeholder images and assets #assets
-
 ## 2025-05-22
-10:30:00 - Updated README with comprehensive project documentation #docs
-11:00:00 - Created custom favicon and site branding assets #branding #assets
-11:30:00 - Added GitHub workflow for automated deployment #cicd #deployment
-12:00:00 - Configured Google Tag Manager for analytics #analytics
-12:15:00 - Added robots.txt and improved SEO #seo
-12:30:00 - Tested responsive design across all pages #testing #responsive
-14:00:00 - Enhanced header styling to fix rendering issues #styling #bugfix
-14:30:00 - Improved author image with SVG-based graphics #assets #branding
-15:00:00 - Fixed ChartJS integration for better interactive charts #bugfix #interactive
-15:30:00 - Created high-quality SVG images for devlog covers #assets #branding
-16:00:00 - Updated social links to use GitHub and LinkedIn #social #profile
-16:30:00 - Added personal identity information with professional links #profile #branding
-17:00:00 - Updated component documentation with SVG assets section #docs #components
-17:30:00 - Applied consistent prose styling to both ArticleLayout and SeriesLayout #styling #consistency
-18:00:00 - Improved ArticleLayout header styling with visual indicators #styling #ux
-18:30:00 - Replaced all JPG/PNG references with optimized SVG versions #assets #performance
-19:00:00 - Enhanced AuthorBio component with social media links #components #social
-19:30:00 - Updated site README with expanded technology stack section #docs #branding
-20:00:00 - Consolidated style improvements across layouts #styling #refactor
-20:30:00 - Created NEXT-STEPS.md document for future development planning #planning #roadmap
+00:34:04 - Updated package dependencies and configuration #setup #dependencies
+00:52:24 - Configured Astro with MDX support #setup #integration
+01:15:00 - Created component foundations: Nav, SeriesNav #components #navigation
+01:45:00 - Built articles and series listing pages #pages #content
+02:30:00 - Added analytics utility functions #utils #analytics
+03:00:00 - Created CalloutBox component for contextual information #components #ui
+03:30:00 - Implemented series organization and navigation #structure #navigation
+04:00:03 - Updated BaseLayout with metadata and SEO improvements #layout #seo
+04:15:00 - Enhanced SeriesLayout with improved navigation #layout #navigation
+04:30:00 - Added SGEO component for search optimization #components #seo
+04:45:00 - Implemented ChartComponent for data visualization #components #interactive
+15:55:14 - Added initial image assets for articles and profiles #assets #media
+16:00:03 - Created high-quality SVG versions of all site graphics #assets #svg
+16:15:00 - Updated README with comprehensive project documentation #docs
+16:30:00 - Created COMPONENTS.md documentation #docs #components
+16:45:00 - Configured Tailwind for typography and responsive design #styling #responsive
+16:46:08 - Created first devlog article documenting platform setup #content #devlog
+16:48:02 - Enhanced Footer component with proper social links #components #navigation
+16:48:14 - Improved AuthorBio with lazy-loading and accessibility #components #a11y
+16:48:29 - Updated About page with proper author information #pages #content
+16:50:05 - Enhanced ArticleLayout with navigation options #layout #navigation
+18:30:39 - Fixed navigation links in Nav component #bugfix #navigation
+18:32:02 - Created NEXT-STEPS.md with development roadmap #planning #roadmap
+18:32:37 - Updated CHANGELOG with accurate timestamps #docs #organization
+19:15:45 - Created copilot-instructions.md for AI assistance #docs #development
+19:45:20 - Created Devlog #2 article about interactive components #content #devlog
+20:30:15 - Implemented enhanced code syntax highlighting with Shiki #feature #ui
+20:32:20 - Added code copy functionality to code blocks #feature #ui
+20:35:45 - Fixed updatedDate handling in ArticleLayout #bugfix #layout
+21:15:30 - Fixed devlog 2 to use Astro component format instead of MDX #bugfix #content
+21:20:45 - Created SVG cover image for devlog 2 #assets #media
+21:25:10 - Fixed script paths for code highlighting #bugfix #structure
+21:30:25 - Restructured code copy functionality for proper loading #bugfix #ui
+20:40:00 - Unified all heading styles globally using .prose classes; h1, h2, h3, h4 are now bold and sized consistently across all pages #styling #typography
+20:41:00 - Implemented global underlined h2 style via .prose h2 and removed redundant prose-h2/prose-headings classes from layouts #styling #consistency
+20:42:00 - Updated global.css to ensure all prose headings match the preferred article style, including about page and all articles #css #design
+20:43:00 - Fixed canonicalURL prop type error in SeriesLayout.astro for Astro v5+ compatibility #bugfix #astro
+20:44:00 - Updated devlog #1 to document these design and technical decisions for future reference #docs #devlog
+
+## 2025-05-21
+08:58:08 - Project initialized with Astro and TypeScript configuration #setup #astro
+20:30:00 - Created basic component structure #components #structure
+21:15:00 - Implemented initial page layouts #layout #structure
+22:00:00 - Set up navigation and basic routing #navigation #structure
+22:45:00 - Created placeholder content for main pages #content #structure
+23:15:00 - Added base styling with Tailwind CSS integration #styling #tailwind
+23:40:00 - Established project organization and folder structure #structure #organization

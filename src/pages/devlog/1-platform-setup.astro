@@ -5,11 +5,11 @@ import ChartComponent from "../../components/ChartComponent.astro";
 
 const publishDate = new Date('2025-05-21');
 const chartData = {
-  labels: ['Astro', 'Tailwind CSS', 'MDX', 'Google Analytics'],
+  labels: ['Astro', 'Astro Components', 'Tailwind CSS', 'MDX', 'Google Analytics'],
   datasets: [
     {
       label: 'Technology Adoption',
-      data: [95, 90, 80, 70],
+      data: [95, 92, 90, 65, 70],
       backgroundColor: 'rgba(59, 130, 246, 0.5)',
       borderColor: 'rgb(59, 130, 246)',
       borderWidth: 1
@@ -28,8 +28,7 @@ const chartData = {
     Today marks the beginning of a new journey. I'm excited to share the creation process of <em>Signals &amp; Systems</em>, 
     a personal publishing platform I'm building from the ground up to host long-form, interactive content.
   </p>
-
-  <h2>The Vision</h2>
+  <h2 class="text-2xl font-bold mt-8 mb-4">The Vision</h2>
   
   <p>
     As both an educator and technologist, I've always found myself at the intersection of content creation and 
@@ -44,29 +43,29 @@ const chartData = {
       This will guide your technical decisions and help you avoid unnecessary complexity.
     </p>
   </CalloutBox>
-
-  <h2>Technology Choices</h2>
+  <h2 class="text-2xl font-bold mt-8 mb-4">Technology Choices</h2>
 
   <p>
     After evaluating several options, I settled on a tech stack that prioritizes performance, simplicity, and 
     developer experience:
   </p>
-
   <ul>
     <li><strong>Astro</strong>: A modern static site generator that delivers excellent performance by default, with minimal JavaScript.</li>
-    <li><strong>MDX</strong>: Markdown with JSX support, allowing me to embed interactive components directly in my writing.</li>
+    <li><strong>Astro Components</strong>: Using Astro's component system for creating reusable UI elements with HTML-like syntax.</li>
+    <li><strong>MDX (Future)</strong>: Planning to explore Markdown with JSX support for simpler content writing workflow.</li>
     <li><strong>Tailwind CSS</strong>: A utility-first CSS framework that makes styling straightforward and consistent.</li>
     <li><strong>Google Analytics</strong>: For basic audience insights while respecting privacy concerns.</li>
   </ul>
-
-  <ChartComponent 
-    type="bar" 
-    data={chartData} 
-    title="Technology Selection Confidence" 
-    description="My confidence level (0-100) in each technology choice for this platform."
-  />
-
-  <h2>Project Structure</h2>
+  <div class="my-8">
+    <p class="text-lg font-medium text-gray-700 mb-2">Technology Selection Confidence</p>
+    <ChartComponent 
+      type="bar" 
+      data={chartData} 
+      title="" 
+      description="My confidence level (0-100) in each technology choice for this platform."
+    />
+  </div>
+  <h2 class="text-2xl font-bold mt-8 mb-4">Project Structure</h2>
 
   <p>
     I've organized the project with a focus on modularity and maintainability:
@@ -82,8 +81,7 @@ signals-and-systems/
 ├── public/            # Static assets
 └── astro.config.mjs   # Astro configuration
   </code></pre>
-
-  <h2>The Design Philosophy</h2>
+  <h2 class="text-2xl font-bold mt-8 mb-4">The Design Philosophy</h2>
 
   <p>
     For this platform, I'm embracing a minimalist design approach with a focus on readability and content hierarchy. 
@@ -101,46 +99,17 @@ signals-and-systems/
       The interactive elements in this platform are built with a "load on demand" approach to maintain fast initial page loads.
     </p>
   </CalloutBox>
-
-  <h2>The Ethical Considerations</h2>
+  <h2 class="text-2xl font-bold mt-8 mb-4">The Ethical Considerations</h2>
 
   <p>
     As I build this platform, I'm constantly thinking about the ethical dimensions of digital publishing:
   </p>
-
   <ul>
     <li><strong>Privacy</strong>: Minimizing data collection and being transparent about what's collected.</li>
     <li><strong>Accessibility</strong>: Ensuring content is accessible to all readers, regardless of ability.</li>
     <li><strong>Sustainability</strong>: Building a platform with minimal environmental impact through efficient code and assets.</li>
     <li><strong>Vibecoding</strong>: Exploring the balance between technical optimization and human-centered design.</li>
-  </ul>
-  <h2>What's Next</h2>
-
-  <p>
-    This is just the beginning. In the next devlog entry, I'll dive deeper into the implementation details of the components 
-    I've created, particularly focusing on the interactive elements and how they're integrated with MDX. Here's a preview of what's coming:
-  </p>
-
-  <ul>
-    <li><strong>Interactive Components Deep Dive</strong> - A closer look at Chart.js integration and dynamic content</li>
-    <li><strong>Enhanced Code Syntax Highlighting</strong> - Adding better code blocks with language support</li>
-    <li><strong>Dark Mode Implementation</strong> - Creating a toggleable dark theme with consistent styling</li>
-    <li><strong>Search Functionality</strong> - Adding client-side search capabilities</li>
-  </ul>
-
-  <p>
-    I'll also start exploring the concept of "vibecoding" more thoroughly—what does it mean to code with a focus on the 
-    overall feel and experience rather than just technical specifications? This approach aims to balance technical excellence with 
-    emotional resonance, creating systems that feel good to use.
-  </p>
-  <CalloutBox type="tip" title="Join the Conversation">
-    <p>
-      Have thoughts on this approach or suggestions for future devlog topics? I'd love to hear from you! 
-      Connect with me on <a href="https://github.com/Tamok" class="text-blue-600 hover:text-blue-800">GitHub</a> or
-      <a href="https://www.linkedin.com/in/jonathan-engeln/" class="text-blue-600 hover:text-blue-800">LinkedIn</a>.
-    </p>
-  </CalloutBox>
-  <h2>Visual Design Evolution</h2>
+  </ul>  <h2 class="text-2xl font-bold mt-8 mb-4">Visual Design Evolution</h2>
   
   <p>
     One of the key aspects of this platform is the visual design. I wanted to create a clean, distraction-free reading experience that 
@@ -160,41 +129,91 @@ signals-and-systems/
       the narrative, not distract from it. This philosophy guides all design decisions from typography to component behaviors.
     </p>
   </CalloutBox>
-
-  <h2>Technical Implementation Highlights</h2>
+  <h2 class="text-2xl font-bold mt-8 mb-4">Technical Implementation Highlights</h2>
 
   <p>
     Some of the more interesting technical aspects of this implementation include:
   </p>
-
   <ul>
     <li><strong>Astro's Islands Architecture</strong> - Allows us to ship minimal JavaScript while still enabling interactive components</li>
-    <li><strong>MDX Integration</strong> - Seamlessly mix Markdown with React components</li>
+    <li><strong>Astro Components</strong> - Using Astro's native component system for clean organization and reusability</li>
+    <li><strong>Future MDX Integration</strong> - Planning to explore a more markdown-native approach while maintaining component capabilities</li>
     <li><strong>Dynamic Chart Rendering</strong> - Asynchronously loads Chart.js only when needed to optimize page performance</li>
     <li><strong>Responsive Typography</strong> - Scales beautifully across device sizes using Tailwind's responsive utilities</li>
     <li><strong>Build-time SEO Optimization</strong> - Leverages Astro's static generation for optimal search visibility</li>
   </ul>
-
-  <h2>Changelog</h2>
+  <h2 class="text-2xl font-bold mt-8 mb-4">Changelog</h2>
 
   <pre class="text-sm bg-gray-100 p-4 rounded overflow-auto">
-<code>2025-05-21 18:25 - Project initialized with Astro and basic dependencies #setup #astro
-2025-05-21 18:30 - Configured Tailwind CSS with Vite plugin #styling #tailwind
-2025-05-21 18:40 - Created base layout structure #layout #components
-2025-05-21 19:00 - Implemented main navigation and footer components #components #ui
-2025-05-21 19:15 - Created ArticleLayout and SeriesLayout for content #layout #content
-2025-05-21 19:30 - Developed key components: AuthorBio, CalloutBox, SeriesNav, SGEO #components
-2025-05-21 19:45 - Added ChartComponent for interactive data visualization #components #interactive
-2025-05-21 20:00 - Built homepage with featured content sections #pages #ui
-2025-05-21 20:15 - Created first devlog article #content #devlog
-2025-05-21 20:30 - Implemented series and articles listing pages #pages #content
-2025-05-21 20:45 - Added about page with author information #pages #content
-2025-05-21 21:00 - Created basic placeholder images and assets #assets
+<code>2025-05-21 08:58 - Project initialized with Astro and TypeScript configuration #setup #astro
+2025-05-21 20:30 - Created basic component structure #components #structure
+2025-05-21 21:15 - Implemented initial page layouts #layout #structure
+2025-05-21 22:00 - Set up navigation and basic routing #navigation #structure
+2025-05-21 22:45 - Created placeholder content for main pages #content #structure
+2025-05-21 23:15 - Added base styling with Tailwind CSS integration #styling #tailwind
+2025-05-21 23:40 - Established project organization and folder structure #structure #organization
 
-2025-05-22 10:30 - Updated README with comprehensive project documentation #docs
-2025-05-22 15:00 - Fixed ChartJS integration for better interactive charts #bugfix #interactive
-2025-05-22 15:30 - Created high-quality SVG images for devlog covers #assets #branding
-2025-05-22 16:00 - Updated social links to use GitHub and LinkedIn #social #profile
-2025-05-22 19:00 - Enhanced AuthorBio component with social media links #components #social</code>
+2025-05-22 00:34 - Updated package dependencies and configuration #setup #dependencies
+2025-05-22 00:52 - Configured Astro with MDX support #setup #integration
+2025-05-22 04:00 - Updated BaseLayout with metadata and SEO improvements #layout #seo
+2025-05-22 04:45 - Implemented ChartComponent for data visualization #components #interactive
+2025-05-22 15:55 - Added initial image assets for articles and profiles #assets #media
+2025-05-22 16:00 - Created high-quality SVG versions of all site graphics #assets #svg
+2025-05-22 16:15 - Updated README with comprehensive project documentation #docs
+2025-05-22 16:46 - Created first devlog article documenting platform setup #content #devlog
+2025-05-22 16:48 - Enhanced Footer and AuthorBio components #components #navigation
+2025-05-22 18:30 - Updated navigation with consistent site structure #navigation #ux</code>
   </pre>
+
+  <h2 class="text-2xl font-bold mt-8 mb-4">What's Next</h2>
+  
+  <p>
+    This is just the beginning. In the next devlog entry, I'll dive deeper into the implementation details of the components 
+    I've created, particularly focusing on the interactive elements and how they enhance content. Here's a preview of what's coming:
+  </p>
+
+  <CalloutBox type="info" title="Development Principles">
+    <p class="mb-2">
+      For every future development step, we will adhere to these core principles:
+    </p>
+    <ul class="list-disc pl-5 space-y-1">
+      <li><strong>Detailed Documentation</strong>: Always update the CHANGELOG.md and devlog with specific details for each change</li>
+      <li><strong>Component Awareness</strong>: Reference and update COMPONENTS.md as we develop to maintain a consistent component library</li>
+      <li><strong>Minimalism</strong>: Focus on essential functionality without feature bloat</li>
+      <li><strong>Performance</strong>: Optimize for speed and efficiency across all devices</li>
+      <li><strong>Cutting-Edge Practices</strong>: Stay current with web development best practices</li>
+      <li><strong>Component Reuse</strong>: Prefer enhancing existing components over creating new ones</li>
+    </ul>
+  </CalloutBox>
+
+  <h3 class="text-xl font-semibold mt-6 mb-3">Upcoming Features</h3>
+  
+  <ul>
+    <li><strong>Interactive Components Deep Dive</strong> - A closer look at Chart.js integration and dynamic content</li>
+    <li><strong>Enhanced Code Syntax Highlighting</strong> - Adding better code blocks with language support</li>
+    <li><strong>Dark Mode Implementation</strong> - Creating a toggleable dark theme with consistent styling</li>
+    <li><strong>MDX Integration Exploration</strong> - Evaluating how to add MDX support while maintaining our component system</li>
+    <li><strong>Search Functionality</strong> - Adding client-side search capabilities</li>
+  </ul>
+
+  <h3 class="text-xl font-semibold mt-6 mb-3">Vibecoding: A New Development Approach</h3>
+  
+  <p>
+    "Vibe coding" is a term used to describe a new approach to software development that leverages AI to automate parts of the coding process. 
+    It's characterized by focusing on the overall intent of the project and allowing AI tools to handle the syntax and structure. 
+    Essentially, developers describe what they want to achieve in natural language, and AI tools generate the code.
+  </p>
+  
+  <p>
+    This approach aims to balance technical excellence with emotional resonance, creating systems that not only function well but also 
+    feel good to use. Through Signals & Systems, we'll explore how vibecoding can be applied to create more intuitive, human-centered digital experiences.
+  </p>
+
+  <CalloutBox type="tip" title="Join the Conversation">
+    <p>
+      Have thoughts on this approach or suggestions for future devlog topics? I'd love to hear from you! 
+      Connect with me on <a href="https://github.com/Tamok" class="text-blue-600 hover:text-blue-800">GitHub</a> or
+      <a href="https://www.linkedin.com/in/jonathan-engeln/" class="text-blue-600 hover:text-blue-800">LinkedIn</a>.
+    </p>
+  </CalloutBox>
 </ArticleLayout>

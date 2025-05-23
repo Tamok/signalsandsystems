@@ -11,7 +11,8 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.7",
     "astro": "^5.7.14",
-    "date-fns": "^4.1.0"
+    "date-fns": "^4.1.0",
+    "shiki": "^3.4.2"
   },
   "packageManager": "pnpm@10.6.5+sha1.da220e966c2db3275efb5928cf8f3592681b106b",
   "devDependencies": {

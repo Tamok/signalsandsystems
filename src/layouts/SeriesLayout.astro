@@ -47,7 +47,7 @@ const nextArticle = currentIndex < seriesArticles.length - 1 ? seriesArticles[cu
   title={`${title} | ${seriesTitle} Series`}
   description={description}
   ogImage={ogImage}
-  canonicalURL={canonicalURL}
+  canonicalURL={typeof canonicalURL === 'string' ? canonicalURL : canonicalURL.toString()}
 >
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="mb-8">
@@ -71,9 +71,8 @@ const nextArticle = currentIndex < seriesArticles.length - 1 ? seriesArticles[cu
             />
           </div>
         )}
-      </header>      <div class="article-content prose prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4">
-        <slot />
-      </div>
+      </header>
+      <slot />
       
       <div class="mt-12">
         <SeriesNav 

@@ -99,6 +99,25 @@ This document serves as a reference guide for all components and layouts in the 
 - **File:** `/src/components/AuthorBio.astro`
 - **Description:** Displays author information at the end of articles with social links to GitHub and LinkedIn.
 
+### CodeBlock
+- **File:** `/src/components/CodeBlock.astro`
+- **Description:** Enhanced code block with syntax highlighting and copy-to-clipboard functionality.
+- **Props:**
+  - `code`: The code string to be displayed and highlighted
+  - `lang`: Programming language for syntax highlighting
+  - `filename`: Optional filename to display above the code (optional)
+  - `theme`: Color theme for highlighting (github-light or github-dark) (optional)
+  - `showLineNumbers`: Whether to display line numbers (optional)
+
+### CodeExample
+- **File:** `/src/components/CodeExample.astro`
+- **Description:** Demo component that displays example code in various languages.
+- **Props:**
+  - `language`: Programming language for the example (javascript, typescript, python, astro) (optional)
+  - `showLineNumbers`: Whether to display line numbers (optional)
+  - `theme`: Color theme for highlighting (github-light or github-dark) (optional)
+  - `filename`: Optional filename to display above the code (optional)
+
 ## SVG Assets
 
 ### Favicon

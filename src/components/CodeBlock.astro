@@ -1,0 +1,110 @@
+---
+import { highlightCode, addCopyButtons } from '../utils/codeHighlight';
+
+interface Props {
+  code: string;
+  lang: string;
+  filename?: string;
+  theme?: 'github-light' | 'github-dark';
+  showLineNumbers?: boolean;
+}
+
+const { 
+  code, 
+  lang, 
+  filename = null, 
+  theme = 'github-light', 
+  showLineNumbers = false 
+} = Astro.props;
+
+// Get highlighted code HTML
+const highlighted = await highlightCode(code, lang, theme);
+
+// Add copy button and wrap in container
+const htmlWithCopyButton = addCopyButtons(highlighted);
+
+// Add line numbers if requested
+let finalHtml = htmlWithCopyButton;
+if (showLineNumbers) {
+  // Process the HTML to add line numbers
+  finalHtml = finalHtml.replace(
+    /<pre(.*?)><code(.*?)>(.*?)<\/code><\/pre>/gs,
+    (match, preAttrs, codeAttrs, codeContent) => {
+      const lines = codeContent.split('\n');
+      const lineNumbers = lines
+        .map((_: string, i: number) => `<span class="line-number">${i + 1}</span>`)
+        .join('\n');
+      
+      return `
+        <div class="code-with-line-numbers">
+          <div class="line-numbers-container">${lineNumbers}</div>
+          <pre${preAttrs}><code${codeAttrs}>${codeContent}</code></pre>
+        </div>
+      `;
+    }
+  );
+}
+---
+
+<div class="code-block">
+  {filename && (
+    <div class="code-filename px-4 py-2 text-sm bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 rounded-t-md">
+      {filename}
+    </div>
+  )}
+  <div class:list={["code-content", { "rounded-md": !filename, "rounded-b-md": filename }]}>
+    <Fragment set:html={finalHtml} />
+  </div>
+</div>
+
+<style is:global>
+  .code-block {
+    margin: 1.5rem 0;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.875rem;
+  }
+
+  .code-block-wrapper {
+    position: relative;
+  }
+
+  .code-with-line-numbers {
+    display: flex;
+  }
+
+  .line-numbers-container {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 0.5rem;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    color: #888;
+    text-align: right;
+    user-select: none;
+  }
+
+  .line-number {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    padding-right: 0.5rem;
+  }
+
+  .dark .code-block-wrapper pre {
+    background-color: #0d1117 !important;
+  }
+
+  .code-block pre {
+    margin: 0;
+    padding: 1rem;
+    overflow-x: auto;
+    border-radius: 0.375rem;
+  }
+
+  .code-block code {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+</style>
+
+<!-- Script is loaded in BaseLayout instead of per component -->
