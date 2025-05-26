@@ -46,17 +46,17 @@ import CodeBlock from '../../components/CodeBlock.astro';
 
 <h2 class="text-2xl font-bold mt-8 mb-4">Data Visualization: Beyond the Basics</h2>
 <p>
-  Data visualization isn't just about bar charts—it's about telling a story with data. Here, I wanted to showcase how interactive visualizations can highlight the platform's core values and ambitions. The chart below isn't just a demo; it's a living snapshot of what matters most to Signals & Systems:
+  Data visualization isn't just about bar charts—it's about telling a story with data. For this article, I've chosen a pie chart to emphasize the proportional significance of each platform value. This visualization highlights how each core value contributes to the overall philosophy of Signals & Systems:
 </p>
 <div class="my-8 p-6 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg shadow-sm">
   <ChartComponent 
-    type="bar"
+    type="pie"
     data={{
-      labels: ['Accessibility', 'Performance', 'User Consent', 'Visualization', 'Customization', 'Fun Factor'],
+      labels: ['Accessibility', 'Performance', 'User Experience', 'Visualization', 'Customization', 'Fun Factor'],
       datasets: [
         {
-          label: 'Platform Impact Score',
-          data: [98, 95, 100, 92, 90, 88],
+          label: 'Platform Value Distribution',
+          data: [100, 90, 100, 80, 100, 70],
           backgroundColor: [
             'rgba(34,197,94,0.7)',
             'rgba(59,130,246,0.7)',
@@ -72,8 +72,7 @@ import CodeBlock from '../../components/CodeBlock.astro';
             'rgb(244,63,94)',
             'rgb(168,85,247)',
             'rgb(16,185,129)'
-          ],
-          borderWidth: 2
+          ]
         }
       ]
     }}
@@ -82,23 +81,17 @@ import CodeBlock from '../../components/CodeBlock.astro';
         legend: { position: 'top' },
         title: {
           display: true,
-          text: 'Signals & Systems: Platform Impact Map',
+          text: 'Signals & Systems: Platform Value Distribution',
           font: { size: 18 },
           color: '#334155',
           padding: { top: 10, bottom: 20 }
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          max: 100
         }
       }
     }}
   />
 </div>
 <p>
-  This bar chart visualizes the platform's priorities: accessibility, performance, user consent, visualization, customization, and fun. Each bar represents a core value, and the scores reflect my commitment to pushing each area as far as possible. Interactive data like this invites readers to explore, compare, and even challenge the priorities of the platform.
+  This pie chart visualizes the relative importance of each of the values I prioritize: accessibility, performance, user experience, visualization, customization, and fun. By showing proportions, it underscores how each value shapes the overall direction of the platform.
 </p>
 
 <h2 class="text-2xl font-bold mt-10 mb-4">Privacy & Consent: The Ethical Foundation</h2>
