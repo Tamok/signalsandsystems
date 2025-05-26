@@ -78,7 +78,7 @@ The blog hosts articles that can either be part of a series or standalone pieces
 
 ## 📝 Devlog and Changelog
 
-The [Devlog Series](/series/devlog) documents the creation and evolution of this platform, providing insights into technical decisions, challenges, and ethical considerations. The [CHANGELOG.md](./CHANGELOG.md) maintains a detailed record of all significant features and actions with timestamps. 
+The [Devlog Series](https://signalsandsystems.jellwrites.com/series/devlog) documents the creation and evolution of this platform, providing insights into technical decisions, challenges, and ethical considerations. The [CHANGELOG.md](./CHANGELOG.md) maintains a detailed record of all significant features and actions with timestamps. 
 
 For future development plans and upcoming features, see [NEXT-STEPS.md](./NEXT-STEPS.md).
 
