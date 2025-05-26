@@ -37,10 +37,19 @@ Urgent bugs and tasks that need to be addressed in the next session:
    - ✓ Ensure all content is dynamic and sourced from the appropriate files
    - ✓ We do not want to have any hardcoded content in the project, as it is a static site generator and should be able to generate all content dynamically
 
-3. **Implement Dark Mode**
-   - Create toggle component
+3. **Implement Dark Mode + Style**
+   - Use "BY JELL" SVG and add that svg in the corner of the Signals & Systems branding (Signals & Systems by JELL) 
+   - Create a toggle component for dark mode
    - Design dark color scheme that's consistent with brand
    - Ensure SVGs adapt to color scheme changes
+
+4. **Improve Accessibility and ensure compliance**
+   - Conduct an accessibility audit of all components
+   - Add ARIA attributes where necessary
+   - Ensure keyboard navigation works across all interactive elements
+   - Test with screen readers to ensure compatibility
+   - Ensure a GDPR-friendly cookie consent implementation for GA4 tracking
+   - Provide clear opt-in/opt-out options for users in the footer (a simple toggle switch or checkbox).
 
 ## Short-term Goals (Next 2-3 Sessions)
 
