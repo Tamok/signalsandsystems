@@ -1,0 +1,324 @@
+---
+title: "Devlog #4: Deployment & Development Debugging"
+description: "Setting up GitHub Pages deployment with custom domains and implementing development-only debug patterns for better developer experience."
+publishDate: 2025-05-26T15:31:00Z
+series: "devlog"
+order: 4
+coverImage: "/images/devlog-4-cover.svg"
+tags: ["deployment", "github-pages", "debugging", "workflow", "domains"]
+---
+
+import CalloutBox from '../../components/CalloutBox.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+<p class="lead">
+  <em>From local development to live deployment: configuring GitHub Pages with custom domains and establishing patterns for development-only debugging that don't interfere with production builds.</em>
+</p>
+
+<h2 class="text-2xl font-bold mt-8 mb-4">Going Live: GitHub Pages Deployment</h2>
+
+<p>
+  After building our content management system and interactive components, it was time to deploy the Signals & Systems platform to the web. GitHub Pages emerged as the natural choice for hosting our Astro-based static site, offering seamless integration with our existing GitHub workflow.
+</p>
+
+<h3 class="text-xl font-semibold mt-6 mb-3">GitHub Actions Workflow</h3>
+
+<p>
+  The deployment process leverages GitHub Actions to automatically build and deploy our site whenever we push changes to the main branch. The workflow handles the entire pipeline from source code to live site.
+</p>
+
+<div class="my-6">
+  <CodeBlock
+    code={`name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Install dependencies
+        run: pnpm install
+      - name: Build with Astro
+        run: pnpm run build
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: \${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4`}
+    lang="yaml"
+    filename=".github/workflows/deploy.yml"
+  />
+</div>
+
+<CalloutBox type="info" title="Repository Configuration Required">
+  <p>
+    The GitHub Actions workflow requires specific repository settings to function properly. In your repository settings, navigate to <strong>Pages</strong> and select <strong>GitHub Actions</strong> as the source, rather than deploying from a branch.
+  </p>
+</CalloutBox>
+
+<h3 class="text-xl font-semibold mt-6 mb-3">Custom Domain Configuration</h3>
+
+<p>
+  Setting up custom domains involved both DNS configuration and GitHub Pages settings. We configured two domains to point to our GitHub Pages site: our primary domain and a shorter alternative.
+</p>
+
+<div class="my-6">
+  <CodeBlock
+    code={`// astro.config.mjs - Site URL configuration
+export default defineConfig({
+  site: 'https://signalsandsystems.jellwrites.com',
+  integrations: [
+    tailwind({
+      applyBaseStyles: false,
+    }),
+    mdx(),
+  ],
+  markdown: {
+    shikiConfig: {
+      theme: 'github-light',
+      wrap: true
+    }
+  }
+});`}
+    lang="javascript"
+    filename="astro.config.mjs"
+  />
+</div>
+
+<p>
+  The CNAME file in the public directory tells GitHub Pages which custom domain to use:
+</p>
+
+<div class="my-6">
+  <CodeBlock
+    code={`signalsandsystems.jellwrites.com`}
+    lang="text"
+    filename="public/CNAME"
+  />
+</div>
+
+<CalloutBox type="tip" title="DNS Setup">
+  <p>
+    At your domain provider, create CNAME records pointing both domains to <code>yourusername.github.io</code>. DNS propagation typically takes a few minutes to several hours.
+  </p>
+</CalloutBox>
+
+<h3 class="text-xl font-semibold mt-6 mb-3">Build vs. Source Deployment</h3>
+
+<p>
+  One key decision was whether to push the built <code>dist</code> folder or let GitHub Actions handle the build process. We chose the GitHub Actions approach for several reasons:
+</p>
+
+<ul class="list-disc pl-6 mt-4 space-y-2">
+  <li><strong>Automation</strong>: Builds happen automatically on every push</li>
+  <li><strong>Consistency</strong>: Same build environment every time</li>
+  <li><strong>Clean Repository</strong>: No build artifacts in version control</li>
+  <li><strong>Easy Rollbacks</strong>: Can redeploy any previous commit</li>
+</ul>
+
+<h2 class="text-2xl font-bold mt-8 mb-4">Development-Only Debug Patterns</h2>
+
+<p>
+  As our platform grew more complex, we needed better visibility into what was happening during development without cluttering the production site with debug information.
+</p>
+
+<h3 class="text-xl font-semibold mt-6 mb-3">Environment-Based Conditional Rendering</h3>
+
+<p>
+  Astro provides <code>import.meta.env.DEV</code> to distinguish between development and production builds. This allows us to include helpful debug information that automatically disappears in production.
+</p>
+
+<div class="my-6">
+  <CodeBlock
+    code={`// Development-only debug information
+{import.meta.env.DEV && (
+  <div class="debug-info">
+    DEBUG: {articles.length} articles loaded
+  </div>
+)}`}
+    lang="astro"
+    filename="Basic Debug Pattern"
+  />
+</div>
+
+<h3 class="text-xl font-semibold mt-6 mb-3">Overlay Debug Styles</h3>
+
+<p>
+  To prevent debug information from affecting page layout, we developed an overlay pattern using CSS positioning. This keeps debug info visible but completely separate from the content flow.
+</p>
+
+<div class="my-6">
+  <CodeBlock
+    code={`// Non-intrusive debug overlay
+{import.meta.env.DEV && (
+  <div class="fixed top-4 right-4 bg-red-500 text-white px-2 py-1 text-xs rounded z-50 pointer-events-none">
+    DEBUG: {articles.length} articles loaded
+  </div>
+)}`}
+    lang="astro"
+    filename="Overlay Debug Pattern"
+  />
+</div>
+
+<p>
+  The key CSS properties that make this work:
+</p>
+
+<ul class="list-disc pl-6 mt-4 space-y-2">
+  <li><code>fixed</code> positioning removes the element from document flow</li>
+  <li><code>z-50</code> ensures debug info appears above other content</li>
+  <li><code>pointer-events-none</code> prevents interference with user interactions</li>
+  <li>Bright colors make debug content clearly identifiable</li>
+</ul>
+
+<h3 class="text-xl font-semibold mt-6 mb-3">Common Debug Patterns</h3>
+
+<p>
+  We established several reusable patterns for different types of debug information:
+</p>
+
+<div class="my-6">
+  <CodeBlock
+    code={`// Data count debug
+{import.meta.env.DEV && (
+  <div class="fixed bottom-4 left-4 bg-blue-600 text-white px-2 py-1 text-xs rounded">
+    {componentName}: {dataArray.length} items
+  </div>
+)}
+
+// State debug
+{import.meta.env.DEV && (
+  <div class="absolute top-0 right-0 bg-yellow-500 text-black px-1 text-xs">
+    State: {currentState}
+  </div>
+)}
+
+// Performance debug
+{import.meta.env.DEV && (
+  <div class="fixed top-4 left-4 bg-green-600 text-white px-2 py-1 text-xs rounded font-mono">
+    Render: {Date.now()}ms
+  </div>
+)}`}
+    lang="astro"
+    filename="Debug Pattern Library"
+  />
+</div>
+
+<h2 class="text-2xl font-bold mt-8 mb-4">Updating Development Guidelines</h2>
+
+<p>
+  To ensure consistent use of these patterns across the project, we updated our GitHub Copilot instructions to include comprehensive guidelines for development-only debug information.
+</p>
+
+<CalloutBox type="info" title="Documentation as Code">
+  <p>
+    By embedding these patterns in our Copilot instructions, we ensure that both human developers and AI assistants follow consistent practices when adding debug functionality.
+  </p>
+</CalloutBox>
+
+<h3 class="text-xl font-semibold mt-6 mb-3">Benefits of This Approach</h3>
+
+<ul class="list-disc pl-6 mt-4 space-y-2">
+  <li><strong>Zero Production Impact</strong>: Debug code is completely removed from builds</li>
+  <li><strong>Layout Preservation</strong>: Overlays don't affect page structure</li>
+  <li><strong>Development Efficiency</strong>: Quick visual feedback during development</li>
+  <li><strong>Consistent Patterns</strong>: Standardized approach across components</li>
+  <li><strong>Performance Friendly</strong>: No runtime overhead in production</li>
+</ul>
+
+<h2 class="text-2xl font-bold mt-8 mb-4">Deployment Workflow in Practice</h2>
+
+<p>
+  The complete deployment process now works seamlessly:
+</p>
+
+<ol class="list-decimal pl-6 mt-4 space-y-2">
+  <li>Push changes to the main branch</li>
+  <li>GitHub Actions automatically triggers the build</li>
+  <li>Astro builds the static site with all debug code removed</li>
+  <li>The built site deploys to GitHub Pages</li>
+  <li>Custom domain serves the updated content</li>
+</ol>
+
+<div class="my-6">
+  <CodeBlock
+    code={`# Typical deployment command sequence
+git add .
+git commit -m "Add new article with debug overlays"
+git push origin main
+
+# GitHub Actions takes over:
+# 1. Checkout code
+# 2. Setup Node.js and pnpm
+# 3. Install dependencies
+# 4. Run build (import.meta.env.DEV = false)
+# 5. Deploy to GitHub Pages
+# 6. Update live site`}
+    lang="bash"
+    filename="Deployment Flow"
+  />
+</div>
+
+<h2 class="text-2xl font-bold mt-8 mb-4">Lessons Learned</h2>
+
+<p>
+  Setting up deployment and debugging patterns taught us several valuable lessons:
+</p>
+
+<ul class="list-disc pl-6 mt-4 space-y-2">
+  <li><strong>Automation Reduces Friction</strong>: Automated deployment encourages more frequent updates</li>
+  <li><strong>Environment Separation is Critical</strong>: Development and production should behave differently</li>
+  <li><strong>Visual Feedback Accelerates Development</strong>: Overlay debug info provides immediate insights</li>
+  <li><strong>Documentation Enables Consistency</strong>: Clear patterns prevent ad-hoc solutions</li>
+</ul>
+
+<CalloutBox type="tip" title="Next Steps">
+  <p>
+    With deployment automated and debugging patterns established, we're ready to focus on content creation and platform refinements. The foundation is solid, and the development experience is smooth.
+  </p>
+</CalloutBox>
+
+<h2 class="text-2xl font-bold mt-8 mb-4">Looking Forward</h2>
+
+<p>
+  Our deployment pipeline is now production-ready, and our development debugging patterns provide the visibility we need without compromising the user experience. This foundation enables rapid iteration and confident deployments as we continue to expand the platform's capabilities.
+</p>
+
+<p>
+  The combination of automated deployment and intelligent debugging represents a significant step forward in our development workflow, demonstrating how thoughtful tooling choices compound into major productivity gains.
+</p>

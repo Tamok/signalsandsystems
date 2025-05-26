@@ -19,7 +19,11 @@ const latestSeries = [...series].sort((a, b) => b.startDate.getTime() - a.startD
       <p class="text-xl text-gray-600 max-w-2xl mx-auto">
         A personal, self-hosted publishing platform designed for long-form, markdown-native articles enriched with interactive elements.
       </p>
-      <div class="text-red-600 text-sm mt-4">DEBUG: {articles.length} articles found</div>
+      {import.meta.env.DEV && (
+        <div class="fixed top-4 right-4 bg-red-500 text-white px-2 py-1 text-xs rounded z-50 pointer-events-none">
+          DEBUG: {articles.length} articles loaded
+        </div>
+      )}
     </section>
     
     <section class="max-w-5xl mx-auto mb-16">

@@ -78,6 +78,65 @@ const { title, description = 'Default description' } = Astro.props;
 - For complex components, consider extracting common patterns using @apply in a CSS file
 - Maintain responsive design using Tailwind's breakpoint prefixes
 
+## Development-Only Debug Information
+
+When adding debug information for development purposes, follow these guidelines to ensure debug output doesn't interfere with production builds or layout:
+
+### Environment-Based Conditional Rendering
+- Always wrap debug output with `import.meta.env.DEV` to ensure it only appears during development
+- Use this pattern for debug information that helps during development but should never appear in production
+
+```astro
+{import.meta.env.DEV && (
+  <div class="debug-info">DEBUG: {someVariable}</div>
+)}
+```
+
+### Overlay Debug Styles
+- Use CSS positioning to overlay debug information without affecting document flow
+- Prefer fixed or absolute positioning for debug elements
+- Use distinctive styling (bright colors, borders) to clearly identify debug content
+
+```astro
+{import.meta.env.DEV && (
+  <div class="fixed top-4 right-4 bg-red-500 text-white px-2 py-1 text-xs rounded z-50 pointer-events-none">
+    DEBUG: {articles.length} articles loaded
+  </div>
+)}
+```
+
+### Debug Information Best Practices
+- Keep debug messages concise and informative
+- Include relevant context (component name, data counts, state information)
+- Use consistent formatting across debug messages
+- Position debug overlays in corners or edges to avoid content interference
+- Add `pointer-events-none` to prevent debug elements from interfering with user interactions
+- Use high z-index values (z-50, z-[9999]) to ensure debug info appears above other content
+
+### Common Debug Patterns
+```astro
+<!-- Data count debug -->
+{import.meta.env.DEV && (
+  <div class="fixed bottom-4 left-4 bg-blue-600 text-white px-2 py-1 text-xs rounded">
+    {componentName}: {dataArray.length} items
+  </div>
+)}
+
+<!-- State debug -->
+{import.meta.env.DEV && (
+  <div class="absolute top-0 right-0 bg-yellow-500 text-black px-1 text-xs">
+    State: {currentState}
+  </div>
+)}
+
+<!-- Performance debug -->
+{import.meta.env.DEV && (
+  <div class="fixed top-4 left-4 bg-green-600 text-white px-2 py-1 text-xs rounded font-mono">
+    Render: {Date.now()}ms
+  </div>
+)}
+```
+
 ## Project Structure Guidelines
 - Place new components in `src/components/`
 - Add new pages in `src/pages/` with appropriate nesting

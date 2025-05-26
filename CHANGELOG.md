@@ -1,5 +1,9 @@
 # Signals & Systems Changelog
 
+2025-05-26 - 16:30 - Created Devlog #4 "Deployment & Development Debugging" covering GitHub Pages deployment, custom domain setup, and development-only debug patterns with overlay styling - #content #devlog #deployment #debugging
+2025-05-26 - 16:25 - Updated GitHub Copilot instructions to include comprehensive guidelines for development-only debug information with overlay patterns and best practices - #docs #development #debugging
+2025-05-26 - 16:20 - Implemented overlay-style debug pattern in index.astro using fixed positioning to avoid layout impact during development - #feature #debugging #ui
+
 2025-05-26 - 15:30 - Enhanced devlog #2: Replaced bar chart with pie chart for platform value distribution to make visualization more meaningful and less gimmicky - #content #visualization
 2025-05-26 - 15:45 - Enhanced devlog #3: Replaced abstract "Migration Challenge Difficulty" chart with concrete "Migration Development Effort" chart showing files modified and lines of code changed - #content #visualization
 2025-05-26 - 16:00 - Added interactive hover/focus effects to SVG flow chart in devlog #3 with accessibility features (keyboard navigation, ARIA labels, drop shadow effects) - #ui #a11y #interactive
