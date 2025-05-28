@@ -8,8 +8,7 @@ export async function initializeHighlighter() {
   if (!highlighterInstance) {
     const shiki = await import('shiki');
     highlighterInstance = await shiki.createHighlighter({
-      themes: ['github-light', 'github-dark'],
-      langs: [
+      themes: ['github-light', 'github-dark'],      langs: [
         'javascript',
         'typescript',
         'jsx',
@@ -22,6 +21,7 @@ export async function initializeHighlighter() {
         'bash',
         'yaml',
         'python',
+        'xml',
       ],
     });
   }
@@ -57,7 +57,7 @@ export async function highlightCode(code: string, lang: string, theme: string = 
 export function addCopyButtons(html: string): string {
   // Replace each pre tag with a div containing the pre and a copy button
   return html.replace(
-    /<pre(.*?)>(.*?)<\/pre>/gs,
+    /<pre(.*?)>([\s\S]*?)<\/pre>/g,
     (match: string, attrs: string, content: string) => {
       return `
         <div class="code-block-wrapper relative group">

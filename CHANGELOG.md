@@ -1,5 +1,18 @@
 # Signals & Systems Changelog
 
+2025-05-27 - 19:56 - Fixed tsconfig.json path resolution error by updating extends path from "astro/tsconfigs/strict" to "./node_modules/astro/tsconfigs/strict.json" - #bugfix #typescript #config
+2025-05-27 - 19:54 - Fixed TypeScript compilation errors in codeHighlight.ts: replaced ES2018 regex 's' flag with [\s\S]*? pattern and added missing function closing brace - #bugfix #typescript #syntax
+2025-05-27 - 19:35 - Created SVG-TEMPLATE-SYSTEM.md with comprehensive grid system specifications and quadrant dimension guidelines - #docs #design-system #svg
+2025-05-27 - 19:34 - Documented SVG template content strategies and implementation best practices for future cover creation - #docs #template #guidelines
+2025-05-27 - 19:33 - Added XML validation requirements and common pitfalls section to SVG documentation - #docs #xml #validation
+2025-05-27 - 19:32 - Documented color palette standards and typography guidelines for SVG template system - #docs #design #standards
+2025-05-27 - 19:31 - Created development workflow and testing procedures documentation for SVG covers - #docs #workflow #testing
+2025-05-27 - 19:30 - Added XML language support to shiki highlighter in codeHighlight.ts - resolves "Language `xml` not found" ShikiError during builds - #bugfix #technical #shiki
+2025-05-27 - 19:28 - Added mandatory CTA CalloutBox to devlog #5 with GitHub and LinkedIn links - matches pattern established in articles 1-4 for consistent user engagement - #content #cta #consistency
+2025-05-27 - 19:27 - Replaced all emdashes ("—") with standard dashes (" - ") across all devlog articles for consistent punctuation formatting - #content #formatting #consistency
+2025-05-27 - 19:26 - Converted all "we/our/us" references to first-person "I/my/me" across devlog articles 1-5 to reflect sole authorship voice - #content #voice #consistency
+2025-05-27 - 19:25 - Fixed MDX syntax errors in devlog #3 that were preventing successful builds - improved paragraph and list formatting - #bugfix #mdx #build
+
 2025-05-26 - 16:30 - Created Devlog #4 "Deployment & Development Debugging" covering GitHub Pages deployment, custom domain setup, and development-only debug patterns with overlay styling - #content #devlog #deployment #debugging
 2025-05-26 - 16:25 - Updated GitHub Copilot instructions to include comprehensive guidelines for development-only debug information with overlay patterns and best practices - #docs #development #debugging
 2025-05-26 - 16:20 - Implemented overlay-style debug pattern in index.astro using fixed positioning to avoid layout impact during development - #feature #debugging #ui

@@ -1,0 +1,78 @@
+<!-- Cover Template with Grid System -->
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3730a3;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+    <!-- Softer quadrant background - lighter version of main gradient -->
+    <linearGradient id="quadrantBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.15" />
+      <stop offset="100%" style="stop-color:#1e40af;stop-opacity:0.25" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Grid pattern -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  
+  <!-- CONTENT QUADRANTS (Above title area) -->
+  <!-- Content area: y=60 to y=400 (340px height), x=60 to x=1140 (1080px width) -->
+    <!-- Top-Left Quadrant (Rectangular: 520x150) -->
+  <rect x="60" y="60" width="520" height="150" rx="12" fill="url(#quadrantBg)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  <text x="320" y="140" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="sans-serif" font-size="14" font-weight="500">Top-Left Quadrant (520×150)</text>
+  
+  <!-- Top-Right Quadrant (Square: 300x150) -->
+  <rect x="620" y="60" width="300" height="150" rx="12" fill="url(#quadrantBg)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  <text x="770" y="140" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="sans-serif" font-size="14" font-weight="500">Top-Right (300×150)</text>
+  
+  <!-- Bottom-Left Quadrant (Square: 300x150) -->
+  <rect x="60" y="240" width="300" height="150" rx="12" fill="url(#quadrantBg)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  <text x="210" y="320" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="sans-serif" font-size="14" font-weight="500">Bottom-Left (300×150)</text>
+  
+  <!-- Bottom-Right Quadrant (Rectangular: 520x150) -->
+  <rect x="400" y="240" width="520" height="150" rx="12" fill="url(#quadrantBg)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  <text x="660" y="320" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="sans-serif" font-size="14" font-weight="500">Bottom-Right Quadrant (520×150)</text>
+  
+  <!-- FIXED TEXT AREAS -->
+  
+  <!-- Title Area -->
+  <rect x="0" y="420" width="1200" height="60" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+  <text x="600" y="450" text-anchor="middle" fill="white" font-family="sans-serif" font-size="48" font-weight="bold">
+    Article Title Here
+  </text>
+  
+  <!-- Subtitle Area -->
+  <rect x="0" y="480" width="1200" height="40" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+  <text x="600" y="490" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="24">
+    Technology Stack • Features • Keywords
+  </text>
+  
+  <!-- Series Line Area -->
+  <rect x="0" y="520" width="1200" height="40" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+  <text x="600" y="550" text-anchor="middle" fill="#60a5fa" font-family="sans-serif" font-size="18">
+    Devlog Series • Article X
+  </text>
+  
+  <!-- Status Indicator Area -->
+  <rect x="60" y="570" width="240" height="50" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+  <g transform="translate(100, 500)">
+    <rect x="0" y="0" width="180" height="40" rx="20" fill="rgba(34, 197, 94, 0.2)" stroke="#22c55e" stroke-width="2"/>
+    <circle cx="25" cy="20" r="8" fill="#22c55e"/>
+    <text x="45" y="25" fill="#22c55e" font-family="sans-serif" font-size="14" font-weight="bold">Status Ready</text>
+  </g>
+  
+  <!-- Grid Labels -->
+  <text x="60" y="40" fill="rgba(255,255,255,0.8)" font-family="sans-serif" font-size="16" font-weight="bold">CONTENT QUADRANTS</text>
+  <text x="60" y="450" fill="rgba(255,255,255,0.8)" font-family="sans-serif" font-size="16" font-weight="bold">FIXED TEXT AREAS</text>
+</svg>

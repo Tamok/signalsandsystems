@@ -1,39 +1,192 @@
-<!-- Devlog 1 Cover: Platform Setup, styled to match Devlog 2 -->
-<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3730a3;stop-opacity:1" />
+    </linearGradient>
+    <!-- Softer quadrant background -->
+    <linearGradient id="quadrantBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.15" />
+      <stop offset="100%" style="stop-color:#1e40af;stop-opacity:0.25" />
+    </linearGradient>
+  </defs>
+  
   <!-- Background -->
-  <rect width="1200" height="630" fill="#f8fafc"/>
-  <!-- Grid Pattern -->
-  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e2e8f0" stroke-width="1"/>
-  </pattern>
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Grid pattern -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+    </pattern>
+  </defs>
   <rect width="1200" height="630" fill="url(#grid)"/>
-  <!-- Decorative Elements -->
-  <circle cx="180" cy="160" r="70" fill="#60a5fa" opacity="0.18"/>
-  <rect x="900" y="420" width="160" height="120" rx="18" fill="#10b981" opacity="0.18"/>
-  <rect x="250" y="420" width="90" height="90" rx="10" fill="#8b5cf6" opacity="0.18"/>
-  <!-- Platform Setup Motif -->
-  <g transform="translate(400, 200)">
-    <!-- Terminal Window -->
-    <rect x="0" y="0" width="400" height="220" rx="12" fill="white" stroke="#e2e8f0" stroke-width="2"/>
-    <!-- Window Header -->
-    <rect x="0" y="0" width="400" height="32" rx="12 12 0 0" fill="#3b82f6"/>
-    <circle cx="20" cy="16" r="6" fill="#f87171"/>
-    <circle cx="44" cy="16" r="6" fill="#fbbf24"/>
-    <circle cx="68" cy="16" r="6" fill="#34d399"/>
-    <!-- Terminal Prompt Lines -->
-    <rect x="30" y="50" width="340" height="18" rx="4" fill="#f1f5f9"/>
-    <rect x="30" y="80" width="220" height="18" rx="4" fill="#f1f5f9"/>
-    <rect x="30" y="110" width="300" height="18" rx="4" fill="#f1f5f9"/>
-    <rect x="30" y="140" width="180" height="18" rx="4" fill="#f1f5f9"/>
-    <rect x="30" y="170" width="260" height="18" rx="4" fill="#f1f5f9"/>
-    <!-- Simulated Command Text -->
-    <text x="45" y="64" font-family="Fira Mono, monospace" font-size="15" fill="#64748b">$ pnpm create astro@latest</text>
-    <text x="45" y="94" font-family="Fira Mono, monospace" font-size="15" fill="#64748b">$ pnpm add tailwindcss</text>
-    <text x="45" y="124" font-family="Fira Mono, monospace" font-size="15" fill="#64748b">$ pnpm add date-fns</text>
-    <text x="45" y="154" font-family="Fira Mono, monospace" font-size="15" fill="#64748b">$ pnpm add @astrojs/mdx</text>
-    <text x="45" y="184" font-family="Fira Mono, monospace" font-size="15" fill="#64748b">$ pnpm dev</text>
+    <!-- TOP-LEFT QUADRANT: Terminal Setup Commands (520x150) -->
+  <g transform="translate(60, 60)">
+    <rect x="0" y="0" width="520" height="150" rx="12" fill="url(#quadrantBg)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    
+    <!-- Terminal window -->
+    <g transform="translate(20, 20)">
+      <!-- Terminal header -->
+      <rect x="0" y="0" width="480" height="30" rx="8" fill="#1f2937"/>
+      <circle cx="15" cy="15" r="5" fill="#ef4444"/>
+      <circle cx="35" cy="15" r="5" fill="#f59e0b"/>
+      <circle cx="55" cy="15" r="5" fill="#22c55e"/>
+      <text x="80" y="20" fill="#9ca3af" font-family="monospace" font-size="12">Terminal - Setup Commands</text>
+      
+      <!-- Terminal content -->      <rect x="0" y="30" width="480" height="80" fill="#111827"/>
+      <text x="10" y="50" fill="#22c55e" font-family="monospace" font-size="11">$ npm create astro@latest signals-and-systems</text>
+      <text x="10" y="70" fill="#60a5fa" font-family="monospace" font-size="11">$ cd signals-and-systems &amp;&amp; npm install</text>
+      <text x="10" y="90" fill="#f59e0b" font-family="monospace" font-size="11">$ npm run dev</text>
+      <text x="10" y="105" fill="#9ca3af" font-family="monospace" font-size="10">🚀 Local dev server ready at localhost:4321</text>
+    </g>
   </g>
-  <!-- Title -->
-  <text x="600" y="500" font-family="Arial" font-size="36" font-weight="bold" text-anchor="middle" fill="#0f172a">Platform Setup</text>
-  <text x="600" y="540" font-family="Arial" font-size="24" text-anchor="middle" fill="#475569">Signals &amp; Systems Devlog #1</text>
+    <!-- TOP-RIGHT QUADRANT: Technology Stack Icons (300x150) -->
+  <g transform="translate(640, 60)">
+    <rect x="0" y="0" width="300" height="150" rx="12" fill="url(#quadrantBg)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    
+    <text x="20" y="30" fill="white" font-family="sans-serif" font-size="16" font-weight="bold">Tech Stack</text>
+    
+    <!-- Technology icons/badges -->
+    <g transform="translate(20, 45)">
+      <!-- Astro -->
+      <rect x="0" y="0" width="80" height="25" rx="4" fill="#ff5d01"/>
+      <text x="40" y="17" text-anchor="middle" fill="white" font-family="sans-serif" font-size="12" font-weight="bold">Astro</text>
+      
+      <!-- TypeScript -->
+      <rect x="90" y="0" width="80" height="25" rx="4" fill="#3178c6"/>
+      <text x="130" y="17" text-anchor="middle" fill="white" font-family="sans-serif" font-size="12" font-weight="bold">TypeScript</text>
+      
+      <!-- Tailwind -->
+      <rect x="180" y="0" width="80" height="25" rx="4" fill="#06b6d4"/>
+      <text x="220" y="17" text-anchor="middle" fill="white" font-family="sans-serif" font-size="12" font-weight="bold">Tailwind</text>
+      
+      <!-- MDX -->
+      <rect x="0" y="35" width="80" height="25" rx="4" fill="#1c1e24"/>
+      <text x="40" y="52" text-anchor="middle" fill="#f9ac00" font-family="sans-serif" font-size="12" font-weight="bold">MDX</text>
+      
+      <!-- Vite -->
+      <rect x="90" y="35" width="80" height="25" rx="4" fill="#646cff"/>
+      <text x="130" y="52" text-anchor="middle" fill="white" font-family="sans-serif" font-size="12" font-weight="bold">Vite</text>
+      
+      <!-- Node.js -->
+      <rect x="180" y="35" width="80" height="25" rx="4" fill="#339933"/>
+      <text x="220" y="52" text-anchor="middle" fill="white" font-family="sans-serif" font-size="12" font-weight="bold">Node.js</text>
+    </g>
+    
+    <!-- Version info -->
+    <g transform="translate(20, 110)">
+      <text x="0" y="15" fill="#9ca3af" font-family="monospace" font-size="10">Astro 4.x • TS 5.x • Tailwind 3.x</text>
+    </g>
+  </g>
+    <!-- BOTTOM-LEFT QUADRANT: Platform Foundation Blocks (300x150) -->
+  <g transform="translate(60, 240)">
+    <rect x="0" y="0" width="300" height="150" rx="12" fill="url(#quadrantBg)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    
+    <text x="20" y="30" fill="white" font-family="sans-serif" font-size="16" font-weight="bold">Foundation</text>
+    
+    <!-- Foundation blocks -->
+    <g transform="translate(20, 45)">
+      <!-- Base layer -->
+      <rect x="0" y="60" width="260" height="20" rx="4" fill="#374151"/>
+      <text x="130" y="74" text-anchor="middle" fill="white" font-family="sans-serif" font-size="12" font-weight="bold">Development Environment</text>
+      
+      <!-- Framework layer -->
+      <rect x="20" y="40" width="220" height="20" rx="4" fill="#4f46e5"/>
+      <text x="130" y="54" text-anchor="middle" fill="white" font-family="sans-serif" font-size="12" font-weight="bold">Astro Framework</text>
+      
+      <!-- Component layer -->
+      <rect x="40" y="20" width="180" height="20" rx="4" fill="#06b6d4"/>
+      <text x="130" y="34" text-anchor="middle" fill="white" font-family="sans-serif" font-size="12" font-weight="bold">Component System</text>
+      
+      <!-- Content layer -->
+      <rect x="60" y="0" width="140" height="20" rx="4" fill="#10b981"/>
+      <text x="130" y="14" text-anchor="middle" fill="white" font-family="sans-serif" font-size="12" font-weight="bold">Content Layer</text>
+    </g>
+  </g>
+    <!-- BOTTOM-RIGHT QUADRANT: Project Structure Diagram (520x150) -->
+  <g transform="translate(420, 240)">
+    <rect x="0" y="0" width="520" height="150" rx="12" fill="url(#quadrantBg)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    
+    <text x="20" y="30" fill="white" font-family="sans-serif" font-size="16" font-weight="bold">Project Structure</text>
+    
+    <!-- File tree structure -->
+    <g transform="translate(20, 45)">
+      <!-- Root folder -->
+      <g>
+        <rect x="0" y="0" width="16" height="12" rx="2" fill="#f59e0b"/>
+        <text x="22" y="10" fill="white" font-family="monospace" font-size="11" font-weight="bold">signals-and-systems/</text>
+      </g>
+      
+      <!-- src folder -->
+      <g transform="translate(20, 18)">
+        <rect x="0" y="0" width="14" height="10" rx="2" fill="#3b82f6"/>
+        <text x="18" y="8" fill="#94a3b8" font-family="monospace" font-size="10">src/</text>
+        
+        <!-- pages -->
+        <g transform="translate(60, 0)">
+          <rect x="0" y="0" width="12" height="8" rx="1" fill="#22c55e"/>
+          <text x="16" y="7" fill="#94a3b8" font-family="monospace" font-size="9">pages/</text>
+        </g>
+        
+        <!-- components -->
+        <g transform="translate(140, 0)">
+          <rect x="0" y="0" width="12" height="8" rx="1" fill="#8b5cf6"/>
+          <text x="16" y="7" fill="#94a3b8" font-family="monospace" font-size="9">components/</text>
+        </g>
+        
+        <!-- layouts -->
+        <g transform="translate(240, 0)">
+          <rect x="0" y="0" width="12" height="8" rx="1" fill="#ef4444"/>
+          <text x="16" y="7" fill="#94a3b8" font-family="monospace" font-size="9">layouts/</text>
+        </g>
+      </g>
+      
+      <!-- public folder -->
+      <g transform="translate(20, 36)">
+        <rect x="0" y="0" width="14" height="10" rx="2" fill="#06b6d4"/>
+        <text x="18" y="8" fill="#94a3b8" font-family="monospace" font-size="10">public/</text>
+        
+        <!-- assets -->
+        <g transform="translate(80, 0)">
+          <rect x="0" y="0" width="12" height="8" rx="1" fill="#f59e0b"/>
+          <text x="16" y="7" fill="#94a3b8" font-family="monospace" font-size="9">images/</text>
+        </g>
+      </g>
+      
+      <!-- config files -->
+      <g transform="translate(20, 54)">
+        <circle cx="6" cy="6" r="4" fill="#9ca3af"/>
+        <text x="16" y="9" fill="#94a3b8" font-family="monospace" font-size="10">astro.config.mjs</text>
+        
+        <circle cx="140" cy="6" r="4" fill="#9ca3af"/>
+        <text x="150" y="9" fill="#94a3b8" font-family="monospace" font-size="10">package.json</text>
+        
+        <circle cx="260" cy="6" r="4" fill="#9ca3af"/>
+        <text x="270" y="9" fill="#94a3b8" font-family="monospace" font-size="10">tsconfig.json</text>
+      </g>
+    </g>
+  </g>
+  
+  <!-- FIXED TEXT AREAS -->
+    <!-- Title -->
+  <text x="600" y="450" text-anchor="middle" fill="white" font-family="sans-serif" font-size="48" font-weight="bold">
+    Project Setup &amp; Foundation
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="490" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="24">
+    Astro • TypeScript • Project Structure • Development Environment
+  </text>
+  
+  <!-- Series indicator -->
+  <text x="600" y="550" text-anchor="middle" fill="#60a5fa" font-family="sans-serif" font-size="18">
+    Devlog Series • Article 1
+  </text>
+    <!-- Status indicator -->
+  <g transform="translate(100, 500)">
+    <rect x="0" y="0" width="220" height="40" rx="20" fill="rgba(251, 191, 36, 0.2)" stroke="#f59e0b" stroke-width="2"/>
+    <circle cx="25" cy="20" r="8" fill="#f59e0b"/>
+    <text x="45" y="25" fill="#f59e0b" font-family="sans-serif" font-size="14" font-weight="bold">Development In Progress</text>
+  </g>
 </svg>

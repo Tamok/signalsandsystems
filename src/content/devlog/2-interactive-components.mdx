@@ -30,7 +30,7 @@ import CodeBlock from '../../components/CodeBlock.astro';
 
 <h2 class="text-2xl font-bold mt-8 mb-4">Astro Components: The Engine of Interactivity</h2>
 <p>
-  This platform is built almost entirely on Astro's native component system. Astro components allow for a seamless blend of static content and dynamic, interactive features—without the overhead of a full client-side framework. Every interactive element you see here, from charts to consent popups, is an Astro component designed for performance, accessibility, and reusability.
+  This platform is built almost entirely on Astro's native component system. Astro components allow for a seamless blend of static content and dynamic, interactive features - without the overhead of a full client-side framework. Every interactive element you see here, from charts to consent popups, is an Astro component designed for performance, accessibility, and reusability.
 </p>
 <ul class="list-disc ml-6 my-4">
   <li>Encapsulate logic and UI for easy reuse</li>
@@ -40,13 +40,13 @@ import CodeBlock from '../../components/CodeBlock.astro';
 </ul>
 <CalloutBox type="info">
   <p>
-    Astro components are the backbone of this site. They make it possible to build interactive, accessible, and performant features—without sacrificing the content-first philosophy.
+    Astro components are the backbone of this site. They make it possible to build interactive, accessible, and performant features - without sacrificing the content-first philosophy.
   </p>
 </CalloutBox>
 
 <h2 class="text-2xl font-bold mt-8 mb-4">Data Visualization: Beyond the Basics</h2>
 <p>
-  Data visualization isn't just about bar charts—it's about telling a story with data. For this article, I've chosen a pie chart to emphasize the proportional significance of each platform value. This visualization highlights how each core value contributes to the overall philosophy of Signals & Systems:
+  Data visualization isn't just about bar charts - it's about telling a story with data. For this article, I've chosen a pie chart to emphasize the proportional significance of each platform value. This visualization highlights how each core value contributes to the overall philosophy of Signals & Systems:
 </p>
 <div class="my-8 p-6 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg shadow-sm">
   <ChartComponent 
@@ -121,7 +121,7 @@ import CodeBlock from '../../components/CodeBlock.astro';
       popup.id = 'astro-consent-popup';
       popup.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60';
       popup.innerHTML = \
-        <div class='bg-white rounded-lg shadow-lg p-6 max-w-md w-full text-gray-900' role='dialog' aria-modal='true' aria-labelledby='consent-title'>\n          <h2 id='consent-title' class='text-lg font-semibold mb-2'>Analytics Consent</h2>\n          <p class='mb-4'>We use Google Tag Manager to collect usage data because we're curious nerds who love understanding how people interact with our content.</p>\n          <div class='flex gap-2 justify-end'>\n            <button id='decline-btn' class='px-4 py-2 rounded bg-gray-200 hover:bg-gray-300'>Decline</button>\n            <button id='accept-btn' class='px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700'>Accept</button>\n          </div>\n        </div>\n      ';
+        <div class='bg-white rounded-lg shadow-lg p-6 max-w-md w-full text-gray-900' role='dialog' aria-modal='true' aria-labelledby='consent-title'>\n          <h2 id='consent-title' class='text-lg font-semibold mb-2'>Analytics Consent</h2>\n          <p class='mb-4'>I use Google Tag Manager to collect usage data because I'm a curious nerd who loves understanding how people interact with my content.</p>\n          <div class='flex gap-2 justify-end'>\n            <button id='decline-btn' class='px-4 py-2 rounded bg-gray-200 hover:bg-gray-300'>Decline</button>\n            <button id='accept-btn' class='px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700'>Accept</button>\n          </div>\n        </div>\n      ';
       document.body?.appendChild(popup);
       popup.querySelector('#accept-btn')?.addEventListener('click', () => {
         localStorage.setItem(consentKey, 'granted');

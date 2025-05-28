@@ -1,6 +1,6 @@
 ---
 title: "Devlog #3: The Astro Content Collections Migration Epic"
-description: "Our journey migrating from static files to a dynamic, type-safe content architecture using Astro Content Collections and MDX."
+description: "My journey migrating from static files to a dynamic, type-safe content architecture using Astro Content Collections and MDX."
 publishDate: 2025-05-23
 series: "Devlog"
 order: 3
@@ -12,22 +12,22 @@ import ChartComponent from '../../components/ChartComponent.astro';
 import CodeBlock from '../../components/CodeBlock.astro';
 
 <p class="lead">
-  This devlog chronicles our epic journey migrating the Signals & Systems blog from static, hardcoded Astro files 
+  This devlog chronicles my epic journey migrating the Signals & Systems blog from static, hardcoded Astro files 
   to a modern, maintainable, and type-safe content system using Astro Content Collections and MDX.
 </p>
 
 <h2 class="text-2xl font-bold mt-8 mb-4">The Starting Point</h2>
 <p>
-  As I mentioned in our <a href="/devlog/1-platform-setup" class="text-blue-600 hover:underline">first devlog</a>, 
-  our vision for Signals & Systems is to create a platform that elegantly presents interconnected articles with a 
+  As I mentioned in my <a href="/devlog/1-platform-setup" class="text-blue-600 hover:underline">first devlog</a>, 
+  my vision for Signals & Systems is to create a platform that elegantly presents interconnected articles with a 
   focus on readability and interactivity. With the <a href="/devlog/2-interactive-components" class="text-blue-600 hover:underline">interactive components</a> now in place, 
-  we needed a robust system to manage content relationships without hardcoding references.
+  I needed a robust system to manage content relationships without hardcoding references.
 </p>
 <p class="mt-4">
-  Our articles started as static `.astro` files in `src/pages/devlog/`. Content was hardcoded, making updates and navigation brittle:
+  My articles started as static `.astro` files in `src/pages/devlog/`. Content was hardcoded, making updates and navigation brittle:
 </p>
 <ul class="list-disc pl-6 mt-4 space-y-2">
-  <li>We had to update multiple files when adding a new article</li>
+  <li>I had to update multiple files when adding a new article</li>
   <li>Type safety was inconsistent across pages</li>
   <li>Navigation between related articles required manual linking</li>
   <li>Series membership wasn't systematically tracked</li>
@@ -36,7 +36,7 @@ import CodeBlock from '../../components/CodeBlock.astro';
 
 <h2 class="text-2xl font-bold mt-8 mb-4">The Migration Plan</h2>
 <p>
-  After evaluating options for creating a more maintainable content system, we developed a migration plan:
+  After evaluating options for creating a more maintainable content system, I developed a migration plan:
 </p>
 <ul class="list-disc pl-6 mt-4 space-y-2">
   <li>Move all articles to <code class="bg-gray-100 px-2 py-1 rounded">src/content/devlog/</code> as MDX files for rich content and component support</li>
@@ -46,7 +46,7 @@ import CodeBlock from '../../components/CodeBlock.astro';
 </ul>
 
 <h2 class="text-2xl font-bold mt-8 mb-4">Content Flow Architecture</h2>
-<p>Here's a visualization of how content now flows through our platform:</p>
+<p>Here's a visualization of how content now flows through my platform:</p>
 <div class="my-8 flex justify-center">
   <svg viewBox="0 0 600 220" width="100%" height="220" aria-labelledby="content-flow-title" role="img">
     <title id="content-flow-title">Content Flow Through Platform Architecture</title>
@@ -125,7 +125,7 @@ import CodeBlock from '../../components/CodeBlock.astro';
 
 <h2 class="text-2xl font-bold mt-8 mb-4">Content Schema Implementation</h2>
 <p>
-  The cornerstone of our new architecture is type-safe content schemas defined in 
+  The cornerstone of my new architecture is type-safe content schemas defined in 
   <code class="bg-gray-100 px-2 py-1 rounded">src/content/config.ts</code> using Zod for validation:
 </p>
 <div class="my-6">
@@ -136,7 +136,7 @@ import CodeBlock from '../../components/CodeBlock.astro';
   />
 </div>
 <p class="mt-4">
-  Complementing our schema, we developed utility functions in <code class="bg-gray-100 px-2 py-1 rounded">src/utils/content.ts</code> to provide a clean API for content retrieval:
+  Complementing my schema, I developed utility functions in <code class="bg-gray-100 px-2 py-1 rounded">src/utils/content.ts</code> to provide a clean API for content retrieval:
 </p>
 <div class="my-6">
   <CodeBlock
@@ -147,15 +147,15 @@ import CodeBlock from '../../components/CodeBlock.astro';
 </div>
 <CalloutBox type="info">
   <p>
-    <strong>Migration Complete:</strong> We've successfully transitioned to 
+    <strong>Migration Complete:</strong> I've successfully transitioned to 
     <a href="https://docs.astro.build/en/guides/content-collections/" class="text-blue-600 hover:underline">Astro Content Collections</a>, 
-    giving us powerful content management capabilities with complete type safety throughout the content pipeline.
+    giving me powerful content management capabilities with complete type safety throughout the content pipeline.
   </p>
 </CalloutBox>
 
 <h2 class="text-2xl font-bold mt-8 mb-4">Dynamic Routes Implementation</h2>
 <p>
-  Creating dynamic routes for content was a crucial part of the migration. By moving article pages from <code class="bg-gray-100 px-2 py-1 rounded">src/pages/devlog/</code> to <code class="bg-gray-100 px-2 py-1 rounded">src/content/devlog/</code>, we needed to update our routing:
+  Creating dynamic routes for content was a crucial part of the migration. By moving article pages from <code class="bg-gray-100 px-2 py-1 rounded">src/pages/devlog/</code> to <code class="bg-gray-100 px-2 py-1 rounded">src/content/devlog/</code>, I needed to update my routing:
 </p>
 <div class="bg-gray-50 rounded-md p-4 my-6 overflow-auto">
   <CodeBlock
@@ -167,8 +167,8 @@ import CodeBlock from '../../components/CodeBlock.astro';
 
 <h2 class="text-2xl font-bold mt-8 mb-4">Series Navigation</h2>
 <p>
-  One of the most significant improvements is our series navigation. Previously, we had to manually specify 
-  previous and next articles. Now, we can derive this information from the content structure:
+One of the most significant improvements is my series navigation. Previously, I had to manually specify 
+  previous and next articles. Now, I can derive this information from the content structure:
 </p>
 <div class="bg-gray-50 rounded-md p-4 my-6 overflow-auto">
   <CodeBlock
@@ -247,7 +247,7 @@ import CodeBlock from '../../components/CodeBlock.astro';
   />
 </div>
 <p>
-  This chart shows the real development effort behind our migration. Bug fixes required the most work (350+ lines across 12 files), 
+  This chart shows the real development effort behind my migration. Bug fixes required the most work (350+ lines across 12 files), 
   while the initial content schema setup was surprisingly minimal (45 lines across 3 files). Component updates involved 
   the most widespread changes, touching 8 different files to ensure compatibility with the new content system.
 </p>
@@ -256,27 +256,27 @@ import CodeBlock from '../../components/CodeBlock.astro';
 
 <h3 class="text-xl font-semibold mt-6 mb-2">1. Content Not Appearing</h3>
 <p>
-  One of our most perplexing issues was when all articles suddenly disappeared from the site:
+  One of my most perplexing issues was when all articles suddenly disappeared from the site:
 </p>
 <CalloutBox type="warning">
   <p>
     <strong>Root Cause:</strong> A syntax error in <code>ConsentPopup.astro</code> broke Astro's content sync mechanism, causing all articles to disappear.
   </p>
   <p>
-    <strong>Solution:</strong> We fixed the syntax error, restarted the dev server, and validated content sync was working correctly.
+    <strong>Solution:</strong> I fixed the syntax error, restarted the dev server, and validated content sync was working correctly.
   </p>
 </CalloutBox>
 
 <h3 class="text-xl font-semibold mt-6 mb-2">2. Double-Prefixed Slugs</h3>
 <p>
-  Our routing was broken because we had an issue with path prefixes:
+  My routing was broken because I had an issue with path prefixes:
 </p>
 <CalloutBox type="warning">
   <p>
     <strong>Root Cause:</strong> Slugs were stored as <code>/devlog/&#123;slug&#125;</code> and then <code>/devlog/</code> was prepended again in links.
   </p>
   <p>
-    <strong>Solution:</strong> We changed to store only the filename as slug and prepend <code>/devlog/</code> only in UI components.
+    <strong>Solution:</strong> I changed to store only the filename as slug and prepend <code>/devlog/</code> only in UI components.
   </p>
 </CalloutBox>
 
@@ -292,7 +292,7 @@ import CodeBlock from '../../components/CodeBlock.astro';
   />
 </div>
 <p>
-  This required meticulous checking of all frontmatter fields against our schema definitions.
+  This required meticulous checking of all frontmatter fields against my schema definitions.
 </p>
 
 <h3 class="text-xl font-semibold mt-6 mb-2">4. Component Rendering in MDX</h3>
@@ -301,13 +301,13 @@ import CodeBlock from '../../components/CodeBlock.astro';
 </p>
 <CalloutBox type="info">
   <p>
-    We had to ensure all <code>.astro</code> components were imported at the top of each MDX file and properly referenced in the content.
+    I had to ensure all <code>.astro</code> components were imported at the top of each MDX file and properly referenced in the content.
   </p>
 </CalloutBox>
 
 <h3 class="text-xl font-semibold mt-6 mb-2">5. TypeScript Errors</h3>
 <p>
-  TypeScript was relentlessly enforcing type safety, especially with our dynamic routes:
+  TypeScript was relentlessly enforcing type safety, especially with my dynamic routes:
 </p>
 <div class="bg-gray-50 rounded-md p-4 my-4 overflow-auto">
   <CodeBlock
@@ -319,12 +319,12 @@ import CodeBlock from '../../components/CodeBlock.astro';
 
 <h2 class="text-2xl font-bold mt-8 mb-4">Implementation Backtracking</h2>
 <p>
-  Several times during the migration, we had to backtrack and revert changes due to new issues:
+  Several times during the migration, I had to backtrack and revert changes due to new issues:
 </p>
 <ul class="list-disc pl-6 mt-4 space-y-2">
-  <li>We tried different slug formats, switching between relative and absolute paths</li>
-  <li>We experimented with different data structures for storing article relationships</li>
-  <li>We made changes to layout components then had to roll some back for compatibility</li>
+  <li>I tried different slug formats, switching between relative and absolute paths</li>
+  <li>I experimented with different data structures for storing article relationships</li>
+  <li>I made changes to layout components then had to roll some back for compatibility</li>
 </ul>
 <p>
   This iterative process, while frustrating at times, led to a more robust and well-tested solution.
@@ -352,17 +352,17 @@ import CodeBlock from '../../components/CodeBlock.astro';
 
 <h2 class="text-2xl font-bold mt-8 mb-4">Next Steps</h2>
 <p>
-  With our content architecture now stable and robust, we're ready to build on this foundation:
+  With my content architecture now stable and robust, I'm ready to build on this foundation:
 </p>
 <ul class="list-disc pl-6 mt-4 space-y-2">
   <li>Implementing tag-based browsing across article categories</li>
   <li>Adding related article suggestions based on content similarity</li>
-  <li>Building a search functionality leveraging our centralized content structure</li>
+  <li>Building a search functionality leveraging my centralized content structure</li>
   <li>Documenting all custom components for easier content creation</li>
 </ul>
 
 <CalloutBox type="tip" title="Join the Conversation">
   <p>
-    This migration was one of our most challenging but rewarding development efforts. Have thoughts or feedback? Connect on <a href="https://github.com/Tamok" class="text-blue-600 hover:text-blue-800">GitHub</a> or <a href="https://www.linkedin.com/in/jonathan-engeln/" class="text-blue-600 hover:text-blue-800">LinkedIn</a>.
+    This migration was one of my most challenging but rewarding development efforts. Have thoughts or feedback? Connect on <a href="https://github.com/Tamok" class="text-blue-600 hover:text-blue-800">GitHub</a> or <a href="https://www.linkedin.com/in/jonathan-engeln/" class="text-blue-600 hover:text-blue-800">LinkedIn</a>.
   </p>
 </CalloutBox>
