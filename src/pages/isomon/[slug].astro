@@ -13,10 +13,10 @@ interface SeriesArticle {
   publishDate: Date;
 }
 
-// Generate static paths for all devlog articles
+// Generate static paths for all isomon articles
 export async function getStaticPaths() {
-  const devlogEntries = await getCollection('devlog');
-  return devlogEntries.map(entry => ({
+  const isomonEntries = await getCollection('isomon');
+  return isomonEntries.map(entry => ({
     params: { slug: entry.slug },
     props: { entry }
   }));
@@ -42,7 +42,7 @@ if (seriesSlug) {
     publishDate
   }));
   
-  const currentIndex = sortedArticles.findIndex(a => a.slug === `devlog/${currentArticleSlug}`);
+  const currentIndex = sortedArticles.findIndex(a => a.slug === `isomon/${currentArticleSlug}`);
   prevArticle = currentIndex > 0 ? sortedArticles[currentIndex - 1] : null;
   nextArticle = currentIndex < sortedArticles.length - 1 ? sortedArticles[currentIndex + 1] : null;
 }
@@ -55,7 +55,7 @@ if (seriesSlug) {
   coverImage={entry.data.coverImage}  seriesTitle={entry.data.series}
   seriesSlug={seriesSlug}
   seriesArticles={sortedArticles}
-  currentArticleSlug={`devlog/${currentArticleSlug}`}
+  currentArticleSlug={`isomon/${currentArticleSlug}`}
   prevArticle={prevArticle}
   nextArticle={nextArticle}
 >

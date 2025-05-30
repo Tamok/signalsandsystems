@@ -1,5 +1,5 @@
 ---
-import { format } from 'date-fns';
+import { formatDateUTC } from '../utils/formatDate';
 
 interface SeriesArticle {
   title: string;
@@ -30,23 +30,23 @@ const {
 const sortedArticles = [...allArticles].sort((a, b) => a.order - b.order);
 ---
 
-<div class="series-navigation">
+<div class="series-navigation" data-series={seriesSlug.toLowerCase()}>
   <div class="mb-6">
     <h3 class="text-lg font-medium text-gray-900 mb-3">{seriesTitle} Series</h3>
     <ul class="space-y-2">
       {sortedArticles.map((article) => (
         <li class="flex items-center">
           {article.slug === currentSlug ? (
-            <span class="text-blue-600 font-medium">
+            <span class={seriesSlug.toLowerCase() === 'isomon' ? 'isomon-title text-blue-600 font-medium' : 'text-blue-600 font-medium'}>
               → {article.title}
               <span class="text-sm text-gray-500 ml-2">
-                ({format(article.publishDate, 'MMM d, yyyy')})
+                ({formatDateUTC(article.publishDate)})
               </span>
             </span>          ) : (
-            <a href={`/devlog/${article.slug}`} class="text-gray-700 hover:text-blue-600">
+            <a href={`/${article.slug}`} class={seriesSlug.toLowerCase() === 'isomon' ? 'isomon-title text-gray-700 hover:text-blue-600' : 'text-gray-700 hover:text-blue-600'}>
               {article.title}
               <span class="text-sm text-gray-500 ml-2">
-                ({format(article.publishDate, 'MMM d, yyyy')})
+                ({formatDateUTC(article.publishDate)})
               </span>
             </a>
           )}
@@ -55,9 +55,8 @@ const sortedArticles = [...allArticles].sort((a, b) => a.order - b.order);
     </ul>
   </div>
 
-  <div class="flex justify-between items-center pt-6 border-t border-gray-200">
-    {prevArticle ? (          <a 
-        href={`/devlog/${prevArticle.slug}`} 
+  <div class="flex justify-between items-center pt-6 border-t border-gray-200">    {prevArticle ? (          <a 
+        href={`/${prevArticle.slug}`} 
         class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
       >
         <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -70,7 +69,7 @@ const sortedArticles = [...allArticles].sort((a, b) => a.order - b.order);
     )}
     
     {nextArticle ? (      <a 
-        href={`/devlog/${nextArticle.slug}`} 
+        href={`/${nextArticle.slug}`} 
         class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
       >
         Next: {nextArticle.title}

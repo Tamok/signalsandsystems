@@ -1,0 +1,16 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import WiringSchematic from "../components/WiringSchematic.astro";
+---
+
+<BaseLayout title="Wiring Test">
+  <div class="container mx-auto px-4 py-12">
+    <h1>Wiring Schematic Test</h1>
+    <WiringSchematic 
+      title="Test Wiring Diagram"
+      description="Testing the wiring schematic component"
+      width={800}
+      height={600}
+    />
+  </div>
+</BaseLayout>

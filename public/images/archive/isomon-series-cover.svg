@@ -1,0 +1,135 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Background gradient -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a8a"/>
+      <stop offset="100%" style="stop-color:#3730a3"/>
+    </linearGradient>
+    
+    <!-- Quadrant gradient -->
+    <linearGradient id="quadrantGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:rgba(34, 197, 94, 0.15)"/>
+      <stop offset="100%" style="stop-color:rgba(34, 197, 94, 0.25)"/>
+    </linearGradient>
+    
+    <!-- Grid pattern -->
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  
+  <!-- Content quadrants -->
+  <g transform="translate(60, 60)">
+    <!-- Top-Left: IoT Architecture -->
+    <rect x="0" y="0" width="520" height="150" rx="12" fill="url(#quadrantGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text x="20" y="25" fill="white" font-size="16" font-weight="bold">IoT Node Architecture</text>
+    
+    <!-- ESP32-C6 representation -->
+    <rect x="30" y="40" width="80" height="50" rx="4" fill="rgba(34, 197, 94, 0.3)" stroke="#22c55e" stroke-width="1"/>
+    <text x="35" y="55" fill="#22c55e" font-size="10" font-family="monospace">ESP32-C6</text>
+    <text x="35" y="68" fill="#22c55e" font-size="10" font-family="monospace">FireBeetle</text>
+    <text x="35" y="81" fill="#22c55e" font-size="10" font-family="monospace">RISC-V</text>
+    
+    <!-- Sensor connections -->
+    <circle cx="150" cy="50" r="8" fill="rgba(59, 130, 246, 0.3)" stroke="#3b82f6"/>
+    <text x="135" y="40" fill="#93c5fd" font-size="10">Soil</text>
+    
+    <circle cx="150" cy="80" r="8" fill="rgba(59, 130, 246, 0.3)" stroke="#3b82f6"/>
+    <text x="130" y="95" fill="#93c5fd" font-size="10">Temp/Humid</text>
+    
+    <circle cx="200" cy="65" r="8" fill="rgba(168, 85, 247, 0.3)" stroke="#a855f7"/>
+    <text x="185" y="55" fill="#c4b5fd" font-size="10">Display</text>
+    
+    <!-- Connection lines -->
+    <line x1="110" y1="65" x2="142" y2="50" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <line x1="110" y1="65" x2="142" y2="80" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <line x1="110" y1="65" x2="192" y2="65" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    
+    <!-- WiFi symbol -->
+    <g transform="translate(250, 45)">
+      <path d="M 0,20 Q 10,10 20,20 M 5,15 Q 10,12 15,15 M 8,12 Q 10,11 12,12" fill="none" stroke="#22c55e" stroke-width="2"/>
+      <text x="25" y="15" fill="#22c55e" font-size="10">Wi-Fi 6</text>
+    </g>
+    
+    <text x="30" y="125" fill="rgba(255,255,255,0.7)" font-size="12">Real-time environmental monitoring with modern connectivity</text>
+  </g>
+  
+  <g transform="translate(640, 60)">
+    <!-- Top-Right: Sensor Array -->
+    <rect x="0" y="0" width="300" height="150" rx="12" fill="url(#quadrantGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text x="20" y="25" fill="white" font-size="16" font-weight="bold">Sensor Array</text>
+    
+    <!-- Capacitive soil sensor -->
+    <rect x="30" y="40" width="15" height="60" rx="2" fill="rgba(168, 85, 247, 0.4)" stroke="#a855f7" stroke-width="1"/>
+    <text x="50" y="50" fill="#c4b5fd" font-size="10">Capacitive</text>
+    <text x="50" y="62" fill="#c4b5fd" font-size="10">Soil Sensor</text>
+    <text x="50" y="74" fill="rgba(255,255,255,0.6)" font-size="9">Corrosion</text>
+    <text x="50" y="84" fill="rgba(255,255,255,0.6)" font-size="9">Resistant</text>
+    
+    <!-- SHT30 temperature/humidity -->
+    <rect x="180" y="50" width="25" height="15" rx="2" fill="rgba(34, 197, 94, 0.4)" stroke="#22c55e" stroke-width="1"/>
+    <text x="155" y="45" fill="#86efac" font-size="10">SHT30</text>
+    <text x="140" y="75" fill="rgba(255,255,255,0.6)" font-size="9">±0.2°C precision</text>
+    <text x="140" y="85" fill="rgba(255,255,255,0.6)" font-size="9">±2% humidity</text>
+    
+    <!-- TFT Display -->
+    <rect x="120" y="100" width="40" height="30" rx="2" fill="rgba(59, 130, 246, 0.4)" stroke="#3b82f6" stroke-width="1"/>
+    <text x="95" y="95" fill="#93c5fd" font-size="10">1.8" TFT LCD</text>
+    <text x="100" y="145" fill="rgba(255,255,255,0.6)" font-size="9">128×160 pixels</text>
+  </g>
+  
+  <g transform="translate(60, 230)">
+    <!-- Bottom-Left: Monitoring Features -->
+    <rect x="0" y="0" width="300" height="150" rx="12" fill="url(#quadrantGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text x="20" y="25" fill="white" font-size="16" font-weight="bold">Smart Monitoring</text>
+    
+    <text x="30" y="50" fill="#22c55e" font-size="12">✓ Adaptive sampling rates</text>
+    <text x="30" y="70" fill="#22c55e" font-size="12">✓ Local data buffering</text>
+    <text x="30" y="90" fill="#22c55e" font-size="12">✓ Cloud synchronization</text>
+    <text x="30" y="110" fill="#22c55e" font-size="12">✓ Battery optimization</text>
+    <text x="30" y="130" fill="#22c55e" font-size="12">✓ Alert thresholds</text>
+  </g>
+  
+  <g transform="translate(420, 230)">
+    <!-- Bottom-Right: Isopod Application -->
+    <rect x="0" y="0" width="520" height="150" rx="12" fill="url(#quadrantGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text x="20" y="25" fill="white" font-size="16" font-weight="bold">Terrestrial Isopod Habitat Monitoring</text>
+    
+    <!-- Isopod silhouette representation -->
+    <ellipse cx="80" cy="70" rx="25" ry="15" fill="rgba(168, 85, 247, 0.3)" stroke="#a855f7"/>
+    <ellipse cx="65" cy="67" rx="3" ry="2" fill="#a855f7"/>
+    <text x="110" y="65" fill="#c4b5fd" font-size="12">Optimal conditions for</text>
+    <text x="110" y="80" fill="#c4b5fd" font-size="12">roly-poly health</text>
+    
+    <!-- Environmental ranges -->
+    <g transform="translate(250, 45)">
+      <text x="0" y="15" fill="rgba(255,255,255,0.8)" font-size="11">Humidity: 60-80%</text>
+      <text x="0" y="30" fill="rgba(255,255,255,0.8)" font-size="11">Temperature: 18-24°C</text>
+      <text x="0" y="45" fill="rgba(255,255,255,0.8)" font-size="11">Substrate: Moist, not wet</text>
+      <text x="0" y="60" fill="rgba(255,255,255,0.8)" font-size="11">pH: 6.5-7.5</text>
+    </g>
+  </g>
+  
+  <!-- Fixed text areas -->
+  <g transform="translate(0, 420)">
+    <!-- Title -->
+    <text x="600" y="40" text-anchor="middle" fill="white" font-size="48" font-weight="bold">ISOMON Series</text>
+    
+    <!-- Subtitle -->
+    <text x="600" y="75" text-anchor="middle" fill="#93c5fd" font-size="24">IoT-Powered Isopod Monitoring Nodes</text>
+    
+    <!-- Series line -->
+    <text x="600" y="105" text-anchor="middle" fill="#60a5fa" font-size="18">Building comprehensive habitat management through modern sensor technology</text>
+    
+    <!-- Status indicator -->
+    <g transform="translate(500, 140)">
+      <rect x="0" y="0" width="200" height="40" rx="20" fill="rgba(34, 197, 94, 0.2)" stroke="#22c55e" stroke-width="1"/>
+      <circle cx="30" cy="20" r="6" fill="#22c55e"/>
+      <text x="50" y="25" fill="#22c55e" font-size="14" font-weight="bold">Series Active</text>
+    </g>
+  </g>
+</svg>

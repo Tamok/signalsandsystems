@@ -1,0 +1,186 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Vichy pattern base -->
+    <pattern id="vichyPattern" width="60" height="60" patternUnits="userSpaceOnUse">
+      <!-- Light green squares -->
+      <rect x="0" y="0" width="30" height="30" fill="#dcfce7"/>
+      <rect x="30" y="30" width="30" height="30" fill="#dcfce7"/>
+      <!-- Dark green squares -->
+      <rect x="30" y="0" width="30" height="30" fill="#bbf7d0"/>
+      <rect x="0" y="30" width="30" height="30" fill="#bbf7d0"/>
+    </pattern>
+    
+    <!-- Diagonal grid overlay -->
+    <pattern id="diagonalGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <!-- Diagonal lines -->
+      <path d="M 0 0 L 40 40" stroke="rgba(34, 197, 94, 0.1)" stroke-width="1" fill="none"/>
+      <path d="M 0 40 L 40 0" stroke="rgba(34, 197, 94, 0.1)" stroke-width="1" fill="none"/>
+    </pattern>
+      <!-- Detailed isopod pattern for background -->
+    <pattern id="isopodPattern" width="120" height="120" patternUnits="userSpaceOnUse" opacity="0.15">
+      <g>
+        <!-- Common pill bug (Armadillidium vulgare) - conglobated -->
+        <g transform="translate(20, 20)">
+          <circle cx="0" cy="0" r="10" fill="#4a5568"/>
+          <!-- Segmentation lines showing conglobated form -->
+          <path d="M -8 -5 Q 0 -10 8 -5" stroke="#2d3748" stroke-width="0.8" fill="none"/>
+          <path d="M -8 -2 Q 0 -4 8 -2" stroke="#2d3748" stroke-width="0.8" fill="none"/>
+          <path d="M -8 2 Q 0 4 8 2" stroke="#2d3748" stroke-width="0.8" fill="none"/>
+          <path d="M -8 5 Q 0 10 8 5" stroke="#2d3748" stroke-width="0.8" fill="none"/>
+          <!-- Center divider -->
+          <line x1="0" y1="-10" x2="0" y2="10" stroke="#2d3748" stroke-width="0.6"/>
+        </g>
+        
+        <!-- Sowbug (Trachelipus rathkii) - smaller, conglobated -->
+        <g transform="translate(100, 30)">
+          <circle cx="0" cy="0" r="8" fill="#6b7280"/>
+          <!-- Segmentation lines -->
+          <path d="M -6 -4 Q 0 -8 6 -4" stroke="#4b5563" stroke-width="0.7" fill="none"/>
+          <path d="M -6 -1 Q 0 -2 6 -1" stroke="#4b5563" stroke-width="0.7" fill="none"/>
+          <path d="M -6 1 Q 0 2 6 1" stroke="#4b5563" stroke-width="0.7" fill="none"/>
+          <path d="M -6 4 Q 0 8 6 4" stroke="#4b5563" stroke-width="0.7" fill="none"/>
+          <line x1="0" y1="-8" x2="0" y2="8" stroke="#4b5563" stroke-width="0.5"/>
+        </g>
+        
+        <!-- Roly-poly (Armadillidium nasatum) - different color, with side markings -->
+        <g transform="translate(40, 80)">
+          <circle cx="0" cy="0" r="12" fill="#71717a"/>
+          <!-- Segmentation lines -->
+          <path d="M -9 -6 Q 0 -12 9 -6" stroke="#52525b" stroke-width="0.8" fill="none"/>
+          <path d="M -10 -2 Q 0 -5 10 -2" stroke="#52525b" stroke-width="0.8" fill="none"/>
+          <path d="M -10 2 Q 0 5 10 2" stroke="#52525b" stroke-width="0.8" fill="none"/>
+          <path d="M -7 7 Q 0 10 7 7" stroke="#57534e" stroke-width="0.7" fill="none"/>
+          <line x1="0" y1="-10" x2="0" y2="10" stroke="#57534e" stroke-width="0.5"/>
+          <!-- Side markings -->
+          <circle cx="-4" cy="-4" r="1" fill="#57534e" opacity="0.6"/>
+          <circle cx="4" cy="-4" r="1" fill="#57534e" opacity="0.6"/>
+          <circle cx="-4" cy="4" r="1" fill="#57534e" opacity="0.6"/>
+          <circle cx="4" cy="4" r="1" fill="#57534e" opacity="0.6"/>
+        </g>
+        
+        <!-- Woodlouse (Oniscus asellus) - conglobated -->
+        <g transform="translate(80, 90)">
+          <circle cx="0" cy="0" r="9" fill="#a8a29e"/>
+          <!-- Distinctive segmentation pattern -->
+          <path d="M -6 -6 Q 0 -9 6 -6" stroke="#78716c" stroke-width="0.6" fill="none"/>
+          <path d="M -7 -1 Q 0 -3 7 -1" stroke="#78716c" stroke-width="0.6" fill="none"/>
+          <path d="M -7 1 Q 0 3 7 1" stroke="#78716c" stroke-width="0.6" fill="none"/>
+          <path d="M -6 6 Q 0 9 6 6" stroke="#78716c" stroke-width="0.6" fill="none"/>
+          <line x1="0" y1="-9" x2="0" y2="9" stroke="#78716c" stroke-width="0.4"/>
+        </g>
+        
+        <!-- Small juvenile isopod - conglobated -->
+        <g transform="translate(60, 60)">
+          <circle cx="0" cy="0" r="6" fill="#9ca3af"/>
+          <!-- Simple segmentation -->
+          <path d="M -4 -3 Q 0 -6 4 -3" stroke="#6b7280" stroke-width="0.5" fill="none"/>
+          <path d="M -4 0 Q 0 -1 4 0" stroke="#6b7280" stroke-width="0.5" fill="none"/>
+          <path d="M -4 3 Q 0 6 4 3" stroke="#6b7280" stroke-width="0.5" fill="none"/>
+          <line x1="0" y1="-6" x2="0" y2="6" stroke="#6b7280" stroke-width="0.3"/>
+        </g>
+      </g>
+    </pattern>
+    
+    <!-- Quadrant gradient -->
+    <linearGradient id="quadrantGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#1e293b;stop-opacity:0.9" />
+    </linearGradient>
+    
+    <!-- Arrow marker definition -->
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#22c55e"/>
+    </marker>    <!-- Title background with subtle brown tones -->
+    <linearGradient id="titleBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#78350f;stop-opacity:0.5" />
+      <stop offset="50%" style="stop-color:#92400e;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#78350f;stop-opacity:0.5" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background layers -->
+  <rect width="1200" height="630" fill="url(#vichyPattern)"/>
+  <rect width="1200" height="630" fill="url(#diagonalGrid)"/>
+  <rect width="1200" height="630" fill="url(#isopodPattern)"/>
+
+  <!-- TOP-LEFT QUADRANT: Customizable Content Area -->
+  <g transform="translate(60, 60)">
+    <rect x="0" y="0" width="520" height="130" rx="12" fill="url(#quadrantGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text x="20" y="25" fill="white" font-size="16" font-weight="bold">[TOP-LEFT CONTENT TITLE]</text>
+    
+    <!-- Placeholder content area -->
+    <g transform="translate(30, 35)">      <text x="0" y="20" fill="rgba(255,255,255,0.8)" font-size="12">Content area 1: Replace with episode-specific content</text>
+      <text x="0" y="40" fill="rgba(255,255,255,0.6)" font-size="10">&#8226; Feature specifications</text>
+      <text x="0" y="55" fill="rgba(255,255,255,0.6)" font-size="10">&#8226; Component details</text>
+      <text x="0" y="70" fill="rgba(255,255,255,0.6)" font-size="10">&#8226; Technical highlights</text>
+    </g>
+  </g>
+
+  <!-- TOP-RIGHT QUADRANT: Customizable Content Area -->
+  <g transform="translate(620, 60)">
+    <rect x="0" y="0" width="520" height="130" rx="12" fill="url(#quadrantGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text x="20" y="25" fill="white" font-size="16" font-weight="bold">[TOP-RIGHT CONTENT TITLE]</text>
+    
+    <!-- Placeholder content area -->
+    <g transform="translate(30, 35)">      <text x="0" y="20" fill="rgba(255,255,255,0.8)" font-size="12">Content area 2: Replace with episode-specific content</text>
+      <text x="0" y="40" fill="rgba(255,255,255,0.6)" font-size="10">&#8226; System specifications</text>
+      <text x="0" y="55" fill="rgba(255,255,255,0.6)" font-size="10">&#8226; Performance metrics</text>
+      <text x="0" y="70" fill="rgba(255,255,255,0.6)" font-size="10">&#8226; Key capabilities</text>
+    </g>
+  </g>
+
+  <!-- BOTTOM-LEFT QUADRANT: Customizable Content Area -->
+  <g transform="translate(60, 220)">
+    <rect x="0" y="0" width="520" height="140" rx="12" fill="url(#quadrantGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text x="20" y="25" fill="white" font-size="16" font-weight="bold">[BOTTOM-LEFT CONTENT TITLE]</text>
+    
+    <!-- Placeholder content area -->
+    <g transform="translate(30, 35)">      <text x="0" y="20" fill="rgba(255,255,255,0.8)" font-size="12">Content area 3: Replace with episode-specific content</text>
+      <text x="0" y="40" fill="rgba(255,255,255,0.6)" font-size="10">&#8226; Implementation details</text>
+      <text x="0" y="55" fill="rgba(255,255,255,0.6)" font-size="10">&#8226; Architecture diagrams</text>
+      <text x="0" y="70" fill="rgba(255,255,255,0.6)" font-size="10">&#8226; Process flows</text>
+      <text x="0" y="85" fill="rgba(255,255,255,0.6)" font-size="10">&#8226; System integration</text>
+    </g>
+  </g>
+
+  <!-- BOTTOM-RIGHT QUADRANT: Customizable Content Area -->
+  <g transform="translate(620, 220)">
+    <rect x="0" y="0" width="520" height="140" rx="12" fill="url(#quadrantGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text x="20" y="25" fill="white" font-size="16" font-weight="bold">[BOTTOM-RIGHT CONTENT TITLE]</text>
+    
+    <!-- Placeholder content area -->
+    <g transform="translate(30, 35)">      <text x="0" y="20" fill="rgba(255,255,255,0.8)" font-size="12">Content area 4: Replace with episode-specific content</text>
+      <text x="0" y="40" fill="rgba(255,255,255,0.6)" font-size="10">&#8226; Status indicators</text>
+      <text x="0" y="55" fill="rgba(255,255,255,0.6)" font-size="10">&#8226; Results &amp; outcomes</text>
+      <text x="0" y="70" fill="rgba(255,255,255,0.6)" font-size="10">&#8226; Future considerations</text>
+      <text x="0" y="85" fill="rgba(255,255,255,0.6)" font-size="10">&#8226; Next steps</text>
+    </g>
+  </g>
+
+  <!-- Title area with proper background -->
+  <g transform="translate(0, 420)">
+    <!-- Title background -->
+    <rect x="0" y="0" width="1200" height="210" fill="url(#titleBg)"/>
+      <!-- Episode number and title (customizable) -->
+    <text x="600" y="50" text-anchor="middle" fill="white" font-size="48" font-weight="bold">ISOMON &#35;[X]</text>
+      <!-- Episode subtitle (customizable) -->
+    <text x="600" y="85" text-anchor="middle" fill="#fbbf24" font-size="24">[Episode Subtitle Here]</text>
+    
+    <!-- Episode description (customizable) -->
+    <text x="600" y="115" text-anchor="middle" fill="#fed7aa" font-size="18">[Key Technologies] &#8226; [Main Features] &#8226; [Development Tools] &#8226; [Integration Focus]</text>
+    
+    <!-- Status indicator (customizable) -->
+    <g transform="translate(500, 150)">
+      <rect x="0" y="0" width="200" height="40" rx="20" fill="rgba(34, 197, 94, 0.2)" stroke="#22c55e" stroke-width="1"/>
+      <circle cx="30" cy="20" r="6" fill="#22c55e"/>
+      <text x="50" y="25" fill="#22c55e" font-size="14" font-weight="bold">[Episode Status]</text>
+    </g>
+  </g>
+
+  <!-- Template Usage Instructions (remove when creating actual cover) -->
+  <g transform="translate(60, 10)" opacity="0.7">
+    <rect x="0" y="0" width="400" height="40" rx="4" fill="rgba(255, 0, 0, 0.1)" stroke="rgba(255, 0, 0, 0.3)" stroke-width="1"/>
+    <text x="10" y="15" fill="#ef4444" font-size="10" font-weight="bold">TEMPLATE - REMOVE THIS SECTION WHEN CREATING ACTUAL COVER</text>
+    <text x="10" y="30" fill="#ef4444" font-size="9">Replace all [PLACEHOLDER] text with episode-specific content</text>
+  </g>
+</svg>

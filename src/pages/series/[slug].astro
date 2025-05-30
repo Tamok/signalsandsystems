@@ -5,6 +5,7 @@ import SeriesLayout from '../../layouts/SeriesLayout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import { getSeriesBySlug, getSeriesArticles } from '../../utils/content';
+import { formatDateUTC } from '../../utils/formatDate';
 
 // Generate static paths for all series
 export async function getStaticPaths() {
@@ -38,7 +39,7 @@ if (!series) {
   <div class="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
       <header class="mb-12 text-center">
-        <h1 class="text-4xl font-bold text-gray-900 mb-4">{series.title}</h1>
+        <h1 class={`text-4xl font-bold mb-4${series.slug && series.slug.toLowerCase() === 'isomon' ? ' isomon-title' : ''}`}>{series.title}</h1>
         <p class="text-xl text-gray-600">
           {series.description}
         </p>
@@ -46,23 +47,18 @@ if (!series) {
       
       <div class="space-y-10">
         {sortedArticles.map((article) => (
-          <article class="bg-white rounded-lg shadow-md overflow-hidden">
-            <div class="p-6">
-              <h2 class="text-2xl font-bold text-gray-900 mb-2">
-                <a href={`/devlog/${article.slug}`} class="hover:text-blue-600 transition-colors">
+          <article class="bg-white rounded-lg shadow-md overflow-hidden">            <div class="p-6">
+              <h2 class={`text-2xl font-bold mb-2${article.series && article.series.toLowerCase() === 'isomon' ? ' isomon-title' : ''}`}>
+                <a href={`/${article.slug}`} class={article.series && article.series.toLowerCase() === 'isomon' ? 'isomon-title' : 'text-gray-900 hover:text-blue-600'}>
                   {article.title}
                 </a>
               </h2>
               <p class="text-gray-700 mb-4">{article.description}</p>
               <div class="flex items-center justify-between">
                 <span class="text-sm text-gray-500">
-                  {article.publishDate.toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
+                  {formatDateUTC(article.publishDate)}
                 </span>
-                <a href={`/devlog/${article.slug}`} class="text-sm font-medium text-blue-600 hover:text-blue-500">
+                <a href={`/${article.slug}`} class="text-sm font-medium text-blue-600 hover:text-blue-500">
                   Read more →
                 </a>
               </div>

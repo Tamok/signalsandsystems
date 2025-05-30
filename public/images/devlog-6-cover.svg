@@ -1,0 +1,154 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3730a3;stop-opacity:1" />
+    </linearGradient>
+    <!-- Softer quadrant background -->
+    <linearGradient id="quadrantBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.15" />
+      <stop offset="100%" style="stop-color:#1e40af;stop-opacity:0.25" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Grid pattern -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  
+  <!-- TOP-LEFT QUADRANT: Text vs Interactive Comparison (520x150) -->
+  <g transform="translate(60, 60)">
+    <rect x="0" y="0" width="520" height="150" rx="12" fill="url(#quadrantBg)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    
+    <!-- Text instructions section -->
+    <g transform="translate(30, 25)">
+      <text x="0" y="0" fill="#ef4444" font-family="sans-serif" font-size="14" font-weight="bold">Text Instructions</text>
+      
+      <!-- Text list representation -->
+      <text x="0" y="20" fill="rgba(255,255,255,0.8)" font-family="monospace" font-size="9">1. Connect ESP32 3.3V to sensor VCC</text>
+      <text x="0" y="35" fill="rgba(255,255,255,0.8)" font-family="monospace" font-size="9">2. Connect ESP32 GND to sensor GND</text>
+      <text x="0" y="50" fill="rgba(255,255,255,0.8)" font-family="monospace" font-size="9">3. Connect ESP32 A0 to sensor SIG</text>
+      <text x="0" y="65" fill="rgba(255,255,255,0.8)" font-family="monospace" font-size="9">4. Connect ESP32 SCL to temp SCL</text>
+      <text x="0" y="80" fill="rgba(255,255,255,0.8)" font-family="monospace" font-size="9">5. Connect ESP32 SDA to temp SDA</text>
+      
+      <!-- Error indicators -->
+      <text x="0" y="100" fill="#ef4444" font-family="sans-serif" font-size="10">❌ Error-prone</text>
+      <text x="0" y="115" fill="#ef4444" font-family="sans-serif" font-size="10">❌ Hard to verify</text>
+    </g>
+    
+    <!-- Arrow -->
+    <path d="M240 75 L320 75 M300 55 L320 75 L300 95" stroke="#60a5fa" stroke-width="4" fill="none"/>
+    <text x="280" y="50" text-anchor="middle" fill="#60a5fa" font-family="sans-serif" font-size="12" font-weight="bold">Upgrade</text>
+    
+    <!-- Interactive diagram section -->
+    <g transform="translate(340, 25)">
+      <text x="0" y="0" fill="#22c55e" font-family="sans-serif" font-size="14" font-weight="bold">Interactive SVG</text>
+      
+      <!-- Simple wiring diagram -->
+      <rect x="10" y="15" width="60" height="40" rx="4" fill="rgba(34, 197, 94, 0.3)" stroke="#22c55e"/>
+      <text x="40" y="25" text-anchor="middle" fill="#22c55e" font-family="sans-serif" font-size="8" font-weight="bold">ESP32</text>
+      <text x="40" y="35" text-anchor="middle" fill="#86efac" font-family="sans-serif" font-size="7">FireBeetle</text>
+      
+      <!-- Sensor -->
+      <rect x="100" y="25" width="30" height="20" rx="2" fill="rgba(168, 85, 247, 0.3)" stroke="#a855f7"/>
+      <text x="115" y="37" text-anchor="middle" fill="#c4b5fd" font-family="sans-serif" font-size="7">Sensor</text>
+      
+      <!-- Wires with colors -->
+      <line x1="70" y1="30" x2="100" y2="30" stroke="#dc2626" stroke-width="3"/>
+      <line x1="70" y1="35" x2="100" y2="35" stroke="#000000" stroke-width="3"/>
+      <line x1="70" y1="40" x2="100" y2="40" stroke="#2563eb" stroke-width="3"/>
+      
+      <!-- Zoom icon -->
+      <circle cx="120" cy="20" r="8" fill="rgba(59, 130, 246, 0.3)" stroke="#3b82f6"/>
+      <text x="120" y="24" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="10">🔍</text>
+      
+      <!-- Benefits -->
+      <text x="0" y="75" fill="#22c55e" font-family="sans-serif" font-size="10">✓ Visual clarity</text>
+      <text x="0" y="90" fill="#22c55e" font-family="sans-serif" font-size="10">✓ Zoomable details</text>
+      <text x="0" y="105" fill="#22c55e" font-family="sans-serif" font-size="10">✓ Color-coded wires</text>
+    </g>
+  </g>
+  
+  <!-- TOP-RIGHT QUADRANT: Technical Features (300x150) -->
+  <g transform="translate(640, 60)">
+    <rect x="0" y="0" width="300" height="150" rx="12" fill="url(#quadrantBg)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text x="20" y="25" fill="white" font-family="sans-serif" font-size="16" font-weight="bold">Interactive Features</text>
+    
+    <!-- Feature list -->
+    <g transform="translate(30, 40)">
+      <text x="0" y="0" fill="#3b82f6" font-family="sans-serif" font-size="12" font-weight="bold">🖱️ Mouse Wheel Zoom</text>
+      <text x="0" y="20" fill="#a855f7" font-family="sans-serif" font-size="12" font-weight="bold">👆 Touch Pinch-to-Zoom</text>
+      <text x="0" y="40" fill="#22c55e" font-family="sans-serif" font-size="12" font-weight="bold">🖐 Click &amp; Drag Pan</text>
+      <text x="0" y="60" fill="#f59e0b" font-family="sans-serif" font-size="12" font-weight="bold">🔄 Reset View Button</text>
+      
+      <!-- Technical specs -->
+      <text x="0" y="85" fill="rgba(255,255,255,0.7)" font-family="sans-serif" font-size="10">• SVG-based scalable graphics</text>
+      <text x="0" y="100" fill="rgba(255,255,255,0.7)" font-family="sans-serif" font-size="10">• Progressive enhancement</text>
+    </g>
+  </g>
+  
+  <!-- BOTTOM-LEFT QUADRANT: Design Principles (300x150) -->
+  <g transform="translate(60, 230)">
+    <rect x="0" y="0" width="300" height="150" rx="12" fill="url(#quadrantBg)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text x="20" y="25" fill="white" font-family="sans-serif" font-size="16" font-weight="bold">Design Principles</text>
+    
+    <!-- Principles list -->
+    <g transform="translate(30, 45)">
+      <text x="0" y="0" fill="#60a5fa" font-family="sans-serif" font-size="11" font-weight="bold">Content-First Approach</text>
+      <text x="0" y="15" fill="rgba(255,255,255,0.8)" font-family="sans-serif" font-size="9">Information comes first, interaction enhances</text>
+      
+      <text x="0" y="35" fill="#60a5fa" font-family="sans-serif" font-size="11" font-weight="bold">Progressive Enhancement</text>
+      <text x="0" y="50" fill="rgba(255,255,255,0.8)" font-family="sans-serif" font-size="9">Works without JS, better with it</text>
+      
+      <text x="0" y="70" fill="#60a5fa" font-family="sans-serif" font-size="11" font-weight="bold">User Empathy</text>
+      <text x="0" y="85" fill="rgba(255,255,255,0.8)" font-family="sans-serif" font-size="9">Solving real documentation problems</text>
+    </g>
+  </g>
+  
+  <!-- BOTTOM-RIGHT QUADRANT: Implementation Details (520x150) -->
+  <g transform="translate(420, 230)">
+    <rect x="0" y="0" width="520" height="150" rx="12" fill="url(#quadrantBg)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text x="20" y="25" fill="white" font-family="sans-serif" font-size="16" font-weight="bold">WiringSchematic.astro Component</text>
+    
+    <!-- Code representation -->
+    <g transform="translate(30, 45)">
+      <rect x="0" y="0" width="200" height="70" rx="4" fill="rgba(0,0,0,0.3)" stroke="rgba(255,255,255,0.2)"/>
+      <text x="8" y="15" fill="#22c55e" font-family="monospace" font-size="10">interface Props {</text>
+      <text x="8" y="28" fill="#3b82f6" font-family="monospace" font-size="10">  zoomable?: boolean;</text>
+      <text x="8" y="41" fill="#3b82f6" font-family="monospace" font-size="10">  width?: number;</text>
+      <text x="8" y="54" fill="#3b82f6" font-family="monospace" font-size="10">  height?: number;</text>
+      <text x="8" y="67" fill="#22c55e" font-family="monospace" font-size="10">}</text>
+      
+      <!-- Features -->
+      <g transform="translate(220, 0)">
+        <text x="0" y="15" fill="#86efac" font-family="sans-serif" font-size="11">✓ Transform matrices</text>
+        <text x="0" y="30" fill="#86efac" font-family="sans-serif" font-size="11">✓ Touch event handling</text>
+        <text x="0" y="45" fill="#86efac" font-family="sans-serif" font-size="11">✓ Color-coded wiring</text>
+        <text x="0" y="60" fill="#86efac" font-family="sans-serif" font-size="11">✓ Layered routing</text>
+      </g>
+    </g>
+  </g>
+  
+  <!-- FIXED TEXT AREAS -->
+  <!-- Title -->
+  <text x="600" y="460" text-anchor="middle" fill="white" font-family="sans-serif" font-size="48" font-weight="bold">Devlog #6</text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="500" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="24">Interactive Wiring Diagrams</text>
+  
+  <!-- Series line -->
+  <text x="600" y="535" text-anchor="middle" fill="#60a5fa" font-family="sans-serif" font-size="18">SVG • Interactive Components • Technical Documentation</text>
+    <!-- Status indicator -->
+  <g transform="translate(450, 570)">
+    <rect x="0" y="0" width="300" height="40" rx="20" fill="rgba(34, 197, 94, 0.2)" stroke="#22c55e" stroke-width="1"/>
+    <circle cx="30" cy="20" r="6" fill="#22c55e"/>
+    <text x="50" y="25" fill="#22c55e" font-family="sans-serif" font-size="14" font-weight="bold">Implementation Complete</text>
+  </g>
+
+</svg>

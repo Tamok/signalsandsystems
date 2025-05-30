@@ -5,26 +5,26 @@ import Footer from "../../components/Footer.astro";
 import { getSeriesArticles } from "../../utils/content";
 import { formatDateUTC } from '../../utils/formatDate';
 
-const seriesArticles = await getSeriesArticles("devlog");
+const seriesArticles = await getSeriesArticles("isomon");
 const sortedArticles = [...seriesArticles].sort(
   (a, b) => (a.order ?? 0) - (b.order ?? 0)
 );
 ---
 
 <BaseLayout 
-  title="devlog Series | Signals & Systems"
-  description="Follow along as we document the creation and evolution of the Signals & Systems publishing platform."
+  title="ISOMON Series | Signals & Systems"
+  description="Building an IoT-powered monitoring system for terrestrial isopods - from simple sensor nodes to comprehensive habitat management solutions."
 >
   <Nav slot="header" />
   
   <div class="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
-      <header class="mb-12 text-center">        <h1 class="text-4xl font-bold text-gray-900 mb-4 sm:text-5xl">
-          devlog Series
+      <header class="mb-12 text-center">
+        <h1 class="text-4xl font-bold mb-4 sm:text-5xl isomon-title">
+          ISOMON Series
         </h1>
         <p class="text-xl text-gray-600 leading-relaxed">
-          A behind-the-scenes look at building the Signals & Systems platform, including technical decisions, 
-          challenges, and ethical considerations around vibecoding.
+          Building an IoT-powered monitoring system for terrestrial isopods - from simple sensor nodes to comprehensive habitat management solutions.
         </p>
       </header>
 
@@ -32,14 +32,15 @@ const sortedArticles = [...seriesArticles].sort(
         {sortedArticles.map((article) => (
           <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
             <div class="p-6">
-              <div class="flex items-center justify-between mb-3">                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                  devlog #{article.order || 1}
+              <div class="flex items-center justify-between mb-3">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                  ISOMON #{article.order || 1}
                 </span>
                 <time class="text-sm text-gray-500" datetime={article.publishDate.toISOString()}>
                   {formatDateUTC(article.publishDate)}
                 </time>
-              </div>              <h2 class="text-xl font-semibold text-gray-900 mb-3">
-                <a href={`/${article.slug}`} class="hover:text-blue-600 transition-colors duration-200">
+              </div>              <h2 class={`text-xl font-semibold mb-3 isomon-title`}>
+                <a href={`/${article.slug}`} class="isomon-title hover:text-green-700 transition-colors duration-200">
                   {article.title}
                 </a>
               </h2>
@@ -48,7 +49,7 @@ const sortedArticles = [...seriesArticles].sort(
               </p>
               <a 
                 href={`/${article.slug}`}
-                class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
+                class="inline-flex items-center text-green-600 hover:text-green-800 font-medium transition-colors duration-200"
               >
                 Read article
                 <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

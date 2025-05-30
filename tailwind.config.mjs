@@ -37,12 +37,41 @@ export default {
               paddingTop: '0.125rem',
               paddingBottom: '0.125rem',
               fontWeight: '400',
-            },
-            pre: {
+            },            pre: {
               backgroundColor: 'var(--tw-prose-pre-bg)',
               borderRadius: '0.5rem',
               padding: '1rem',
               overflowX: 'auto',
+            },
+            // Ensure lists are properly styled
+            'ul > li': {
+              paddingLeft: '0.25rem',
+              position: 'relative',
+            },
+            'ul > li::before': {
+              content: '"•"',
+              position: 'absolute',
+              left: '-1.25rem',
+              color: 'var(--tw-prose-bullets)',
+              fontWeight: '600',
+            },
+            'ol > li': {
+              paddingLeft: '0.25rem',
+              position: 'relative',
+            },
+            'ol > li::before': {
+              fontWeight: '400',
+              color: 'var(--tw-prose-counters)',
+            },
+            // Ensure proper spacing for lists
+            'ul, ol': {
+              marginTop: '1.25em',
+              marginBottom: '1.25em',
+              paddingLeft: '1.625em',
+            },
+            'li': {
+              marginTop: '0.5em',
+              marginBottom: '0.5em',
             }
           }
         }

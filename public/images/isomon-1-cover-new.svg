@@ -1,0 +1,188 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Background gradient -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#065f46;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#047857;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Quadrant gradient -->
+    <linearGradient id="quadrantGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:rgba(34, 197, 94, 0.15)"/>
+      <stop offset="100%" style="stop-color:rgba(34, 197, 94, 0.25)"/>
+    </linearGradient>
+    
+    <!-- Grid pattern -->
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  
+  <!-- Content quadrants -->
+  <g transform="translate(60, 60)">
+    <!-- Top-Left: ESP32-C6 Block Diagram -->
+    <rect x="0" y="0" width="520" height="150" rx="12" fill="url(#quadrantGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text x="20" y="25" fill="white" font-size="16" font-weight="bold">ESP32-C6 FireBeetle Core</text>
+    
+    <!-- Main processor block -->
+    <rect x="30" y="40" width="120" height="70" rx="4" fill="rgba(34, 197, 94, 0.3)" stroke="#22c55e" stroke-width="2"/>
+    <text x="40" y="55" fill="#22c55e" font-size="12" font-weight="bold">RISC-V 32-bit</text>
+    <text x="40" y="70" fill="#22c55e" font-size="11">160 MHz</text>
+    <text x="40" y="83" fill="#86efac" font-size="10">400KB SRAM</text>
+    <text x="40" y="96" fill="#86efac" font-size="10">4MB Flash</text>
+    
+    <!-- Connectivity modules -->
+    <rect x="170" y="45" width="80" height="25" rx="3" fill="rgba(59, 130, 246, 0.3)" stroke="#3b82f6"/>
+    <text x="175" y="60" fill="#93c5fd" font-size="10" font-weight="bold">Wi-Fi 6</text>
+    
+    <rect x="170" y="75" width="80" height="25" rx="3" fill="rgba(168, 85, 247, 0.3)" stroke="#a855f7"/>
+    <text x="175" y="90" fill="#c4b5fd" font-size="10" font-weight="bold">Bluetooth 5</text>
+    
+    <rect x="270" y="45" width="80" height="25" rx="3" fill="rgba(245, 158, 11, 0.3)" stroke="#f59e0b"/>
+    <text x="275" y="60" fill="#fbbf24" font-size="10" font-weight="bold">Thread/Zigbee</text>
+    
+    <rect x="270" y="75" width="80" height="25" rx="3" fill="rgba(239, 68, 68, 0.3)" stroke="#ef4444"/>
+    <text x="275" y="90" fill="#fca5a5" font-size="10" font-weight="bold">Matter</text>
+    
+    <!-- GPIO indicators -->
+    <g transform="translate(380, 40)">
+      <text x="0" y="15" fill="rgba(255,255,255,0.8)" font-size="11">13 GPIO Pins</text>
+      <text x="0" y="30" fill="rgba(255,255,255,0.6)" font-size="9">• SPI, I2C, UART</text>
+      <text x="0" y="42" fill="rgba(255,255,255,0.6)" font-size="9">• ADC, PWM</text>
+      <text x="0" y="54" fill="rgba(255,255,255,0.6)" font-size="9">• USB-C charging</text>
+    </g>
+  </g>
+  
+  <g transform="translate(640, 60)">
+    <!-- Top-Right: Sensor Specifications -->
+    <rect x="0" y="0" width="300" height="150" rx="12" fill="url(#quadrantGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text x="20" y="25" fill="white" font-size="16" font-weight="bold">Precision Sensors</text>
+    
+    <!-- Soil moisture sensor detail -->
+    <g transform="translate(30, 35)">
+      <rect x="0" y="5" width="20" height="70" rx="3" fill="rgba(168, 85, 247, 0.4)" stroke="#a855f7" stroke-width="2"/>
+      <text x="30" y="20" fill="#c4b5fd" font-size="12" font-weight="bold">Capacitive Soil</text>
+      <text x="30" y="35" fill="rgba(255,255,255,0.8)" font-size="10">• Corrosion resistant</text>
+      <text x="30" y="48" fill="rgba(255,255,255,0.8)" font-size="10">• Linear response</text>
+      <text x="30" y="61" fill="rgba(255,255,255,0.8)" font-size="10">• Low power</text>
+    </g>
+    
+    <!-- SHT30 sensor -->
+    <g transform="translate(30, 90)">
+      <rect x="0" y="5" width="30" height="20" rx="3" fill="rgba(34, 197, 94, 0.4)" stroke="#22c55e" stroke-width="2"/>
+      <text x="40" y="15" fill="#86efac" font-size="12" font-weight="bold">SHT30 I2C</text>
+      <text x="40" y="30" fill="rgba(255,255,255,0.8)" font-size="10">±0.2°C temp, ±2% humidity</text>
+    </g>
+    
+    <!-- Display representation -->
+    <g transform="translate(180, 50)">
+      <rect x="0" y="0" width="50" height="40" rx="3" fill="rgba(59, 130, 246, 0.4)" stroke="#3b82f6" stroke-width="2"/>
+      <rect x="5" y="5" width="40" height="30" rx="1" fill="rgba(0,0,0,0.3)"/>
+      <text x="55" y="15" fill="#93c5fd" font-size="11" font-weight="bold">1.8" TFT</text>
+      <text x="55" y="30" fill="rgba(255,255,255,0.7)" font-size="9">128×160px</text>
+    </g>
+  </g>
+  
+  <g transform="translate(60, 230)">
+    <!-- Bottom-Left: Terrarium Environment -->
+    <rect x="0" y="0" width="300" height="150" rx="12" fill="url(#quadrantGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text x="20" y="25" fill="white" font-size="16" font-weight="bold">Terrarium Monitoring</text>
+    
+    <!-- Terrarium representation -->
+    <g transform="translate(30, 40)">
+      <!-- Glass container outline -->
+      <rect x="20" y="20" width="160" height="80" rx="8" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+      
+      <!-- Substrate -->
+      <rect x="25" y="85" width="150" height="10" rx="2" fill="rgba(120, 53, 15, 0.8)"/>
+      
+      <!-- Realistic roly-polies (pill bugs) -->
+      <!-- Roly-poly 1 -->
+      <g transform="translate(50, 75)">
+        <ellipse cx="0" cy="0" rx="8" ry="4" fill="#4a5568"/>
+        <ellipse cx="-6" cy="0" rx="2" ry="2" fill="#2d3748"/>
+        <ellipse cx="-3" cy="0" rx="1.5" ry="1.5" fill="#2d3748"/>
+        <ellipse cx="0" cy="0" rx="1.5" ry="1.5" fill="#2d3748"/>
+        <ellipse cx="3" cy="0" rx="1.5" ry="1.5" fill="#2d3748"/>
+        <ellipse cx="6" cy="0" rx="1" ry="1" fill="#2d3748"/>
+        <!-- Antennae -->
+        <line x1="-8" y1="-1" x2="-12" y2="-3" stroke="#2d3748" stroke-width="0.5"/>
+        <line x1="-8" y1="1" x2="-12" y2="3" stroke="#2d3748" stroke-width="0.5"/>
+      </g>
+      
+      <!-- Roly-poly 2 -->
+      <g transform="translate(120, 80)">
+        <ellipse cx="0" cy="0" rx="6" ry="3" fill="#4a5568"/>
+        <ellipse cx="-4" cy="0" rx="1.5" ry="1.5" fill="#2d3748"/>
+        <ellipse cx="-2" cy="0" rx="1" ry="1" fill="#2d3748"/>
+        <ellipse cx="0" cy="0" rx="1" ry="1" fill="#2d3748"/>
+        <ellipse cx="2" cy="0" rx="1" ry="1" fill="#2d3748"/>
+        <ellipse cx="4" cy="0" rx="0.8" ry="0.8" fill="#2d3748"/>
+        <!-- Antennae -->
+        <line x1="-6" y1="-1" x2="-9" y2="-2" stroke="#2d3748" stroke-width="0.5"/>
+        <line x1="-6" y1="1" x2="-9" y2="2" stroke="#2d3748" stroke-width="0.5"/>
+      </g>
+      
+      <!-- Roly-poly 3 (smaller, background) -->
+      <g transform="translate(80, 85)">
+        <ellipse cx="0" cy="0" rx="4" ry="2" fill="#4a5568" opacity="0.8"/>
+        <ellipse cx="-3" cy="0" rx="1" ry="1" fill="#2d3748"/>
+        <ellipse cx="-1" cy="0" rx="0.8" ry="0.8" fill="#2d3748"/>
+        <ellipse cx="1" cy="0" rx="0.8" ry="0.8" fill="#2d3748"/>
+        <ellipse cx="3" cy="0" rx="0.6" ry="0.6" fill="#2d3748"/>
+      </g>
+      
+      <!-- Plants -->
+      <g transform="translate(40, 70)">
+        <path d="M 0 15 Q -5 10 -8 5 Q -5 8 0 10 Q 5 8 8 5 Q 5 10 0 15" fill="#22c55e" opacity="0.6"/>
+      </g>
+      <g transform="translate(140, 65)">
+        <path d="M 0 20 Q -3 15 -5 10 Q -3 13 0 15 Q 3 13 5 10 Q 3 15 0 20" fill="#22c55e" opacity="0.6"/>
+      </g>
+      
+      <!-- Sensors -->
+      <rect x="200" y="70" width="6" height="25" rx="1" fill="#a855f7"/>
+      <text x="210" y="85" fill="#c4b5fd" font-size="8">Soil</text>
+      
+      <rect x="200" y="40" width="8" height="6" rx="1" fill="#22c55e"/>
+      <text x="210" y="45" fill="#86efac" font-size="8">Temp</text>
+    </g>
+  </g>
+  
+  <g transform="translate(420, 230)">
+    <!-- Bottom-Right: Features -->
+    <rect x="0" y="0" width="520" height="150" rx="12" fill="url(#quadrantGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text x="20" y="25" fill="white" font-size="16" font-weight="bold">Key Features</text>
+    
+    <g transform="translate(30, 45)">
+      <text x="0" y="15" fill="#166534" font-family="sans-serif" font-size="12" font-weight="bold">Key Features:</text>
+      <text x="0" y="35" fill="#166534" font-family="sans-serif" font-size="10">• ESP32-C6 with Wi-Fi 6 &amp; Thread</text>
+      <text x="0" y="50" fill="#166534" font-family="sans-serif" font-size="10">• Precision environmental sensors</text>
+      <text x="0" y="65" fill="#166534" font-family="sans-serif" font-size="10">• Real-time monitoring &amp; alerts</text>
+      <text x="0" y="80" fill="#166534" font-family="sans-serif" font-size="10">• Open-source hardware design</text>
+    </g>
+  </g>
+  
+  <!-- Title area -->
+  <g transform="translate(0, 420)">
+    <!-- Title -->
+    <text x="600" y="40" text-anchor="middle" fill="white" font-size="48" font-weight="bold">ISOMON #1</text>
+    
+    <!-- Subtitle -->
+    <text x="600" y="75" text-anchor="middle" fill="#93c5fd" font-size="24">Building the First Monitoring Node</text>
+    
+    <!-- Series line -->
+    <text x="600" y="105" text-anchor="middle" fill="#60a5fa" font-size="18">ESP32-C6 • Precision Sensors • Arduino IDE • IoT Integration</text>
+    
+    <!-- Status indicator -->
+    <g transform="translate(500, 140)">
+      <rect x="0" y="0" width="200" height="40" rx="20" fill="rgba(34, 197, 94, 0.2)" stroke="#22c55e" stroke-width="1"/>
+      <circle cx="30" cy="20" r="6" fill="#22c55e"/>
+      <text x="50" y="25" fill="#22c55e" font-size="14" font-weight="bold">Design Complete</text>
+    </g>
+  </g>
+</svg>

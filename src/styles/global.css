@@ -1,5 +1,107 @@
 @import "tailwindcss";
 
+/* ========================================
+   DEVELOPMENT DEBUG TOOLS
+   Only active when .debug-mode class is on body
+   ======================================== */
+
+/* Main debug indicator */
+body.debug-mode {
+  border-top: 5px solid red !important;
+}
+
+body.debug-mode::before {
+  content: "🐛 DEBUG MODE ACTIVE - Toggle with button or Ctrl+D";
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: #000;
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 12px;
+  z-index: 10000;
+  border-radius: 4px;
+  max-width: 300px;
+}
+
+/* Element structure debugging */
+body.debug-mode article {
+  border: 3px solid green !important;
+}
+
+body.debug-mode .prose {
+  border: 2px solid blue !important;
+}
+
+body.debug-mode .prose ul {
+  border: 1px solid purple !important;
+}
+
+/* Debug key - dynamically populated by JavaScript */
+#debug-key {
+  position: fixed;
+  top: 60px;
+  right: 10px;
+  background: #000;
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 10px;
+  z-index: 9999;
+  border-radius: 4px;
+  max-width: 250px;
+  line-height: 1.4;
+  display: none;
+}
+
+body.debug-mode #debug-key {
+  display: block;
+}
+
+/* Series detection labels - show only if series elements exist */
+body.debug-mode .series-isomon::before {
+  content: "📊 ISOMON SERIES";
+  position: fixed;
+  top: 120px;
+  right: 10px;
+  background: #22c55e;
+  color: white;
+  padding: 4px 8px;
+  font-size: 11px;
+  z-index: 9998;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+body.debug-mode .series-devlog::before {
+  content: "⚙️ devlog SERIES";
+  position: fixed;
+  top: 120px;
+  right: 10px;
+  background: #3b82f6;
+  color: white;
+  padding: 4px 8px;
+  font-size: 11px;
+  z-index: 9998;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+/* Class inspection - show only if article elements exist */
+body.debug-mode article::after {
+  content: "Classes: " attr(class);
+  position: fixed;
+  top: 150px;
+  right: 10px;
+  background: #333;
+  color: #fff;
+  padding: 5px 10px;
+  font-size: 10px;
+  z-index: 9996;
+  border-radius: 4px;
+  max-width: 300px;
+  word-wrap: break-word;
+}
+
 /* Generalized prose heading underline for h2 */
 .prose h2 {
   position: relative;
@@ -46,6 +148,32 @@
   line-height: 1.75;
   color: #4B5563;
   margin-bottom: 2rem;
+}
+
+/* Fix prose list spacing issues */
+.prose ul {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  padding-left: 1.625rem;
+}
+
+.prose li {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose li > p {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Ensure proper spacing between text and lists */
+.prose p + ul {
+  margin-top: 1.5rem;
+}
+
+.prose ul + p {
+  margin-top: 1.5rem;
 }
 
 /* Remove old .article-content h2 style if present */
@@ -144,4 +272,85 @@
   font-size: 0.75rem;
   line-height: 1.5;
   padding-right: 0.5rem;
+}
+
+/* Series-specific custom bullet points */
+
+/* ISOMON Series - Conglobated (round) isopod bullet points */
+[data-series="isomon"] ul > li {
+  list-style: none !important;
+  position: relative !important;
+  padding-left: 2rem !important;
+}
+[data-series="isomon"] ul > li::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 0.8em;
+  width: 12px;
+  height: 12px;
+  transform: translateY(-50%);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3C!-- Conglobated (rolled up) isopod - circular when defensive --%3E%3C!-- Outer shell segments --%3E%3Ccircle cx='7' cy='7' r='6.5' fill='%23451a03' stroke='%23292524' stroke-width='0.3'/%3E%3Ccircle cx='7' cy='7' r='5.5' fill='%2378350f'/%3E%3Ccircle cx='7' cy='7' r='4.5' fill='%2392400e'/%3E%3Ccircle cx='7' cy='7' r='3.5' fill='%23a16207'/%3E%3C!-- Segment lines (concentric arcs) --%3E%3Cpath d='M 2 7 A 5 5 0 0 1 12 7' stroke='%23451a03' stroke-width='0.4' fill='none'/%3E%3Cpath d='M 3 4.5 A 4 4 0 0 1 11 9.5' stroke='%23451a03' stroke-width='0.3' fill='none'/%3E%3Cpath d='M 4 3.5 A 3 3 0 0 1 10 10.5' stroke='%23451a03' stroke-width='0.3' fill='none'/%3E%3C!-- Central body spot --%3E%3Ccircle cx='7' cy='7' r='1.5' fill='%23451a03' opacity='0.6'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+/* DEVLOG Series - Cog/gear-shaped bullet points */
+article.series-devlog.prose ul > li {
+  list-style: none !important;
+  position: relative !important;
+  padding-left: 2rem !important;
+}
+
+article.series-devlog.prose ul > li::before {
+  content: '⚙️';
+  position: absolute;
+  left: 10px;
+  top: 0.8em;
+  transform: translateY(-50%);
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* Nested lists should use normal bullets to avoid visual complexity */
+[data-series="isomon"] ul > li ul > li::before {
+  display: none !important;
+}
+[data-series="isomon"] ul > li ul > li {
+  list-style: disc !important;
+  padding-left: 1rem !important;
+}
+
+/* ISOMON Series - Green styling for article titles everywhere using data-series attribute */
+[data-series="isomon"] h1,
+[data-series="isomon"] .article-title,
+[data-series="isomon"] .isomon-title {
+  color: #16a34a !important; /* green-600 */
+}
+
+/* Remove h2, h3, h4 from the selector so only .isomon-title is green for ISOMON */
+
+/* Add a class for ISOMON articles in lists/cards */
+.card.isomon h3,
+.card.isomon .article-title,
+.card[data-series="isomon"] h3,
+.card[data-series="isomon"] .article-title {
+  color: #16a34a !important;
+}
+
+/* Series page titles for ISOMON */
+.isomon-series-title {
+  color: #16a34a !important; /* green-600 */
+}
+
+/* Navigation elements for ISOMON series */
+.series-nav .isomon-series,
+.series-badge.isomon {
+  background-color: #dcfce7 !important; /* green-100 */
+  color: #16a34a !important; /* green-600 */
+}
+
+/* Always apply green to .isomon-title, regardless of parent context */
+.isomon-title {
+  color: #16a34a !important; /* green-600 */
 }

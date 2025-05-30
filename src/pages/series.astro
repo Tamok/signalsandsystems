@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import { getAllSeries } from "../utils/content";
+import { formatDateUTC } from '../utils/formatDate';
 
 const series = await getAllSeries();
 ---
@@ -26,8 +27,8 @@ const series = await getAllSeries();
         {series.map((s) => (
           <article class="bg-white rounded-lg shadow-md overflow-hidden">
             <div class="p-6">
-              <h2 class="text-2xl font-bold mb-2">
-                <a href={`/series/${s.slug}`} class="text-gray-900 hover:text-blue-600">
+              <h2 class={`text-2xl font-bold mb-2${s.slug && s.slug.toLowerCase() === 'isomon' ? ' isomon-title' : ''}`}>
+                <a href={`/series/${s.slug}`} class={s.slug && s.slug.toLowerCase() === 'isomon' ? 'isomon-title' : 'text-gray-900 hover:text-blue-600'}>
                   {s.title}
                 </a>
               </h2>
@@ -36,10 +37,7 @@ const series = await getAllSeries();
                 <div class="text-sm text-gray-500">
                   <span>{s.articleCount} {s.articleCount === 1 ? 'Article' : 'Articles'}</span>
                   <span class="mx-2">•</span>
-                  <span>Started {s.startDate.toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long' 
-                  })}</span>
+                  <span>Started {formatDateUTC(s.startDate)}</span>
                 </div>
                 <a href={`/series/${s.slug}`} class="text-blue-600 hover:text-blue-800 text-sm font-medium">
                   View series →

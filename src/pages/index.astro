@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import { getAllArticles, getAllSeries } from "../utils/content";
+import { formatDateUTC } from '../utils/formatDate';
 
 const articles = await getAllArticles();
 const latestArticles = [...articles].sort((a, b) => b.publishDate.getTime() - a.publishDate.getTime()).slice(0, 4);
@@ -10,14 +11,13 @@ const series = await getAllSeries();
 const latestSeries = [...series].sort((a, b) => b.startDate.getTime() - a.startDate.getTime()).slice(0, 4);
 ---
 
-<BaseLayout title="Signals & Systems - A personal publishing platform">
+<BaseLayout title="Signals & Systems - Musings on thoughtful technology">
   <Nav slot="header" />
   
   <div class="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
     <section class="text-center mb-16">
-      <h1 class="text-5xl font-extrabold text-gray-900 mb-6">Signals & Systems</h1>
-      <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-        A personal, self-hosted publishing platform designed for long-form, markdown-native articles enriched with interactive elements.
+      <h1 class="text-5xl font-extrabold text-gray-900 mb-6">Signals & Systems</h1>      <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+        Musings on technology, systems design, and the art of building thoughtful digital experiences through hands-on exploration and documentation.
       </p>
       {import.meta.env.DEV && (
         <div class="fixed top-4 right-4 bg-red-500 text-white px-2 py-1 text-xs rounded z-50 pointer-events-none">
@@ -30,10 +30,9 @@ const latestSeries = [...series].sort((a, b) => b.startDate.getTime() - a.startD
       <h2 class="text-3xl font-bold text-gray-800 mb-6">Latest Articles</h2>
       <div class="grid gap-8 md:grid-cols-2">
         {latestArticles.map(article => (
-          <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <div class="p-6">
-              <h3 class="text-xl font-semibold mb-2">
-                <a href={`/devlog/${article.slug}`} class="text-blue-600 hover:text-blue-800">
+          <div class="bg-white rounded-lg shadow-md overflow-hidden">            <div class="p-6">
+              <h3 class={`text-xl font-semibold mb-2${article.series && article.series.toLowerCase() === 'isomon' ? ' isomon-title' : ''}`}>
+                <a href={`/${article.slug}`} class={article.series && article.series.toLowerCase() === 'isomon' ? 'isomon-title' : 'text-blue-600 hover:text-blue-800'}>
                   {article.title}
                 </a>
               </h3>
@@ -41,7 +40,7 @@ const latestSeries = [...series].sort((a, b) => b.startDate.getTime() - a.startD
                 {article.description}
               </p>
               <div class="flex items-center text-sm text-gray-500">
-                <span>{article.publishDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                <span>{formatDateUTC(article.publishDate)}</span>
                 <span class="mx-2">•</span>
                 <span>JELL</span>
               </div>
@@ -57,8 +56,8 @@ const latestSeries = [...series].sort((a, b) => b.startDate.getTime() - a.startD
         {latestSeries.map(s => (
           <div class="bg-white rounded-lg shadow-md overflow-hidden">
             <div class="p-6">
-              <h3 class="text-xl font-semibold mb-2">
-                <a href={`/series/${s.slug}`} class="text-blue-600 hover:text-blue-800">
+              <h3 class={`text-xl font-semibold mb-2${s.slug && s.slug.toLowerCase() === 'isomon' ? ' isomon-title' : ''}`}>
+                <a href={`/series/${s.slug}`} class={s.slug && s.slug.toLowerCase() === 'isomon' ? 'isomon-title' : 'text-blue-600 hover:text-blue-800'}>
                   {s.title}
                 </a>
               </h3>
@@ -68,7 +67,7 @@ const latestSeries = [...series].sort((a, b) => b.startDate.getTime() - a.startD
               <div class="flex items-center text-sm text-gray-500">
                 <span>{s.articleCount} {s.articleCount === 1 ? 'Article' : 'Articles'}</span>
                 <span class="mx-2">•</span>
-                <span>Started {s.startDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                <span>Started {formatDateUTC(s.startDate)}</span>
               </div>
             </div>
           </div>

@@ -221,6 +221,27 @@ Each implementation demonstrates different aspects of the template system:
 - Technical documentation approaches
 - Status communication methods
 
+### Realistic Illustration Guidelines
+
+#### Biological Elements (ISOMON Series)
+When creating covers featuring living organisms:
+- **Anatomical Accuracy**: Include realistic body segments, antennae, and proportional features
+- **Environmental Context**: Place organisms in appropriate habitats (soil substrate, vegetation)
+- **Title Space**: Ensure clear, unobstructed areas for text overlay
+- **Color Harmony**: Use natural colors that complement the overall design palette
+
+#### Technical Component Representation
+- **Schematic Accuracy**: Maintain proper proportions and pin configurations
+- **Visual Clarity**: Use clear, distinguishable component outlines
+- **Functional Context**: Show components in realistic usage scenarios
+- **Wire Routing**: Follow electrical best practices for connection visualization
+
+#### XML Compliance for Illustrations
+- **Clean Structure**: Ensure no content exists after the closing `</svg>` tag
+- **Proper Encoding**: Escape special characters in text elements (`&`, `<`, `>`)
+- **Validation Testing**: Use browser tools and online validators before deployment
+- **Performance Optimization**: Minimize unnecessary path complexity while maintaining visual quality
+
 ---
 
 *This documentation reflects the template system as implemented in the Signals & Systems platform. For questions or contributions, reference the project's main documentation and changelog.*

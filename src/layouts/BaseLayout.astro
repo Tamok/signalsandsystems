@@ -126,9 +126,83 @@ const {
     <footer class="mt-auto">
       <!-- Footer content will be inserted here -->
       <slot name="footer" />
-    </footer>
-    
-    <!-- Additional scripts -->
+    </footer>    <!-- Additional scripts -->
     <slot name="after-footer" />
+    
+    <!-- Development Debug Toggle (only in dev mode) -->
+    <script>      // Only add debug functionality in development
+      if (import.meta.env.DEV) {
+        // Create debug toggle button
+        const debugButton = document.createElement('button');
+        debugButton.textContent = '🐛 Debug';
+        debugButton.title = 'Toggle debug mode (Ctrl+D)';
+        debugButton.style.cssText = `
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          z-index: 10001;
+          background: #333;
+          color: white;
+          border: 2px solid #666;
+          padding: 8px 12px;
+          border-radius: 6px;
+          font-size: 12px;
+          font-weight: bold;
+          cursor: pointer;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+          transition: all 0.2s ease;
+        `;
+        
+        // Create debug key element
+        const debugKey = document.createElement('div');
+        debugKey.id = 'debug-key';
+        document.body.appendChild(debugKey);
+        
+        // Function to update debug key based on what's present on page
+        const updateDebugKey = () => {
+          const elements = {
+            redBorder: document.body.classList.contains('debug-mode'),
+            greenBorder: !!document.querySelector('article'),
+            blueBorder: !!document.querySelector('.prose'),
+            purpleBorder: !!document.querySelector('.prose ul'),
+            seriesIsomon: !!document.querySelector('.series-isomon'),
+            seriesDevlog: !!document.querySelector('.series-devlog')
+          };
+          
+          const keyItems = [];
+          if (elements.redBorder) keyItems.push('🔴 Red Border = Debug Mode Active');
+          if (elements.greenBorder) keyItems.push('🟢 Green Border = Article Element');
+          if (elements.blueBorder) keyItems.push('🔵 Blue Border = .prose Element');
+          if (elements.purpleBorder) keyItems.push('🟣 Purple Border = Lists');
+          
+          debugKey.textContent = keyItems.join(' • ');
+        };
+        
+        // Toggle function
+        const toggleDebug = () => {
+          const isActive = document.body.classList.toggle('debug-mode');
+          debugButton.style.background = isActive ? '#22c55e' : '#333';
+          debugButton.style.borderColor = isActive ? '#16a34a' : '#666';
+          updateDebugKey();
+        };        
+        debugButton.addEventListener('click', toggleDebug);
+        
+        // Keyboard shortcut: Ctrl+D
+        document.addEventListener('keydown', (e) => {
+          if (e.ctrlKey && e.key === 'd') {
+            e.preventDefault();
+            toggleDebug();
+          }
+        });
+        
+        document.body.appendChild(debugButton);
+        
+        // Enable debug mode by default in dev and update key
+        document.body.classList.add('debug-mode');
+        debugButton.style.background = '#22c55e';
+        debugButton.style.borderColor = '#16a34a';
+        updateDebugKey();
+      }
+    </script>
   </body>
 </html>

@@ -1,0 +1,356 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  width?: number;
+  height?: number;
+  id?: string;
+  zoomable?: boolean;
+}
+
+const {
+  title = "Wiring Schematic",
+  description,
+  width = 800,
+  height = 600,
+  id = `wiring-${Math.random().toString(36).substring(2, 9)}`,
+  zoomable = true
+} = Astro.props;
+---
+
+<figure class="wiring-schematic-container mb-8">
+  {title && <h3 class="text-lg font-semibold mb-2">{title}</h3>}
+  {description && <p class="text-gray-600 text-sm mb-4">{description}</p>}
+  
+  {zoomable && (
+    <div class="mb-2 text-xs text-gray-500 flex items-center gap-4">
+      <span>🔍 Zoom: Mouse wheel / Pinch to zoom</span>
+      <button class="reset-zoom-btn bg-blue-100 hover:bg-blue-200 px-2 py-1 rounded text-blue-700 text-xs">Reset View</button>
+    </div>
+  )}
+  
+  <div class={`bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden ${zoomable ? 'schematic-zoom-container' : ''}`} style={`width: 100%; max-width: ${width}px; margin: 0 auto;`}>
+    <svg
+      id={id}
+      viewBox={`0 0 ${width} ${height}`}
+      class={`w-full h-auto ${zoomable ? 'zoomable-schematic' : ''}`}
+      xmlns="http://www.w3.org/2000/svg"
+      style="cursor: grab;"
+    >
+      <!-- Grid pattern -->
+      <defs>
+        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+          <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e5e7eb" stroke-width="0.5"/>
+        </pattern>
+        
+        <!-- Component styles -->
+        <style>
+          .component-rect { fill: #f3f4f6; stroke: #374151; stroke-width: 2; }
+          .component-text { font-family: system-ui, sans-serif; font-size: 12px; fill: #374151; font-weight: 500; }
+          .component-label { font-family: system-ui, sans-serif; font-size: 10px; fill: #6b7280; }
+          .wire { stroke: #dc2626; stroke-width: 2; fill: none; }
+          .wire-power { stroke: #dc2626; stroke-width: 2; fill: none; }
+          .wire-ground { stroke: #000000; stroke-width: 2; fill: none; }
+          .wire-signal { stroke: #2563eb; stroke-width: 2; fill: none; }
+          .wire-i2c { stroke: #059669; stroke-width: 2; fill: none; }
+          .connection-dot { fill: #374151; }
+          .pin-label { font-family: system-ui, sans-serif; font-size: 9px; fill: #374151; }
+        </style>
+      </defs>
+      
+      <!-- Background grid -->
+      <rect width={width} height={height} fill="url(#grid)" />
+      
+      <!-- ESP32-C6 FireBeetle -->
+      <g id="esp32">
+        <rect x="300" y="100" width="200" height="120" class="component-rect" rx="8"/>
+        <text x="400" y="120" text-anchor="middle" class="component-text">ESP32-C6 FireBeetle</text>
+        <text x="400" y="135" text-anchor="middle" class="component-label">+ IO Shield</text>
+        
+        <!-- Pin labels and connection points -->
+        <!-- Power pins -->
+        <circle cx="320" cy="140" r="3" class="connection-dot"/>
+        <text x="315" y="138" text-anchor="end" class="pin-label">3.3V</text>
+        
+        <circle cx="320" cy="160" r="3" class="connection-dot"/>
+        <text x="315" y="158" text-anchor="end" class="pin-label">GND</text>
+        
+        <!-- Analog pin -->
+        <circle cx="320" cy="180" r="3" class="connection-dot"/>
+        <text x="315" y="178" text-anchor="end" class="pin-label">A0</text>
+        
+        <!-- I2C pins -->
+        <circle cx="480" cy="140" r="3" class="connection-dot"/>
+        <text x="485" y="138" text-anchor="start" class="pin-label">SCL</text>
+        
+        <circle cx="480" cy="160" r="3" class="connection-dot"/>
+        <text x="485" y="158" text-anchor="start" class="pin-label">SDA</text>
+        
+        <!-- USB-C connector -->
+        <rect x="380" y="85" width="40" height="10" class="component-rect" rx="5"/>
+        <text x="400" y="80" text-anchor="middle" class="component-label">USB-C</text>
+      </g>
+      
+      <!-- Soil Moisture Sensor -->
+      <g id="soil-sensor">
+        <rect x="50" y="150" width="150" height="80" class="component-rect" rx="6"/>
+        <text x="125" y="175" text-anchor="middle" class="component-text">Capacitive Soil</text>
+        <text x="125" y="190" text-anchor="middle" class="component-text">Moisture Sensor</text>
+        
+        <!-- Pins -->
+        <circle cx="180" cy="170" r="3" class="connection-dot"/>
+        <text x="185" y="168" text-anchor="start" class="pin-label">VCC</text>
+        
+        <circle cx="180" cy="190" r="3" class="connection-dot"/>
+        <text x="185" y="188" text-anchor="start" class="pin-label">GND</text>
+        
+        <circle cx="180" cy="210" r="3" class="connection-dot"/>
+        <text x="185" y="208" text-anchor="start" class="pin-label">SIG</text>
+      </g>
+      
+      <!-- Temperature/Humidity Sensor -->
+      <g id="temp-sensor">
+        <rect x="600" y="150" width="150" height="80" class="component-rect" rx="6"/>
+        <text x="675" y="175" text-anchor="middle" class="component-text">SHT30 Temp/Humidity</text>
+        <text x="675" y="190" text-anchor="middle" class="component-text">Stainless Steel Housing</text>
+        
+        <!-- Pins -->
+        <circle cx="620" cy="170" r="3" class="connection-dot"/>
+        <text x="615" y="168" text-anchor="end" class="pin-label">VCC</text>
+        
+        <circle cx="620" cy="190" r="3" class="connection-dot"/>
+        <text x="615" y="188" text-anchor="end" class="pin-label">GND</text>
+        
+        <circle cx="620" cy="210" r="3" class="connection-dot"/>
+        <text x="615" y="208" text-anchor="end" class="pin-label">SCL</text>
+        
+        <circle cx="620" cy="230" r="3" class="connection-dot"/>
+        <text x="615" y="228" text-anchor="end" class="pin-label">SDA</text>
+      </g>
+      
+      <!-- TFT Display -->
+      <g id="display">
+        <rect x="300" y="350" width="200" height="100" class="component-rect" rx="6"/>
+        <text x="400" y="375" text-anchor="middle" class="component-text">1.8" TFT Display</text>
+        <text x="400" y="390" text-anchor="middle" class="component-text">ST7735 (SPI)</text>
+        <text x="400" y="405" text-anchor="middle" class="component-label">Connected via GDI Interface</text>
+        <text x="400" y="420" text-anchor="middle" class="component-label">on IO Shield</text>
+      </g>
+      
+      <!-- Power Supply -->
+      <g id="power">
+        <rect x="100" y="50" width="120" height="60" class="component-rect" rx="6"/>
+        <text x="160" y="75" text-anchor="middle" class="component-text">USB-C Power</text>
+        <text x="160" y="90" text-anchor="middle" class="component-text">5V → 3.3V</text>
+        
+        <circle cx="200" cy="100" r="3" class="connection-dot"/>
+        <text x="205" y="98" text-anchor="start" class="pin-label">3.3V</text>
+      </g>
+        <!-- Wiring connections with improved routing to avoid overlaps -->
+      <!-- Power lines (red) - routed on upper layer -->
+      <path d="M 200 100 L 270 100 L 270 130 L 320 130 L 320 140" class="wire-power"/>
+      <path d="M 270 130 L 270 165 L 190 165 L 190 170 L 180 170" class="wire-power"/>
+      <path d="M 270 130 L 570 130 L 570 165 L 620 165 L 620 170" class="wire-power"/>
+      
+      <!-- Ground lines (black) - routed on middle layer -->
+      <path d="M 320 160 L 275 160 L 275 195 L 190 195 L 190 190 L 180 190" class="wire-ground"/>
+      <path d="M 275 160 L 565 160 L 565 195 L 620 195 L 620 190" class="wire-ground"/>
+      
+      <!-- Signal line (blue) - routed on lower layer -->
+      <path d="M 180 210 L 240 210 L 240 185 L 315 185 L 315 180 L 320 180" class="wire-signal"/>
+      
+      <!-- I2C lines (green) - routed with wide separation -->
+      <path d="M 480 140 L 520 140 L 520 205 L 615 205 L 615 210 L 620 210" class="wire-i2c"/>
+      <path d="M 480 160 L 530 160 L 530 235 L 615 235 L 615 230 L 620 230" class="wire-i2c"/>
+      
+      <!-- Connection dots at key junctions -->
+      <circle cx="270" cy="130" r="2.5" class="connection-dot"/>
+      <circle cx="275" cy="160" r="2.5" class="connection-dot"/>
+      <circle cx="240" cy="210" r="2.5" class="connection-dot"/>
+      <circle cx="520" cy="140" r="2.5" class="connection-dot"/>
+      <circle cx="530" cy="160" r="2.5" class="connection-dot"/>
+      
+      <!-- Wire labels for clarity -->
+      <text x="235" y="125" class="pin-label" fill="#dc2626">+3.3V</text>
+      <text x="235" y="155" class="pin-label" fill="#000000">GND</text>
+      <text x="235" y="205" class="pin-label" fill="#2563eb">ANALOG</text>
+      <text x="470" y="125" class="pin-label" fill="#059669">SCL</text>
+      <text x="470" y="175" class="pin-label" fill="#059669">SDA</text>
+      
+      <!-- Legend -->
+      <g id="legend" transform="translate(50, 350)">
+        <text x="0" y="15" class="component-text">Wire Legend:</text>
+        
+        <line x1="0" y1="30" x2="30" y2="30" class="wire-power"/>
+        <text x="35" y="35" class="component-label">Power (VCC)</text>
+        
+        <line x1="0" y1="45" x2="30" y2="45" class="wire-ground"/>
+        <text x="35" y="50" class="component-label">Ground (GND)</text>
+        
+        <line x1="0" y1="60" x2="30" y2="60" class="wire-signal"/>
+        <text x="35" y="65" class="component-label">Analog Signal</text>
+        
+        <line x1="0" y1="75" x2="30" y2="75" class="wire-i2c"/>
+        <text x="35" y="80" class="component-label">I2C (SCL/SDA)</text>
+      </g>
+      
+      <!-- Notes -->
+      <g id="notes" transform="translate(550, 350)">
+        <text x="0" y="15" class="component-text">Notes:</text>
+        <text x="0" y="35" class="component-label">• IO Shield provides screw terminals</text>
+        <text x="0" y="50" class="component-label">• Display connects via GDI interface</text>
+        <text x="0" y="65" class="component-label">• All connections are secure and reliable</text>
+        <text x="0" y="80" class="component-label">• Built-in pull-up resistors for I2C</text>
+      </g>    </svg>
+  </div>
+</figure>
+
+{zoomable && (
+  <style>
+    .schematic-zoom-container {
+      position: relative;
+      max-height: 70vh;
+      overflow: hidden;
+    }
+    
+    .zoomable-schematic {
+      transition: transform 0.1s ease-out;
+      transform-origin: center center;
+    }
+    
+    .zoomable-schematic:active {
+      cursor: grabbing;
+    }
+    
+    .reset-zoom-btn {
+      font-family: system-ui, sans-serif;
+      border: 1px solid #3b82f6;
+      transition: all 0.2s ease;
+    }
+  </style>
+  
+  <script define:vars={{ id, width, height }}>
+    document.addEventListener('DOMContentLoaded', function() {
+      const svg = document.getElementById(id);
+      const container = svg.closest('.schematic-zoom-container');
+      const resetBtn = container.parentElement.querySelector('.reset-zoom-btn');
+      
+      if (!svg || !container) return;
+      
+      let scale = 1;
+      let translateX = 0;
+      let translateY = 0;
+      let isDragging = false;
+      let lastX = 0;
+      let lastY = 0;
+      
+      const minScale = 0.5;
+      const maxScale = 3;
+      
+      function updateTransform() {
+        svg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+      }
+      
+      function resetZoom() {
+        scale = 1;
+        translateX = 0;
+        translateY = 0;
+        updateTransform();
+      }
+      
+      // Zoom with mouse wheel
+      container.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        
+        const rect = container.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+        
+        const prevScale = scale;
+        const zoomIntensity = 0.1;
+        const delta = e.deltaY > 0 ? -zoomIntensity : zoomIntensity;
+        
+        scale = Math.max(minScale, Math.min(maxScale, scale + delta));
+        
+        if (scale !== prevScale) {
+          const scaleChange = scale / prevScale;
+          translateX = mouseX - scaleChange * (mouseX - translateX);
+          translateY = mouseY - scaleChange * (mouseY - translateY);
+          updateTransform();
+        }
+      });
+      
+      // Pan with mouse drag
+      svg.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        svg.style.cursor = 'grabbing';
+      });
+      
+      document.addEventListener('mousemove', function(e) {
+        if (!isDragging) return;
+        
+        const deltaX = e.clientX - lastX;
+        const deltaY = e.clientY - lastY;
+        
+        translateX += deltaX;
+        translateY += deltaY;
+        
+        lastX = e.clientX;
+        lastY = e.clientY;
+        
+        updateTransform();
+      });
+      
+      document.addEventListener('mouseup', function() {
+        isDragging = false;
+        svg.style.cursor = 'grab';
+      });
+      
+      // Touch support for mobile
+      let lastTouchDistance = 0;
+      
+      container.addEventListener('touchstart', function(e) {
+        if (e.touches.length === 2) {
+          const touch1 = e.touches[0];
+          const touch2 = e.touches[1];
+          lastTouchDistance = Math.hypot(
+            touch2.clientX - touch1.clientX,
+            touch2.clientY - touch1.clientY
+          );
+        }
+      });
+      
+      container.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+        
+        if (e.touches.length === 2) {
+          const touch1 = e.touches[0];
+          const touch2 = e.touches[1];
+          const touchDistance = Math.hypot(
+            touch2.clientX - touch1.clientX,
+            touch2.clientY - touch1.clientY
+          );
+          
+          if (lastTouchDistance > 0) {
+            const scaleChange = touchDistance / lastTouchDistance;
+            const newScale = Math.max(minScale, Math.min(maxScale, scale * scaleChange));
+            
+            if (newScale !== scale) {
+              scale = newScale;
+              updateTransform();
+            }
+          }
+          
+          lastTouchDistance = touchDistance;
+        }
+      });
+      
+      // Reset button
+      if (resetBtn) {
+        resetBtn.addEventListener('click', resetZoom);
+      }
+    });
+  </script>
+)}

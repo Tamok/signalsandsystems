@@ -22,6 +22,8 @@ export async function initializeHighlighter() {
         'yaml',
         'python',
         'xml',
+        'c',
+        'cpp',
       ],
     });
   }

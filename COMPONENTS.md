@@ -118,6 +118,23 @@ This document serves as a reference guide for all components and layouts in the 
   - `theme`: Color theme for highlighting (github-light or github-dark) (optional)
   - `filename`: Optional filename to display above the code (optional)
 
+### WiringSchematic
+- **File:** `/src/components/WiringSchematic.astro`
+- **Description:** Renders interactive SVG wiring schematics for electronics projects.
+- **Props:**
+  - `title`: Schematic title (optional, default: "Wiring Schematic")
+  - `description`: Schematic description (optional)
+  - `width`: SVG width in pixels (default: 800)
+  - `height`: SVG height in pixels (default: 600)
+  - `id`: Unique ID for the SVG element (auto-generated if not provided)
+- **Features:**
+  - Color-coded wiring (power, ground, signal, I2C)
+  - Component representations with labels
+  - Connection dots and pin labels
+  - Built-in legend and notes
+  - Responsive SVG scaling
+- **Usage:** Ideal for documenting hardware connections in technical articles
+
 ## SVG Assets
 
 ### Favicon

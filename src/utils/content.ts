@@ -52,13 +52,11 @@ export async function getAllArticles(): Promise<Article[]> {
   try {
     // Get articles from the devlog collection
     const devlogEntries = await getCollection('devlog');
-    
-    // Transform entries to match the Article interface
-    const articles = devlogEntries
+    const devlogArticles = devlogEntries
       .filter(entry => !entry.data.draft)
       .map(entry => ({
         title: entry.data.title,
-        slug: entry.slug, // Only the slug, no /devlog/ prefix
+        slug: `devlog/${entry.slug}`, // Include collection prefix for routing
         description: entry.data.description,
         publishDate: entry.data.publishDate,
         series: entry.data.series,
@@ -66,12 +64,23 @@ export async function getAllArticles(): Promise<Article[]> {
         coverImage: entry.data.coverImage
       }));
     
-    allArticles.push(...articles);
+    allArticles.push(...devlogArticles);
     
-    // Add additional collections here when you create them
-    // const otherEntries = await getCollection('other');
-    // const otherArticles = otherEntries.map(...);
-    // allArticles.push(...otherArticles);
+    // Get articles from the isomon collection
+    const isomonEntries = await getCollection('isomon');
+    const isomonArticles = isomonEntries
+      .filter(entry => !entry.data.draft)
+      .map(entry => ({
+        title: entry.data.title,
+        slug: `isomon/${entry.slug}`, // Include collection prefix for routing
+        description: entry.data.description,
+        publishDate: entry.data.publishDate,
+        series: entry.data.series,
+        order: entry.data.order,
+        coverImage: entry.data.coverImage
+      }));
+    
+    allArticles.push(...isomonArticles);
     
     // Sort by publish date, newest first
     return allArticles.sort(
@@ -151,11 +160,12 @@ export async function getArticleBySlug(slug: string): Promise<Article | undefine
     const collectionName = parts[0];
     const entryId = parts.slice(1).join('/');
     
-    // Only support 'devlog' collection for now
-    if (collectionName !== 'devlog') {
+    // Support multiple collections
+    if (!['devlog', 'isomon'].includes(collectionName)) {
       return undefined;
     }
-      const entry = await getEntry(collectionName, entryId);
+    
+    const entry = await getEntry(collectionName as 'devlog' | 'isomon', entryId);
     
     if (!entry) {
       return undefined;
@@ -163,7 +173,7 @@ export async function getArticleBySlug(slug: string): Promise<Article | undefine
     
     return {
       title: entry.data.title,
-      slug: `/${collectionName}/${entry.slug}`,
+      slug: `${collectionName}/${entry.slug}`, // No leading slash
       description: entry.data.description,
       publishDate: entry.data.publishDate,
       series: entry.data.series,

@@ -181,3 +181,188 @@ For additional project context and guidance, refer to:
 - GitHub: [github.com/Tamok](https://github.com/Tamok)
 - LinkedIn: [linkedin.com/in/jonathan-engeln](https://www.linkedin.com/in/jonathan-engeln/)
 - Astro Documentation: [astro.build/docs](https://astro.build/docs)
+
+## Voice and Content Profile
+
+**PRIMARY PERSONA REFERENCE**: All content creation and writing assistance must reference the comprehensive voice training profile in `persona.json` (excluded from version control).
+
+### Article Writing Guidelines
+
+When assisting with article creation, blog posts, or any written content:
+
+1. **Voice Consistency**: Use `persona.json` as the primary reference for:
+   - Writing style and tone
+   - Technical expertise and knowledge areas
+   - Communication preferences and patterns
+   - Professional background and experience
+   - Personal interests and perspectives
+
+2. **Content Standards**: 
+   - Maintain the author's authentic voice while ensuring clarity and engagement
+   - Reference the detailed background in signals processing, electrical engineering, and software development
+   - Incorporate insights from the author's entrepreneurial experience and project leadership
+   - Draw from the comprehensive online presence and community involvement documented in the persona
+
+3. **Technical Writing**: 
+   - Leverage the detailed technical expertise areas documented in the persona
+   - Maintain consistency with the author's demonstrated knowledge across platforms (Stack Overflow, GitHub, Reddit)
+   - Reference specific certifications and professional experience when relevant
+
+4. **Content Adaptation**:
+   - Adapt content complexity based on the target audience while maintaining the author's analytical approach
+   - Incorporate the author's demonstrated passion for education and knowledge sharing
+   - Reflect the creative and technical balance shown across various platforms and projects
+
+### Usage Instructions for AI Assistants
+
+- **ALWAYS** reference `persona.json` before writing any article content
+- Use the detailed background information to inform technical depth and accuracy
+- Maintain consistency with the documented communication style and preferences
+- Draw from the comprehensive platform activity patterns to understand audience engagement approaches
+- Reference specific experiences, projects, and expertise areas as documented in the persona file
+- **For detailed article writing guidance**, refer to the comprehensive `article-writing-guide.md` in this instructions directory
+
+### Content Creation Resources
+
+- **Primary Persona Reference**: `persona.json` (comprehensive voice training profile)
+- **Article Writing Workflow**: `.github/instructions/article-writing-guide.md`
+- **Technical Guidelines**: This document's development principles and code style sections
+
+## Content Management System Guidelines
+
+Based on successful implementation of multi-collection content management, follow these patterns when working with Astro content collections:
+
+### Multi-Collection Support
+- Design utility functions to work across multiple collections (`devlog`, `isomon`, etc.)
+- Include collection prefixes in article slugs for proper routing (`devlog/slug`, `isomon/slug`)
+- Use TypeScript union types for collection names to ensure type safety
+
+```typescript
+export async function getAllArticles(): Promise<Article[]> {
+  const allArticles: Article[] = [];
+  
+  // Fetch from multiple collections
+  const devlogEntries = await getCollection('devlog');
+  const isomonEntries = await getCollection('isomon');
+  
+  // Transform and combine with collection prefixes
+  const devlogArticles = devlogEntries.map(entry => ({
+    // ...existing properties...
+    slug: `devlog/${entry.slug}`, // Include collection prefix
+  }));
+  
+  allArticles.push(...devlogArticles, ...isomonArticles);
+  return allArticles;
+}
+```
+
+### Dynamic Link Patterns
+- Avoid hardcoded collection-specific links (`/devlog/`, `/isomon/`)
+- Use dynamic article slugs that include collection information: `/${article.slug}`
+- This pattern enables easy addition of new collections without code changes
+
+```astro
+<!-- Preferred: Dynamic routing -->
+<a href={`/${article.slug}`}>Read article</a>
+
+<!-- Avoid: Hardcoded collection paths -->
+<a href={`/devlog/${article.slug}`}>Read article</a>
+```
+
+### Collection-Agnostic Components
+- Build components that work with any content collection
+- Pass collection information through props rather than hardcoding
+- Use conditional logic based on slug patterns when collection-specific behavior is needed
+
+```astro
+---
+// Determine collection from slug
+const collection = article.slug.split('/')[0];
+const isDevlog = collection === 'devlog';
+const isIsomon = collection === 'isomon';
+---
+
+<article class={`article ${collection}-article`}>
+  {isDevlog && <DevlogSpecificComponent />}
+  {isIsomon && <IsomonSpecificComponent />}
+</article>
+```
+
+### Content Utility Best Practices
+- Handle missing collections gracefully with try-catch blocks
+- Sort articles consistently across collections (by date, order, etc.)
+- Filter out draft content uniformly across all collections
+- Provide meaningful error messages and fallbacks
+
+## Interactive Component Guidelines
+
+When creating interactive components for technical documentation, follow these established patterns:
+
+### SVG-Based Interactive Elements
+- Use SVG for scalable, interactive technical diagrams
+- Implement zoom and pan functionality with mouse and touch support
+- Provide reset controls for returning to default view
+- Layer content logically (background, components, connections, annotations)
+
+```astro
+---
+interface Props {
+  zoomable?: boolean;
+  width?: number;
+  height?: number;
+}
+
+const { zoomable = true, width = 800, height = 600 } = Astro.props;
+---
+
+<div class={`diagram-container ${zoomable ? 'zoomable' : ''}`}>
+  <svg viewBox={`0 0 ${width} ${height}`} class="interactive-svg">
+    <!-- Content structured in logical layers -->
+  </svg>
+</div>
+
+{zoomable && (
+  <script>
+    // Progressive enhancement - add interactivity
+    // Include touch support for mobile devices
+    // Implement smooth zoom and pan with transform matrices
+  </script>
+)}
+```
+
+### Technical Diagram Standards
+- Use consistent color coding across diagrams:
+  - **Power (Red #dc2626)**: Voltage/power connections
+  - **Ground (Black #000000)**: Ground connections  
+  - **Signal (Blue #2563eb)**: Data/analog signals
+  - **Communication (Green #059669)**: I2C, SPI, serial protocols
+- Route connections to avoid overlaps using layered paths
+- Label components clearly with readable typography
+- Include legends and annotations for clarity
+
+### Progressive Enhancement Patterns
+- Ensure functionality without JavaScript (static fallback)
+- Add interactivity as enhancement rather than requirement
+- Provide clear visual feedback for interactive elements
+- Test thoroughly on mobile and desktop devices
+
+```astro
+<!-- Base functionality works without JavaScript -->
+<svg viewBox="0 0 800 600" class="technical-diagram">
+  <!-- Static content that's always accessible -->
+</svg>
+
+<!-- Enhanced interactivity added progressively -->
+{interactive && (
+  <script>
+    // Enhancement code that improves but doesn't break experience
+  </script>
+)}
+```
+
+### Accessibility in Interactive Components
+- Ensure keyboard navigation for interactive elements
+- Provide ARIA labels for complex SVG content
+- Maintain sufficient color contrast for all visual elements
+- Include text alternatives for purely visual information
+- Test with screen readers and assistive technologies

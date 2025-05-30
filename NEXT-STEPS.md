@@ -19,6 +19,12 @@ Urgent bugs and tasks that need to be addressed in the next session:
 0.2. **Bug fixes** ✓ (Completed on May 22, 2025)
    - ✓ Fixed devlog 2 to use Astro component format instead of MDX
    - ✓ Fixed script paths for code highlighting components
+
+0.3. **ISOMON Series Enhancement** ✓ (Completed on May 28, 2025)
+   - ✓ Created WiringSchematic.astro component for visual hardware documentation
+   - ✓ Replaced text-based wiring guides with interactive SVG schematics
+   - ✓ Updated ISOMON #1 with visual wiring diagram
+   - ✓ Added component documentation to COMPONENTS.md
    - ✓ Added proper SVG cover image for devlog 2
    - ✓ Fixed file structure and script loading for code components
 

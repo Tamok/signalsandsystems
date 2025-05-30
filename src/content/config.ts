@@ -31,5 +31,6 @@ const seriesCollection = defineCollection({
 // Export collections
 export const collections = {
   'devlog': articleCollection,
+  'isomon': articleCollection,
   'series': seriesCollection,
 };

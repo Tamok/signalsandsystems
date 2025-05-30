@@ -1,5 +1,19 @@
 # Signals & Systems Changelog
 
+2025-05-29 - 15:40 - Fixed markdown list rendering globally by adding proper prose list spacing CSS, updated ISOMON 1 cover with green vichy pattern and ecosystem health monitoring theme, resolved XML parse error in devlog 6 cover by escaping ampersand character - #bugfix #css #design #xml
+2025-05-29 - 15:32 - Completed comprehensive fixes: replaced ISOMON 1 cover with XML-compliant version featuring realistic roly-polies, enhanced SVG template documentation with illustration guidelines, verified all changes build and render correctly - #completion #xml #design #validation
+2025-05-29 - 00:20 - Fixed markdown list formatting across all content by adding proper spacing between list introduction text and bullet items for consistent rendering - #content #formatting #markdown
+2025-05-29 - 00:18 - Replaced fictional impact analysis section in Devlog #6 with realistic development philosophy and performance considerations to maintain content authenticity - #content #accuracy #devlog
+2025-05-29 - 00:16 - Updated terminology from "complex hardware connections" to "hardware connections" in Devlog #6 for clearer, more accessible language - #content #clarity #terminology
+2025-05-29 - 00:15 - Created Devlog #6 "Interactive Wiring Diagrams" with comprehensive deep-dive into building zoomable SVG schematic components and enhanced technical documentation tools - #content #devlog #interactive #svg
+2025-05-29 - 00:10 - Added zoom and pan functionality to WiringSchematic.astro with mouse wheel, touch support, and reset controls for enhanced user experience - #feature #interactive #mobile
+2025-05-29 - 00:05 - Improved wire routing in WiringSchematic component with layered paths, connection dots, and wire labels to eliminate overlaps and enhance clarity - #feature #ux #technical
+2025-05-29 - 00:00 - Fixed XML validation error in isomon-1-cover.svg by escaping ampersand characters in "Wi-Fi 6 & Thread" and "monitoring & alerts" text elements - #bugfix #xml #svg
+2025-05-28 - 23:55 - Completed comprehensive content management system overhaul: fixed corrupted devlog.astro, enhanced multi-collection support, and implemented dynamic routing across all pages - #system #content #routing
+2025-05-28 - 23:50 - Enhanced getAllArticles() and getArticleBySlug() functions to support both devlog and isomon collections with proper TypeScript typing and collection prefixes - #feature #typescript #collections
+2025-05-28 - 23:45 - Migrated all hardcoded /devlog/ links to dynamic /${article.slug} format across articles.astro, index.astro, series pages, and navigation components - #refactor #dynamic #links
+2025-05-28 - 23:40 - Fixed series navigation and dynamic route handling in devlog/[slug].astro and isomon/[slug].astro to support multi-collection slug matching - #bugfix #navigation #routing
+2025-05-28 - 21:45 - Created WiringSchematic.astro component with interactive SVG diagrams replacing text-based wiring guides in ISOMON #1 - features color-coded wiring, component representations, and responsive design - #component #technical #isomon
 2025-05-27 - 19:56 - Fixed tsconfig.json path resolution error by updating extends path from "astro/tsconfigs/strict" to "./node_modules/astro/tsconfigs/strict.json" - #bugfix #typescript #config
 2025-05-27 - 19:54 - Fixed TypeScript compilation errors in codeHighlight.ts: replaced ES2018 regex 's' flag with [\s\S]*? pattern and added missing function closing brace - #bugfix #typescript #syntax
 2025-05-27 - 19:35 - Created SVG-TEMPLATE-SYSTEM.md with comprehensive grid system specifications and quadrant dimension guidelines - #docs #design-system #svg
@@ -99,7 +113,16 @@
 2025-05-23 - 12:00 - Ran Astro's check and dev commands to validate content sync and build - #validation #testing
 2025-05-23 - 12:30 - Updated CHANGELOG.md with timestamped, line-by-line entries for each migration step - #docs #changelog
 2025-05-23 - 12:30 - Updated NEXT-STEPS.md with a summary for Devlog #3, documenting the migration, challenges, and lessons learned - #docs #planning
-2025-05-23 - 14:10 - Updated NEXT-STEPS.md section 2.1 to remove placeholder and document the migration plan and execution in detail - #docs #planning
+2025-05-29 - 20:10 - Replaced all direct uses of .toLocaleDateString with centralized formatDateUTC utility for UTC-correct, consistent date display across all article, series, and navigation views - #refactor #date-format
+2025-05-29 - 20:15 - Added data-series attribute to article/series containers and navigation for scalable, series-specific theming - #feature #theming #css
+2025-05-29 - 20:20 - Updated homepage (index.astro), series page (series/[slug].astro), articles list (articles.astro), and SeriesNav (SeriesNav.astro) to use formatDateUTC for all date displays - #refactor #date-format
+2025-05-29 - 20:25 - Refactored layouts and navigation to add data-series attribute for series-specific theming; updated CSS to use [data-series="isomon"] for ISOMON-specific styles (green titles, custom bullets) - #feature #theming #css
+2025-05-29 - 20:30 - Updated article layout (ArticleLayout.astro) so only the main article title is green for ISOMON, not all headers - #bugfix #theming
+2025-05-29 - 20:35 - Updated homepage, series page, and SeriesNav to apply green style only to ISOMON article titles - #bugfix #theming
+2025-05-29 - 20:40 - Removed unused or conflicting date formatting code in layouts/components; fixed import/export issues with new date utility - #cleanup #bugfix
+2025-05-29 - 20:45 - Removed [data-series="isomon"] h2, h3, h4 from CSS to prevent unintended green headers; ensured only .isomon-title is green for ISOMON - #bugfix #css
+2025-05-29 - 20:50 - Added global .isomon-title selector to CSS so ISOMON titles are always green regardless of parent context (fixes homepage, articles, and series list) - #bugfix #css #theming
+2025-05-29 - 21:00 - Verified all date displays use formatDateUTC and are correct; confirmed theming approach is DRY and extensible for future series - #validation #theming #date-format
 
 
 

@@ -1,0 +1,309 @@
+---
+title: "ISOMON #1: Building the First Monitoring Node"
+description: "Designing and implementing an IoT-powered environmental monitor for terrestrial isopods using ESP32-C6, modern sensors, and thoughtful engineering principles."
+publishDate: 2025-05-29
+series: "ISOMON"
+order: 1
+coverImage: "/images/isomon-1-cover.svg"
+tags: ["IoT", "ESP32", "sensors", "Arduino", "embedded systems"]
+---
+
+import CalloutBox from '../../components/CalloutBox.astro';
+import ChartComponent from '../../components/ChartComponent.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import WiringSchematic from '../../components/WiringSchematic.astro';
+
+export const componentSpecs = {
+  labels: ['Power Efficiency', 'Connectivity', 'Sensor Accuracy', 'Display Quality', 'Expandability'],
+  datasets: [
+    {
+      label: 'ISOMON Node Capabilities',
+      data: [92, 95, 88, 85, 90],
+      backgroundColor: 'rgba(34, 197, 94, 0.5)',
+      borderColor: 'rgb(34, 197, 94)',
+      borderWidth: 2,
+      fill: true
+    }
+  ]
+};
+
+export const architectureCode = `// ISOMON Node - Core Architecture
+#include <WiFi.h>
+#include <HTTPClient.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_ST7735.h>
+#include <Wire.h>
+
+// Pin definitions for FireBeetle ESP32-C6
+#define SOIL_MOISTURE_PIN   A0    // Analog input for soil sensor
+#define TFT_CS             5      // TFT chip select
+#define TFT_RST            22     // TFT reset
+#define TFT_DC             21     // TFT data/command
+
+// Sensor I2C address
+#define TEMP_HUMIDITY_ADDR 0x44   // SHT30 default address
+
+// Initialize display
+Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
+
+struct EnvironmentData {
+  float temperature;
+  float humidity;
+  int soilMoisture;
+  unsigned long timestamp;
+};`;
+
+<p class="lead">
+  Welcome to ISOMON - the <em>Isopod Monitoring Node</em> series. What started as a simple birthday present idea for my partner to monitor her beloved terrestrial isopods has evolved into a comprehensive IoT project that combines modern sensor technology, efficient embedded programming, and thoughtful engineering design.
+</p>
+
+## The Problem Space
+
+As someone who's spent years working with both data systems and embedded hardware, I was fascinated by the challenge of creating an environmental monitoring system that needed to be both precise and unobtrusive. Terrestrial isopods, those charming little land crustaceans many know as "roly-polies", require specific environmental conditions to thrive. They need consistent humidity levels, appropriate temperature ranges, and substrate moisture that falls within narrow parameters.
+
+Traditional monitoring approaches often fall short. Basic hygrometers lack the precision needed, while commercial IoT solutions are either too expensive or don't provide the specific metrics isopod keepers actually need. This presented a perfect opportunity to build something better from the ground up.
+
+<CalloutBox type="info">
+  <p>
+    <strong>Series Scope:</strong> ISOMON will evolve from a single monitoring node to a comprehensive habitat management system, including data logging, trend analysis, automated alerts, and eventually environmental control capabilities.
+  </p>
+</CalloutBox>
+
+## Component Selection and Engineering Rationale
+
+After extensive research and consideration of various microcontroller platforms, I selected components that balance performance, reliability, and future expandability:
+
+### Core Processing: DFRobot FireBeetle 2 ESP32-C6
+
+The ESP32-C6 represents a significant advancement over previous ESP32 variants. Key advantages include:
+
+- **Wi-Fi 6 support** for improved connectivity in congested networks
+- **Thread/Zigbee compatibility** enabling future mesh network expansion  
+- **RISC-V architecture** offering better power efficiency than ARM alternatives
+- **Built-in security hardware** for secure IoT communications
+- **Multiple communication protocols** (Wi-Fi, Bluetooth 5, 802.15.4)
+
+The FireBeetle form factor provides essential features in a compact package:
+
+- Onboard lithium battery charging circuit for portable operation
+- USB-C connectivity for modern cable compatibility
+- 13 GPIO pins with multiple interface options (SPI, I2C, UART, PWM)
+
+### Sensor Array: Precision Environmental Monitoring
+
+**Gravity Analog Capacitive Soil Moisture Sensor:** Traditional resistive soil sensors suffer from corrosion and provide inconsistent readings. Capacitive sensors measure dielectric changes in the soil without direct electrical contact, offering:
+
+- Long-term stability and corrosion resistance
+- Linear response characteristics across the measurement range
+- Low power consumption for battery-powered applications
+
+**I2C Temperature & Humidity Sensor (SHT30 with Stainless Steel Housing):** The SHT30 provides ±0.2°C temperature accuracy and ±2% humidity accuracy, while the stainless steel housing ensures:
+
+- Protection from substrate contamination
+- Rapid thermal response for accurate readings
+- Chemical resistance to cleaning agents
+
+### Display and Interface: Fermion 1.8" TFT LCD
+
+The ST7735-based display provides:
+
+- 128×160 pixel resolution with 65K color depth
+- SPI interface for fast data transfer
+- Integrated MicroSD slot for local data logging
+- Low power consumption with controllable backlight
+
+<div class="my-8">
+  <p class="text-lg font-medium text-gray-700 mb-2">ISOMON Node Capability Assessment</p>
+  <ChartComponent 
+    type="radar" 
+    data={componentSpecs} 
+    title="" 
+    description="Technical capabilities of the selected component combination, rated on performance, reliability, and suitability for the application."
+  />
+</div>
+
+## System Architecture and Data Flow
+
+The ISOMON node implements a layered architecture designed for reliability and expandability:
+
+<CodeBlock 
+  code={architectureCode} 
+  lang="javascript" 
+  filename="isomon-core.h" 
+/>
+
+### Data Acquisition Layer
+Sensors are polled at optimized intervals:
+- **Temperature/Humidity:** Every 30 seconds (SHT30 has built-in averaging)
+- **Soil Moisture:** Every 60 seconds (substrate changes slowly)
+- **System Status:** Every 5 minutes (battery, WiFi signal strength)
+
+### Processing and Validation Layer
+Raw sensor data undergoes validation and conditioning:
+- **Range checking** to detect sensor failures
+- **Moving average filtering** to reduce noise
+- **Change detection** to trigger immediate alerts for rapid environmental shifts
+
+### Communication Layer  
+Data transmission uses multiple pathways for reliability:
+- **Primary:** HTTP POST to cloud endpoint via Wi-Fi
+- **Backup:** Local storage to MicroSD card
+- **Future:** Bluetooth mesh for multi-node coordination
+
+## Hardware Implementation
+
+The physical assembly leverages the DFRobot IO Shield to minimize wiring complexity and improve reliability:
+
+<WiringSchematic 
+  title="ISOMON Node Wiring Diagram"
+  description="Complete wiring schematic showing connections between ESP32-C6 FireBeetle, sensors, and display components"
+  width={800}
+  height={600}
+/>
+
+### Connection Strategy
+
+The IO Shield provides several key advantages:
+
+- **Screw terminals** for secure sensor connections
+- **Built-in pull-up resistors** for I2C communication
+- **Power distribution** with proper filtering
+- **GDI interface** simplifying display connections
+
+### Enclosure Design Considerations
+
+For the protective housing, I selected a clear polycarbonate enclosure that provides:
+
+- Visual access to the display without opening the case
+- Ventilation ports positioned to avoid moisture ingress
+- Cable glands for sensor wires extending into the habitat
+- Mounting points for stable positioning
+
+<CalloutBox type="tip">
+  <p>
+    <strong>Pro Tip:</strong> When working with environmental sensors in humid conditions, apply a thin coat of silicone conformal coating to PCB traces and connections. This prevents corrosion while maintaining electrical performance.
+  </p>
+</CalloutBox>
+
+## Software Architecture and Implementation
+
+The firmware implements a state machine approach for reliable operation:
+
+<CodeBlock
+  code={`// Core monitoring loop with power management
+void loop() {
+  static unsigned long lastSensorRead = 0;
+  static unsigned long lastDataTransmit = 0;
+  
+  // Check if it's time for sensor reading
+  if (millis() - lastSensorRead >= SENSOR_INTERVAL) {
+    EnvironmentData data = readAllSensors();
+    
+    if (validateReadings(data)) {
+      updateDisplay(data);
+      bufferData(data);
+      lastSensorRead = millis();
+    }
+  }
+  
+  // Transmit buffered data at specified intervals
+  if (millis() - lastDataTransmit >= TRANSMIT_INTERVAL) {
+    transmitBufferedData();
+    lastDataTransmit = millis();
+  }
+  
+  // Enter light sleep to conserve power  esp_sleep_enable_timer_wakeup(SLEEP_DURATION * 1000);
+  esp_light_sleep_start();
+}`}
+  lang="cpp"
+  filename="isomon_main.ino"
+/>
+
+### Key Software Features
+
+**Adaptive Sampling:** The system adjusts sampling rates based on environmental stability. Rapid changes trigger more frequent sampling, while stable conditions allow for power-saving extended intervals.
+
+**Robust Error Handling:** Network failures, sensor disconnections, and power issues are handled gracefully with automatic recovery mechanisms.
+
+**Data Integrity:** All sensor readings include timestamps and checksums, with local backup storage ensuring no data loss during connectivity issues.
+
+## Power Management and Battery Life
+
+The ESP32-C6's advanced power management enables extended battery operation:
+
+- **Active mode:** ~80mA during sensor reading and data transmission
+- **Light sleep:** ~0.8mA between readings  
+- **Deep sleep:** ~10µA during extended idle periods
+
+With a 2000mAh lithium battery, the node can operate for approximately 15-20 days between charges, depending on data transmission frequency and environmental conditions.
+
+## Cloud Integration and Data Pipeline
+
+For the cloud backend, I'm implementing a lightweight REST API that accepts sensor data and provides:
+
+- **Real-time dashboards** for current environmental conditions
+- **Historical trend analysis** with configurable time ranges
+- **Alert thresholds** with SMS/email notifications
+- **Data export** in CSV and JSON formats for further analysis
+
+The initial implementation uses a simple Node.js server with MongoDB for data storage, but the API design allows for easy migration to other platforms as the system scales.
+
+## Testing and Calibration Protocol
+
+Before deployment, each sensor undergoes a rigorous calibration process:
+
+1. **Soil Moisture Calibration:**
+
+   - Dry air reading (0% moisture reference)
+   - Distilled water immersion (100% moisture reference)
+   - Multiple substrate samples with known moisture content
+
+2. **Temperature/Humidity Validation:**
+   - Comparison against calibrated reference instruments
+   - Stability testing across the operating temperature range
+   - Response time characterization
+
+3. **System Integration Testing:**
+   - 48-hour continuous operation monitoring
+   - Network connectivity stress testing
+   - Power cycling and recovery validation
+
+<CalloutBox type="warning">
+  <p>
+    <strong>Important:</strong> Soil moisture sensors require calibration for each specific substrate type. Coconut fiber, sphagnum moss, and commercial isopod substrates all have different dielectric properties that affect readings.
+  </p>
+</CalloutBox>
+
+## What's Next in the ISOMON Series
+
+This first node represents just the foundation of a comprehensive habitat monitoring ecosystem. Upcoming articles will cover:
+
+<CalloutBox type="info">
+  <p>
+    <strong>Series Update:</strong> The article order and focus may shift as development progresses. The roadmap below reflects current planning but will be updated to match actual development priorities and discoveries.
+  </p>
+</CalloutBox>
+
+**ISOMON #2: Code Implementation and Software Architecture** - Deep dive into the firmware development, sensor integration patterns, data processing algorithms, and communication protocols that bring the hardware to life.
+
+**ISOMON #3: Deployment and Real-World Testing** - Installing the first node, initial data collection, and performance optimization based on actual isopod habitat conditions.
+
+**ISOMON #4: Multi-Node Coordination** - Expanding to multiple monitoring points with mesh networking and distributed data collection.
+
+**ISOMON #5: Advanced Analytics and Alerts** - Implementing machine learning algorithms for predictive habitat management and automated alerts.
+
+**ISOMON #6: Environmental Control Integration** - Adding actuators for humidity control, substrate moisture management, and automated feeding systems.
+
+## Building Your Own ISOMON Node
+
+All design files, code, and documentation for this project will be available on GitHub under an open-source license. The total component cost for this single node is approximately $25-30, making it accessible for hobbyist isopod keepers and educational institutions, but I hope to be able to scale cost down with implementation and having a better understanding of where costs lie.
+
+Whether you're monitoring isopods, other terrarium inhabitants, or simply interested in practical IoT development, the ISOMON platform provides a solid foundation for environmental sensing projects.
+
+The intersection of embedded systems engineering and animal husbandry might seem niche, but it exemplifies how thoughtful technology application can enhance our care for the creatures we share our world with, even the smallest ones.
+
+<CalloutBox type="tip" title="Join the Conversation">
+  <p>
+    Have questions about the ISOMON build or suggestions for future monitoring features? Connect with me on <a href="https://github.com/Tamok" class="text-blue-600 hover:text-blue-800">GitHub</a> or <a href="https://www.linkedin.com/in/jonathan-engeln/" class="text-blue-600 hover:text-blue-800">LinkedIn</a> to continue the conversation.
+  </p>
+</CalloutBox>

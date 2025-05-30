@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import { getAllArticles, getAllSeries } from "../utils/content";
+import { formatDateUTC } from '../utils/formatDate';
 
 const articles = await getAllArticles();
 const series = await getAllSeries();
@@ -36,9 +37,8 @@ const sortedArticles = [...articles].sort((a, b) => b.publishDate.getTime() - a.
                 )}
                 {!article.series && (
                   <span>Article</span>
-                )}
-              </div>              <h2 class="text-2xl font-bold mb-2">
-                <a href={`/devlog/${article.slug}`} class="text-gray-900 hover:text-blue-600">
+                )}              </div>              <h2 class={`text-2xl font-bold mb-2${article.series && article.series.toLowerCase() === 'isomon' ? ' isomon-title' : ''}`}>
+                <a href={`/${article.slug}`} class={article.series && article.series.toLowerCase() === 'isomon' ? 'isomon-title' : 'text-gray-900 hover:text-blue-600'}>
                   {article.title}
                 </a>
               </h2>
@@ -46,13 +46,10 @@ const sortedArticles = [...articles].sort((a, b) => b.publishDate.getTime() - a.
               <div class="flex items-center justify-between">
                 <div class="text-sm text-gray-500">
                   <time datetime={article.publishDate.toISOString()}>
-                    {article.publishDate.toLocaleDateString('en-US', { 
-                      year: 'numeric',
-                      month: 'long', 
-                      day: 'numeric'                    })}
+                    {formatDateUTC(article.publishDate)}
                   </time>
                 </div>
-                <a href={`/devlog/${article.slug}`} class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                <a href={`/${article.slug}`} class="text-blue-600 hover:text-blue-800 text-sm font-medium">
                   Read article →
                 </a>
               </div>
