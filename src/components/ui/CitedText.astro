@@ -1,0 +1,231 @@
+---
+export interface Props {
+  source?: string;
+  url?: string;
+  author?: string;
+  year?: string;
+  title?: string;
+  publication?: string;
+  type?: 'statistic' | 'quote' | 'fact' | 'projection';
+  citationId?: string;
+  citationNumber?: number;
+}
+
+const { 
+  source, 
+  url, 
+  author, 
+  year, 
+  title, 
+  publication, 
+  type = 'fact',
+  citationId,
+  citationNumber
+} = Astro.props;
+
+// Generate unique ID for citation if not provided
+const uniqueId = citationId || `citation-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<span 
+  class={`cited-text cited-${type} ${url ? 'clickable' : ''}`}
+  data-citation-id={uniqueId}
+  data-source={source}
+  data-url={url}
+  data-author={author}
+  data-year={year}
+  data-title={title}
+  data-publication={publication}
+  data-citation-number={citationNumber}
+>
+  <slot />
+  <sup class="citation-marker">[{citationNumber || '1'}]</sup>
+</span>
+
+<style>  .cited-text {
+    position: relative;
+    cursor: help;
+    border-bottom: 1px dotted #4338CA;
+    transition: all 0.2s ease;
+  }
+
+  .cited-text.clickable {
+    cursor: pointer;
+    border-bottom: 1px solid #4338CA;
+  }
+
+  .cited-text.clickable:hover {
+    color: #4338CA;
+    text-decoration: underline;
+  }
+
+  .cited-statistic {
+    background: linear-gradient(120deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  .cited-quote {
+    background: linear-gradient(120deg, rgba(34, 197, 94, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-style: italic;
+  }
+
+  .cited-fact {
+    background: linear-gradient(120deg, rgba(249, 115, 22, 0.1) 0%, rgba(239, 68, 68, 0.1) 100%);
+    padding: 2px 4px;
+    border-radius: 4px;
+  }
+  .citation-marker {
+    font-size: 0.75rem;
+    color: #4338CA;
+    font-weight: 600;
+    margin-left: 2px;
+  }
+
+  .cited-text:hover {
+    background-opacity: 0.2;
+    transform: translateY(-1px);
+  }  /* Custom tooltip element instead of CSS pseudo-elements */
+  .citation-tooltip {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1f2937;
+    color: #f9fafb;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    max-width: 320px;
+    white-space: pre-line;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    z-index: 50;
+    pointer-events: none;
+    font-weight: 500;
+    line-height: 1.5;
+    border: 1px solid #374151;
+  }
+
+  .citation-tooltip.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-2px);
+  }
+
+  /* Arrow for tooltip */
+  .citation-tooltip::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #1f2937;
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    .citation-tooltip {
+      background: #f3f4f6;
+      color: #1f2937;
+      border-color: #d1d5db;
+      box-shadow: 0 10px 15px -3px rgba(255, 255, 255, 0.1), 0 4px 6px -2px rgba(255, 255, 255, 0.05);
+    }
+    
+    .citation-tooltip::before {
+      border-top-color: #f3f4f6;
+    }
+  }
+
+  .dark .citation-tooltip {
+    background: #f3f4f6;
+    color: #1f2937;
+    border-color: #d1d5db;
+    box-shadow: 0 10px 15px -3px rgba(255, 255, 255, 0.1), 0 4px 6px -2px rgba(255, 255, 255, 0.05);
+  }
+  
+  .dark .citation-tooltip::before {
+    border-top-color: #f3f4f6;
+  }
+
+  /* Responsive positioning for mobile */
+  @media (max-width: 768px) {
+    .citation-tooltip {
+      max-width: 280px;
+      font-size: 0.8rem;
+      padding: 10px 14px;
+    }
+  }
+</style>
+
+<script is:client>
+  // Enhanced tooltip functionality with proper DOM tooltips
+  document.addEventListener('DOMContentLoaded', function() {
+    const citedElements = document.querySelectorAll('.cited-text');
+    citedElements.forEach(element => {
+      const source = element.getAttribute('data-source');
+      const url = element.getAttribute('data-url');
+      const author = element.getAttribute('data-author');
+      const year = element.getAttribute('data-year');
+      const title = element.getAttribute('data-title');
+      const publication = element.getAttribute('data-publication');
+      const citationNumber = element.getAttribute('data-citation-number');
+      // Build detailed tooltip content with better formatting
+      let tooltipLines = [];
+      if (citationNumber) {
+        tooltipLines.push(`Citation [${citationNumber}]`);
+      }
+      if (author && year) {
+        tooltipLines.push(`${author} (${year})`);
+      } else if (author) {
+        tooltipLines.push(`${author}`);
+      } else if (year) {
+        tooltipLines.push(`(${year})`);
+      }
+      if (title) {
+        tooltipLines.push(`"${title}"`);
+      }
+      if (publication) {
+        tooltipLines.push(publication);
+      } else if (source && source !== author) {
+        tooltipLines.push(source);
+      }
+      if (url) {
+        tooltipLines.push('');
+        tooltipLines.push('🔗 Click to view source');
+      }
+      const tooltipContent = tooltipLines.join('\n');
+      // Create tooltip element
+      const tooltip = document.createElement('div');
+      tooltip.className = 'citation-tooltip';
+      tooltip.textContent = tooltipContent;
+      element.appendChild(tooltip);
+      // Add hover events with improved timing
+      var hoverTimeout;
+      element.addEventListener('mouseenter', function() {
+        clearTimeout(hoverTimeout);
+        hoverTimeout = setTimeout(function() {
+          tooltip.classList.add('visible');
+        }, 300);
+      });
+      element.addEventListener('mouseleave', function() {
+        clearTimeout(hoverTimeout);
+        tooltip.classList.remove('visible');
+      });
+      // Add click handler for URLs
+      if (url) {
+        element.classList.add('clickable');
+        element.addEventListener('click', function(e) {
+          e.preventDefault();
+          window.open(url, '_blank', 'noopener,noreferrer');
+        });
+      }
+    });
+  });
+</script>

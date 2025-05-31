@@ -85,8 +85,7 @@ const {
             />
           </div>
         )}
-      </header>
-      <slot />
+      </header>      <slot />
       <hr class="my-12 border-gray-200" />
       {seriesArticles && seriesTitle && seriesSlug && currentArticleSlug && (
         <nav class="mt-12" aria-label={`Articles in the ${seriesTitle} series`}>
@@ -102,6 +101,5 @@ const {
       )}
       <AuthorBio />
     </article>
-  </div>
-  <Footer slot="footer" />
+  </div>  <Footer slot="footer" />
 </BaseLayout>
