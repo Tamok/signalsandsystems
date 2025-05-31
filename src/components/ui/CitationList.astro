@@ -1,0 +1,18 @@
+---
+// Renders the citation list for GEO articles, auto-generating from citationData and used IDs
+import { citationData } from '../../content/geo/citationData.ts';
+
+export interface Props {
+  usedIds: number[];
+}
+
+const { usedIds } = Astro.props;
+const usedCitations = citationData.filter(c => usedIds.includes(c.id));
+---
+<ol class="citation-list">
+  {usedCitations.map(c => (
+    <li>
+      <a href={c.url} target="_blank">{c.author} ({c.year}). "{c.title}". {c.publication}.</a>
+    </li>
+  ))}
+</ol>
