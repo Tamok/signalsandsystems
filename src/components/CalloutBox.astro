@@ -1,6 +1,6 @@
 ---
 interface Props {
-  type?: 'info' | 'warning' | 'error' | 'tip';
+  type?: 'info' | 'warning' | 'error' | 'tip' | 'insight' | 'stat' | 'note' | 'success' | 'next';
   title?: string;
 }
 
@@ -14,28 +14,48 @@ const bgColor = {
   info: "bg-blue-50",
   warning: "bg-yellow-50",
   error: "bg-red-50",
-  tip: "bg-green-50"
+  tip: "bg-green-50",
+  insight: "bg-purple-50",
+  stat: "bg-cyan-50",
+  note: "bg-gray-50",
+  success: "bg-emerald-50",
+  next: "bg-indigo-50"
 }[type];
 
 const borderColor = {
   info: "border-blue-400",
   warning: "border-yellow-400",
   error: "border-red-400",
-  tip: "border-green-400"
+  tip: "border-green-400",
+  insight: "border-purple-400",
+  stat: "border-cyan-400",
+  note: "border-gray-400",
+  success: "border-emerald-400",
+  next: "border-indigo-400"
 }[type];
 
 const textColor = {
   info: "text-blue-700",
   warning: "text-yellow-700",
   error: "text-red-700",
-  tip: "text-green-700"
+  tip: "text-green-700",
+  insight: "text-purple-700",
+  stat: "text-cyan-700",
+  note: "text-gray-700",
+  success: "text-emerald-700",
+  next: "text-indigo-700"
 }[type];
 
 const iconColor = {
   info: "text-blue-400",
   warning: "text-yellow-400",
   error: "text-red-400",
-  tip: "text-green-400"
+  tip: "text-green-400",
+  insight: "text-purple-400",
+  stat: "text-cyan-400",
+  note: "text-gray-400",
+  success: "text-emerald-400",
+  next: "text-indigo-400"
 }[type];
 
 // Set icon based on type
@@ -55,10 +75,33 @@ switch(type) {
     icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
             </svg>`;
-    break;
-  case 'tip':
+    break;  case 'tip':
     icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" />
+            </svg>`;
+    break;  case 'insight':
+    icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" />
+            </svg>`;
+    break;
+  case 'stat':
+    icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+            </svg>`;
+    break;
+  case 'note':
+    icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
+            </svg>`;
+    break;
+  case 'success':
+    icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>`;
+    break;
+  case 'next':
+    icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
             </svg>`;
     break;
 }
@@ -67,7 +110,12 @@ const defaultTitle = {
   info: 'Information',
   warning: 'Warning',
   error: 'Error',
-  tip: 'Tip'
+  tip: 'Tip',
+  insight: 'Insight',
+  stat: 'Statistic',
+  note: 'Note',
+  success: 'Success',
+  next: 'Next Steps'
 }[type];
 ---
 

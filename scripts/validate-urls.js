@@ -4,8 +4,8 @@ console.log('Validation script for Astro Content Collections navigation');
 console.log('Checking URL formats...');
 
 // Import node filesystem
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 // Directories to check
 const dirsToCheck = [

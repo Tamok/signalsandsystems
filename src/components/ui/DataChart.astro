@@ -1,0 +1,571 @@
+---
+export interface Props {
+  type: 'bar' | 'line' | 'pie' | 'donut';
+  data: Array<{
+    label: string;
+    value?: number;
+    color?: string;
+    data?: Array<{ x: string; y: number }>; // For line charts
+  }>;
+  title?: string;
+  height?: number;
+  width?: number;
+  showLabels?: boolean;
+  showValues?: boolean;
+  animate?: boolean;
+  unit?: string;
+  note?: string;
+}
+
+const { 
+  type, 
+  data, 
+  title, 
+  height = 300, 
+  width = 600, 
+  showLabels = true, 
+  showValues = true,
+  animate = true,
+  unit = '',
+  note = ''
+} = Astro.props;
+
+// Generate unique ID for this chart
+const chartId = `chart-${Math.random().toString(36).substr(2, 9)}`;
+
+// Default colors if not provided
+const defaultColors = [
+  '#3B82F6', '#8B5CF6', '#EF4444', '#F59E0B', 
+  '#10B981', '#F97316', '#6366F1', '#EC4899'
+];
+
+// Ensure each data point has a color and validate data
+const chartData = data.map((item, index) => ({
+  ...item,
+  color: item.color || defaultColors[index % defaultColors.length],
+  // Ensure line chart data is valid
+  data: type === 'line' && item.data ? item.data.filter(d => d && typeof d.y === 'number') : item.data
+}));
+---
+
+<div class="chart-container">
+  {title && <h3 class="chart-title">{title}</h3>}
+    {type === 'bar' && (
+    <div class="bar-chart" style={`height: ${height}px; width: ${width}px;`}>
+      <div class="chart-area">
+        {chartData.filter(item => typeof item.value === 'number').map((item, index) => {
+          const validValues = chartData.filter(d => typeof d.value === 'number').map(d => d.value || 0);
+          const maxValue = Math.max(...validValues) || 1;
+          const barHeight = ((item.value || 0) / maxValue) * (height - 60);
+          const itemValue = item.value || 0;
+          
+          return (
+            <div 
+              class="bar-item" 
+              style={`animation-delay: ${animate ? index * 0.1 : 0}s;`}
+            >
+              <div 
+                class="bar" 
+                style={`
+                  height: ${barHeight}px; 
+                  background-color: ${item.color};
+                  ${animate ? 'animation: growUp 0.8s ease-out forwards;' : ''}
+                `}
+              >
+                {showValues && (
+                  <span class="bar-value">
+                    {unit.includes('USD') ? `$${itemValue.toLocaleString()}` : 
+                     unit.includes('%') ? `${itemValue}%` : 
+                     `${itemValue}${unit}`}
+                  </span>
+                )}
+              </div>
+              {showLabels && (
+                <span class="bar-label">{item.label}</span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  )}
+
+  {type === 'line' && (
+    <div class="line-chart" style={`height: ${height}px; width: ${width}px;`}>
+      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
+        <defs>
+          {chartData.map((series, index) => (
+            <linearGradient id={`gradient-${index}`} x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style={`stop-color:${series.color};stop-opacity:0.3`} />
+              <stop offset="100%" style={`stop-color:${series.color};stop-opacity:0.05`} />
+            </linearGradient>
+          ))}
+        </defs>
+        
+        {/* Grid lines */}
+        <g class="grid-lines">
+          {[...Array(5)].map((_, i) => (            <line
+              x1="50"
+              y1={50 + (i * (height - 100) / 4)}
+              x2={width - 50}
+              y2={50 + (i * (height - 100) / 4)}
+              stroke="#e2e8f0"
+              stroke-width="1"
+              opacity="0.3"
+            />
+          ))}
+        </g>        {/* Lines */}
+        {chartData.map((series, seriesIndex) => {
+          if (!series.data || series.data.length === 0) return null;
+          
+          const allYValues = chartData.flatMap(s => s.data?.map(d => d.y) || []).filter(v => typeof v === 'number');
+          if (allYValues.length === 0) return null;
+          
+          const maxY = Math.max(...allYValues);
+          const minY = Math.min(...allYValues);
+          const range = maxY - minY || 1; // Prevent division by zero
+          
+          const pathD = series.data.map((point, pointIndex) => {
+            const x = 50 + (pointIndex / Math.max(series.data!.length - 1, 1)) * (width - 100);
+            const y = height - 50 - ((point.y - minY) / range) * (height - 100);
+            return pointIndex === 0 ? `M ${x} ${y}` : `L ${x} ${y}`;
+          }).join(' ');
+          
+          return (
+            <g>
+              <path
+                d={pathD}
+                fill="none"
+                stroke={series.color}
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class={animate ? 'line-path' : ''}
+                style={animate ? `animation-delay: ${seriesIndex * 0.2}s;` : ''}
+              />
+              {series.data.map((point, pointIndex) => {
+                const x = 50 + (pointIndex / Math.max(series.data!.length - 1, 1)) * (width - 100);
+                const y = height - 50 - ((point.y - minY) / range) * (height - 100);
+                return (
+                  <circle
+                    cx={x}
+                    cy={y}
+                    r="4"
+                    fill={series.color}
+                    stroke="white"
+                    stroke-width="2"
+                    class={animate ? 'line-point' : ''}
+                    style={animate ? `animation-delay: ${seriesIndex * 0.2 + pointIndex * 0.1}s;` : ''}
+                  />
+                );
+              })}
+            </g>
+          );
+        })}
+          {/* X-axis labels */}
+        {chartData[0]?.data && chartData[0].data.map((point, index) => (
+          <text
+            x={50 + (index / (chartData[0].data!.length - 1)) * (width - 100)}
+            y={height - 20}
+            text-anchor="middle"
+            fill="#64748b"
+            font-size="12"
+            class="x-axis-label"
+          >
+            {point.x}
+          </text>
+        ))}
+      </svg>
+      
+      {showLabels && (
+        <div class="line-legend">
+          {chartData.map((series, index) => (
+            <div class="legend-item">
+              <span class="legend-color" style={`background-color: ${series.color};`}></span>
+              <span class="legend-text">{series.label}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )}
+
+  {type === 'donut' && (
+    <div class="donut-chart" style={`width: ${width}px; height: ${height}px;`}>
+      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
+        <g transform={`translate(${width/2}, ${height/2})`}>
+          {(() => {
+            const radius = Math.min(width, height) / 2 - 20;
+            const innerRadius = radius * 0.6;
+            let currentAngle = 0;
+            const total = chartData.reduce((sum, item) => sum + (item.value || 0), 0);
+            
+            return chartData.map((item, index) => {
+              const itemValue = item.value || 0;
+              const angle = (itemValue / total) * 2 * Math.PI;
+              const x1 = Math.cos(currentAngle) * radius;
+              const y1 = Math.sin(currentAngle) * radius;
+              const x2 = Math.cos(currentAngle + angle) * radius;
+              const y2 = Math.sin(currentAngle + angle) * radius;
+              const x3 = Math.cos(currentAngle + angle) * innerRadius;
+              const y3 = Math.sin(currentAngle + angle) * innerRadius;
+              const x4 = Math.cos(currentAngle) * innerRadius;
+              const y4 = Math.sin(currentAngle) * innerRadius;
+              const largeArc = angle > Math.PI ? 1 : 0;
+              
+              const pathData = [
+                `M ${x1} ${y1}`,
+                `A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2}`,
+                `L ${x3} ${y3}`,
+                `A ${innerRadius} ${innerRadius} 0 ${largeArc} 0 ${x4} ${y4}`,
+                'Z'
+              ].join(' ');
+              
+              currentAngle += angle;
+              
+              return (
+                <path
+                  d={pathData}
+                  fill={item.color}
+                  stroke="white"
+                  stroke-width="2"
+                  class={animate ? 'donut-segment' : ''}
+                  style={animate ? `animation-delay: ${index * 0.2}s;` : ''}
+                />
+              );
+            });
+          })()}
+        </g>
+      </svg>
+      
+      {showLabels && (
+        <div class="donut-labels">
+          {chartData.map((item, index) => (
+            <div class="donut-label-item" style={`color: ${item.color};`}>
+              <span class="label-color" style={`background-color: ${item.color};`}></span>
+              <span class="label-text">{item.label}</span>
+              {showValues && <span class="label-value">{item.value || 0}%</span>}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )}
+
+  {note && (
+    <div class="chart-note">
+      {note}
+    </div>
+  )}
+</div>
+
+<style>  .chart-container {
+    margin: 2rem 0;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+  }
+
+  .chart-title {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #1e293b;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .chart-note {
+    text-align: center;
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    color: #64748b;
+    font-style: italic;
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    .chart-container {
+      background: #1e293b;
+      border-color: #374151;
+    }
+    
+    .chart-title {
+      color: #f1f5f9;
+    }
+    
+    .chart-note {
+      color: #94a3b8;
+    }
+  }
+
+  .dark .chart-container {
+    background: #1e293b;
+    border-color: #374151;
+  }
+  
+  .dark .chart-title {
+    color: #f1f5f9;
+  }
+  
+  .dark .chart-note {
+    color: #94a3b8;
+  }
+
+  /* Bar Chart Styles */
+  .bar-chart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+  }
+
+  .chart-area {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
+    padding: 20px 0;
+  }
+
+  .bar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .bar {
+    width: 40px;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 8px;
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+  .bar-value {
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.7);
+    padding: 2px 6px;
+    border-radius: 4px;
+    backdrop-filter: blur(4px);
+  }  .bar-label {
+    margin-top: 8px;
+    font-size: 0.875rem;
+    color: #1e293b;
+    text-align: center;
+    max-width: 120px;
+    line-height: 1.2;
+  }
+
+  /* Dark mode for bar charts */
+  @media (prefers-color-scheme: dark) {
+    .bar-label {
+      color: #f1f5f9;
+    }
+  }
+
+  .dark .bar-label {
+    color: #f1f5f9;
+  }
+
+  /* Line Chart Styles */
+  .line-chart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+  }
+
+  .line-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }  .legend-text {
+    color: #1e293b;
+  }
+
+  /* Dark mode for line chart legend */
+  @media (prefers-color-scheme: dark) {
+    .legend-text {
+      color: #f1f5f9;
+    }
+    
+    .x-axis-label {
+      fill: #94a3b8 !important;
+    }
+  }
+
+  .dark .legend-text {
+    color: #f1f5f9;
+  }
+  
+  .dark .x-axis-label {
+    fill: #94a3b8 !important;
+  }
+
+  .line-path {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: drawLine 2s ease-out forwards;
+  }
+
+  .line-point {
+    opacity: 0;
+    animation: fadeInScale 0.5s ease-out forwards;
+  }
+
+  /* Donut Chart Styles */
+  .donut-chart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+  }
+
+  .donut-segment {
+    opacity: 0;
+    animation: fadeInScale 0.8s ease-out forwards;
+  }
+
+  .donut-labels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.5rem;
+    margin-top: 1rem;
+    width: 100%;
+  }
+
+  .donut-label-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .label-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }  .label-text {
+    color: #1e293b;
+    flex: 1;
+  }
+
+  .label-value {
+    font-weight: 600;
+    color: #64748b;
+  }
+
+  /* Dark mode for donut chart labels */
+  @media (prefers-color-scheme: dark) {
+    .label-text {
+      color: #f1f5f9;
+    }
+    
+    .label-value {
+      color: #94a3b8;
+    }
+  }
+
+  .dark .label-text {
+    color: #f1f5f9;
+  }
+  
+  .dark .label-value {
+    color: #94a3b8;
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes growUp {
+    to {
+      transform: scaleY(1);
+    }
+  }
+
+  @keyframes fadeInScale {
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes drawLine {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .bar-chart {
+      width: 100%;
+      height: 250px;
+    }
+    
+    .bar-item {
+      min-width: 45px;
+    }
+    
+    .bar {
+      width: 30px;
+    }
+    
+    .line-chart svg {
+      width: 100%;
+      height: auto;
+      max-width: 500px;
+    }
+    
+    .donut-chart svg {
+      width: 100%;
+      height: auto;
+      max-width: 300px;
+    }
+    
+    .donut-labels {
+      grid-template-columns: 1fr;
+    }
+    
+    .line-legend {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+</style>
+
+<script is:client>
+// (Optional: If you have any client-side JS for DataChart, put it here. If not, this ensures hydration for any future interactivity.)
+</script>

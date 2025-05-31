@@ -65,8 +65,7 @@ export async function getAllArticles(): Promise<Article[]> {
       }));
     
     allArticles.push(...devlogArticles);
-    
-    // Get articles from the isomon collection
+      // Get articles from the isomon collection
     const isomonEntries = await getCollection('isomon');
     const isomonArticles = isomonEntries
       .filter(entry => !entry.data.draft)
@@ -81,6 +80,22 @@ export async function getAllArticles(): Promise<Article[]> {
       }));
     
     allArticles.push(...isomonArticles);
+    
+    // Get articles from the geo collection
+    const geoEntries = await getCollection('geo');
+    const geoArticles = geoEntries
+      .filter(entry => !entry.data.draft)
+      .map(entry => ({
+        title: entry.data.title,
+        slug: `geo/${entry.slug}`, // Include collection prefix for routing
+        description: entry.data.description,
+        publishDate: entry.data.publishDate,
+        series: entry.data.series,
+        order: entry.data.order,
+        coverImage: entry.data.coverImage
+      }));
+    
+    allArticles.push(...geoArticles);
     
     // Sort by publish date, newest first
     return allArticles.sort(
@@ -159,13 +174,12 @@ export async function getArticleBySlug(slug: string): Promise<Article | undefine
     
     const collectionName = parts[0];
     const entryId = parts.slice(1).join('/');
-    
-    // Support multiple collections
-    if (!['devlog', 'isomon'].includes(collectionName)) {
+      // Support multiple collections
+    if (!['devlog', 'isomon', 'geo'].includes(collectionName)) {
       return undefined;
     }
     
-    const entry = await getEntry(collectionName as 'devlog' | 'isomon', entryId);
+    const entry = await getEntry(collectionName as 'devlog' | 'isomon' | 'geo', entryId);
     
     if (!entry) {
       return undefined;

@@ -1,0 +1,311 @@
+---
+export interface Props {
+  stats: Array<{
+    value: string | number;
+    label: string;
+    description?: string;
+    color?: string;
+    icon?: string;
+    source?: string;
+    url?: string;
+  }>;
+  layout?: 'grid' | 'horizontal' | 'vertical';
+  columns?: number;
+  animate?: boolean;
+}
+
+const { 
+  stats, 
+  layout = 'grid', 
+  columns = 3, 
+  animate = true 
+} = Astro.props;
+
+// Default colors
+const defaultColors = [
+  '#3B82F6', '#8B5CF6', '#EF4444', '#F59E0B', 
+  '#10B981', '#F97316', '#6366F1', '#EC4899'
+];
+---
+
+<div 
+  class={`stats-display ${layout}`}
+  style={layout === 'grid' ? `--columns: ${columns};` : ''}
+>
+  {stats.map((stat, index) => {
+    const color = stat.color || defaultColors[index % defaultColors.length];
+    
+    return (
+      <div 
+        class={`stat-item ${animate ? 'animate' : ''}`}
+        style={`
+          --stat-color: ${color};
+          ${animate ? `animation-delay: ${index * 0.1}s;` : ''}
+        `}
+      >
+        {stat.icon && (
+          <div class="stat-icon">
+            <i class={stat.icon}></i>
+          </div>
+        )}
+        
+        <div class="stat-content">
+          <div class="stat-value" data-value={typeof stat.value === 'number' ? stat.value : stat.value}>
+            {stat.value}{typeof stat.value === 'number' && stat.label.includes('%') ? '%' : ''}
+          </div>
+          
+          <div class="stat-label">{stat.label}</div>
+          
+          {stat.description && (
+            <div class="stat-description">{stat.description}</div>
+          )}
+          
+          {stat.source && (
+            <div class="stat-source">
+              {stat.url ? (
+                <a href={stat.url} target="_blank" rel="noopener noreferrer">
+                  Source: {stat.source}
+                </a>
+              ) : (
+                <span>Source: {stat.source}</span>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  })}
+</div>
+
+<style>
+  .stats-display {
+    margin: 2rem 0;
+    gap: 1.5rem;
+  }
+
+  .stats-display.grid {
+    display: grid;
+    grid-template-columns: repeat(var(--columns, 3), 1fr);
+  }
+
+  .stats-display.horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .stats-display.vertical {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-item {
+    background: var(--color-background-secondary);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--stat-color), color-mix(in srgb, var(--stat-color) 80%, white));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s ease;
+  }
+
+  .stat-item:hover {
+    border-color: var(--stat-color);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .stat-item:hover::before {
+    transform: scaleX(1);
+  }
+
+  .stat-item.animate {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideInUp 0.6s ease-out forwards;
+  }
+
+  .stat-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 1rem;
+    background: linear-gradient(135deg, var(--stat-color), color-mix(in srgb, var(--stat-color) 80%, white));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+  }
+
+  .stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--stat-color);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--stat-color), color-mix(in srgb, var(--stat-color) 70%, white));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+
+  .stat-description {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+    margin-bottom: 0.75rem;
+  }
+
+  .stat-source {
+    font-size: 0.75rem;
+    color: var(--color-text-tertiary);
+    margin-top: auto;
+  }
+
+  .stat-source a {
+    color: var(--stat-color);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--stat-color);
+    transition: all 0.2s ease;
+  }
+
+  .stat-source a:hover {
+    border-bottom-style: solid;
+  }
+
+  /* Counter Animation */
+  .stat-item.animate .stat-value[data-value] {
+    counter-reset: stat-counter 0;
+    animation: countUp 2s ease-out forwards;
+  }
+
+  @property --counter {
+    syntax: '<integer>';
+    inherits: false;
+    initial-value: 0;
+  }
+
+  /* Animations */
+  @keyframes slideInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes countUp {
+    from {
+      --counter: 0;
+    }
+    to {
+      --counter: var(--final-value, 100);
+    }
+  }
+
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .stats-display.grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .stats-display.grid,
+    .stats-display.horizontal {
+      grid-template-columns: 1fr;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-item {
+      padding: 1rem;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+    }
+
+    .stat-icon {
+      width: 40px;
+      height: 40px;
+      font-size: 1.25rem;
+    }
+  }
+</style>
+
+<script>
+  // Enhanced counter animation for numbers
+  document.addEventListener('DOMContentLoaded', function() {
+    const statValues = document.querySelectorAll('.stat-value[data-value]');
+    
+    const observerOptions = {
+      threshold: 0.5,
+      rootMargin: '0px 0px -10% 0px'
+    };        const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const element = entry.target as HTMLElement;
+          const finalValue = element.getAttribute('data-value');
+          
+          // Check if the value is a number
+          if (finalValue) {
+            const numValue = parseFloat(finalValue);
+            if (!isNaN(numValue)) {
+              animateValue(element, 0, numValue, 2000);
+            }
+          }
+          
+          observer.unobserve(element);
+        }
+      });
+    }, observerOptions);
+
+    statValues.forEach(stat => {
+      observer.observe(stat);
+    });    function animateValue(element: HTMLElement, start: number, end: number, duration: number): void {
+      const startTime = performance.now();
+      const isPercentage = element.textContent?.includes('%') ?? false;
+      const suffix = isPercentage ? '%' : '';
+      
+      function update(currentTime: number): void {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function for smooth animation
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(start + (end - start) * eased);
+        
+        element.textContent = current + suffix;
+        
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
+      }
+      
+      requestAnimationFrame(update);
+    }
+  });
+</script>

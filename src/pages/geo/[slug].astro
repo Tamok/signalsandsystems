@@ -1,0 +1,64 @@
+---
+import { getCollection } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { getSeriesArticles } from '../../utils/content';
+
+interface SeriesArticle {
+  title: string;
+  slug: string;
+  order: number;
+  publishDate: Date;
+}
+
+// Generate static paths for all geo articles
+export async function getStaticPaths() {
+  const geoEntries = await getCollection('geo');
+  return geoEntries.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry }
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+// Series navigation logic
+const seriesSlug = "geo";
+const currentArticleSlug = entry.slug;
+let prevArticle: SeriesArticle | null = null;
+let nextArticle: SeriesArticle | null = null;
+let sortedArticles: SeriesArticle[] = [];
+
+if (entry.data.series) {
+  const seriesArticles = await getSeriesArticles(entry.data.series);
+  sortedArticles = seriesArticles.map(a => ({
+    title: a.title,
+    slug: a.slug,
+    order: a.order || 0,
+    publishDate: a.publishDate
+  })).sort((a, b) => a.order - b.order);
+  
+  const currentIndex = sortedArticles.findIndex(a => a.slug === `geo/${currentArticleSlug}`);
+  prevArticle = currentIndex > 0 ? sortedArticles[currentIndex - 1] : null;
+  nextArticle = currentIndex < sortedArticles.length - 1 ? sortedArticles[currentIndex + 1] : null;
+}
+---
+
+<ArticleLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  publishDate={entry.data.publishDate}
+  coverImage={entry.data.coverImage}
+  seriesTitle={entry.data.series}
+  seriesSlug={seriesSlug}
+  seriesArticles={sortedArticles}
+  currentArticleSlug={`geo/${currentArticleSlug}`}
+  prevArticle={prevArticle}
+  nextArticle={nextArticle}
+>
+  <Content />
+</ArticleLayout>
+
+<script>
+import '../../scripts/copyCode.js';
+</script>
