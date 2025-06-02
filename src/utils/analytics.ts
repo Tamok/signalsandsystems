@@ -38,6 +38,8 @@ export const sendGTMEvent = (eventName: string, eventParams: Record<string, any>
     }
 };
 
+// GDPR/Consent: We only store your analytics consent (granted/denied) in localStorage under 'ss-analytics-consent'. No other personal data is stored or tracked by this site. You can change your consent at any time using the preferences link in the footer.
+
 // Type definitions for TypeScript
 declare global {
     interface Window {

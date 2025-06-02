@@ -224,3 +224,5 @@ export async function getSeriesBySlug(slug: string): Promise<Series | undefined>
     return undefined;
   }
 }
+
+// GDPR/Consent: This site only stores analytics consent (granted/denied) in localStorage. No other user data is stored or tracked.

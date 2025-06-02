@@ -29,7 +29,7 @@ const {
     <title>{title}</title>    <meta name="title" content={title} />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -86,7 +86,7 @@ const {
           <div class='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60'>
             <div class='bg-white rounded-lg shadow-lg p-6 max-w-md w-full text-gray-900' role='dialog' aria-modal='true' aria-labelledby='consent-title'>
               <h2 id='consent-title' class='text-lg font-semibold mb-2'>Analytics Consent</h2>
-              <p class='mb-4'>We use Google Tag Manager to collect analytics data to improve your experience. You can opt out at any time.</p>
+              <p class='mb-4'>We use Google Tag Manager (GA4) to collect anonymous usage data because I'm a nerd who loves data and patterns. This helps me improve the site and content. Declining is totally fine and won't affect your experience. No personal data is stored, and you can change your preference at any time using the link in the footer.</p>
               <div class='flex gap-2 justify-end'>
                 <button id='decline-btn' class='px-4 py-2 rounded bg-gray-200 hover:bg-gray-300'>Decline</button>
                 <button id='accept-btn' class='px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700'>Accept</button>
