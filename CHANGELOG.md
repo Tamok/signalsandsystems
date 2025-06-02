@@ -1,5 +1,38 @@
 # Signals & Systems Changelog
 
+2025-06-01 - 23:21 - Added favicon.png file to project root for site branding - #assets #favicon
+2025-06-01 - 23:21 - Updated BaseLayout.astro to use new PNG favicon instead of SVG favicon - #favicon #layout
+2025-06-01 - 22:47 - Fixed unrealistic publish date in GEO article #1 from future date to current timeline - #content #geo #dates
+2025-06-01 - 21:20 - Created comprehensive citation validation script (validate-article.cjs) to check URL accessibility and citation health - #validation #citations #tooling
+2025-06-01 - 21:20 - Enhanced StatsDisplay.astro component with optional 'unit' field support for displaying %, k, m values - #components #enhancement
+2025-06-01 - 21:20 - Improved CitationList.astro with auto-generation capabilities and enhanced formatting - #components #citations
+2025-06-01 - 21:20 - Enhanced CitedText.astro with improved tooltip system and global positioning - #components #ui #citations
+2025-06-01 - 21:20 - Streamlined DataChart.astro by removing unused JSX version and dark mode conflicts - #components #cleanup
+2025-06-01 - 21:20 - Updated GEO article content with real market data and refined analytical writing voice - #content #geo #data
+2025-06-01 - 21:20 - Fixed MDX parsing error in GEO article preventing successful builds - #bugfix #mdx #build
+2025-06-01 - 21:20 - Created citationData.ts for centralized citation data management - #data #citations #typescript
+2025-06-01 - 21:20 - Removed deprecated validate-urls.js script in favor of new validation system - #cleanup #tooling
+2025-05-31 - 14:22 - Added CitationList.astro component to complete auto-citation system implementation - #components #citations
+2025-05-31 - 14:20 - Created NEW-GEO-SERIES.md documentation for new content series planning - #docs #geo #planning
+2025-05-31 - 14:20 - Added geo-article-1-cover.svg and geo-series-cover.svg for visual branding - #assets #svg #geo
+2025-05-31 - 14:20 - Implemented autoCitations.js script for automatic citation extraction and list generation - #feature #citations #automation
+2025-05-31 - 14:20 - Enhanced CalloutBox.astro component with improved styling and functionality - #components #ui
+2025-05-31 - 14:20 - Created comprehensive CitedText.astro component for inline citation references with tooltips - #components #citations #ui
+2025-05-31 - 14:20 - Built DataChart.astro component for interactive data visualization in articles - #components #visualization #interactive
+2025-05-31 - 14:20 - Added StatsDisplay.astro component for displaying key statistics and metrics - #components #ui #data
+2025-05-31 - 14:20 - Created basic callout.astro and quote.astro UI components for content formatting - #components #ui
+2025-05-31 - 14:20 - Updated content config to support new GEO collection alongside existing devlog and isomon - #config #collections
+2025-05-31 - 14:20 - Created first GEO article "What is GEO and Why Higher Ed Needs It Now" with comprehensive citation system - #content #geo #citations
+2025-05-31 - 14:20 - Added four placeholder GEO articles for series structure planning - #content #geo #planning
+2025-05-31 - 14:20 - Created geo.json series configuration for navigation and metadata - #config #geo #navigation
+2025-05-31 - 14:20 - Implemented dynamic routing for GEO articles with [slug].astro page - #routing #geo #dynamic
+2025-05-31 - 14:20 - Updated homepage to include GEO series in content listings - #content #navigation #geo
+2025-05-31 - 14:20 - Created dedicated GEO series page for navigation and article listing - #pages #geo #navigation
+2025-05-31 - 14:20 - Enhanced content.ts utility to support multi-collection article fetching - #utils #collections #typescript
+2025-05-31 - 14:20 - Updated TypeScript configuration for better module resolution - #config #typescript
+2025-05-31 - 14:20 - Added auto-citation functionality to BaseLayout.astro for automatic citation list generation - #feature #citations #automation #layout
+2025-05-31 - 14:20 - Enhanced ArticleLayout.astro formatting and structure for better readability - #layout #formatting
+
 2025-05-29 - 15:40 - Fixed markdown list rendering globally by adding proper prose list spacing CSS, updated ISOMON 1 cover with green vichy pattern and ecosystem health monitoring theme, resolved XML parse error in devlog 6 cover by escaping ampersand character - #bugfix #css #design #xml
 2025-05-29 - 15:32 - Completed comprehensive fixes: replaced ISOMON 1 cover with XML-compliant version featuring realistic roly-polies, enhanced SVG template documentation with illustration guidelines, verified all changes build and render correctly - #completion #xml #design #validation
 2025-05-29 - 00:20 - Fixed markdown list formatting across all content by adding proper spacing between list introduction text and bullet items for consistent rendering - #content #formatting #markdown
