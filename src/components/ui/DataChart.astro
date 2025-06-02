@@ -259,10 +259,11 @@ const chartData = data.map((item, index) => ({
   )}
 </div>
 
-<style>  .chart-container {
+<style>
+  .chart-container {
     margin: 2rem 0;
     padding: 1rem;
-    background: #f8fafc;
+    background: #f8fafc !important;
     border-radius: 8px;
     border: 1px solid #e2e8f0;
   }
@@ -270,7 +271,7 @@ const chartData = data.map((item, index) => ({
   .chart-title {
     text-align: center;
     margin-bottom: 1rem;
-    color: #1e293b;
+    color: #1e293b !important;
     font-size: 1.25rem;
     font-weight: 600;
   }
@@ -279,37 +280,13 @@ const chartData = data.map((item, index) => ({
     text-align: center;
     margin-top: 0.75rem;
     font-size: 0.875rem;
-    color: #64748b;
+    color: #64748b !important;
     font-style: italic;
   }
 
-  /* Dark mode support */
-  @media (prefers-color-scheme: dark) {
-    .chart-container {
-      background: #1e293b;
-      border-color: #374151;
-    }
-    
-    .chart-title {
-      color: #f1f5f9;
-    }
-    
-    .chart-note {
-      color: #94a3b8;
-    }
-  }
-
-  .dark .chart-container {
-    background: #1e293b;
-    border-color: #374151;
-  }
-  
-  .dark .chart-title {
-    color: #f1f5f9;
-  }
-  
-  .dark .chart-note {
-    color: #94a3b8;
+  .bar-label, .legend-text, .label-text, .label-value, .x-axis-label {
+    color: #1e293b !important;
+    fill: #1e293b !important;
   }
 
   /* Bar Chart Styles */
@@ -367,17 +344,6 @@ const chartData = data.map((item, index) => ({
     line-height: 1.2;
   }
 
-  /* Dark mode for bar charts */
-  @media (prefers-color-scheme: dark) {
-    .bar-label {
-      color: #f1f5f9;
-    }
-  }
-
-  .dark .bar-label {
-    color: #f1f5f9;
-  }
-
   /* Line Chart Styles */
   .line-chart {
     display: flex;
@@ -408,25 +374,6 @@ const chartData = data.map((item, index) => ({
     flex-shrink: 0;
   }  .legend-text {
     color: #1e293b;
-  }
-
-  /* Dark mode for line chart legend */
-  @media (prefers-color-scheme: dark) {
-    .legend-text {
-      color: #f1f5f9;
-    }
-    
-    .x-axis-label {
-      fill: #94a3b8 !important;
-    }
-  }
-
-  .dark .legend-text {
-    color: #f1f5f9;
-  }
-  
-  .dark .x-axis-label {
-    fill: #94a3b8 !important;
   }
 
   .line-path {
@@ -481,25 +428,6 @@ const chartData = data.map((item, index) => ({
   .label-value {
     font-weight: 600;
     color: #64748b;
-  }
-
-  /* Dark mode for donut chart labels */
-  @media (prefers-color-scheme: dark) {
-    .label-text {
-      color: #f1f5f9;
-    }
-    
-    .label-value {
-      color: #94a3b8;
-    }
-  }
-
-  .dark .label-text {
-    color: #f1f5f9;
-  }
-  
-  .dark .label-value {
-    color: #94a3b8;
   }
 
   /* Animations */
@@ -565,7 +493,3 @@ const chartData = data.map((item, index) => ({
     }
   }
 </style>
-
-<script is:client>
-// (Optional: If you have any client-side JS for DataChart, put it here. If not, this ensures hydration for any future interactivity.)
-</script>

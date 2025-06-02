@@ -8,6 +8,7 @@ export interface Props {
     icon?: string;
     source?: string;
     url?: string;
+    unit?: string;
   }>;
   layout?: 'grid' | 'horizontal' | 'vertical';
   columns?: number;
@@ -48,10 +49,9 @@ const defaultColors = [
             <i class={stat.icon}></i>
           </div>
         )}
-        
-        <div class="stat-content">
+          <div class="stat-content">
           <div class="stat-value" data-value={typeof stat.value === 'number' ? stat.value : stat.value}>
-            {stat.value}{typeof stat.value === 'number' && stat.label.includes('%') ? '%' : ''}
+            {stat.value}{stat.unit || ''}
           </div>
           
           <div class="stat-label">{stat.label}</div>

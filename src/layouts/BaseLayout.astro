@@ -128,8 +128,7 @@ const {
       <slot name="footer" />
     </footer>    <!-- Additional scripts -->
     <slot name="after-footer" />
-    
-    <!-- Development Debug Toggle (only in dev mode) -->
+      <!-- Development Debug Toggle (only in dev mode) -->
     <script>      // Only add debug functionality in development
       if (import.meta.env.DEV) {
         // Create debug toggle button
@@ -202,82 +201,6 @@ const {
         debugButton.style.background = '#22c55e';
         debugButton.style.borderColor = '#16a34a';
         updateDebugKey();
-      }
-    </script>
-    
-    <!-- Auto-citation system: Extract data directly from CitedText components -->
-    <script>
-      function mountCitationList() {
-        // Find all CitedText components (they have data attributes)
-        const citedElements = document.querySelectorAll('[data-citation-number]');
-        
-        if (!citedElements.length) return;
-          // Extract citation data from the DOM elements
-        const citations = Array.from(citedElements).map(el => ({
-          number: parseInt(el.getAttribute('data-citation-number') || '0'),
-          author: el.getAttribute('data-author') || '',
-          year: el.getAttribute('data-year') || '',
-          title: el.getAttribute('data-title') || '',
-          publication: el.getAttribute('data-publication') || el.getAttribute('data-source') || '',
-          url: el.getAttribute('data-url') || ''
-        }))
-        .filter(c => c.number > 0) // Only valid citations
-        .sort((a, b) => a.number - b.number); // Sort by citation number
-        
-        // Remove duplicates (same citation number)
-        const uniqueCitations = citations.filter((citation, index, arr) => 
-          arr.findIndex(c => c.number === citation.number) === index
-        );
-        
-        if (!uniqueCitations.length) return;
-
-        // Find or create the citation list container
-        let container = document.getElementById('auto-citation-list');
-        if (!container) {
-          container = document.createElement('section');
-          container.id = 'auto-citation-list';
-          container.className = 'prose mt-12';
-          container.setAttribute('aria-label', 'Article Citations');
-          
-          // Insert before series navigation or author bio
-          const article = document.querySelector('article.prose');
-          const seriesNav = article?.querySelector('nav[aria-label*="series"]');
-          const authorBio = article?.querySelector('.author-bio, [class*="author"]');
-          
-          if (article) {
-            const insertPoint = seriesNav || authorBio || null;
-            if (insertPoint) {
-              article.insertBefore(container, insertPoint);
-            } else {
-              article.appendChild(container);
-            }
-          }
-        }
-
-        // Build the citation list HTML
-        const citationHTML = uniqueCitations
-          .map(c => `
-            <li>
-              <a href="${c.url}" target="_blank" rel="noopener noreferrer">
-                ${c.author} (${c.year}). "${c.title}". <em>${c.publication}</em>.
-              </a>
-            </li>
-          `).join('');
-        
-        container.innerHTML = `
-          <h2 class="text-xl font-bold mb-4">Citations</h2>
-          <ol class="citation-list list-decimal pl-6 space-y-2">
-            ${citationHTML}
-          </ol>
-        `;
-      }
-
-      // Initialize when DOM is ready
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', mountCitationList);
-      } else {
-        mountCitationList();
-      }
-    </script>
+      }    </script>
   </body>
 </html>

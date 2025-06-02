@@ -47,16 +47,15 @@ const uniqueId = citationId || `citation-${Math.random().toString(36).substr(2, 
     cursor: help;
     border-bottom: 1px dotted #4338CA;
     transition: all 0.2s ease;
+    display: inline;
   }
 
   .cited-text.clickable {
     cursor: pointer;
     border-bottom: 1px solid #4338CA;
   }
-
   .cited-text.clickable:hover {
     color: #4338CA;
-    text-decoration: underline;
   }
 
   .cited-statistic {
@@ -64,6 +63,7 @@ const uniqueId = citationId || `citation-${Math.random().toString(36).substr(2, 
     padding: 2px 4px;
     border-radius: 4px;
     font-weight: 600;
+    margin: 0 1px;
   }
 
   .cited-quote {
@@ -71,11 +71,32 @@ const uniqueId = citationId || `citation-${Math.random().toString(36).substr(2, 
     padding: 2px 4px;
     border-radius: 4px;
     font-style: italic;
+    margin: 0 1px;
   }
 
   .cited-fact {
     background: linear-gradient(120deg, rgba(249, 115, 22, 0.1) 0%, rgba(239, 68, 68, 0.1) 100%);
     padding: 2px 4px;
+    border-radius: 4px;
+    margin: 0 1px;
+  }
+
+  /* Adjacent citation merging */
+  .cited-text + .cited-text {
+    margin-left: -1px;
+  }
+  
+  .cited-text:first-child {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
+  
+  .cited-text:last-child {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+  
+  .cited-text:only-child {
     border-radius: 4px;
   }
   .citation-marker {
@@ -88,7 +109,94 @@ const uniqueId = citationId || `citation-${Math.random().toString(36).substr(2, 
   .cited-text:hover {
     background-opacity: 0.2;
     transform: translateY(-1px);
-  }  /* Custom tooltip element instead of CSS pseudo-elements */
+  }  /* Global citation tooltip */
+  :global(#global-citation-tooltip) {
+    position: fixed;
+    background: linear-gradient(135deg, rgba(31, 41, 55, 0.98) 0%, rgba(55, 65, 81, 0.96) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    color: #f9fafb;
+    padding: 18px 22px;
+    border-radius: 16px;
+    font-size: 0.875rem;
+    max-width: 360px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+      0 32px 64px -12px rgba(0, 0, 0, 0.6),
+      0 16px 32px -8px rgba(0, 0, 0, 0.4),
+      0 8px 16px -4px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    z-index: 1000;
+    pointer-events: none;
+    font-weight: 500;
+    line-height: 1.7;
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    letter-spacing: 0.015em;
+    transform: translateX(-50%) translateY(-100%) scale(0.95);
+  }
+
+  :global(#global-citation-tooltip.visible) {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-100%) scale(1);
+  }  /* Arrow for global tooltip */
+  :global(#global-citation-tooltip::before) {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 10px solid transparent;
+    border-top-color: rgba(31, 41, 55, 0.98);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  }
+
+  :global(#global-citation-tooltip::after) {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba(139, 92, 246, 0.8) 20%, 
+      rgba(99, 102, 241, 0.8) 50%, 
+      rgba(139, 92, 246, 0.8) 80%, 
+      transparent 100%);
+    border-radius: 16px 16px 0 0;
+  }
+
+  /* Dark mode support for global tooltip */
+  @media (prefers-color-scheme: dark) {
+    :global(#global-citation-tooltip) {
+      background: rgba(243, 244, 246, 0.95);
+      backdrop-filter: blur(8px);
+      color: #1f2937;
+      border-color: rgba(209, 213, 219, 0.8);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+    }
+    
+    :global(#global-citation-tooltip::before) {
+      border-top-color: rgba(243, 244, 246, 0.95);
+    }
+  }
+
+  :global(.dark #global-citation-tooltip) {
+    background: rgba(243, 244, 246, 0.95);
+    backdrop-filter: blur(8px);
+    color: #1f2937;
+    border-color: rgba(209, 213, 219, 0.8);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+  }
+  
+  :global(.dark #global-citation-tooltip::before) {
+    border-top-color: rgba(243, 244, 246, 0.95);
+  }
+
+  /* Custom tooltip element instead of CSS pseudo-elements */
   .citation-tooltip {
     position: absolute;
     bottom: calc(100% + 12px);
@@ -164,67 +272,131 @@ const uniqueId = citationId || `citation-${Math.random().toString(36).substr(2, 
   }
 </style>
 
-<script is:client>
-  // Enhanced tooltip functionality with proper DOM tooltips
+<script is:inline>
+  // Enhanced tooltip functionality with one tooltip per citation number
   document.addEventListener('DOMContentLoaded', function() {
+    // Only run this once, even if multiple CitedText components exist
+    if (window.citationTooltipsInitialized) {
+      return;
+    }
+    window.citationTooltipsInitialized = true;
+    
     const citedElements = document.querySelectorAll('.cited-text');
+    const processedCitations = new Set();
+      // Create a global tooltip container
+    let globalTooltip = document.getElementById('global-citation-tooltip');
+    if (!globalTooltip) {
+      globalTooltip = document.createElement('div');
+      globalTooltip.id = 'global-citation-tooltip';
+      document.body.appendChild(globalTooltip);
+    }
+    
+    // First pass: collect all unique citation data
+    const citationData = new Map();
     citedElements.forEach(element => {
+      const citationNumber = element.getAttribute('data-citation-number');
       const source = element.getAttribute('data-source');
       const url = element.getAttribute('data-url');
       const author = element.getAttribute('data-author');
       const year = element.getAttribute('data-year');
       const title = element.getAttribute('data-title');
       const publication = element.getAttribute('data-publication');
-      const citationNumber = element.getAttribute('data-citation-number');
-      // Build detailed tooltip content with better formatting
-      let tooltipLines = [];
-      if (citationNumber) {
-        tooltipLines.push(`Citation [${citationNumber}]`);
-      }
-      if (author && year) {
-        tooltipLines.push(`${author} (${year})`);
-      } else if (author) {
-        tooltipLines.push(`${author}`);
-      } else if (year) {
-        tooltipLines.push(`(${year})`);
-      }
-      if (title) {
-        tooltipLines.push(`"${title}"`);
-      }
-      if (publication) {
-        tooltipLines.push(publication);
-      } else if (source && source !== author) {
-        tooltipLines.push(source);
-      }
-      if (url) {
-        tooltipLines.push('');
-        tooltipLines.push('🔗 Click to view source');
-      }
-      const tooltipContent = tooltipLines.join('\n');
-      // Create tooltip element
-      const tooltip = document.createElement('div');
-      tooltip.className = 'citation-tooltip';
-      tooltip.textContent = tooltipContent;
-      element.appendChild(tooltip);
-      // Add hover events with improved timing
-      var hoverTimeout;
-      element.addEventListener('mouseenter', function() {
-        clearTimeout(hoverTimeout);
-        hoverTimeout = setTimeout(function() {
-          tooltip.classList.add('visible');
-        }, 300);
-      });
-      element.addEventListener('mouseleave', function() {
-        clearTimeout(hoverTimeout);
-        tooltip.classList.remove('visible');
-      });
-      // Add click handler for URLs
-      if (url) {
-        element.classList.add('clickable');
-        element.addEventListener('click', function(e) {
-          e.preventDefault();
-          window.open(url, '_blank', 'noopener,noreferrer');
+      
+      if (citationNumber && !citationData.has(citationNumber)) {
+        // Build detailed tooltip content with better formatting
+        let tooltipLines = [];
+        if (citationNumber) {
+          tooltipLines.push(`Citation [${citationNumber}]`);
+        }
+        if (author && year) {
+          tooltipLines.push(`${author} (${year})`);
+        } else if (author) {
+          tooltipLines.push(`${author}`);
+        } else if (year) {
+          tooltipLines.push(`(${year})`);
+        }        if (title) {
+          tooltipLines.push(`<em>${title}</em>`);
+        }
+        if (publication) {
+          tooltipLines.push(publication);
+        } else if (source && source !== author) {
+          tooltipLines.push(source);
+        }
+        if (url) {
+          tooltipLines.push('');
+          tooltipLines.push('🔗 Click to view source');
+        }
+        
+        citationData.set(citationNumber, {
+          content: tooltipLines.join('\n'),
+          url: url
         });
+      }
+    });
+      // Second pass: add event listeners to all citation elements
+    citedElements.forEach(element => {
+      const citationNumber = element.getAttribute('data-citation-number');
+      const citationInfo = citationData.get(citationNumber);
+      
+      if (citationInfo) {
+        let hoverTimeout;
+        let hideTimeout;
+        
+        element.addEventListener('mouseenter', function(e) {
+          clearTimeout(hoverTimeout);
+          clearTimeout(hideTimeout);          hoverTimeout = setTimeout(function() {
+            globalTooltip.innerHTML = citationInfo.content.replace(/\n/g, '<br>');
+            
+            // Position tooltip relative to the hovered element
+            const rect = element.getBoundingClientRect();
+            const tooltipWidth = 320; // max-width from CSS
+            const tooltipHeight = 80; // estimated height
+            
+            // Calculate horizontal position
+            let left = rect.left + rect.width / 2;
+            const rightEdge = left + tooltipWidth / 2;
+            const leftEdge = left - tooltipWidth / 2;
+            
+            // Adjust if tooltip would go off-screen
+            if (rightEdge > window.innerWidth - 20) {
+              left = window.innerWidth - tooltipWidth / 2 - 20;
+            } else if (leftEdge < 20) {
+              left = tooltipWidth / 2 + 20;
+            }
+              // Calculate vertical position
+            let top = rect.top - 10;
+            if (top - tooltipHeight < 20) {
+              // If tooltip would go above viewport, show it below the element
+              top = rect.bottom + 10;
+              globalTooltip.style.transform = 'translateX(-50%) scale(1)';
+            } else {
+              globalTooltip.style.transform = 'translateX(-50%) translateY(-100%) scale(1)';
+            }
+            
+            globalTooltip.style.position = 'fixed';
+            globalTooltip.style.left = left + 'px';
+            globalTooltip.style.top = top + 'px';
+            
+            globalTooltip.classList.add('visible');
+          }, 200);
+        });
+        
+        element.addEventListener('mouseleave', function() {
+          clearTimeout(hoverTimeout);
+          
+          hideTimeout = setTimeout(function() {
+            globalTooltip.classList.remove('visible');
+          }, 100);
+        });
+        
+        // Add click handler for URLs
+        if (citationInfo.url) {
+          element.classList.add('clickable');
+          element.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.open(citationInfo.url, '_blank', 'noopener,noreferrer');
+          });
+        }
       }
     });
   });

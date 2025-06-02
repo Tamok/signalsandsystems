@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import AuthorBio from '../components/AuthorBio.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import CitationList from '../components/ui/CitationList.astro';
 import { formatDateUTC } from '../utils/formatDate';
 import SeriesNav from '../components/SeriesNav.astro';
 
@@ -86,6 +87,10 @@ const {
           </div>
         )}
       </header>      <slot />
+      
+      <!-- Auto-generated citation list -->
+      <CitationList />
+      
       <hr class="my-12 border-gray-200" />
       {seriesArticles && seriesTitle && seriesSlug && currentArticleSlug && (
         <nav class="mt-12" aria-label={`Articles in the ${seriesTitle} series`}>
