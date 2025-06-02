@@ -1,0 +1,161 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SGEO from '../components/SGEO.astro';
+---
+<BaseLayout title="Privacy Policy - Signals & Systems">
+  <SGEO 
+    title="Privacy Policy - Signals & Systems"
+    description="Privacy policy and data protection information for Signals & Systems"
+  />
+  
+  <div class="max-w-4xl mx-auto px-4 py-12">
+    <article class="prose prose-lg mx-auto">
+      <h1>Privacy Policy</h1>
+      <p class="text-sm text-gray-600 mb-8">Last updated: June 2, 2025</p>
+
+      <h2>Who We Are</h2>
+      <p>
+        Signals & Systems is a personal publishing platform operated by JELL. 
+        Our website address is: https://signalsandsystems.jellwrites.com/  or https://signalsys.dev
+      </p>
+
+      <h2>What Data We Collect and Why</h2>
+      
+      <h3>Analytics Data (Optional)</h3>
+      <p>
+        With your explicit consent, we use Google Tag Manager and GA4 to collect anonymous usage data including:
+      </p>
+      <ul>
+        <li>Pages visited and time spent on site</li>
+        <li>Browser type and operating system</li>
+        <li>Referring websites</li>
+        <li>General geographic location (country/region level)</li>
+        <li>Device type (desktop, mobile, tablet)</li>
+      </ul>
+      <p>
+        <strong>Purpose:</strong> To understand how visitors use our site and improve content and user experience. Also to make nice visualizations.
+      </p>
+      <p>
+        <strong>Legal Basis:</strong> Consent (GDPR Article 6(1)(a))
+      </p>
+      <p>
+        <strong>Data Retention:</strong> Google Analytics retains this data for 26 months, after which it is automatically deleted.
+      </p>
+
+      <h3>Consent Preferences</h3>
+      <p>
+        We store your analytics consent choice (granted/denied) in your browser's local storage under the key 'ss-analytics-consent'.
+      </p>
+      <p>
+        <strong>Purpose:</strong> To remember your privacy preferences and avoid showing the consent popup repeatedly.
+      </p>
+      <p>
+        <strong>Legal Basis:</strong> Legitimate interest (GDPR Article 6(1)(f)) - necessary for the proper functioning of our consent system.
+      </p>
+
+      <h3>What We Don't Collect</h3>
+      <ul>
+        <li>No personal information (names, emails, addresses)</li>
+        <li>No account creation or user profiles</li>
+        <li>No tracking across other websites</li>
+        <li>No selling of data to third parties</li>
+        <li>No marketing emails or communications</li>
+      </ul>
+
+      <h2>Data Sharing</h2>
+      <p>
+        The only data sharing occurs when you consent to analytics:
+      </p>
+      <ul>
+        <li><strong>Google Analytics:</strong> Anonymous usage data is processed by Google under their <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Privacy Policy</a></li>
+        <li><strong>No other third parties</strong> receive any data from this website</li>
+      </ul>
+
+      <h2>Your Rights Under GDPR</h2>
+      <p>You have the following rights regarding your data:</p>
+      
+      <h3>Right to Withdraw Consent</h3>
+      <p>
+        You can withdraw analytics consent at any time using the "Cookie & Analytics Preferences" link in the footer.
+        This will stop all future data collection immediately.
+      </p>
+
+      <h3>Right to Data Portability</h3>
+      <p>
+        Since we only store your consent preference locally in your browser, 
+        you can export this data yourself through your browser's developer tools.
+      </p>
+
+      <h3>Right to Deletion</h3>
+      <p>
+        To delete your consent preference: clear your browser's local storage for this site.
+        For Google Analytics data deletion, you can request this through Google's 
+        <a href="https://support.google.com/analytics/answer/9450800" target="_blank" rel="noopener">data deletion process</a>.
+      </p>
+
+      <h3>Right to Access</h3>
+      <p>
+        The only personal data we store is your consent preference, which you can view 
+        in your browser's local storage or by checking which option is selected in our consent popup.
+      </p>
+
+      <h3>Right to Rectification</h3>
+      <p>
+        You can correct your consent preference at any time using the footer link.
+      </p>
+
+      <h3>Right to Object</h3>
+      <p>
+        You can object to analytics processing by declining or withdrawing consent.
+      </p>
+
+      <h2>Data Security</h2>
+      <p>
+        We implement appropriate technical measures to protect your data:
+      </p>
+      <ul>
+        <li>HTTPS encryption for all communications</li>
+        <li>No sensitive data storage on our servers</li>
+        <li>Consent data stored locally in your browser only</li>
+        <li>Regular security updates to our platform</li>
+      </ul>
+
+      <h2>International Data Transfers</h2>
+      <p>
+        When you consent to analytics, your anonymous usage data may be transferred to and processed in the United States 
+        by Google Analytics. Google provides appropriate safeguards for international transfers under GDPR.
+      </p>
+
+      <h2>Changes to This Policy</h2>
+      <p>
+        We may update this privacy policy from time to time. Any changes will be posted on this page with an updated date.
+        Significant changes will be highlighted in our changelog.
+      </p>
+
+      <h2>Contact Information</h2>
+      <p>
+        If you have any questions about this privacy policy or your data rights, you can contact us at:
+      </p>
+      <p>
+        <strong>Email:</strong> contact@jellwrites.com<br>
+      </p>
+
+      <h2>Data Protection Authority</h2>
+      <p>
+        You have the right to lodge a complaint with your local data protection authority if you believe 
+        we have not complied with GDPR requirements.
+      </p>
+      
+      <hr class="my-8">
+      
+      <div class="bg-blue-50 p-6 rounded-lg">
+        <h3 class="text-lg font-semibold mb-2">Summary</h3>
+        <p class="text-sm">
+          We believe in radical transparency about data collection. We collect minimal data, 
+          only with your consent, and give you full control over your privacy choices. 
+          Most importantly: <strong>declining analytics will not affect your experience on this site in any way.</strong>
+        </p>
+      </div>
+    </article>
+  </div>
+</BaseLayout>

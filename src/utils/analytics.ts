@@ -1,4 +1,4 @@
-export const gtmId = 'GTM-XXXXXXX'; // Replace with your actual GTM ID when ready to deploy
+export const gtmId = 'GTM-T7M99JBN'; // Production GTM ID
 
 // Function to initialize Google Tag Manager
 export const initGTM = (id: string) => {

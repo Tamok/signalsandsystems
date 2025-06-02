@@ -3,38 +3,14 @@
 // Persistent consent management button for GDPR compliance
 ---
 <script>
+  import { createConsentPopup } from '../utils/consentPopup';
+  
   // This script is only for client-side interaction
   document.addEventListener('DOMContentLoaded', function () {
-    const consentKey = 'ss-analytics-consent';
     const btn = document.getElementById('consent-preferences-btn');
     if (btn) {
       btn.onclick = () => {
-        // Show the consent popup again
-        if (document.getElementById('astro-consent-popup')) return;
-        const popup = document.createElement('div');
-        popup.id = 'astro-consent-popup';
-        popup.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60';
-        popup.innerHTML = `
-          <div class='bg-white rounded-lg shadow-lg p-6 max-w-md w-full text-gray-900' role='dialog' aria-modal='true' aria-labelledby='consent-title'>
-            <h2 id='consent-title' class='text-lg font-semibold mb-2'>Analytics Consent Preferences</h2>
-            <p class='mb-4'>You can update your analytics consent at any time. We use Google Tag Manager (GA4) to collect anonymous usage data because we love data and want to improve the site. Declining is totally fine and won't affect your experience.</p>
-            <div class='flex gap-2 justify-end'>
-              <button id='decline-btn' class='px-4 py-2 rounded bg-gray-200 hover:bg-gray-300'>Decline</button>
-              <button id='accept-btn' class='px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700'>Accept</button>
-            </div>
-          </div>
-        `;
-        document.body.appendChild(popup);
-        popup.querySelector('#accept-btn')?.addEventListener('click', () => {
-          localStorage.setItem(consentKey, 'granted');
-          popup.remove();
-          window.location.reload(); // Reload to apply GTM if newly accepted
-        });
-        popup.querySelector('#decline-btn')?.addEventListener('click', () => {
-          localStorage.setItem(consentKey, 'denied');
-          popup.remove();
-          window.location.reload(); // Reload to remove GTM if newly declined
-        });
+        createConsentPopup(true); // true = preferences mode
       };
     }
   });

@@ -1,0 +1,170 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SGEO from '../components/SGEO.astro';
+---
+<BaseLayout title="Cookie Policy - Signals & Systems">
+  <SGEO 
+    title="Cookie Policy - Signals & Systems"
+    description="Cookie usage and data storage information for Signals & Systems"
+  />
+  
+  <div class="max-w-4xl mx-auto px-4 py-12">
+    <article class="prose prose-lg mx-auto">
+      <h1>Cookie Policy</h1>
+      <p class="text-sm text-gray-600 mb-8">Last updated: June 2, 2025</p>
+
+      <h2>What Are Cookies?</h2>
+      <p>
+        Cookies are small text files that are placed on your device when you visit a website. 
+        They are widely used to make websites work more efficiently and provide information to website owners.
+      </p>
+
+      <h2>How We Use Local Storage (Not Cookies)</h2>
+      <p>
+        Unlike many websites, we primarily use browser localStorage instead of traditional cookies. 
+        localStorage is similar to cookies but stays in your browser and is not sent to our servers.
+      </p>
+
+      <h3>Essential Local Storage</h3>
+      <table class="min-w-full bg-white border border-gray-300">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="px-4 py-2 border border-gray-300">Name</th>
+            <th class="px-4 py-2 border border-gray-300">Purpose</th>
+            <th class="px-4 py-2 border border-gray-300">Duration</th>
+            <th class="px-4 py-2 border border-gray-300">Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="px-4 py-2 border border-gray-300">ss-analytics-consent</td>
+            <td class="px-4 py-2 border border-gray-300">Stores your analytics consent choice (granted/denied)</td>
+            <td class="px-4 py-2 border border-gray-300">Until manually cleared</td>
+            <td class="px-4 py-2 border border-gray-300">Essential</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Analytics Cookies (Only if Consented)</h3>
+      <p>
+        If you consent to analytics, Google Analytics may set the following cookies:
+      </p>
+      <table class="min-w-full bg-white border border-gray-300">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="px-4 py-2 border border-gray-300">Name</th>
+            <th class="px-4 py-2 border border-gray-300">Purpose</th>
+            <th class="px-4 py-2 border border-gray-300">Duration</th>
+            <th class="px-4 py-2 border border-gray-300">Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="px-4 py-2 border border-gray-300">_ga</td>
+            <td class="px-4 py-2 border border-gray-300">Distinguishes unique users</td>
+            <td class="px-4 py-2 border border-gray-300">2 years</td>
+            <td class="px-4 py-2 border border-gray-300">Analytics</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2 border border-gray-300">_ga_*</td>
+            <td class="px-4 py-2 border border-gray-300">Stores session state</td>
+            <td class="px-4 py-2 border border-gray-300">2 years</td>
+            <td class="px-4 py-2 border border-gray-300">Analytics</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2 border border-gray-300">_gid</td>
+            <td class="px-4 py-2 border border-gray-300">Distinguishes users</td>
+            <td class="px-4 py-2 border border-gray-300">24 hours</td>
+            <td class="px-4 py-2 border border-gray-300">Analytics</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Managing Your Preferences</h2>
+      
+      <h3>Our Consent System</h3>
+      <p>
+        You can manage your analytics consent at any time using the "Cookie & Analytics Preferences" 
+        link in our footer. This will immediately stop or start analytics tracking.
+      </p>
+
+      <h3>Browser Settings</h3>
+      <p>
+        You can also manage cookies and localStorage through your browser settings:
+      </p>
+      <ul>
+        <li><strong>Chrome:</strong> Settings > Privacy and security > Cookies and other site data</li>
+        <li><strong>Firefox:</strong> Settings > Privacy & Security > Cookies and Site Data</li>
+        <li><strong>Safari:</strong> Preferences > Privacy > Manage Website Data</li>
+        <li><strong>Edge:</strong> Settings > Cookies and site permissions</li>
+      </ul>
+
+      <h3>Google Analytics Opt-out</h3>
+      <p>
+        You can also opt out of Google Analytics across all websites using the 
+        <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">
+          Google Analytics Opt-out Browser Add-on
+        </a>.
+      </p>
+
+      <h2>Third-Party Cookies</h2>
+      <p>
+        We do not use any third-party cookies except for Google Analytics (when consented). 
+        We do not use cookies for:
+      </p>
+      <ul>
+        <li>Advertising or marketing</li>
+        <li>Social media tracking</li>
+        <li>Cross-site tracking</li>
+        <li>Behavioral profiling</li>
+      </ul>
+
+      <h2>Updates to This Policy</h2>
+      <p>
+        We may update this cookie policy from time to time. Any changes will be posted on this page 
+        with an updated date.
+      </p>
+
+      <h2>Contact Us</h2>
+      <p>
+        If you have any questions about our use of cookies or localStorage, please contact us at 
+        [your-email@domain.com] or see our <a href="/privacy">Privacy Policy</a>.
+      </p>
+
+      <div class="bg-green-50 p-6 rounded-lg mt-8">
+        <h3 class="text-lg font-semibold mb-2">Current Status</h3>
+        <p class="text-sm">
+          <strong>Your current analytics consent:</strong> <span id="consent-status">Loading...</span>
+        </p>
+        <button id="check-consent" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+          Check Current Preferences
+        </button>
+      </div>
+    </article>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const consentKey = 'ss-analytics-consent';
+      const statusElement = document.getElementById('consent-status');
+      const checkButton = document.getElementById('check-consent');
+      
+      function updateStatus() {
+        const consent = localStorage.getItem(consentKey);
+        if (consent === 'granted') {
+          statusElement.textContent = 'Analytics enabled';
+          statusElement.className = 'text-green-600 font-semibold';
+        } else if (consent === 'denied') {
+          statusElement.textContent = 'Analytics disabled';
+          statusElement.className = 'text-red-600 font-semibold';
+        } else {
+          statusElement.textContent = 'Not set (will prompt on next page load)';
+          statusElement.className = 'text-yellow-600 font-semibold';
+        }
+      }
+      
+      checkButton.addEventListener('click', updateStatus);
+      updateStatus(); // Initial update
+    });
+  </script>
+</BaseLayout>
