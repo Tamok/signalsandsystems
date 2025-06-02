@@ -1,5 +1,7 @@
 # Signals & Systems Changelog
 
+2025-06-01 - 23:45 - Created devlog #7 "Building a Citation System for the AI Age - Balancing GEO with Academic Integrity" with comprehensive coverage of citation system development journey - #content #devlog #citations #ai
+2025-06-01 - 23:45 - Created devlog-7-cover.svg featuring interactive citation tooltip visualization and three-layer architecture diagram with validation terminal output - #assets #cover #design
 2025-06-01 - 23:21 - Added favicon.png file to project root for site branding - #assets #favicon
 2025-06-01 - 23:21 - Updated BaseLayout.astro to use new PNG favicon instead of SVG favicon - #favicon #layout
 2025-06-01 - 22:47 - Fixed unrealistic publish date in GEO article #1 from future date to current timeline - #content #geo #dates
