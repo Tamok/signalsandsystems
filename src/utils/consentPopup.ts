@@ -1,6 +1,8 @@
 // Shared utility for creating consent popups
 // Used by both initial consent popup and footer consent manager
 
+import { sendGTMEvent } from './analytics.js';
+
 export function createConsentPopup(isPreferencesMode = false) {
   const consentKey = 'ss-analytics-consent';
   

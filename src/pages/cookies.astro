@@ -1,17 +1,39 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SGEO from '../components/SGEO.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
 ---
 <BaseLayout title="Cookie Policy - Signals & Systems">
+  <Nav />
+  
   <SGEO 
     title="Cookie Policy - Signals & Systems"
     description="Cookie usage and data storage information for Signals & Systems"
   />
   
   <div class="max-w-4xl mx-auto px-4 py-12">
-    <article class="prose prose-lg mx-auto">
-      <h1>Cookie Policy</h1>
-      <p class="text-sm text-gray-600 mb-8">Last updated: June 2, 2025</p>
+    <article class="prose prose-lg mx-auto">      <h1>Cookie Policy</h1>
+      <p class="text-sm text-gray-600 mb-8">Last updated: June 4, 2025</p>
+
+      <div class="bg-green-50 p-6 rounded-lg mb-8">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h3 class="text-lg font-semibold mb-2">Current Analytics Status</h3>
+            <p class="text-sm">
+              <strong>Your current analytics consent:</strong> <span id="consent-status">Loading...</span>
+            </p>
+          </div>
+          <div class="flex gap-2">
+            <button id="check-consent" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+              Check Status
+            </button>
+            <button id="toggle-consent" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+              Toggle Analytics
+            </button>
+          </div>
+        </div>
+      </div>
 
       <h2>What Are Cookies?</h2>
       <p>
@@ -126,28 +148,20 @@ import SGEO from '../components/SGEO.astro';
       </p>
 
       <h2>Contact Us</h2>
-      <p>
-        If you have any questions about our use of cookies or localStorage, please contact us at 
+      <p>        If you have any questions about our use of cookies or localStorage, please contact us at 
         [your-email@domain.com] or see our <a href="/privacy">Privacy Policy</a>.
       </p>
-
-      <div class="bg-green-50 p-6 rounded-lg mt-8">
-        <h3 class="text-lg font-semibold mb-2">Current Status</h3>
-        <p class="text-sm">
-          <strong>Your current analytics consent:</strong> <span id="consent-status">Loading...</span>
-        </p>
-        <button id="check-consent" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-          Check Current Preferences
-        </button>
-      </div>
     </article>
   </div>
+
+  <Footer />
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const consentKey = 'ss-analytics-consent';
-      const statusElement = document.getElementById('consent-status');
-      const checkButton = document.getElementById('check-consent');
+      const statusElement = document.getElementById('consent-status') as HTMLElement;
+      const checkButton = document.getElementById('check-consent') as HTMLElement;
+      const toggleButton = document.getElementById('toggle-consent') as HTMLElement;
       
       function updateStatus() {
         const consent = localStorage.getItem(consentKey);
@@ -164,6 +178,19 @@ import SGEO from '../components/SGEO.astro';
       }
       
       checkButton.addEventListener('click', updateStatus);
+      
+      toggleButton.addEventListener('click', function() {
+        const consent = localStorage.getItem(consentKey);
+        if (consent === 'granted') {
+          localStorage.setItem(consentKey, 'denied');
+        } else {
+          localStorage.setItem(consentKey, 'granted');
+        }
+        updateStatus();
+        // Reload page to apply analytics changes
+        window.location.reload();
+      });
+      
       updateStatus(); // Initial update
     });
   </script>
