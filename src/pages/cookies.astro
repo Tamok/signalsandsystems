@@ -56,12 +56,17 @@ import Footer from '../components/Footer.astro';
             <th class="px-4 py-2 border border-gray-300">Duration</th>
             <th class="px-4 py-2 border border-gray-300">Type</th>
           </tr>
-        </thead>
-        <tbody>
+        </thead>        <tbody>
           <tr>
             <td class="px-4 py-2 border border-gray-300">ss-analytics-consent</td>
             <td class="px-4 py-2 border border-gray-300">Stores your analytics consent choice (granted/denied)</td>
             <td class="px-4 py-2 border border-gray-300">Until manually cleared</td>
+            <td class="px-4 py-2 border border-gray-300">Essential</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2 border border-gray-300">ss-newsletter-popup</td>
+            <td class="px-4 py-2 border border-gray-300">Stores newsletter popup state (minimized, closed, timestamps)</td>
+            <td class="px-4 py-2 border border-gray-300">72 hours for close state, permanent for minimize state</td>
             <td class="px-4 py-2 border border-gray-300">Essential</td>
           </tr>
         </tbody>
@@ -127,7 +132,14 @@ import Footer from '../components/Footer.astro';
         <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">
           Google Analytics Opt-out Browser Add-on
         </a>.
+      </p>      <h2>Third-Party Services</h2>
+      <p>
+        We use the following third-party services that may store data:
       </p>
+      <ul>
+        <li><strong>Google Analytics (when consented):</strong> May set cookies for usage tracking</li>
+        <li><strong>Buttondown (for newsletter):</strong> Processes email addresses when you voluntarily subscribe. Does not set cookies on our site</li>
+      </ul>
 
       <h2>Third-Party Cookies</h2>
       <p>

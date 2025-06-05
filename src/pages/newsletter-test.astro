@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="Newsletter Test - Signals & Systems">
+  <Nav slot="header" />
+  
+  <div class="max-w-4xl mx-auto px-4 py-12">
+    <article class="prose prose-lg mx-auto">
+      <h1>Newsletter Popup Test</h1>
+      <p class="text-sm text-gray-600 mb-8">Test page for newsletter subscription popup functionality</p>
+
+      <h2>Testing Instructions</h2>
+      <ol>
+        <li>The newsletter popup should appear in the top-right corner on page load (if not previously dismissed)</li>
+        <li>Test the minimize button (-) - popup should collapse to a small mail icon</li>
+        <li>Test the close button (X) - popup should disappear for 72 hours</li>
+        <li>When minimized, clicking the mail icon should restore the full popup</li>
+        <li>The privacy tooltip (?) should show privacy information on hover</li>
+      </ol>
+
+      <h2>Local Storage Keys</h2>
+      <p>The following localStorage keys are used:</p>
+      <ul>
+        <li><code>ss-newsletter-popup</code> - Stores popup state (minimized/closed with timestamps)</li>
+        <li><code>ss-analytics-consent</code> - Analytics consent (existing)</li>
+      </ul>
+
+      <h2>Reset Test State</h2>
+      <p>Use your browser's developer tools to clear localStorage for this domain to reset the popup state.</p>
+
+      <h2>Form Submission</h2>
+      <p>The form submits to Buttondown's API and opens a popup window for confirmation. The action URL is:</p>
+      <code>https://buttondown.com/api/emails/embed-subscribe/jell</code>
+
+      <h2>Privacy Compliance</h2>
+      <p>Check the updated <a href="/privacy">Privacy Policy</a> and <a href="/cookies">Cookie Policy</a> for newsletter-related information.</p>
+
+      <h2>Responsive Design</h2>
+      <p>Test the popup on different screen sizes to ensure it adapts correctly:</p>
+      <ul>
+        <li>Desktop: Fixed position top-right</li>
+        <li>Tablet: Responsive width with max-width</li>
+        <li>Mobile: Full-width with margins</li>
+      </ul>
+    </article>
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  code {
+    background: #f3f4f6;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+  }
+</style>

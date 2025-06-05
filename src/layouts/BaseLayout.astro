@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import SubscribePopup from "../components/SubscribePopup.astro";
 
 // Props interface
 interface Props {
@@ -120,12 +121,15 @@ const {
     
     <main class="flex-grow">
       <slot />
-    </main>
-
-    <footer class="mt-auto">
+    </main>    <footer class="mt-auto">
       <!-- Footer content will be inserted here -->
       <slot name="footer" />
-    </footer>    <!-- Additional scripts -->
+    </footer>
+
+    <!-- Newsletter Subscription Popup -->
+    <SubscribePopup />
+
+    <!-- Additional scripts -->
     <slot name="after-footer" />
       <!-- Development Debug Toggle (only in dev mode) -->
     <script>      // Only add debug functionality in development

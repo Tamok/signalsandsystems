@@ -5,6 +5,13 @@
 # Tags are used for categorization and searchability.
 # Latest changes are at the top.
 
+2025-06-04 - 20:15 - Implemented newsletter subscription popup with Buttondown integration - dismissable with minimize/close states, 72-hour close duration, privacy-first design - #newsletter #popup #buttondown #privacy
+2025-06-04 - 20:15 - Added SubscribePopup.astro component with responsive design, accessibility features, and localStorage state management - #components #newsletter #responsive #a11y
+2025-06-04 - 20:15 - Updated Privacy Policy with comprehensive newsletter data collection, storage, and privacy practices sections - #privacy #newsletter #gdpr #docs
+2025-06-04 - 20:15 - Updated Cookie Policy to include newsletter popup localStorage key and third-party services (Buttondown) - #cookies #newsletter #privacy #docs
+2025-06-04 - 20:15 - Added explicit privacy statements about no email tracking (opens, clicks, pixels, replies) in both privacy policy and popup tooltip - #privacy #newsletter #tracking #transparency
+2025-06-04 - 20:15 - Created newsletter-test.astro page for testing popup functionality and documenting implementation details - #testing #newsletter #docs
+
 2025-06-02 - 15:30 - Integrated analytics consent popup with expanded, transparent explanation (why GA4 is used, nerdy data love, opt-out reassurance) - #privacy #gdpr #consent
 2025-06-02 - 15:30 - Ensured Google Tag Manager and consent logic are present on every page via all layouts - #privacy #gdpr #analytics
 2025-06-02 - 15:30 - Added persistent, centered "Cookie & Analytics Preferences" button to the main footer (not a separate footer) - #footer #consent #ui
