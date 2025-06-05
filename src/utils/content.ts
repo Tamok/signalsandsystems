@@ -115,14 +115,18 @@ export async function getAllSeries(): Promise<Series[]> {
     // Get all series data from the series collection
     const seriesEntries = await getCollection('series');
     const result: Series[] = [];
-    
+
     for (const entry of seriesEntries) {
+      // entry.id may include the file extension (e.g. "devlog.json")
+      // Normalize to a slug without extension for consistent routing
+      const slug = entry.id.replace(/\.[^/.]+$/, '');
+
       // Count articles in this series
-      const articlesInSeries = await getSeriesArticles(entry.id);
-      
+      const articlesInSeries = await getSeriesArticles(slug);
+
       result.push({
         title: entry.data.title,
-        slug: entry.id,
+        slug,
         description: entry.data.description,
         articleCount: articlesInSeries.length,
         startDate: entry.data.startDate,
@@ -208,12 +212,12 @@ export async function getSeriesBySlug(slug: string): Promise<Series | undefined>
   try {
     const entry = await getEntry('series', slug);
     if (!entry) return undefined;
-    
+
     const articlesInSeries = await getSeriesArticles(slug);
-    
+
     return {
       title: entry.data.title,
-      slug: entry.id,
+      slug: entry.id.replace(/\.[^/.]+$/, ''),
       description: entry.data.description,
       articleCount: articlesInSeries.length,
       startDate: entry.data.startDate,
