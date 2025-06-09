@@ -102,6 +102,8 @@ const { title, description = 'Default description' } = Astro.props;
 - Place layout templates in `src/layouts/`
 - Store utility functions in `src/utils/`
 - Add static assets to the `public/` directory
+- Place all project documentation in the `docs/` folder. Use subfolders (e.g., `docs/newsletter/`, `docs/newsletter/templates/`) for topic-specific or feature-specific documentation.
+- When referencing documentation in code, comments, or articles, use the correct relative path or GitHub URL to the file in the `docs/` folder.
 
 ## Documentation Requirements
 
@@ -111,6 +113,7 @@ When developing new features or components:
 2. Document new components in COMPONENTS.md
 3. Update README.md when adding significant features
 4. Keep code well-commented for complex logic
+5. Update documentation interlinks when moving or renaming files in `docs/`.
 
 ## Performance Considerations
 

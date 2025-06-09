@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<BaseLayout 
+  title="Subscription Confirmed - Signals & Systems"
+  description="Your email subscription to Signals & Systems newsletter has been confirmed. Welcome aboard!"
+>
+  <Nav slot="header" />
+  
+  <div class="max-w-4xl mx-auto px-4 py-12">
+    <div class="text-center">
+      <!-- Success Icon -->
+      <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-green-100 mb-6">
+        <svg class="h-10 w-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+      
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">Welcome to Signals & Systems!</h1>
+      
+      <div class="max-w-2xl mx-auto">
+        <p class="text-xl text-gray-600 mb-6">
+          Your email subscription has been confirmed. You're now part of our community of thoughtful technology enthusiasts.
+        </p>
+        
+        <div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-8 text-left">
+          <h3 class="text-lg font-semibold text-green-900 mb-3">You're all set!</h3>
+          <ul class="space-y-2 text-green-800">
+            <li class="flex items-start">
+              <svg class="flex-shrink-0 h-5 w-5 text-green-500 mr-3 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span>You'll receive newsletters with insights on technology, systems design, and digital experiences</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="flex-shrink-0 h-5 w-5 text-green-500 mr-3 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span>No spam, no tracking, just quality content delivered to your inbox</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="flex-shrink-0 h-5 w-5 text-green-500 mr-3 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span>Easy unsubscribe anytime with a single click</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+          <h3 class="text-lg font-semibold text-blue-900 mb-3">While you're here...</h3>
+          <p class="text-blue-800 mb-4">
+            Explore our existing content to get a feel for what to expect in future newsletters.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+            <div class="text-left">
+              <h4 class="font-medium text-blue-900 mb-2">Featured Series</h4>
+              <ul class="space-y-1 text-blue-700">
+                <li><a href="/series/devlog" class="hover:underline">Platform Development</a></li>
+                <li><a href="/series/geo" class="hover:underline">Generative Engine Optimization</a></li>
+                <li><a href="/series/isomon" class="hover:underline">IoT Monitoring Systems</a></li>
+              </ul>
+            </div>
+            <div class="text-left">
+              <h4 class="font-medium text-blue-900 mb-2">Latest Articles</h4>
+              <ul class="space-y-1 text-blue-700">
+                <li><a href="/articles" class="hover:underline">Browse All Articles</a></li>
+                <li><a href="/about" class="hover:underline">About This Platform</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a 
+            href="/articles" 
+            class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+          >
+            <svg class="mr-2 -ml-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+            Explore Articles
+          </a>
+          
+          <a 
+            href="/series" 
+            class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+          >
+            <svg class="mr-2 -ml-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+            </svg>
+            Browse Series
+          </a>
+          
+          <a 
+            href="/" 
+            class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+          >
+            <svg class="mr-2 -ml-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+            </svg>
+            Home
+          </a>
+        </div>
+        
+        <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+          <h4 class="font-medium text-gray-900 mb-2">Newsletter Archive</h4>
+          <p class="text-sm text-gray-600">
+            You can view our newsletter archive and past emails at 
+            <a href="https://buttondown.com/jell" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">buttondown.com/jell</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <Footer slot="footer" />
+</BaseLayout>

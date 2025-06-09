@@ -1,0 +1,88 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<BaseLayout 
+  title="Thank You for Subscribing - Signals & Systems"
+  description="Thank you for subscribing to the Signals & Systems newsletter. Check your email for a confirmation link."
+>
+  <Nav slot="header" />
+  
+  <div class="max-w-4xl mx-auto px-4 py-12">
+    <div class="text-center">
+      <!-- Success Icon -->
+      <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-6">
+        <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+      </div>
+      
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">Thank You for Subscribing!</h1>
+      
+      <div class="max-w-2xl mx-auto">
+        <p class="text-xl text-gray-600 mb-6">
+          Your subscription request has been received. To complete the process, please check your email for a confirmation link.
+        </p>
+        
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8 text-left">
+          <h3 class="text-lg font-semibold text-blue-900 mb-3">What happens next?</h3>
+          <ol class="space-y-2 text-blue-800">
+            <li class="flex items-start">
+              <span class="flex-shrink-0 h-6 w-6 rounded-full bg-blue-200 flex items-center justify-center text-sm font-medium text-blue-900 mr-3 mt-0.5">1</span>
+              <span>Check your email inbox for a confirmation message from Buttondown</span>
+            </li>
+            <li class="flex items-start">
+              <span class="flex-shrink-0 h-6 w-6 rounded-full bg-blue-200 flex items-center justify-center text-sm font-medium text-blue-900 mr-3 mt-0.5">2</span>
+              <span>Click the confirmation link to verify your email address</span>
+            </li>
+            <li class="flex items-start">
+              <span class="flex-shrink-0 h-6 w-6 rounded-full bg-blue-200 flex items-center justify-center text-sm font-medium text-blue-900 mr-3 mt-0.5">3</span>
+              <span>You'll receive periodic newsletters with insights on technology, systems design, and digital experiences</span>
+            </li>
+          </ol>
+        </div>
+        
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-8">
+          <h3 class="text-lg font-semibold text-gray-900 mb-3">Privacy Notice</h3>
+          <p class="text-gray-700 text-sm">
+            We respect your privacy. Our newsletters don't use tracking pixels, click tracking, or any form of email surveillance. 
+            You can unsubscribe at any time using the link in every email, and we'll never share your email address with third parties.
+          </p>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a 
+            href="/" 
+            class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+          >
+            <svg class="mr-2 -ml-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+            </svg>
+            Back to Home
+          </a>
+          
+          <a 
+            href="/articles" 
+            class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+          >
+            <svg class="mr-2 -ml-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+            Browse Articles
+          </a>
+        </div>
+        
+        <div class="mt-8 text-sm text-gray-500">
+          <p>
+            Didn't receive the confirmation email? Check your spam folder or 
+            <a href="mailto:support@buttondown.email" class="text-blue-600 hover:text-blue-800">contact Buttondown support</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <Footer slot="footer" />
+</BaseLayout>
