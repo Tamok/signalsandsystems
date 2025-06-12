@@ -148,12 +148,22 @@ body.debug-mode article::after {
   line-height: 1.75;
   color: #4B5563;
   margin-bottom: 2rem;
+  /* Smart text justification */
+  text-align: justify;
+  text-align-last: left;
+  hyphens: auto;
+  word-spacing: normal;
 }
 
 /* Fix paragraph spacing - reduce excessive whitespace between paragraphs */
 .prose p {
   margin-top: 0.75rem;
   margin-bottom: 0.75rem;
+  /* Smart text justification */
+  text-align: justify;
+  text-align-last: left;
+  hyphens: auto;
+  word-spacing: normal;
 }
 
 /* Ensure first paragraph after headings has proper spacing */
