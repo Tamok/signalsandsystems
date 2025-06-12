@@ -150,6 +150,22 @@ body.debug-mode article::after {
   margin-bottom: 2rem;
 }
 
+/* Fix paragraph spacing - reduce excessive whitespace between paragraphs */
+.prose p {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Ensure first paragraph after headings has proper spacing */
+.prose h1 + p,
+.prose h2 + p,
+.prose h3 + p,
+.prose h4 + p,
+.prose h5 + p,
+.prose h6 + p {
+  margin-top: 1rem;
+}
+
 /* Fix prose list spacing issues */
 .prose ul {
   margin-top: 1.25rem;
