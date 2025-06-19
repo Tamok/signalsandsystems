@@ -1,0 +1,119 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SGEO from '../components/SGEO.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+<BaseLayout title="Accessibility - Signals & Systems">
+  <Nav />
+  <SGEO 
+    title="Accessibility Statement - Signals & Systems"
+    description="Accessibility commitment and contact information for Signals & Systems"
+  />
+  <div class="max-w-4xl mx-auto px-4 py-12">
+    <article class="prose prose-lg mx-auto">
+      <h1>Accessibility Statement</h1>
+      <p class="text-sm text-gray-600 mb-8">Last updated: June 18, 2025</p>
+      <div class="bg-yellow-50 p-6 rounded-lg mb-8">
+        <h2 class="text-lg font-semibold mb-2">Our Commitment</h2>
+        <p class="text-sm">
+          Signals & Systems is committed to providing a website that is accessible to the widest possible audience, regardless of technology or ability. We aim to comply with WCAG 2.1 AA standards wherever possible.
+        </p>
+      </div>
+      <h2>Measures to Support Accessibility</h2>
+      <ul>
+        <li>Semantic HTML and ARIA labels for navigation and content</li>
+        <li>Keyboard navigability for all interactive elements</li>
+        <li>High color contrast and scalable text</li>
+        <li>Alt text for all meaningful images</li>
+        <li>Regular accessibility reviews</li>
+      </ul>
+      <h2>Feedback & Contact</h2>
+      <p>
+        If you experience any difficulty accessing any part of this website, please contact us at <a href="mailto:contact@jellwrites.com" class="underline">contact@jellwrites.com</a> and we will do our best to address your concerns promptly.
+      </p>
+      <h2>Continuous Improvement</h2>
+      <p>
+        We are always working to improve the accessibility of our site. If you have suggestions or encounter barriers, please let us know.
+      </p>
+      
+      <h2>Keyboard Navigation Guide</h2>
+      <p class="mb-6">
+        Our site is fully navigable using only a keyboard. Here's a quick reference for common keyboard shortcuts:
+      </p>
+      
+      <div class="bg-gray-50 p-6 rounded-lg mb-8">
+        <h3 class="text-lg font-semibold mb-4">Navigation Shortcuts</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex items-center justify-between p-3 bg-white rounded border">
+            <span class="text-sm">Move to next element</span>
+            <kbd class="inline-flex items-center px-2 py-1 text-xs font-mono bg-gray-100 border border-gray-300 rounded shadow-sm">Tab</kbd>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-white rounded border">
+            <span class="text-sm">Move to previous element</span>
+            <div class="flex gap-1">
+              <kbd class="inline-flex items-center px-2 py-1 text-xs font-mono bg-gray-100 border border-gray-300 rounded shadow-sm">Shift</kbd>
+              <span class="text-gray-400">+</span>
+              <kbd class="inline-flex items-center px-2 py-1 text-xs font-mono bg-gray-100 border border-gray-300 rounded shadow-sm">Tab</kbd>
+            </div>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-white rounded border">
+            <span class="text-sm">Activate link or button</span>
+            <kbd class="inline-flex items-center px-2 py-1 text-xs font-mono bg-gray-100 border border-gray-300 rounded shadow-sm">Enter</kbd>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-white rounded border">
+            <span class="text-sm">Activate button</span>
+            <kbd class="inline-flex items-center px-2 py-1 text-xs font-mono bg-gray-100 border border-gray-300 rounded shadow-sm">Space</kbd>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-white rounded border">
+            <span class="text-sm">Scroll page down</span>
+            <kbd class="inline-flex items-center px-2 py-1 text-xs font-mono bg-gray-100 border border-gray-300 rounded shadow-sm">Page Down</kbd>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-white rounded border">
+            <span class="text-sm">Scroll page up</span>
+            <kbd class="inline-flex items-center px-2 py-1 text-xs font-mono bg-gray-100 border border-gray-300 rounded shadow-sm">Page Up</kbd>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-white rounded border">
+            <span class="text-sm">Go to top of page</span>
+            <kbd class="inline-flex items-center px-2 py-1 text-xs font-mono bg-gray-100 border border-gray-300 rounded shadow-sm">Home</kbd>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-white rounded border">
+            <span class="text-sm">Go to bottom of page</span>
+            <kbd class="inline-flex items-center px-2 py-1 text-xs font-mono bg-gray-100 border border-gray-300 rounded shadow-sm">End</kbd>
+          </div>
+        </div>
+        
+        <h4 class="text-md font-semibold mt-6 mb-3">Screen Reader Shortcuts</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex items-center justify-between p-3 bg-white rounded border">
+            <span class="text-sm">Next heading</span>
+            <kbd class="inline-flex items-center px-2 py-1 text-xs font-mono bg-gray-100 border border-gray-300 rounded shadow-sm">H</kbd>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-white rounded border">
+            <span class="text-sm">Next landmark</span>
+            <kbd class="inline-flex items-center px-2 py-1 text-xs font-mono bg-gray-100 border border-gray-300 rounded shadow-sm">D</kbd>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-white rounded border">
+            <span class="text-sm">Next link</span>
+            <kbd class="inline-flex items-center px-2 py-1 text-xs font-mono bg-gray-100 border border-gray-300 rounded shadow-sm">K</kbd>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-white rounded border">
+            <span class="text-sm">Browse mode toggle</span>
+            <div class="flex gap-1">
+              <kbd class="inline-flex items-center px-2 py-1 text-xs font-mono bg-gray-100 border border-gray-300 rounded shadow-sm">Ctrl</kbd>
+              <span class="text-gray-400">+</span>
+              <kbd class="inline-flex items-center px-2 py-1 text-xs font-mono bg-gray-100 border border-gray-300 rounded shadow-sm">Shift</kbd>
+              <span class="text-gray-400">+</span>
+              <kbd class="inline-flex items-center px-2 py-1 text-xs font-mono bg-gray-100 border border-gray-300 rounded shadow-sm">M</kbd>
+            </div>
+          </div>
+        </div>
+        
+        <p class="text-xs text-gray-600 mt-4">
+          <strong>Note:</strong> Screen reader shortcuts may vary by software (NVDA, JAWS, VoiceOver). Consult your screen reader's documentation for complete key commands.
+        </p>
+      </div>
+    </article>
+  </div>
+  <Footer />
+</BaseLayout>
