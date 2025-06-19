@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const http = require('http');
+const stringSimilarity = require('string-similarity');
+const { URL } = require('url');
 
 console.log('🚀 Article Citation Validator Started');
 
@@ -102,8 +104,49 @@ function extractCitations(content, filePath) {
   return citations;
 }
 
+// Helper to fetch page content (simple, no headless browser)
+function fetchPageContent(url) {
+  return new Promise((resolve) => {
+    try {
+      const protocol = url.startsWith('https:') ? https : http;
+      let data = '';
+      protocol.get(url, (res) => {
+        res.on('data', (chunk) => { data += chunk; });
+        res.on('end', () => resolve(data));
+      }).on('error', () => resolve(null));
+    } catch {
+      resolve(null);
+    }
+  });
+}
+
+// Fuzzy citation check
+async function fuzzyCitationCheck(citations, withUrls, urlChecks, minScore = 0.5) {
+  console.log(colors.magenta + '\n🔎 Fuzzy Citation Existence Check (Experimental)' + colors.reset);
+  for (let i = 0; i < withUrls.length; i++) {
+    const citation = withUrls[i];
+    const urlResult = urlChecks[i];
+    if (!urlResult.accessible) continue;
+    const pageContent = await fetchPageContent(citation.url);
+    if (!pageContent) {
+      console.log(`${colors.yellow}⚠️  Could not fetch page for [${citation.citationNumber}] ${citation.title}${colors.reset}`);
+      continue;
+    }
+    // Remove HTML tags for text search
+    const textContent = pageContent.replace(/<[^>]+>/g, ' ');
+    // Try to match citation.text in the page
+    const best = stringSimilarity.findBestMatch(citation.text, [textContent]);
+    const score = best.bestMatch.rating;
+    if (score >= minScore) {
+      console.log(`${colors.green}✔️  Citation text found on page [${citation.citationNumber}] (score: ${score.toFixed(2)})${colors.reset}`);
+    } else {
+      console.log(`${colors.red}❌ Citation text NOT found on page [${citation.citationNumber}] (score: ${score.toFixed(2)})${colors.reset}`);
+    }
+  }
+}
+
 // Main validation function
-async function validateArticle(filePath) {
+async function validateArticle(filePath, opts = {}) {
   if (!fs.existsSync(filePath)) {
     console.error(`${colors.red}❌ File not found: ${filePath}${colors.reset}`);
     process.exit(1);
@@ -144,13 +187,14 @@ async function validateArticle(filePath) {
   
   let accessibleCount = 0;
   let brokenCount = 0;
+  let urlChecks = [];
   
   // Validate URLs
   if (withUrls.length > 0) {
     console.log(`${colors.blue}${colors.bright}🌐 VALIDATING URLs:${colors.reset}`);
     console.log('='.repeat(50));
     
-    const urlChecks = await Promise.all(
+    urlChecks = await Promise.all(
       withUrls.map(citation => checkUrl(citation.url))
     );
     
@@ -183,7 +227,12 @@ async function validateArticle(filePath) {
       console.log(`\n${colors.yellow}💡 Consider updating broken URLs with working alternatives${colors.reset}`);
     }
   }
-  
+
+  // Fuzzy citation check (optional)
+  if (opts.fuzzyCitationCheck && withUrls.length > 0) {
+    await fuzzyCitationCheck(citations, withUrls, urlChecks);
+  }
+
   // Overall assessment
   console.log(`\n${colors.bright}🎯 OVERALL ASSESSMENT:${colors.reset}`);
   const totalIssues = withoutUrls.length + brokenCount;
@@ -221,14 +270,15 @@ async function validateArticle(filePath) {
 // CLI usage
 if (require.main === module) {
   const filePath = process.argv[2];
+  const fuzzyFlag = process.argv.includes('--fuzzy-citation-check');
   
   if (!filePath) {
-    console.log(`${colors.cyan}Usage: node validate-article.cjs <path-to-article.mdx>${colors.reset}`);
-    console.log(`${colors.yellow}Example: node validate-article.cjs src/content/geo/1-what-is-geo-and-why-higher-ed-needs-it-now.mdx${colors.reset}`);
+    console.log(`${colors.cyan}Usage: node validate-article.cjs <path-to-article.mdx> [--fuzzy-citation-check]${colors.reset}`);
+    console.log(`${colors.yellow}Example: node validate-article.cjs src/content/geo/1-what-is-geo-and-why-higher-ed-needs-it-now.mdx --fuzzy-citation-check${colors.reset}`);
     process.exit(1);
   }
   
-  validateArticle(filePath).catch(console.error);
+  validateArticle(filePath, { fuzzyCitationCheck: fuzzyFlag }).catch(console.error);
 }
 
 module.exports = { validateArticle, extractCitations, checkUrl };
