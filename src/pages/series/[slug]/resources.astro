@@ -1,0 +1,59 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeriesCitationListNew from "../../../components/ui/SeriesCitationListNew.astro";
+import Nav from "../../../components/Nav.astro";
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { getSeriesBySlug } from "../../../utils/content";
+import { getSeriesBadgeConfig } from "../../../utils/seriesBadge";
+
+export async function getStaticPaths() {
+  const seriesEntries = await getCollection('series');
+  return seriesEntries.map((entry: CollectionEntry<'series'>) => ({
+    params: { slug: entry.id },
+    props: { slug: entry.id }
+  }));
+}
+
+const { slug } = Astro.props;
+const safeSlug = slug || '';
+const series = await getSeriesBySlug(safeSlug);
+
+if (!series) {
+  return Astro.redirect('/404');
+}
+
+// Get badge configuration for this series
+const badgeConfig = getSeriesBadgeConfig(safeSlug);
+---
+
+<BaseLayout title={`Resources | ${series.title}`}>
+  <Nav slot="header" />
+  <div class="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <header class="mb-12 text-center">
+        <div class="flex items-center justify-center gap-3 mb-4">
+          <h1 class="text-3xl font-bold text-gray-900 tracking-tight">{series.title} Resources</h1>
+          <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badgeConfig.bgColor} ${badgeConfig.textColor}`}>
+            {badgeConfig.name}
+          </span>
+        </div>
+        <p class="text-lg text-gray-600 mb-8">
+          All references and resources cited in this series. 
+          Click any citation to see where it's used.
+        </p>
+        
+        <div class="mb-8 flex justify-center">
+          <!-- Back to Series Button -->
+          <a href={`/series/${series.slug}`} class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span>Back to Series</span>
+          </a>
+        </div>
+      </header>
+      
+      <SeriesCitationListNew seriesSlug={safeSlug} />
+    </div>
+  </div>
+</BaseLayout>
