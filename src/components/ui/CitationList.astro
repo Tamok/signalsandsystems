@@ -3,10 +3,10 @@
 ---
 
 <div id="citation-list-container">
-  <h3>References</h3>
-  <ol id="citation-list" class="citation-list">
+  <h3 class="text-base font-semibold mb-2 tracking-tight citation-list-title">References</h3>
+  <ul id="citation-list" class="citation-list demure-citation-list">
     <!-- Citations will be auto-populated by script -->
-  </ol>
+  </ul>
 </div>
 
 <style>
@@ -14,38 +14,76 @@
     margin-top: 2rem;
     padding-top: 2rem;
     border-top: 1px solid #e5e7eb;
+    background: none;
   }
-  
-  .citation-list {
-    list-style: decimal;
-    padding-left: 1.5rem;
+  .citation-list-title {
+    color: #3730a3;
+    background: linear-gradient(90deg, #3730a3 0%, #4f46e5 50%, #a21caf 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    letter-spacing: 0.01em;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+  .demure-citation-list {
+    list-style: none;
+    padding-left: 0;
     margin-top: 1rem;
+    color: #6b7280;
+    font-size: 0.97rem;
+    font-family: ui-sans-serif, system-ui, sans-serif;
   }
-    .citation-list li {
-    margin-bottom: 0.75rem;
+  .demure-citation-list li {
+    margin-bottom: 0.5rem;
     line-height: 1.6;
     position: relative;
-    padding-right: 30px;
+    padding-left: 0;
+    padding-right: 0;
+    background: none;
+    border-radius: 0.25rem;
+    transition: background 0.2s;
   }
-  
-  .citation-list a {
-    color: #4338CA;
-    text-decoration: none;
+  .demure-citation-list li:hover {
+    background: #f3f4f6;
+  }
+  .demure-citation-list .citation-numbers {
+    color: #a1a1aa;
+    font-size: 0.92em;
+    font-family: ui-monospace, monospace;
+    margin-right: 0.5em;
+    letter-spacing: 0.01em;
+    vertical-align: middle;
+  }
+  .demure-citation-list a {
+    color: #6366f1;
+    text-decoration: underline dotted;
     word-break: break-word;
     display: inline;
+    transition: color 0.2s;
   }
-  
-  .citation-list a:hover {
+  .demure-citation-list a:hover {
     color: #3730A3;
+    text-decoration: underline;
   }
-  
   @media (prefers-color-scheme: dark) {
     .citation-list-container {
       border-top-color: #374151;
     }
-    
-    .citation-list a {
-      color: #8B5CF6;
+    .demure-citation-list li:hover {
+      background: #23272e;
+    }
+    .citation-list-title {
+      background: linear-gradient(90deg, #a78bfa 0%, #6366f1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+    }
+    .demure-citation-list a {
+      color: #a78bfa;
     }
   }
 </style>
@@ -56,17 +94,21 @@
     const citedElements = document.querySelectorAll('.cited-text');
     const citationList = document.getElementById('citation-list');
     const citationContainer = document.getElementById('citation-list-container');
-    
+    // Remove duplicate 'References' titles if present
+    const allTitles = document.querySelectorAll('.citation-list-title');
+    if (allTitles.length > 1) {
+      for (let i = 1; i < allTitles.length; i++) {
+        allTitles[i].remove();
+      }
+    }
     if (!citationList || citedElements.length === 0) {
       if (citationContainer) {
         citationContainer.style.display = 'none';
       }
       return;
     }
-    
-    // Collect unique citations
-    const citations = new Map();
-    
+    // Group citations by unique metadata and collect only the first number
+    const citationMap = new Map();
     citedElements.forEach(element => {
       const citationNumber = element.getAttribute('data-citation-number');
       const source = element.getAttribute('data-source');
@@ -75,10 +117,10 @@
       const year = element.getAttribute('data-year');
       const title = element.getAttribute('data-title');
       const publication = element.getAttribute('data-publication');
-      
-      if (citationNumber && !citations.has(citationNumber)) {
-        citations.set(citationNumber, {
-          number: parseInt(citationNumber),
+      const key = JSON.stringify({author, year, title, source, url, publication});
+      if (!citationMap.has(key)) {
+        citationMap.set(key, {
+          number: citationNumber,
           source,
           url,
           author,
@@ -88,18 +130,21 @@
         });
       }
     });
-    
-    // Sort by citation number and generate list
-    const sortedCitations = Array.from(citations.values()).sort((a, b) => a.number - b.number);
-    
+    // Sort citations by their number
+    const sortedCitations = Array.from(citationMap.values()).sort((a, b) => {
+      return parseInt(a.number) - parseInt(b.number);
+    });
     citationList.innerHTML = '';
-      sortedCitations.forEach(citation => {
+    sortedCitations.forEach(citation => {
       const li = document.createElement('li');
       li.style.position = 'relative';
-      
+      // Only show the first citation number
+      const numsSpan = document.createElement('span');
+      numsSpan.className = 'citation-numbers';
+      numsSpan.textContent = citation.number + '. ';
+      li.appendChild(numsSpan);
       // Build citation text
       let citationText = '';
-      
       if (citation.author && citation.year) {
         citationText += `${citation.author} (${citation.year}). `;
       } else if (citation.author) {
@@ -107,19 +152,16 @@
       } else if (citation.source) {
         citationText += `${citation.source}. `;
       }
-      
       if (citation.title) {
         citationText += `<em>${citation.title}</em>. `;
       }
-      
       if (citation.publication) {
         citationText += `${citation.publication}.`;
       } else if (citation.source && citation.source !== citation.author) {
         citationText += `${citation.source}.`;
       }
-      
       if (citation.url) {
-        // Create clickable citation with external link icon
+        // Create clickable citation (no icon)
         const link = document.createElement('a');
         link.href = citation.url;
         link.target = '_blank';
@@ -127,38 +169,12 @@
         link.innerHTML = citationText.trim();
         link.style.textDecoration = 'none';
         link.style.display = 'inline';
-        link.style.paddingRight = '24px';
-        
-        // Add external link icon
-        const icon = document.createElement('span');
-        icon.innerHTML = '🔗';
-        icon.style.position = 'absolute';
-        icon.style.right = '0';
-        icon.style.top = '50%';
-        icon.style.transform = 'translateY(-50%)';
-        icon.style.fontSize = '0.85em';
-        icon.style.opacity = '0.7';
-        icon.style.transition = 'opacity 0.2s';
-        icon.setAttribute('aria-label', 'External link');
-        
         li.appendChild(link);
-        li.appendChild(icon);
-        
-        // Add hover effects
-        link.addEventListener('mouseenter', () => {
-          icon.style.opacity = '1';
-        });
-        link.addEventListener('mouseleave', () => {
-          icon.style.opacity = '0.7';
-        });
       } else {
-        li.innerHTML = citationText.trim();
+        li.innerHTML += citationText.trim();
       }
-      
       citationList.appendChild(li);
     });
-    
-    // Show container if we have citations
     if (sortedCitations.length > 0) {
       citationContainer.style.display = 'block';
     } else {

@@ -6,7 +6,7 @@ export interface Props {
   year?: string;
   title?: string;
   publication?: string;
-  type?: 'statistic' | 'quote' | 'fact' | 'projection';
+  type?: 'statistic' | 'quote' | 'fact' | 'projection' | 'book';
   citationId?: string;
   citationNumber?: number;
 }
@@ -79,6 +79,25 @@ const uniqueId = citationId || `citation-${Math.random().toString(36).substr(2, 
     padding: 2px 4px;
     border-radius: 4px;
     margin: 0 1px;
+  }
+
+  .cited-book {
+    background: linear-gradient(120deg, rgba(120, 113, 108, 0.08) 0%, rgba(168, 162, 158, 0.12) 100%);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-style: italic;
+    font-family: 'Georgia', 'Times New Roman', Times, serif;
+    color: #3b3a36;
+    border-bottom: 1px solid #a8a29e;
+    box-shadow: 0 1px 2px rgba(120, 113, 108, 0.04);
+    margin: 0 1px;
+    opacity: 0.92;
+    transition: background 0.2s;
+  }
+  .cited-book:hover {
+    background: linear-gradient(120deg, rgba(168, 162, 158, 0.18) 0%, rgba(120, 113, 108, 0.16) 100%);
+    color: #262626;
+    opacity: 1;
   }
 
   /* Adjacent citation merging */
@@ -271,133 +290,3 @@ const uniqueId = citationId || `citation-${Math.random().toString(36).substr(2, 
     }
   }
 </style>
-
-<script is:inline>
-  // Enhanced tooltip functionality with one tooltip per citation number
-  document.addEventListener('DOMContentLoaded', function() {
-    // Only run this once, even if multiple CitedText components exist
-    if (window.citationTooltipsInitialized) {
-      return;
-    }
-    window.citationTooltipsInitialized = true;
-    
-    const citedElements = document.querySelectorAll('.cited-text');
-    const processedCitations = new Set();
-      // Create a global tooltip container
-    let globalTooltip = document.getElementById('global-citation-tooltip');
-    if (!globalTooltip) {
-      globalTooltip = document.createElement('div');
-      globalTooltip.id = 'global-citation-tooltip';
-      document.body.appendChild(globalTooltip);
-    }
-    
-    // First pass: collect all unique citation data
-    const citationData = new Map();
-    citedElements.forEach(element => {
-      const citationNumber = element.getAttribute('data-citation-number');
-      const source = element.getAttribute('data-source');
-      const url = element.getAttribute('data-url');
-      const author = element.getAttribute('data-author');
-      const year = element.getAttribute('data-year');
-      const title = element.getAttribute('data-title');
-      const publication = element.getAttribute('data-publication');
-      
-      if (citationNumber && !citationData.has(citationNumber)) {
-        // Build detailed tooltip content with better formatting
-        let tooltipLines = [];
-        if (citationNumber) {
-          tooltipLines.push(`Citation [${citationNumber}]`);
-        }
-        if (author && year) {
-          tooltipLines.push(`${author} (${year})`);
-        } else if (author) {
-          tooltipLines.push(`${author}`);
-        } else if (year) {
-          tooltipLines.push(`(${year})`);
-        }        if (title) {
-          tooltipLines.push(`<em>${title}</em>`);
-        }
-        if (publication) {
-          tooltipLines.push(publication);
-        } else if (source && source !== author) {
-          tooltipLines.push(source);
-        }
-        if (url) {
-          tooltipLines.push('');
-          tooltipLines.push('🔗 Click to view source');
-        }
-        
-        citationData.set(citationNumber, {
-          content: tooltipLines.join('\n'),
-          url: url
-        });
-      }
-    });
-      // Second pass: add event listeners to all citation elements
-    citedElements.forEach(element => {
-      const citationNumber = element.getAttribute('data-citation-number');
-      const citationInfo = citationData.get(citationNumber);
-      
-      if (citationInfo) {
-        let hoverTimeout;
-        let hideTimeout;
-        
-        element.addEventListener('mouseenter', function(e) {
-          clearTimeout(hoverTimeout);
-          clearTimeout(hideTimeout);          hoverTimeout = setTimeout(function() {
-            globalTooltip.innerHTML = citationInfo.content.replace(/\n/g, '<br>');
-            
-            // Position tooltip relative to the hovered element
-            const rect = element.getBoundingClientRect();
-            const tooltipWidth = 320; // max-width from CSS
-            const tooltipHeight = 80; // estimated height
-            
-            // Calculate horizontal position
-            let left = rect.left + rect.width / 2;
-            const rightEdge = left + tooltipWidth / 2;
-            const leftEdge = left - tooltipWidth / 2;
-            
-            // Adjust if tooltip would go off-screen
-            if (rightEdge > window.innerWidth - 20) {
-              left = window.innerWidth - tooltipWidth / 2 - 20;
-            } else if (leftEdge < 20) {
-              left = tooltipWidth / 2 + 20;
-            }
-              // Calculate vertical position
-            let top = rect.top - 10;
-            if (top - tooltipHeight < 20) {
-              // If tooltip would go above viewport, show it below the element
-              top = rect.bottom + 10;
-              globalTooltip.style.transform = 'translateX(-50%) scale(1)';
-            } else {
-              globalTooltip.style.transform = 'translateX(-50%) translateY(-100%) scale(1)';
-            }
-            
-            globalTooltip.style.position = 'fixed';
-            globalTooltip.style.left = left + 'px';
-            globalTooltip.style.top = top + 'px';
-            
-            globalTooltip.classList.add('visible');
-          }, 200);
-        });
-        
-        element.addEventListener('mouseleave', function() {
-          clearTimeout(hoverTimeout);
-          
-          hideTimeout = setTimeout(function() {
-            globalTooltip.classList.remove('visible');
-          }, 100);
-        });
-        
-        // Add click handler for URLs
-        if (citationInfo.url) {
-          element.classList.add('clickable');
-          element.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.open(citationInfo.url, '_blank', 'noopener,noreferrer');
-          });
-        }
-      }
-    });
-  });
-</script>
