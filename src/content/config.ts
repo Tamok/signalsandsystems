@@ -33,5 +33,6 @@ export const collections = {
   'devlog': articleCollection,
   'isomon': articleCollection,
   'geo': articleCollection,
+  'tfp': articleCollection,
   'series': seriesCollection,
 };

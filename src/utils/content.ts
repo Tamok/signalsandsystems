@@ -97,6 +97,21 @@ export async function getAllArticles(): Promise<Article[]> {
     
     allArticles.push(...geoArticles);
     
+    // Get articles from the tfp collection
+    const tfpEntries = await getCollection('tfp');
+    const tfpArticles = tfpEntries
+      .filter(entry => !entry.data.draft)
+      .map(entry => ({
+        title: entry.data.title,
+        slug: `tfp/${entry.slug}`,
+        description: entry.data.description,
+        publishDate: entry.data.publishDate,
+        series: entry.data.series,
+        order: entry.data.order,
+        coverImage: entry.data.coverImage
+      }));
+    allArticles.push(...tfpArticles);
+    
     // Sort by publish date, newest first
     return allArticles.sort(
       (a, b) => b.publishDate.getTime() - a.publishDate.getTime()
@@ -178,11 +193,10 @@ export async function getArticleBySlug(slug: string): Promise<Article | undefine
     const collectionName = parts[0];
     const entryId = parts.slice(1).join('/');
       // Support multiple collections
-    if (!['devlog', 'isomon', 'geo'].includes(collectionName)) {
+    if (!['devlog', 'isomon', 'geo', 'tfp'].includes(collectionName)) {
       return undefined;
     }
-    
-    const entry = await getEntry(collectionName as 'devlog' | 'isomon' | 'geo', entryId);
+    const entry = await getEntry(collectionName as 'devlog' | 'isomon' | 'geo' | 'tfp', entryId);
     
     if (!entry) {
       return undefined;
