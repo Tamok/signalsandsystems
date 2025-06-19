@@ -1,0 +1,139 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3730a3;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="quadrantBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.15" />
+      <stop offset="100%" style="stop-color:#1e40af;stop-opacity:0.25" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Grid pattern -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+    <!-- Top-Left: Accessibility Icon with Visual Indicators -->
+  <rect x="60" y="60" width="520" height="150" rx="12" fill="url(#quadrantBg)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  <!-- Universal Access Symbol -->
+  <g transform="translate(180, 135)">
+    <circle cx="0" cy="0" r="35" fill="none" stroke="#60a5fa" stroke-width="2.5"/>
+    <!-- Person symbol -->
+    <circle cx="0" cy="-12" r="6" fill="#60a5fa"/>
+    <rect x="-6" y="-4" width="12" height="16" rx="2" fill="#60a5fa"/>
+    <rect x="-9" y="4" width="6" height="12" rx="1.5" fill="#60a5fa"/>
+    <rect x="3" y="4" width="6" height="12" rx="1.5" fill="#60a5fa"/>
+  </g>
+  <!-- Screen Reader Icon -->
+  <g transform="translate(280, 135)">
+    <rect x="-12" y="-8" width="24" height="16" rx="2" fill="#3b82f6" opacity="0.8"/>
+    <path d="M -8,-4 L -4,0 L -8,4" stroke="#ffffff" stroke-width="1.5" fill="none"/>
+    <circle cx="6" cy="0" r="2" fill="#ffffff"/>
+  </g>
+  <!-- Keyboard Navigation -->
+  <g transform="translate(380, 135)">
+    <rect x="-16" y="-6" width="32" height="12" rx="1.5" fill="#1e40af" opacity="0.7"/>
+    <rect x="-12" y="-3" width="6" height="6" rx="0.5" fill="#ffffff"/>
+    <rect x="-3" y="-3" width="6" height="6" rx="0.5" fill="#ffffff"/>
+    <rect x="6" y="-3" width="6" height="6" rx="0.5" fill="#ffffff"/>
+  </g>
+  <!-- Eye Icon for Visual Accessibility -->
+  <g transform="translate(480, 135)">
+    <ellipse cx="0" cy="0" rx="12" ry="8" fill="none" stroke="#60a5fa" stroke-width="2"/>
+    <circle cx="0" cy="0" r="4" fill="#60a5fa"/>
+    <circle cx="0" cy="0" r="2" fill="#ffffff"/>
+  </g>
+    <!-- Top-Right: WCAG Guidelines Visual -->
+  <rect x="620" y="60" width="300" height="150" rx="12" fill="url(#quadrantBg)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  <!-- WCAG Badge -->
+  <g transform="translate(770, 110)">
+    <rect x="-35" y="-12" width="70" height="24" rx="4" fill="#22c55e" opacity="0.9"/>
+    <text x="0" y="4" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="12" font-weight="700">WCAG 2.1</text>
+  </g>
+  <!-- Contrast ratio indicator -->
+  <g transform="translate(770, 155)">
+    <circle cx="-20" cy="0" r="8" fill="#ffffff"/>
+    <circle cx="20" cy="0" r="8" fill="#1f2937"/>
+    <text x="0" y="3" text-anchor="middle" fill="#60a5fa" font-family="sans-serif" font-size="10" font-weight="bold">4.5:1</text>
+  </g>
+    <!-- Bottom-Left: Semantic HTML Structure -->
+  <rect x="60" y="240" width="300" height="150" rx="12" fill="url(#quadrantBg)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  <!-- HTML Document Structure Icon -->
+  <g transform="translate(210, 315)">
+    <!-- Document outline -->
+    <rect x="-25" y="-30" width="50" height="60" rx="3" fill="none" stroke="#60a5fa" stroke-width="2"/>
+    <!-- Header section -->
+    <rect x="-20" y="-25" width="40" height="8" rx="1" fill="#3b82f6" opacity="0.7"/>
+    <!-- Navigation -->
+    <rect x="-20" y="-12" width="25" height="4" rx="1" fill="#60a5fa" opacity="0.8"/>
+    <!-- Main content blocks -->
+    <rect x="-20" y="-5" width="40" height="6" rx="1" fill="#60a5fa" opacity="0.6"/>
+    <rect x="-20" y="4" width="30" height="4" rx="1" fill="#60a5fa" opacity="0.6"/>
+    <rect x="-20" y="12" width="35" height="4" rx="1" fill="#60a5fa" opacity="0.6"/>
+    <!-- Footer -->
+    <rect x="-20" y="22" width="40" height="6" rx="1" fill="#3b82f6" opacity="0.7"/>
+    <!-- Brackets to suggest code -->
+    <text x="-35" y="-10" fill="#60a5fa" font-family="monospace" font-size="12">&lt;</text>
+    <text x="35" y="-10" fill="#60a5fa" font-family="monospace" font-size="12">&gt;</text>
+  </g>
+    <!-- Bottom-Right: Lighthouse Score and Testing -->
+  <rect x="400" y="240" width="520" height="150" rx="12" fill="url(#quadrantBg)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  <!-- Lighthouse score gauge -->
+  <g transform="translate(530, 315)">
+    <circle cx="0" cy="0" r="28" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="4"/>
+    <circle cx="0" cy="0" r="28" fill="none" stroke="#22c55e" stroke-width="4" 
+            stroke-dasharray="169" stroke-dashoffset="17" stroke-linecap="round" 
+            transform="rotate(-90)"/>
+    <text x="0" y="-2" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">96</text>
+    <text x="0" y="12" text-anchor="middle" fill="#60a5fa" font-family="sans-serif" font-size="9">Accessibility</text>
+  </g>
+  <!-- Testing tools icons -->
+  <g transform="translate(650, 315)">
+    <!-- Magnifying glass for testing -->
+    <circle cx="-15" cy="-8" r="8" fill="none" stroke="#60a5fa" stroke-width="2"/>
+    <line x1="-9" y1="-2" x2="-5" y2="2" stroke="#60a5fa" stroke-width="2" stroke-linecap="round"/>
+    <!-- Checkmark -->
+    <path d="M 5,-5 L 10,0 L 20,-10" stroke="#22c55e" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <!-- Browser/device testing icon -->
+  <g transform="translate(750, 315)">
+    <!-- Desktop monitor -->
+    <rect x="-12" y="-8" width="24" height="16" rx="2" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+    <rect x="-8" y="-5" width="16" height="10" fill="#3b82f6" opacity="0.3"/>
+    <!-- Mobile device -->
+    <rect x="18" y="-6" width="8" height="12" rx="2" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+    <rect x="19" y="-4" width="6" height="8" fill="#3b82f6" opacity="0.3"/>
+  </g>
+  
+  <!-- Title Area -->
+  <rect x="0" y="420" width="1200" height="60" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+  <text x="600" y="460" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="36" font-weight="700">
+    Devlog #10: Building an Accessible Web
+  </text>
+  
+  <!-- Subtitle Area -->
+  <rect x="0" y="480" width="1200" height="150" fill="none"/>
+  <text x="600" y="520" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="sans-serif" font-size="18" font-weight="400">
+    From Lighthouse audits to color contrast fixes: ensuring universal access
+  </text>
+  <text x="600" y="550" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="sans-serif" font-size="18" font-weight="400">
+    to technical content through WCAG compliance and inclusive design
+  </text>
+  
+  <!-- Series badge -->
+  <rect x="50" y="550" width="140" height="30" rx="15" fill="rgba(59, 130, 246, 0.3)" stroke="rgba(59, 130, 246, 0.6)" stroke-width="1"/>
+  <text x="120" y="570" text-anchor="middle" fill="#60a5fa" font-family="sans-serif" font-size="14" font-weight="600">
+    DEVLOG SERIES
+  </text>
+</svg>

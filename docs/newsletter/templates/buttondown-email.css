@@ -1,0 +1,103 @@
+/* Signals & Systems Buttondown Email CSS */
+body, .body {
+  background: #f7f8fa;
+  color: #23272f;
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  margin: 0;
+  padding: 0;
+}
+
+a, .link {
+  color: #1a73e8;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+a:hover, .link:hover {
+  color: #0c47a1;
+  text-decoration: underline;
+}
+
+h1, h2, h3 {
+  color: #1a1d23;
+  font-family: inherit;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: 700;
+}
+h1 { font-size: 2em; border-bottom: 2px solid #e0e4ea; padding-bottom: 0.2em; }
+h2 { font-size: 1.3em; }
+h3 { font-size: 1.1em; }
+
+hr {
+  border: none;
+  border-top: 1px solid #e0e4ea;
+  margin: 2em 0;
+}
+
+ul, ol {
+  margin: 1em 0 1em 1.5em;
+  padding: 0;
+}
+
+strong, b {
+  color: #1a1d23;
+  font-weight: 700;
+}
+
+blockquote {
+  border-left: 4px solid #1a73e8;
+  background: #eef3fa;
+  color: #3a3d45;
+  margin: 1.5em 0;
+  padding: 1em 1.5em;
+  font-style: italic;
+}
+
+.button, .btn, a.button {
+  display: inline-block;
+  background: #1a73e8;
+  color: #fff !important;
+  padding: 0.75em 1.5em;
+  border-radius: 6px;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none !important;
+  margin: 1.5em 0;
+  box-shadow: 0 2px 8px rgba(26,115,232,0.07);
+  transition: background 0.2s;
+}
+.button:hover, .btn:hover, a.button:hover {
+  background: #0c47a1;
+}
+
+.footer, .email-footer {
+  color: #7a7d85;
+  font-size: 0.95em;
+  margin-top: 2em;
+  border-top: 1px solid #e0e4ea;
+  padding-top: 1.5em;
+}
+
+code, pre {
+  background: #f3f4f7;
+  color: #1a1d23;
+  font-family: 'Fira Mono', 'Consolas', monospace;
+  font-size: 0.97em;
+  border-radius: 4px;
+  padding: 0.2em 0.4em;
+}
+
+@media (max-width: 600px) {
+  body, .body {
+    font-size: 16px;
+    padding: 0 5vw;
+  }
+  h1 { font-size: 1.4em; }
+  .button, .btn, a.button {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}

@@ -1,0 +1,116 @@
+<!-- Cover for Devlog 9: Citation System Revamp - following template structure -->
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Template-consistent gradients -->
+    <linearGradient id="bgGradient" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1e3a8a"/>
+      <stop offset="1" stop-color="#3730a3"/>
+    </linearGradient>
+    <linearGradient id="iconGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#60a5fa"/>
+      <stop offset="1" stop-color="#3b82f6"/>
+    </linearGradient>
+    <!-- Grid pattern -->
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+    </pattern>
+    <!-- Softer quadrant background -->
+    <linearGradient id="quadrantBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.15" />
+      <stop offset="100%" style="stop-color:#1e40af;stop-opacity:0.25" />
+    </linearGradient>
+    <!-- Arrow marker -->
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#10b981"/>
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  
+  <!-- CONTENT QUADRANTS (Above title area) -->
+  
+  <!-- Top-Left Quadrant: Animation Excellence (520×150) -->
+  <rect x="60" y="60" width="520" height="150" rx="12" fill="url(#quadrantBg)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  <g transform="translate(90, 90)">
+    <text x="0" y="0" fill="#10b981" font-family="sans-serif" font-size="18" font-weight="bold">🎯 Animation Excellence</text>
+    <g font-family="sans-serif" font-size="13" fill="#fff">
+      <text x="0" y="30">• Precise height-based transitions</text>
+      <text x="0" y="55">• 60fps requestAnimationFrame</text>
+      <text x="0" y="80">• Hardware acceleration (will-change)</text>
+      <text x="0" y="105">• Cubic-bezier easing curves</text>
+    </g>
+  </g>
+  
+  <!-- Top-Right Quadrant: Accessibility First (300×150) -->
+  <rect x="620" y="60" width="300" height="150" rx="12" fill="url(#quadrantBg)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  <g transform="translate(650, 90)">
+    <text x="0" y="0" fill="#8b5cf6" font-family="sans-serif" font-size="18" font-weight="bold">♿ Accessibility First</text>
+    <g font-family="sans-serif" font-size="13" fill="#fff">
+      <text x="0" y="30">• WCAG 2.1 AA compliance</text>
+      <text x="0" y="55">• Full keyboard navigation</text>
+      <text x="0" y="80">• Screen reader support (ARIA)</text>
+      <text x="0" y="105">• Focus management &amp; indicators</text>
+    </g>
+  </g>
+  
+  <!-- Bottom-Left Quadrant: Data Architecture (300×150) -->
+  <rect x="60" y="240" width="300" height="150" rx="12" fill="url(#quadrantBg)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  <g transform="translate(90, 270)">
+    <text x="0" y="0" fill="#fbbf24" font-family="sans-serif" font-size="18" font-weight="bold">🏗️ Architecture</text>
+    <g font-family="sans-serif" font-size="13" fill="#fff">
+      <text x="0" y="30">• Single consolidated JSON</text>
+      <text x="0" y="55">• Usage tracking system</text>
+      <text x="0" y="80">• Shared components</text>
+      <text x="0" y="105">• Tag filtering &amp; sorting</text>
+    </g>
+  </g>
+  
+  <!-- Bottom-Right Quadrant: Performance Impact (520×150) -->
+  <rect x="400" y="240" width="520" height="150" rx="12" fill="url(#quadrantBg)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  <g transform="translate(430, 270)">
+    <text x="0" y="0" fill="#06b6d4" font-family="sans-serif" font-size="18" font-weight="bold">⚡ Performance Impact</text>
+    <g font-family="sans-serif" font-size="13" fill="#fff">
+      <text x="0" y="30">• 40% faster JavaScript execution</text>
+      <text x="0" y="55">• Zero layout thrashing</text>
+      <text x="0" y="80">• Smooth 60fps transitions</text>
+    </g>
+    
+    <!-- Before/After comparison visual -->
+    <g transform="translate(200, 15)">
+      <!-- Before (choppy) -->
+      <rect x="0" y="0" width="80" height="25" rx="4" fill="#ef4444" opacity="0.7"/>
+      <text x="40" y="16" text-anchor="middle" fill="white" font-family="sans-serif" font-size="9" font-weight="600">BEFORE</text>
+      
+      <!-- Arrow -->
+      <path d="M 90 12 L 115 12" stroke="#10b981" stroke-width="2" marker-end="url(#arrowhead)"/>
+      
+      <!-- After (smooth) -->
+      <rect x="125" y="0" width="80" height="25" rx="4" fill="#10b981" opacity="0.9"/>
+      <text x="165" y="16" text-anchor="middle" fill="white" font-family="sans-serif" font-size="9" font-weight="600">AFTER</text>
+    </g>
+  </g>
+  
+  <!-- Title Area -->
+  <text x="600" y="460" text-anchor="middle" fill="white" font-family="sans-serif" font-size="54" font-weight="bold" letter-spacing="2">
+    Citation System Revamp
+  </text>
+  
+  <!-- Subtitle Area -->
+  <text x="600" y="510" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="26">
+    Smooth UX • Accessibility • Performance
+  </text>
+  
+  <!-- Series Line Area -->
+  <text x="600" y="550" text-anchor="middle" fill="#60a5fa" font-family="sans-serif" font-size="20">
+    Devlog Series • Article 9
+  </text>
+  
+  <!-- Status Indicator Area -->
+  <g transform="translate(100, 575)">
+    <rect x="0" y="0" width="180" height="40" rx="20" fill="rgba(34, 197, 94, 0.25)" stroke="#22c55e" stroke-width="2.5"/>
+    <circle cx="25" cy="20" r="10" fill="#22c55e" stroke="#fff" stroke-width="2"/>
+    <text x="45" y="25" fill="#22c55e" font-family="sans-serif" font-size="16" font-weight="bold">Status: Ready</text>
+  </g>
+</svg>
