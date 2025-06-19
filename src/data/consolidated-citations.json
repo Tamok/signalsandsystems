@@ -1,0 +1,1100 @@
+{
+  "lastUpdated": "2025-06-15T08:26:04.129Z",
+  "citations": [
+    {
+      "author": "Frontiers",
+      "source": "Frontiers in Artificial Intelligence",
+      "title": "A Longitudinal Study on Artificial Intelligence Adoption",
+      "type": "statistic",
+      "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2023.1324398/full",
+      "year": "2023",
+      "tags": [
+        "Geo",
+        "Higher education",
+        "Ai search",
+        "Marketing strategy",
+        "Digital transformation"
+      ],
+      "usedInSeries": [
+        "geo"
+      ],
+      "usedInArticles": [
+        {
+          "title": "GEO #1: What Is GEO and Why Higher Ed Needs It Now",
+          "slug": "geo/1-what-is-geo-and-why-higher-ed-needs-it-now",
+          "series": "geo"
+        }
+      ]
+    },
+    {
+      "author": "Doshi, A. & Hauser, K.",
+      "source": "Science Advances",
+      "title": "AI and Individual versus Collective Creativity",
+      "type": "fact",
+      "url": "https://www.science.org/journal/sciadv",
+      "year": "2024",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Microsoft",
+      "source": "Microsoft 2024 Work Trend Index",
+      "title": "AI at Work: The Future of Productivity",
+      "type": "statistic",
+      "url": "https://www.microsoft.com/en-us/worklab/work-trend-index",
+      "year": "2024",
+      "tags": [
+        "Geo",
+        "Higher education",
+        "Ai search",
+        "Marketing strategy",
+        "Digital transformation"
+      ],
+      "usedInSeries": [
+        "geo"
+      ],
+      "usedInArticles": [
+        {
+          "title": "GEO #1: What Is GEO and Why Higher Ed Needs It Now",
+          "slug": "geo/1-what-is-geo-and-why-higher-ed-needs-it-now",
+          "series": "geo"
+        }
+      ]
+    },
+    {
+      "author": "Surden, H.",
+      "source": "Georgia State University Law Review",
+      "title": "Artificial Intelligence and Law: An Overview",
+      "type": "fact",
+      "url": "https://readingroom.law.gsu.edu/gsulr/vol35/iss4/8/",
+      "year": "2019",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Wikipedia",
+      "source": "Wikipedia",
+      "title": "Automation complacency",
+      "type": "fact",
+      "url": "https://en.wikipedia.org/wiki/Automation_complacency",
+      "year": "2024",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Dong, G., & Potenza, M. N.",
+      "source": "NIH",
+      "title": "Behavioural and brain responses related to Internet search and memory",
+      "type": "statistic",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26262779/",
+      "year": "2024",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Ophir, E., Nass, C., & Wagner, A. D.",
+      "source": "NIH",
+      "title": "Cognitive control in media multitaskers",
+      "type": "statistic",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19706386/",
+      "year": "2009",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Risko, E. F., & Gilbert, S. J.",
+      "source": "NIH",
+      "title": "Cognitive offloading",
+      "type": "fact",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27542527/",
+      "year": "2016",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Grinschgl, S., & Papenmeier, F.",
+      "source": "Psychonomic Bulletin & Review",
+      "title": "Consequences of cognitive offloading: Boosting performance but diminishing memory",
+      "type": "statistic",
+      "url": "https://link.springer.com/article/10.3758/s13423-021-01882-y",
+      "year": "2021",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "IBM Institute for Business Value",
+      "source": "AI Search Optimization Study",
+      "title": "Domain-Specific Performance in AI-Driven Content Discovery",
+      "type": "analysis",
+      "url": "https://www.ibm.com/thought-leadership/institute-business-value/report/ai-education",
+      "year": "2024",
+      "tags": [
+        "Geo",
+        "Higher education",
+        "Ai search",
+        "Marketing strategy",
+        "Digital transformation"
+      ],
+      "usedInSeries": [
+        "geo"
+      ],
+      "usedInArticles": [
+        {
+          "title": "GEO #1: What Is GEO and Why Higher Ed Needs It Now",
+          "slug": "geo/1-what-is-geo-and-why-higher-ed-needs-it-now",
+          "series": "geo"
+        }
+      ]
+    },
+    {
+      "author": "Kruger, J., & Dunning, D.",
+      "source": "APA",
+      "title": "Dunning–Kruger effect",
+      "type": "fact",
+      "url": "https://psycnet.apa.org/doiLanding?doi=10.1037%2F0022-3514.77.6.1121",
+      "year": "1999",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "OpenAI",
+      "source": "arXiv",
+      "title": "Evaluating Large Language Models: A Survey",
+      "type": "fact",
+      "url": "https://arxiv.org/abs/2307.03109",
+      "year": "2024",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Bussmann, N., Giudici, P., Marinelli, D., Papenbrock, J., et al.",
+      "source": "Frontiers in Artificial Intelligence",
+      "title": "Explainable Machine Learning in Credit Risk Management",
+      "type": "fact",
+      "url": "https://link.springer.com/article/10.1007/s10614-020-10042-0",
+      "year": "2021",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Researchers",
+      "source": "SSRN",
+      "title": "Factors Influencing Students' Adoption of AI Research Tools: A Logistic Regression Analysis",
+      "type": "recommendation",
+      "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5058710",
+      "year": "2024",
+      "tags": [
+        "Geo",
+        "Higher education",
+        "Ai search",
+        "Marketing strategy",
+        "Digital transformation"
+      ],
+      "usedInSeries": [
+        "geo"
+      ],
+      "usedInArticles": [
+        {
+          "title": "GEO #1: What Is GEO and Why Higher Ed Needs It Now",
+          "slug": "geo/1-what-is-geo-and-why-higher-ed-needs-it-now",
+          "series": "geo"
+        }
+      ]
+    },
+    {
+      "author": "Entrepreneur",
+      "source": "Entrepreneur",
+      "title": "Gen Z is Using AI (ChatGPT) at Work and Proud of It, Survey Finds",
+      "type": "statistic",
+      "url": "https://www.entrepreneur.com/business-news/gen-z-is-using-ai-chatgpt-at-work-and-proud-of-it-survey/483435",
+      "year": "2024",
+      "tags": [
+        "Geo",
+        "Higher education",
+        "Ai search",
+        "Marketing strategy",
+        "Digital transformation"
+      ],
+      "usedInSeries": [
+        "geo"
+      ],
+      "usedInArticles": [
+        {
+          "title": "GEO #1: What Is GEO and Why Higher Ed Needs It Now",
+          "slug": "geo/1-what-is-geo-and-why-higher-ed-needs-it-now",
+          "series": "geo"
+        }
+      ]
+    },
+    {
+      "author": "Brynjolfsson, E., et al.",
+      "source": "NBER Working Paper",
+      "title": "Generative AI at Work",
+      "type": "statistic",
+      "url": "https://www.nber.org/papers/w31161",
+      "year": "2023",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Doshi, A. & Hauser, K.",
+      "source": "Science Advances",
+      "title": "Generative AI enhances individual creativity but reduces the collective diversity of novel content",
+      "type": "fact",
+      "url": "https://www.science.org/doi/10.1126/sciadv.adn5290",
+      "year": "2024",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Aggarwal, P., et al.",
+      "title": "GEO: Generative Engine Optimization",
+      "type": "statistic",
+      "url": "https://arxiv.org/abs/2311.09735",
+      "year": "2023",
+      "tags": [
+        "Academic integrity",
+        "Citation system",
+        "Ai content",
+        "Ux design",
+        "Validation tools",
+        "Geo",
+        "Higher education",
+        "Ai search",
+        "Marketing strategy",
+        "Digital transformation"
+      ],
+      "usedInSeries": [
+        "devlog",
+        "geo"
+      ],
+      "usedInArticles": [
+        {
+          "title": "Devlog #7: Building a Citation System for the AI Age - Balancing Generative AI with Academic Integrity",
+          "slug": "devlog/7-citation-system-development",
+          "series": "devlog"
+        },
+        {
+          "title": "GEO #1: What Is GEO and Why Higher Ed Needs It Now",
+          "slug": "geo/1-what-is-geo-and-why-higher-ed-needs-it-now",
+          "series": "geo"
+        }
+      ],
+      "source": "GEO Research Framework"
+    },
+    {
+      "author": "Sparrow, B., et al.",
+      "source": "NIH",
+      "title": "Google effects on memory: Cognitive consequences of having information at our fingertips",
+      "type": "statistic",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21764755/",
+      "year": "2011",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Topol, E. J.",
+      "source": "Nature Medicine",
+      "title": "High-performance medicine: the convergence of human and artificial intelligence",
+      "type": "fact",
+      "url": "https://www.nature.com/articles/s41591-018-0300-7",
+      "year": "2019",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "McKinsey & Company",
+      "source": "The Future of Search",
+      "title": "How Generative AI is Transforming Information Discovery",
+      "type": "projection",
+      "url": "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai",
+      "year": "2024",
+      "tags": [
+        "Geo",
+        "Higher education",
+        "Ai search",
+        "Marketing strategy",
+        "Digital transformation"
+      ],
+      "usedInSeries": [
+        "geo"
+      ],
+      "usedInArticles": [
+        {
+          "title": "GEO #1: What Is GEO and Why Higher Ed Needs It Now",
+          "slug": "geo/1-what-is-geo-and-why-higher-ed-needs-it-now",
+          "series": "geo"
+        }
+      ]
+    },
+    {
+      "author": "Pew Research Center",
+      "source": "Wikipedia",
+      "title": "Information literacy",
+      "type": "statistic",
+      "url": "https://en.wikipedia.org/wiki/Information_literacy",
+      "year": "2024",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Researchers",
+      "source": "arXiv",
+      "title": "Is ChatGPT Massively Used by Students Nowadays? A Survey on the Use of Large Language Models",
+      "type": "statistic",
+      "url": "https://arxiv.org/abs/2412.17486",
+      "year": "2024",
+      "tags": [
+        "Geo",
+        "Higher education",
+        "Ai search",
+        "Marketing strategy",
+        "Digital transformation"
+      ],
+      "usedInSeries": [
+        "geo"
+      ],
+      "usedInArticles": [
+        {
+          "title": "GEO #1: What Is GEO and Why Higher Ed Needs It Now",
+          "slug": "geo/1-what-is-geo-and-why-higher-ed-needs-it-now",
+          "series": "geo"
+        }
+      ]
+    },
+    {
+      "author": "Digital Education Council",
+      "source": "Digital Education Council",
+      "title": "Key Results from DEC Global AI Student Survey 2024",
+      "type": "statistic",
+      "url": "https://www.digitaleducationcouncil.com/post/what-students-want-key-results-from-dec-global-ai-student-survey-2024",
+      "year": "2024",
+      "tags": [
+        "Geo",
+        "Higher education",
+        "Ai search",
+        "Marketing strategy",
+        "Digital transformation",
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "geo",
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "GEO #1: What Is GEO and Why Higher Ed Needs It Now",
+          "slug": "geo/1-what-is-geo-and-why-higher-ed-needs-it-now",
+          "series": "geo"
+        },
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Wikipedia contributors",
+      "source": "Wikipedia",
+      "title": "Misinformation",
+      "type": "fact",
+      "url": "https://en.wikipedia.org/wiki/Misinformation",
+      "year": "2025",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Junco, R., & Cotten, S. R.",
+      "source": "ScienceDirect",
+      "title": "Multitasking",
+      "type": "fact",
+      "url": "https://www.sciencedirect.com/science/article/pii/S036013151100340X?via%3Dihub",
+      "year": "2012",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Dell'Acqua, F., et al.",
+      "source": "Harvard Business School Working Paper",
+      "title": "Navigating the jagged frontier: Large language models' impact on business consultants",
+      "type": "statistic",
+      "url": "https://www.hbs.edu/ris/Publication%20Files/24-013_d9b45b68-9e74-42d6-a1c6-c72fb70c7282.pdf",
+      "year": "2023",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Ward, A. F.",
+      "source": "Proceedings of the National Academy of Sciences",
+      "title": "People mistake the internet's knowledge for their own",
+      "type": "statistic",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34686595/",
+      "year": "2021",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Sherry Turkle",
+      "source": "Penguin Press",
+      "title": "Reclaiming Conversation: The Power of Talk in a Digital Age",
+      "type": "book",
+      "url": "https://www.penguinrandomhouse.com/books/313732/reclaiming-conversation-by-sherry-turkle/",
+      "year": "2015",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Storm, B. C., & Stone, S. M.",
+      "source": "NIH",
+      "title": "Saving-enhanced memory: the benefits of saving on the learning and remembering of new information",
+      "type": "fact",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25491269/",
+      "year": "2015",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "JELL",
+      "title": "Signals & Systems: GEO Research Observations",
+      "type": "fact",
+      "year": "2025",
+      "tags": [
+        "Academic integrity",
+        "Citation system",
+        "Ai content",
+        "Ux design",
+        "Validation tools"
+      ],
+      "usedInSeries": [
+        "devlog"
+      ],
+      "usedInArticles": [
+        {
+          "title": "Devlog #7: Building a Citation System for the AI Age - Balancing Generative AI with Academic Integrity",
+          "slug": "devlog/7-citation-system-development",
+          "series": "devlog"
+        }
+      ]
+    },
+    {
+      "author": "SpringerOpen",
+      "source": "SpringerOpen",
+      "title": "Students' Voices on Generative AI: Perceptions, Benefits, and Challenges in Higher Education",
+      "type": "statistic",
+      "url": "https://educationaltechnologyjournal.springeropen.com/articles/10.1186/s41239-023-00411-8",
+      "year": "2023",
+      "tags": [
+        "Geo",
+        "Higher education",
+        "Ai search",
+        "Marketing strategy",
+        "Digital transformation"
+      ],
+      "usedInSeries": [
+        "geo"
+      ],
+      "usedInArticles": [
+        {
+          "title": "GEO #1: What Is GEO and Why Higher Ed Needs It Now",
+          "slug": "geo/1-what-is-geo-and-why-higher-ed-needs-it-now",
+          "series": "geo"
+        }
+      ]
+    },
+    {
+      "author": "Prather, J. et al.",
+      "source": "ACM",
+      "title": "Studying the effect of AI Code Generators on Supporting Novice Learners in Introductory Programming",
+      "type": "fact",
+      "url": "https://dl.acm.org/doi/10.1145/3544548.3580919",
+      "year": "2024",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Tetlock, P. E., & Gardner, D.",
+      "source": "Wikipedia",
+      "title": "Superforecasting",
+      "type": "fact",
+      "url": "https://en.wikipedia.org/wiki/Superforecasting",
+      "year": "2015",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Ward, A. F.",
+      "source": "T&F",
+      "title": "Supernormal: How the Internet is changing our memories and our minds.",
+      "type": "fact",
+      "url": "https://www.tandfonline.com/doi/full/10.1080/1047840X.2013.850148#d1e158",
+      "year": "2013",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Campus Technology",
+      "source": "Campus Technology",
+      "title": "Survey: 86% of Students Already Use AI in Their Studies",
+      "type": "statistic",
+      "url": "https://campustechnology.com/articles/2024/08/28/survey-86-of-students-already-use-ai-in-their-studies.aspx",
+      "year": "2024",
+      "tags": [
+        "Geo",
+        "Higher education",
+        "Ai search",
+        "Marketing strategy",
+        "Digital transformation"
+      ],
+      "usedInSeries": [
+        "geo"
+      ],
+      "usedInArticles": [
+        {
+          "title": "GEO #1: What Is GEO and Why Higher Ed Needs It Now",
+          "slug": "geo/1-what-is-geo-and-why-higher-ed-needs-it-now",
+          "series": "geo"
+        }
+      ]
+    },
+    {
+      "author": "National Assessment of Educational Progress",
+      "source": "Wikipedia",
+      "title": "The 2024 Nation’s Report Card",
+      "type": "statistic",
+      "url": "https://www.nagb.gov/powered-by-naep/the-2024-nations-report-card.html",
+      "year": "2024",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "McKinsey & Company",
+      "source": "McKinsey Global Institute Education Research",
+      "title": "The Economic Potential of Generative AI: The Next Productivity Frontier",
+      "type": "statistic",
+      "url": "https://www.mckinsey.com/industries/education/our-insights/the-economic-potential-of-generative-ai-the-next-productivity-frontier",
+      "year": "2024",
+      "tags": [
+        "Geo",
+        "Higher education",
+        "Ai search",
+        "Marketing strategy",
+        "Digital transformation"
+      ],
+      "usedInSeries": [
+        "geo"
+      ],
+      "usedInArticles": [
+        {
+          "title": "GEO #1: What Is GEO and Why Higher Ed Needs It Now",
+          "slug": "geo/1-what-is-geo-and-why-higher-ed-needs-it-now",
+          "series": "geo"
+        }
+      ]
+    },
+    {
+      "author": "Computing Students Research",
+      "source": "arXiv",
+      "title": "The Evolving Usage of GenAI by Computing Students",
+      "type": "statistic",
+      "url": "https://arxiv.org/abs/2412.16453",
+      "year": "2024",
+      "tags": [
+        "Geo",
+        "Higher education",
+        "Ai search",
+        "Marketing strategy",
+        "Digital transformation"
+      ],
+      "usedInSeries": [
+        "geo"
+      ],
+      "usedInArticles": [
+        {
+          "title": "GEO #1: What Is GEO and Why Higher Ed Needs It Now",
+          "slug": "geo/1-what-is-geo-and-why-higher-ed-needs-it-now",
+          "series": "geo"
+        }
+      ]
+    },
+    {
+      "author": "World Economic Forum",
+      "source": "World Economic Forum",
+      "title": "The Future of Jobs Report 2023",
+      "type": "statistic",
+      "url": "https://www3.weforum.org/docs/WEF_Future_of_Jobs_2023.pdf",
+      "year": "2023",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Microsoft Research",
+      "source": "Microsoft Research",
+      "title": "The Impact of Generative AI on Critical Thinking: Self-Reported Reductions in Cognitive Effort and Confidence Effects From a Survey of Knowledge Workers",
+      "type": "quote",
+      "url": "https://www.microsoft.com/en-us/research/publication/the-impact-of-generative-ai-on-critical-thinking-self-reported-reductions-in-cognitive-effort-and-confidence-effects-from-a-survey-of-knowledge-workers/",
+      "year": "2024",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Wikipedia",
+      "source": "Wikipedia",
+      "title": "Transactive memory",
+      "type": "fact",
+      "url": "https://en.wikipedia.org/wiki/Transactive_memory",
+      "year": "2024",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Stackpole, B.",
+      "source": "MIT Sloan",
+      "title": "User experience",
+      "type": "statistic",
+      "url": "https://mitsloan.mit.edu/ideas-made-to-matter/to-help-improve-accuracy-generative-ai-add-speed-bumps",
+      "year": "2024",
+      "tags": [
+        "Ai",
+        "Cognitive science",
+        "Human-computer interaction",
+        "Productivity",
+        "Learning"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    }
+  ]
+}
