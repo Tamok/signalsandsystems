@@ -1,0 +1,2407 @@
+﻿<!DOCTYPE html><html lang="en" class="scroll-smooth"> <head><meta charset="utf-8"><!-- Primary Meta Tags --><title>devlog Series | Signals &amp; Systems</title><meta name="title" content="devlog Series | Signals &#38; Systems"><meta name="description" content="Follow along as we document the creation and evolution of the Signals &#38; Systems publishing platform."><link rel="canonical" href="http://localhost:4323/series/devlog"><link rel="icon" type="image/png" href="/images/favicon.png"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="http://localhost:4323/series/devlog"><meta property="og:title" content="devlog Series | Signals &#38; Systems"><meta property="og:description" content="Follow along as we document the creation and evolution of the Signals &#38; Systems publishing platform."><meta property="og:image" content="/images/og-default.svg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="http://localhost:4323/series/devlog"><meta property="twitter:title" content="devlog Series | Signals &#38; Systems"><meta property="twitter:description" content="Follow along as we document the creation and evolution of the Signals &#38; Systems publishing platform."><meta property="twitter:image" content="/images/og-default.svg"><!-- Code Syntax Highlighting --><!-- GTM will be injected dynamically after consent --><style data-vite-dev-id="D:/Coding Shenanigans/signals-and-systems/sastro/src/styles/global.css">/*! tailwindcss v4.1.7 | MIT License | https://tailwindcss.com */
+@layer properties;
+@layer theme, base, components, utilities;
+@layer theme {
+  :root, :host {
+    --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+      "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
+    --color-red-50: oklch(97.1% 0.013 17.38);
+    --color-red-400: oklch(70.4% 0.191 22.216);
+    --color-red-500: oklch(63.7% 0.237 25.331);
+    --color-red-600: oklch(57.7% 0.245 27.325);
+    --color-red-700: oklch(50.5% 0.213 27.518);
+    --color-amber-50: oklch(98.7% 0.022 95.277);
+    --color-amber-300: oklch(87.9% 0.169 91.605);
+    --color-amber-900: oklch(41.4% 0.112 45.904);
+    --color-yellow-50: oklch(98.7% 0.026 102.212);
+    --color-yellow-400: oklch(85.2% 0.199 91.936);
+    --color-yellow-500: oklch(79.5% 0.184 86.047);
+    --color-yellow-600: oklch(68.1% 0.162 75.834);
+    --color-yellow-700: oklch(55.4% 0.135 66.442);
+    --color-green-50: oklch(98.2% 0.018 155.826);
+    --color-green-100: oklch(96.2% 0.044 156.743);
+    --color-green-200: oklch(92.5% 0.084 155.995);
+    --color-green-400: oklch(79.2% 0.209 151.711);
+    --color-green-500: oklch(72.3% 0.219 149.579);
+    --color-green-600: oklch(62.7% 0.194 149.214);
+    --color-green-700: oklch(52.7% 0.154 150.069);
+    --color-green-800: oklch(44.8% 0.119 151.328);
+    --color-green-900: oklch(39.3% 0.095 152.535);
+    --color-emerald-50: oklch(97.9% 0.021 166.113);
+    --color-emerald-400: oklch(76.5% 0.177 163.223);
+    --color-emerald-700: oklch(50.8% 0.118 165.612);
+    --color-cyan-50: oklch(98.4% 0.019 200.873);
+    --color-cyan-400: oklch(78.9% 0.154 211.53);
+    --color-cyan-700: oklch(52% 0.105 223.128);
+    --color-blue-50: oklch(97% 0.014 254.604);
+    --color-blue-100: oklch(93.2% 0.032 255.585);
+    --color-blue-200: oklch(88.2% 0.059 254.128);
+    --color-blue-400: oklch(70.7% 0.165 254.624);
+    --color-blue-500: oklch(62.3% 0.214 259.815);
+    --color-blue-600: oklch(54.6% 0.245 262.881);
+    --color-blue-700: oklch(48.8% 0.243 264.376);
+    --color-blue-800: oklch(42.4% 0.199 265.638);
+    --color-blue-900: oklch(37.9% 0.146 265.522);
+    --color-indigo-50: oklch(96.2% 0.018 272.314);
+    --color-indigo-400: oklch(67.3% 0.182 276.935);
+    --color-indigo-700: oklch(45.7% 0.24 277.023);
+    --color-purple-50: oklch(97.7% 0.014 308.299);
+    --color-purple-100: oklch(94.6% 0.033 307.174);
+    --color-purple-400: oklch(71.4% 0.203 305.504);
+    --color-purple-600: oklch(55.8% 0.288 302.321);
+    --color-purple-700: oklch(49.6% 0.265 301.924);
+    --color-purple-800: oklch(43.8% 0.218 303.724);
+    --color-slate-600: oklch(44.6% 0.043 257.281);
+    --color-gray-50: oklch(98.5% 0.002 247.839);
+    --color-gray-100: oklch(96.7% 0.003 264.542);
+    --color-gray-200: oklch(92.8% 0.006 264.531);
+    --color-gray-300: oklch(87.2% 0.01 258.338);
+    --color-gray-400: oklch(70.7% 0.022 261.325);
+    --color-gray-500: oklch(55.1% 0.027 264.364);
+    --color-gray-600: oklch(44.6% 0.03 256.802);
+    --color-gray-700: oklch(37.3% 0.034 259.733);
+    --color-gray-800: oklch(27.8% 0.033 256.848);
+    --color-gray-900: oklch(21% 0.034 264.665);
+    --color-black: #000;
+    --color-white: #fff;
+    --spacing: 0.25rem;
+    --container-md: 28rem;
+    --container-2xl: 42rem;
+    --container-3xl: 48rem;
+    --container-4xl: 56rem;
+    --container-5xl: 64rem;
+    --container-7xl: 80rem;
+    --text-xs: 0.75rem;
+    --text-xs--line-height: calc(1 / 0.75);
+    --text-sm: 0.875rem;
+    --text-sm--line-height: calc(1.25 / 0.875);
+    --text-base: 1rem;
+    --text-base--line-height: calc(1.5 / 1);
+    --text-lg: 1.125rem;
+    --text-lg--line-height: calc(1.75 / 1.125);
+    --text-xl: 1.25rem;
+    --text-xl--line-height: calc(1.75 / 1.25);
+    --text-2xl: 1.5rem;
+    --text-2xl--line-height: calc(2 / 1.5);
+    --text-3xl: 1.875rem;
+    --text-3xl--line-height: calc(2.25 / 1.875);
+    --text-4xl: 2.25rem;
+    --text-4xl--line-height: calc(2.5 / 2.25);
+    --text-5xl: 3rem;
+    --text-5xl--line-height: 1;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
+    --tracking-tight: -0.025em;
+    --leading-relaxed: 1.625;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --default-transition-duration: 150ms;
+    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    --default-font-family: var(--font-sans);
+    --default-mono-font-family: var(--font-mono);
+  }
+}
+@layer base {
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+  html, :host {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+    font-feature-settings: var(--default-font-feature-settings, normal);
+    font-variation-settings: var(--default-font-variation-settings, normal);
+    -webkit-tap-highlight-color: transparent;
+  }
+  hr {
+    height: 0;
+    color: inherit;
+    border-top-width: 1px;
+  }
+  abbr:where([title]) {
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+  a {
+    color: inherit;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+  }
+  b, strong {
+    font-weight: bolder;
+  }
+  code, kbd, samp, pre {
+    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+    font-feature-settings: var(--default-mono-font-feature-settings, normal);
+    font-variation-settings: var(--default-mono-font-variation-settings, normal);
+    font-size: 1em;
+  }
+  small {
+    font-size: 80%;
+  }
+  sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+  sub {
+    bottom: -0.25em;
+  }
+  sup {
+    top: -0.5em;
+  }
+  table {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+  }
+  :-moz-focusring {
+    outline: auto;
+  }
+  progress {
+    vertical-align: baseline;
+  }
+  summary {
+    display: list-item;
+  }
+  ol, ul, menu {
+    list-style: none;
+  }
+  img, svg, video, canvas, audio, iframe, embed, object {
+    display: block;
+    vertical-align: middle;
+  }
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+  button, input, select, optgroup, textarea, ::file-selector-button {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+  :where(select:is([multiple], [size])) optgroup {
+    font-weight: bolder;
+  }
+  :where(select:is([multiple], [size])) optgroup option {
+    padding-inline-start: 20px;
+  }
+  ::file-selector-button {
+    margin-inline-end: 4px;
+  }
+  ::placeholder {
+    opacity: 1;
+  }
+  @supports (not (-webkit-appearance: -apple-pay-button))  or (contain-intrinsic-size: 1px) {
+    ::placeholder {
+      color: currentcolor;
+      @supports (color: color-mix(in lab, red, red)) {
+        color: color-mix(in oklab, currentcolor 50%, transparent);
+      }
+    }
+  }
+  textarea {
+    resize: vertical;
+  }
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+  ::-webkit-date-and-time-value {
+    min-height: 1lh;
+    text-align: inherit;
+  }
+  ::-webkit-datetime-edit {
+    display: inline-flex;
+  }
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+  ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-hour-field, ::-webkit-datetime-edit-minute-field, ::-webkit-datetime-edit-second-field, ::-webkit-datetime-edit-millisecond-field, ::-webkit-datetime-edit-meridiem-field {
+    padding-block: 0;
+  }
+  :-moz-ui-invalid {
+    box-shadow: none;
+  }
+  button, input:where([type="button"], [type="reset"], [type="submit"]), ::file-selector-button {
+    appearance: button;
+  }
+  ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
+    height: auto;
+  }
+  [hidden]:where(:not([hidden="until-found"])) {
+    display: none !important;
+  }
+}
+@layer utilities {
+  .pointer-events-none {
+    pointer-events: none;
+  }
+  .collapse {
+    visibility: collapse;
+  }
+  .invisible {
+    visibility: hidden;
+  }
+  .visible {
+    visibility: visible;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+  .absolute {
+    position: absolute;
+  }
+  .fixed {
+    position: fixed;
+  }
+  .relative {
+    position: relative;
+  }
+  .static {
+    position: static;
+  }
+  .inset-0 {
+    inset: calc(var(--spacing) * 0);
+  }
+  .top-0 {
+    top: calc(var(--spacing) * 0);
+  }
+  .top-2 {
+    top: calc(var(--spacing) * 2);
+  }
+  .top-4 {
+    top: calc(var(--spacing) * 4);
+  }
+  .top-20 {
+    top: calc(var(--spacing) * 20);
+  }
+  .top-full {
+    top: 100%;
+  }
+  .right-0 {
+    right: calc(var(--spacing) * 0);
+  }
+  .right-2 {
+    right: calc(var(--spacing) * 2);
+  }
+  .right-4 {
+    right: calc(var(--spacing) * 4);
+  }
+  .bottom-4 {
+    bottom: calc(var(--spacing) * 4);
+  }
+  .bottom-full {
+    bottom: 100%;
+  }
+  .left-0 {
+    left: calc(var(--spacing) * 0);
+  }
+  .left-4 {
+    left: calc(var(--spacing) * 4);
+  }
+  .isolate {
+    isolation: isolate;
+  }
+  .z-40 {
+    z-index: 40;
+  }
+  .z-50 {
+    z-index: 50;
+  }
+  .container {
+    width: 100%;
+    @media (width >= 40rem) {
+      max-width: 40rem;
+    }
+    @media (width >= 48rem) {
+      max-width: 48rem;
+    }
+    @media (width >= 64rem) {
+      max-width: 64rem;
+    }
+    @media (width >= 80rem) {
+      max-width: 80rem;
+    }
+    @media (width >= 96rem) {
+      max-width: 96rem;
+    }
+  }
+  .m-0 {
+    margin: calc(var(--spacing) * 0);
+  }
+  .-mx-5 {
+    margin-inline: calc(var(--spacing) * -5);
+  }
+  .mx-1 {
+    margin-inline: calc(var(--spacing) * 1);
+  }
+  .mx-2 {
+    margin-inline: calc(var(--spacing) * 2);
+  }
+  .mx-auto {
+    margin-inline: auto;
+  }
+  .-my-2 {
+    margin-block: calc(var(--spacing) * -2);
+  }
+  .my-4 {
+    margin-block: calc(var(--spacing) * 4);
+  }
+  .my-6 {
+    margin-block: calc(var(--spacing) * 6);
+  }
+  .my-8 {
+    margin-block: calc(var(--spacing) * 8);
+  }
+  .my-12 {
+    margin-block: calc(var(--spacing) * 12);
+  }
+  .mt-0\.5 {
+    margin-top: calc(var(--spacing) * 0.5);
+  }
+  .mt-1 {
+    margin-top: calc(var(--spacing) * 1);
+  }
+  .mt-2 {
+    margin-top: calc(var(--spacing) * 2);
+  }
+  .mt-3 {
+    margin-top: calc(var(--spacing) * 3);
+  }
+  .mt-4 {
+    margin-top: calc(var(--spacing) * 4);
+  }
+  .mt-6 {
+    margin-top: calc(var(--spacing) * 6);
+  }
+  .mt-8 {
+    margin-top: calc(var(--spacing) * 8);
+  }
+  .mt-10 {
+    margin-top: calc(var(--spacing) * 10);
+  }
+  .mt-12 {
+    margin-top: calc(var(--spacing) * 12);
+  }
+  .mt-auto {
+    margin-top: auto;
+  }
+  .-mr-1 {
+    margin-right: calc(var(--spacing) * -1);
+  }
+  .-mr-2 {
+    margin-right: calc(var(--spacing) * -2);
+  }
+  .mr-2 {
+    margin-right: calc(var(--spacing) * 2);
+  }
+  .mr-3 {
+    margin-right: calc(var(--spacing) * 3);
+  }
+  .mb-1 {
+    margin-bottom: calc(var(--spacing) * 1);
+  }
+  .mb-2 {
+    margin-bottom: calc(var(--spacing) * 2);
+  }
+  .mb-3 {
+    margin-bottom: calc(var(--spacing) * 3);
+  }
+  .mb-4 {
+    margin-bottom: calc(var(--spacing) * 4);
+  }
+  .mb-6 {
+    margin-bottom: calc(var(--spacing) * 6);
+  }
+  .mb-8 {
+    margin-bottom: calc(var(--spacing) * 8);
+  }
+  .mb-12 {
+    margin-bottom: calc(var(--spacing) * 12);
+  }
+  .mb-16 {
+    margin-bottom: calc(var(--spacing) * 16);
+  }
+  .-ml-1 {
+    margin-left: calc(var(--spacing) * -1);
+  }
+  .ml-2 {
+    margin-left: calc(var(--spacing) * 2);
+  }
+  .ml-3 {
+    margin-left: calc(var(--spacing) * 3);
+  }
+  .ml-4 {
+    margin-left: calc(var(--spacing) * 4);
+  }
+  .ml-6 {
+    margin-left: calc(var(--spacing) * 6);
+  }
+  .ml-auto {
+    margin-left: auto;
+  }
+  .block {
+    display: block;
+  }
+  .contents {
+    display: contents;
+  }
+  .flex {
+    display: flex;
+  }
+  .grid {
+    display: grid;
+  }
+  .hidden {
+    display: none;
+  }
+  .inline {
+    display: inline;
+  }
+  .inline-block {
+    display: inline-block;
+  }
+  .inline-flex {
+    display: inline-flex;
+  }
+  .table {
+    display: table;
+  }
+  .h-0 {
+    height: calc(var(--spacing) * 0);
+  }
+  .h-3 {
+    height: calc(var(--spacing) * 3);
+  }
+  .h-4 {
+    height: calc(var(--spacing) * 4);
+  }
+  .h-5 {
+    height: calc(var(--spacing) * 5);
+  }
+  .h-6 {
+    height: calc(var(--spacing) * 6);
+  }
+  .h-8 {
+    height: calc(var(--spacing) * 8);
+  }
+  .h-10 {
+    height: calc(var(--spacing) * 10);
+  }
+  .h-14 {
+    height: calc(var(--spacing) * 14);
+  }
+  .h-16 {
+    height: calc(var(--spacing) * 16);
+  }
+  .h-20 {
+    height: calc(var(--spacing) * 20);
+  }
+  .h-auto {
+    height: auto;
+  }
+  .h-full {
+    height: 100%;
+  }
+  .min-h-screen {
+    min-height: 100vh;
+  }
+  .w-0 {
+    width: calc(var(--spacing) * 0);
+  }
+  .w-3 {
+    width: calc(var(--spacing) * 3);
+  }
+  .w-4 {
+    width: calc(var(--spacing) * 4);
+  }
+  .w-5 {
+    width: calc(var(--spacing) * 5);
+  }
+  .w-6 {
+    width: calc(var(--spacing) * 6);
+  }
+  .w-8 {
+    width: calc(var(--spacing) * 8);
+  }
+  .w-10 {
+    width: calc(var(--spacing) * 10);
+  }
+  .w-14 {
+    width: calc(var(--spacing) * 14);
+  }
+  .w-16 {
+    width: calc(var(--spacing) * 16);
+  }
+  .w-20 {
+    width: calc(var(--spacing) * 20);
+  }
+  .w-64 {
+    width: calc(var(--spacing) * 64);
+  }
+  .w-80 {
+    width: calc(var(--spacing) * 80);
+  }
+  .w-full {
+    width: 100%;
+  }
+  .max-w-2xl {
+    max-width: var(--container-2xl);
+  }
+  .max-w-3xl {
+    max-width: var(--container-3xl);
+  }
+  .max-w-4xl {
+    max-width: var(--container-4xl);
+  }
+  .max-w-5xl {
+    max-width: var(--container-5xl);
+  }
+  .max-w-7xl {
+    max-width: var(--container-7xl);
+  }
+  .max-w-md {
+    max-width: var(--container-md);
+  }
+  .min-w-\[120px\] {
+    min-width: 120px;
+  }
+  .min-w-\[180px\] {
+    min-width: 180px;
+  }
+  .min-w-full {
+    min-width: 100%;
+  }
+  .flex-1 {
+    flex: 1;
+  }
+  .flex-shrink {
+    flex-shrink: 1;
+  }
+  .flex-shrink-0 {
+    flex-shrink: 0;
+  }
+  .shrink {
+    flex-shrink: 1;
+  }
+  .flex-grow {
+    flex-grow: 1;
+  }
+  .grow {
+    flex-grow: 1;
+  }
+  .transform {
+    transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
+  }
+  .list-inside {
+    list-style-position: inside;
+  }
+  .list-decimal {
+    list-style-type: decimal;
+  }
+  .list-disc {
+    list-style-type: disc;
+  }
+  .list-none {
+    list-style-type: none;
+  }
+  .grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  .flex-col {
+    flex-direction: column;
+  }
+  .flex-wrap {
+    flex-wrap: wrap;
+  }
+  .items-center {
+    align-items: center;
+  }
+  .items-start {
+    align-items: flex-start;
+  }
+  .justify-between {
+    justify-content: space-between;
+  }
+  .justify-center {
+    justify-content: center;
+  }
+  .justify-end {
+    justify-content: flex-end;
+  }
+  .gap-1 {
+    gap: calc(var(--spacing) * 1);
+  }
+  .gap-2 {
+    gap: calc(var(--spacing) * 2);
+  }
+  .gap-3 {
+    gap: calc(var(--spacing) * 3);
+  }
+  .gap-4 {
+    gap: calc(var(--spacing) * 4);
+  }
+  .gap-6 {
+    gap: calc(var(--spacing) * 6);
+  }
+  .gap-8 {
+    gap: calc(var(--spacing) * 8);
+  }
+  .space-y-1 {
+    :where(& > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(calc(var(--spacing) * 1) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing) * 1) * calc(1 - var(--tw-space-y-reverse)));
+    }
+  }
+  .space-y-2 {
+    :where(& > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(calc(var(--spacing) * 2) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-y-reverse)));
+    }
+  }
+  .space-y-8 {
+    :where(& > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(calc(var(--spacing) * 8) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing) * 8) * calc(1 - var(--tw-space-y-reverse)));
+    }
+  }
+  .space-y-10 {
+    :where(& > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(calc(var(--spacing) * 10) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing) * 10) * calc(1 - var(--tw-space-y-reverse)));
+    }
+  }
+  .space-x-3 {
+    :where(& > :not(:last-child)) {
+      --tw-space-x-reverse: 0;
+      margin-inline-start: calc(calc(var(--spacing) * 3) * var(--tw-space-x-reverse));
+      margin-inline-end: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-x-reverse)));
+    }
+  }
+  .space-x-4 {
+    :where(& > :not(:last-child)) {
+      --tw-space-x-reverse: 0;
+      margin-inline-start: calc(calc(var(--spacing) * 4) * var(--tw-space-x-reverse));
+      margin-inline-end: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-x-reverse)));
+    }
+  }
+  .space-x-6 {
+    :where(& > :not(:last-child)) {
+      --tw-space-x-reverse: 0;
+      margin-inline-start: calc(calc(var(--spacing) * 6) * var(--tw-space-x-reverse));
+      margin-inline-end: calc(calc(var(--spacing) * 6) * calc(1 - var(--tw-space-x-reverse)));
+    }
+  }
+  .overflow-auto {
+    overflow: auto;
+  }
+  .overflow-hidden {
+    overflow: hidden;
+  }
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+  .rounded {
+    border-radius: 0.25rem;
+  }
+  .rounded-full {
+    border-radius: calc(infinity * 1px);
+  }
+  .rounded-lg {
+    border-radius: var(--radius-lg);
+  }
+  .rounded-md {
+    border-radius: var(--radius-md);
+  }
+  .rounded-r-lg {
+    border-top-right-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
+  }
+  .rounded-b-md {
+    border-bottom-right-radius: var(--radius-md);
+    border-bottom-left-radius: var(--radius-md);
+  }
+  .border {
+    border-style: var(--tw-border-style);
+    border-width: 1px;
+  }
+  .border-t {
+    border-top-style: var(--tw-border-style);
+    border-top-width: 1px;
+  }
+  .border-t-4 {
+    border-top-style: var(--tw-border-style);
+    border-top-width: 4px;
+  }
+  .border-r-4 {
+    border-right-style: var(--tw-border-style);
+    border-right-width: 4px;
+  }
+  .border-b-2 {
+    border-bottom-style: var(--tw-border-style);
+    border-bottom-width: 2px;
+  }
+  .border-l-2 {
+    border-left-style: var(--tw-border-style);
+    border-left-width: 2px;
+  }
+  .border-l-4 {
+    border-left-style: var(--tw-border-style);
+    border-left-width: 4px;
+  }
+  .border-amber-300 {
+    border-color: var(--color-amber-300);
+  }
+  .border-blue-200 {
+    border-color: var(--color-blue-200);
+  }
+  .border-blue-400 {
+    border-color: var(--color-blue-400);
+  }
+  .border-blue-500 {
+    border-color: var(--color-blue-500);
+  }
+  .border-blue-700 {
+    border-color: var(--color-blue-700);
+  }
+  .border-cyan-400 {
+    border-color: var(--color-cyan-400);
+  }
+  .border-emerald-400 {
+    border-color: var(--color-emerald-400);
+  }
+  .border-gray-200 {
+    border-color: var(--color-gray-200);
+  }
+  .border-gray-300 {
+    border-color: var(--color-gray-300);
+  }
+  .border-gray-400 {
+    border-color: var(--color-gray-400);
+  }
+  .border-green-200 {
+    border-color: var(--color-green-200);
+  }
+  .border-green-400 {
+    border-color: var(--color-green-400);
+  }
+  .border-indigo-400 {
+    border-color: var(--color-indigo-400);
+  }
+  .border-purple-400 {
+    border-color: var(--color-purple-400);
+  }
+  .border-red-400 {
+    border-color: var(--color-red-400);
+  }
+  .border-transparent {
+    border-color: transparent;
+  }
+  .border-yellow-400 {
+    border-color: var(--color-yellow-400);
+  }
+  .border-t-gray-900 {
+    border-top-color: var(--color-gray-900);
+  }
+  .bg-amber-50\/60 {
+    background-color: color-mix(in srgb, oklch(98.7% 0.022 95.277) 60%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-amber-50) 60%, transparent);
+    }
+  }
+  .bg-black {
+    background-color: var(--color-black);
+  }
+  .bg-blue-50 {
+    background-color: var(--color-blue-50);
+  }
+  .bg-blue-100 {
+    background-color: var(--color-blue-100);
+  }
+  .bg-blue-200 {
+    background-color: var(--color-blue-200);
+  }
+  .bg-blue-600 {
+    background-color: var(--color-blue-600);
+  }
+  .bg-blue-700 {
+    background-color: var(--color-blue-700);
+  }
+  .bg-cyan-50 {
+    background-color: var(--color-cyan-50);
+  }
+  .bg-emerald-50 {
+    background-color: var(--color-emerald-50);
+  }
+  .bg-gray-50 {
+    background-color: var(--color-gray-50);
+  }
+  .bg-gray-100 {
+    background-color: var(--color-gray-100);
+  }
+  .bg-gray-200 {
+    background-color: var(--color-gray-200);
+  }
+  .bg-gray-600 {
+    background-color: var(--color-gray-600);
+  }
+  .bg-gray-900 {
+    background-color: var(--color-gray-900);
+  }
+  .bg-green-50 {
+    background-color: var(--color-green-50);
+  }
+  .bg-green-100 {
+    background-color: var(--color-green-100);
+  }
+  .bg-green-600 {
+    background-color: var(--color-green-600);
+  }
+  .bg-indigo-50 {
+    background-color: var(--color-indigo-50);
+  }
+  .bg-purple-50 {
+    background-color: var(--color-purple-50);
+  }
+  .bg-purple-100 {
+    background-color: var(--color-purple-100);
+  }
+  .bg-red-50 {
+    background-color: var(--color-red-50);
+  }
+  .bg-red-500 {
+    background-color: var(--color-red-500);
+  }
+  .bg-white {
+    background-color: var(--color-white);
+  }
+  .bg-yellow-50 {
+    background-color: var(--color-yellow-50);
+  }
+  .bg-yellow-500 {
+    background-color: var(--color-yellow-500);
+  }
+  .bg-gradient-to-br {
+    --tw-gradient-position: to bottom right in oklab;
+    background-image: linear-gradient(var(--tw-gradient-stops));
+  }
+  .from-blue-50 {
+    --tw-gradient-from: var(--color-blue-50);
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+  }
+  .to-purple-50 {
+    --tw-gradient-to: var(--color-purple-50);
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+  }
+  .object-cover {
+    object-fit: cover;
+  }
+  .p-0 {
+    padding: calc(var(--spacing) * 0);
+  }
+  .p-1 {
+    padding: calc(var(--spacing) * 1);
+  }
+  .p-2 {
+    padding: calc(var(--spacing) * 2);
+  }
+  .p-3 {
+    padding: calc(var(--spacing) * 3);
+  }
+  .p-4 {
+    padding: calc(var(--spacing) * 4);
+  }
+  .p-6 {
+    padding: calc(var(--spacing) * 6);
+  }
+  .p-8 {
+    padding: calc(var(--spacing) * 8);
+  }
+  .px-1 {
+    padding-inline: calc(var(--spacing) * 1);
+  }
+  .px-2 {
+    padding-inline: calc(var(--spacing) * 2);
+  }
+  .px-3 {
+    padding-inline: calc(var(--spacing) * 3);
+  }
+  .px-4 {
+    padding-inline: calc(var(--spacing) * 4);
+  }
+  .px-5 {
+    padding-inline: calc(var(--spacing) * 5);
+  }
+  .px-6 {
+    padding-inline: calc(var(--spacing) * 6);
+  }
+  .px-8 {
+    padding-inline: calc(var(--spacing) * 8);
+  }
+  .py-0\.5 {
+    padding-block: calc(var(--spacing) * 0.5);
+  }
+  .py-1 {
+    padding-block: calc(var(--spacing) * 1);
+  }
+  .py-2 {
+    padding-block: calc(var(--spacing) * 2);
+  }
+  .py-3 {
+    padding-block: calc(var(--spacing) * 3);
+  }
+  .py-4 {
+    padding-block: calc(var(--spacing) * 4);
+  }
+  .py-12 {
+    padding-block: calc(var(--spacing) * 12);
+  }
+  .pt-1 {
+    padding-top: calc(var(--spacing) * 1);
+  }
+  .pt-2 {
+    padding-top: calc(var(--spacing) * 2);
+  }
+  .pt-6 {
+    padding-top: calc(var(--spacing) * 6);
+  }
+  .pr-4 {
+    padding-right: calc(var(--spacing) * 4);
+  }
+  .pb-3 {
+    padding-bottom: calc(var(--spacing) * 3);
+  }
+  .pl-3 {
+    padding-left: calc(var(--spacing) * 3);
+  }
+  .pl-4 {
+    padding-left: calc(var(--spacing) * 4);
+  }
+  .pl-5 {
+    padding-left: calc(var(--spacing) * 5);
+  }
+  .pl-6 {
+    padding-left: calc(var(--spacing) * 6);
+  }
+  .text-center {
+    text-align: center;
+  }
+  .text-left {
+    text-align: left;
+  }
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+  .text-2xl {
+    font-size: var(--text-2xl);
+    line-height: var(--tw-leading, var(--text-2xl--line-height));
+  }
+  .text-3xl {
+    font-size: var(--text-3xl);
+    line-height: var(--tw-leading, var(--text-3xl--line-height));
+  }
+  .text-4xl {
+    font-size: var(--text-4xl);
+    line-height: var(--tw-leading, var(--text-4xl--line-height));
+  }
+  .text-5xl {
+    font-size: var(--text-5xl);
+    line-height: var(--tw-leading, var(--text-5xl--line-height));
+  }
+  .text-base {
+    font-size: var(--text-base);
+    line-height: var(--tw-leading, var(--text-base--line-height));
+  }
+  .text-lg {
+    font-size: var(--text-lg);
+    line-height: var(--tw-leading, var(--text-lg--line-height));
+  }
+  .text-sm {
+    font-size: var(--text-sm);
+    line-height: var(--tw-leading, var(--text-sm--line-height));
+  }
+  .text-xl {
+    font-size: var(--text-xl);
+    line-height: var(--tw-leading, var(--text-xl--line-height));
+  }
+  .text-xs {
+    font-size: var(--text-xs);
+    line-height: var(--tw-leading, var(--text-xs--line-height));
+  }
+  .leading-relaxed {
+    --tw-leading: var(--leading-relaxed);
+    line-height: var(--leading-relaxed);
+  }
+  .font-bold {
+    --tw-font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-bold);
+  }
+  .font-extrabold {
+    --tw-font-weight: var(--font-weight-extrabold);
+    font-weight: var(--font-weight-extrabold);
+  }
+  .font-medium {
+    --tw-font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-medium);
+  }
+  .font-semibold {
+    --tw-font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-semibold);
+  }
+  .tracking-tight {
+    --tw-tracking: var(--tracking-tight);
+    letter-spacing: var(--tracking-tight);
+  }
+  .text-amber-900 {
+    color: var(--color-amber-900);
+  }
+  .text-black {
+    color: var(--color-black);
+  }
+  .text-blue-400 {
+    color: var(--color-blue-400);
+  }
+  .text-blue-500 {
+    color: var(--color-blue-500);
+  }
+  .text-blue-600 {
+    color: var(--color-blue-600);
+  }
+  .text-blue-700 {
+    color: var(--color-blue-700);
+  }
+  .text-blue-800 {
+    color: var(--color-blue-800);
+  }
+  .text-blue-900 {
+    color: var(--color-blue-900);
+  }
+  .text-cyan-400 {
+    color: var(--color-cyan-400);
+  }
+  .text-cyan-700 {
+    color: var(--color-cyan-700);
+  }
+  .text-emerald-400 {
+    color: var(--color-emerald-400);
+  }
+  .text-emerald-700 {
+    color: var(--color-emerald-700);
+  }
+  .text-gray-400 {
+    color: var(--color-gray-400);
+  }
+  .text-gray-500 {
+    color: var(--color-gray-500);
+  }
+  .text-gray-600 {
+    color: var(--color-gray-600);
+  }
+  .text-gray-700 {
+    color: var(--color-gray-700);
+  }
+  .text-gray-800 {
+    color: var(--color-gray-800);
+  }
+  .text-gray-900 {
+    color: var(--color-gray-900);
+  }
+  .text-green-400 {
+    color: var(--color-green-400);
+  }
+  .text-green-500 {
+    color: var(--color-green-500);
+  }
+  .text-green-600 {
+    color: var(--color-green-600);
+  }
+  .text-green-700 {
+    color: var(--color-green-700);
+  }
+  .text-green-800 {
+    color: var(--color-green-800);
+  }
+  .text-green-900 {
+    color: var(--color-green-900);
+  }
+  .text-indigo-400 {
+    color: var(--color-indigo-400);
+  }
+  .text-indigo-700 {
+    color: var(--color-indigo-700);
+  }
+  .text-purple-400 {
+    color: var(--color-purple-400);
+  }
+  .text-purple-600 {
+    color: var(--color-purple-600);
+  }
+  .text-purple-700 {
+    color: var(--color-purple-700);
+  }
+  .text-purple-800 {
+    color: var(--color-purple-800);
+  }
+  .text-red-400 {
+    color: var(--color-red-400);
+  }
+  .text-red-500 {
+    color: var(--color-red-500);
+  }
+  .text-red-600 {
+    color: var(--color-red-600);
+  }
+  .text-red-700 {
+    color: var(--color-red-700);
+  }
+  .text-slate-600 {
+    color: var(--color-slate-600);
+  }
+  .text-white {
+    color: var(--color-white);
+  }
+  .text-yellow-400 {
+    color: var(--color-yellow-400);
+  }
+  .text-yellow-600 {
+    color: var(--color-yellow-600);
+  }
+  .text-yellow-700 {
+    color: var(--color-yellow-700);
+  }
+  .capitalize {
+    text-transform: capitalize;
+  }
+  .italic {
+    font-style: italic;
+  }
+  .not-italic {
+    font-style: normal;
+  }
+  .underline {
+    text-decoration-line: underline;
+  }
+  .opacity-0 {
+    opacity: 0%;
+  }
+  .shadow {
+    --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .shadow-lg {
+    --tw-shadow: 0 10px 15px -3px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 4px 6px -4px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .shadow-md {
+    --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .shadow-sm {
+    --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .outline {
+    outline-style: var(--tw-outline-style);
+    outline-width: 1px;
+  }
+  .blur {
+    --tw-blur: blur(8px);
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
+  .filter {
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
+  .backdrop-filter {
+    -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+    backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+  }
+  .transition {
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, visibility, content-visibility, overlay, pointer-events;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+  .transition-all {
+    transition-property: all;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+  .transition-colors {
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+  .transition-opacity {
+    transition-property: opacity;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+  .transition-shadow {
+    transition-property: box-shadow;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+  .duration-150 {
+    --tw-duration: 150ms;
+    transition-duration: 150ms;
+  }
+  .duration-200 {
+    --tw-duration: 200ms;
+    transition-duration: 200ms;
+  }
+  .duration-300 {
+    --tw-duration: 300ms;
+    transition-duration: 300ms;
+  }
+  .ease-out {
+    --tw-ease: var(--ease-out);
+    transition-timing-function: var(--ease-out);
+  }
+  .group-hover\:opacity-100 {
+    &:is(:where(.group):hover *) {
+      @media (hover: hover) {
+        opacity: 100%;
+      }
+    }
+  }
+  .hover\:border-gray-300 {
+    &:hover {
+      @media (hover: hover) {
+        border-color: var(--color-gray-300);
+      }
+    }
+  }
+  .hover\:bg-blue-50 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-blue-50);
+      }
+    }
+  }
+  .hover\:bg-blue-100 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-blue-100);
+      }
+    }
+  }
+  .hover\:bg-blue-200 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-blue-200);
+      }
+    }
+  }
+  .hover\:bg-blue-700 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-blue-700);
+      }
+    }
+  }
+  .hover\:bg-gray-50 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-gray-50);
+      }
+    }
+  }
+  .hover\:bg-gray-100 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-gray-100);
+      }
+    }
+  }
+  .hover\:bg-gray-200 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-gray-200);
+      }
+    }
+  }
+  .hover\:bg-gray-300 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-gray-300);
+      }
+    }
+  }
+  .hover\:bg-gray-700 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-gray-700);
+      }
+    }
+  }
+  .hover\:text-blue-600 {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-blue-600);
+      }
+    }
+  }
+  .hover\:text-blue-700 {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-blue-700);
+      }
+    }
+  }
+  .hover\:text-blue-800 {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-blue-800);
+      }
+    }
+  }
+  .hover\:text-gray-500 {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-gray-500);
+      }
+    }
+  }
+  .hover\:text-gray-600 {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-gray-600);
+      }
+    }
+  }
+  .hover\:text-gray-700 {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-gray-700);
+      }
+    }
+  }
+  .hover\:text-gray-800 {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-gray-800);
+      }
+    }
+  }
+  .hover\:text-gray-900 {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-gray-900);
+      }
+    }
+  }
+  .hover\:text-green-700 {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-green-700);
+      }
+    }
+  }
+  .hover\:text-green-800 {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-green-800);
+      }
+    }
+  }
+  .hover\:text-purple-700 {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-purple-700);
+      }
+    }
+  }
+  .hover\:text-purple-800 {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-purple-800);
+      }
+    }
+  }
+  .hover\:underline {
+    &:hover {
+      @media (hover: hover) {
+        text-decoration-line: underline;
+      }
+    }
+  }
+  .hover\:shadow-lg {
+    &:hover {
+      @media (hover: hover) {
+        --tw-shadow: 0 10px 15px -3px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 4px 6px -4px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+        box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+      }
+    }
+  }
+  .focus\:border-blue-500 {
+    &:focus {
+      border-color: var(--color-blue-500);
+    }
+  }
+  .focus\:ring-2 {
+    &:focus {
+      --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+  }
+  .focus\:ring-blue-400 {
+    &:focus {
+      --tw-ring-color: var(--color-blue-400);
+    }
+  }
+  .focus\:ring-blue-500 {
+    &:focus {
+      --tw-ring-color: var(--color-blue-500);
+    }
+  }
+  .focus\:ring-offset-2 {
+    &:focus {
+      --tw-ring-offset-width: 2px;
+      --tw-ring-offset-shadow: var(--tw-ring-inset,) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+    }
+  }
+  .focus\:outline-none {
+    &:focus {
+      --tw-outline-style: none;
+      outline-style: none;
+    }
+  }
+  .focus\:ring-inset {
+    &:focus {
+      --tw-ring-inset: inset;
+    }
+  }
+  .sm\:ml-6 {
+    @media (width >= 40rem) {
+      margin-left: calc(var(--spacing) * 6);
+    }
+  }
+  .sm\:flex {
+    @media (width >= 40rem) {
+      display: flex;
+    }
+  }
+  .sm\:hidden {
+    @media (width >= 40rem) {
+      display: none;
+    }
+  }
+  .sm\:w-1\/2 {
+    @media (width >= 40rem) {
+      width: calc(1/2 * 100%);
+    }
+  }
+  .sm\:w-1\/4 {
+    @media (width >= 40rem) {
+      width: calc(1/4 * 100%);
+    }
+  }
+  .sm\:grid-cols-2 {
+    @media (width >= 40rem) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .sm\:flex-row {
+    @media (width >= 40rem) {
+      flex-direction: row;
+    }
+  }
+  .sm\:items-center {
+    @media (width >= 40rem) {
+      align-items: center;
+    }
+  }
+  .sm\:justify-between {
+    @media (width >= 40rem) {
+      justify-content: space-between;
+    }
+  }
+  .sm\:gap-4 {
+    @media (width >= 40rem) {
+      gap: calc(var(--spacing) * 4);
+    }
+  }
+  .sm\:space-x-8 {
+    @media (width >= 40rem) {
+      :where(& > :not(:last-child)) {
+        --tw-space-x-reverse: 0;
+        margin-inline-start: calc(calc(var(--spacing) * 8) * var(--tw-space-x-reverse));
+        margin-inline-end: calc(calc(var(--spacing) * 8) * calc(1 - var(--tw-space-x-reverse)));
+      }
+    }
+  }
+  .sm\:px-6 {
+    @media (width >= 40rem) {
+      padding-inline: calc(var(--spacing) * 6);
+    }
+  }
+  .sm\:text-5xl {
+    @media (width >= 40rem) {
+      font-size: var(--text-5xl);
+      line-height: var(--tw-leading, var(--text-5xl--line-height));
+    }
+  }
+  .md\:w-1\/3 {
+    @media (width >= 48rem) {
+      width: calc(1/3 * 100%);
+    }
+  }
+  .md\:w-2\/3 {
+    @media (width >= 48rem) {
+      width: calc(2/3 * 100%);
+    }
+  }
+  .md\:grid-cols-2 {
+    @media (width >= 48rem) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .md\:flex-row {
+    @media (width >= 48rem) {
+      flex-direction: row;
+    }
+  }
+  .lg\:px-8 {
+    @media (width >= 64rem) {
+      padding-inline: calc(var(--spacing) * 8);
+    }
+  }
+  .dark\:bg-gray-800 {
+    @media (prefers-color-scheme: dark) {
+      background-color: var(--color-gray-800);
+    }
+  }
+  .dark\:text-gray-300 {
+    @media (prefers-color-scheme: dark) {
+      color: var(--color-gray-300);
+    }
+  }
+}
+body.debug-mode {
+  border-top: 5px solid red !important;
+}
+body.debug-mode::before {
+  content: "ð DEBUG MODE ACTIVE - Toggle with button or Ctrl+D";
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: #000;
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 12px;
+  z-index: 10000;
+  border-radius: 4px;
+  max-width: 300px;
+}
+body.debug-mode article {
+  border: 3px solid green !important;
+}
+body.debug-mode .prose {
+  border: 2px solid blue !important;
+}
+body.debug-mode .prose ul {
+  border: 1px solid purple !important;
+}
+#debug-key {
+  position: fixed;
+  top: 60px;
+  right: 10px;
+  background: #000;
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 10px;
+  z-index: 9999;
+  border-radius: 4px;
+  max-width: 250px;
+  line-height: 1.4;
+  display: none;
+}
+body.debug-mode #debug-key {
+  display: block;
+}
+body.debug-mode .series-isomon::before {
+  content: "ð ISOMON SERIES";
+  position: fixed;
+  top: 120px;
+  right: 10px;
+  background: #22c55e;
+  color: white;
+  padding: 4px 8px;
+  font-size: 11px;
+  z-index: 9998;
+  border-radius: 4px;
+  font-weight: bold;
+}
+body.debug-mode .series-devlog::before {
+  content: "âï¸ devlog SERIES";
+  position: fixed;
+  top: 120px;
+  right: 10px;
+  background: #3b82f6;
+  color: white;
+  padding: 4px 8px;
+  font-size: 11px;
+  z-index: 9998;
+  border-radius: 4px;
+  font-weight: bold;
+}
+body.debug-mode article::after {
+  content: "Classes: " attr(class);
+  position: fixed;
+  top: 150px;
+  right: 10px;
+  background: #333;
+  color: #fff;
+  padding: 5px 10px;
+  font-size: 10px;
+  z-index: 9996;
+  border-radius: 4px;
+  max-width: 300px;
+  word-wrap: break-word;
+}
+.prose h2 {
+  position: relative;
+  padding-bottom: 0.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1.25rem;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+.prose h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: #4338CA;
+}
+.prose h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+.prose h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+.prose h4 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+.lead {
+  font-size: 1.125rem;
+  line-height: 1.75;
+  color: #4B5563;
+  margin-bottom: 2rem;
+  text-align: justify;
+  text-align-last: left;
+  hyphens: auto;
+  word-spacing: normal;
+}
+.prose p {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  text-align: justify;
+  text-align-last: left;
+  hyphens: auto;
+  word-spacing: normal;
+}
+.prose h1 + p, .prose h2 + p, .prose h3 + p, .prose h4 + p, .prose h5 + p, .prose h6 + p {
+  margin-top: 1rem;
+}
+.prose ul {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  padding-left: 1.625rem;
+}
+.prose li {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.prose li > p {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.prose ol {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  padding-left: 1.75rem;
+  list-style: none;
+  counter-reset: custom-counter;
+}
+.prose ol > li {
+  position: relative;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding-left: 2.2rem;
+  min-height: 2rem;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  border-left: 2px solid #6366f1;
+  background: linear-gradient(90deg, rgba(99,102,241,0.07) 0%, rgba(139,92,246,0.04) 100%);
+  border-radius: 0.375rem;
+  transition: background 0.2s, border-color 0.2s;
+}
+.prose ol > li::before {
+  content: counter(custom-counter, decimal);
+  counter-increment: custom-counter;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #6366f1;
+  background: #fff;
+  border: 2px solid #6366f1;
+  border-radius: 9999px;
+  font-size: 1rem;
+  box-shadow: 0 1px 4px 0 rgba(99,102,241,0.08);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  z-index: 1;
+}
+.prose ol > li:hover, .prose ol > li:focus-within {
+  background: linear-gradient(90deg, rgba(99,102,241,0.13) 0%, rgba(139,92,246,0.09) 100%);
+  border-left-color: #4338ca;
+}
+.prose ol > li:hover::before, .prose ol > li:focus-within::before {
+  color: #fff;
+  background: #6366f1;
+  border-color: #4338ca;
+}
+.prose p + ul {
+  margin-top: 1.5rem;
+}
+.prose ul + p {
+  margin-top: 1.5rem;
+}
+.code-block {
+  margin: 1.5rem 0;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.875rem;
+  position: relative;
+}
+.code-filename {
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  background-color: #f3f4f6;
+  color: #334155;
+  border-bottom: 1px solid #e5e7eb;
+  border-radius: 0.375rem 0.375rem 0 0;
+  font-family: 'Fira Code', monospace;
+  font-weight: 500;
+}
+.dark .code-filename {
+  background-color: #334155;
+  color: #f3f4f6;
+  border-bottom: 1px solid #475569;
+}
+.code-content {
+  outline: none;
+}
+.code-block pre {
+  margin: 0;
+  padding: 1rem;
+  overflow-x: auto;
+  border-radius: 0.375rem;
+  background: #f8fafc;
+}
+.dark .code-block pre {
+  background: #0d1117 !important;
+}
+.code-block code {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.code-block .copy-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: #f3f4f6;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.375rem;
+  padding: 0.25rem 0.5rem;
+  opacity: 0.85;
+  transition: background 0.2s, color 0.2s, opacity 0.2s;
+  z-index: 10;
+}
+.code-block .copy-button:hover, .code-block .copy-button:focus {
+  background: #e0e7ef;
+  color: #1e293b;
+  opacity: 1;
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+.dark .code-block .copy-button {
+  background: #1e293b;
+  color: #f3f4f6;
+  border: 1px solid #334155;
+}
+.dark .code-block .copy-button:hover, .dark .code-block .copy-button:focus {
+  background: #334155;
+  color: #fbbf24;
+  outline: 2px solid #fbbf24;
+}
+.code-block .copy-button svg {
+  display: inline;
+  vertical-align: middle;
+  color: inherit;
+  fill: currentColor;
+}
+.code-with-line-numbers {
+  display: flex;
+}
+.line-numbers-container {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0.5rem;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  color: #888;
+  text-align: right;
+  user-select: none;
+}
+.line-number {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  padding-right: 0.5rem;
+}
+[data-series="isomon"] ul > li {
+  list-style: none !important;
+  position: relative !important;
+  padding-left: 2rem !important;
+}
+[data-series="isomon"] ul > li::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 0.8em;
+  width: 12px;
+  height: 12px;
+  transform: translateY(-50%);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3C!-- Conglobated (rolled up) isopod - circular when defensive --%3E%3C!-- Outer shell segments --%3E%3Ccircle cx='7' cy='7' r='6.5' fill='%23451a03' stroke='%23292524' stroke-width='0.3'/%3E%3Ccircle cx='7' cy='7' r='5.5' fill='%2378350f'/%3E%3Ccircle cx='7' cy='7' r='4.5' fill='%2392400e'/%3E%3Ccircle cx='7' cy='7' r='3.5' fill='%23a16207'/%3E%3C!-- Segment lines (concentric arcs) --%3E%3Cpath d='M 2 7 A 5 5 0 0 1 12 7' stroke='%23451a03' stroke-width='0.4' fill='none'/%3E%3Cpath d='M 3 4.5 A 4 4 0 0 1 11 9.5' stroke='%23451a03' stroke-width='0.3' fill='none'/%3E%3Cpath d='M 4 3.5 A 3 3 0 0 1 10 10.5' stroke='%23451a03' stroke-width='0.3' fill='none'/%3E%3C!-- Central body spot --%3E%3Ccircle cx='7' cy='7' r='1.5' fill='%23451a03' opacity='0.6'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+article.series-devlog.prose ul > li {
+  list-style: none !important;
+  position: relative !important;
+  padding-left: 2rem !important;
+}
+article.series-devlog.prose ul > li::before {
+  content: 'âï¸';
+  position: absolute;
+  left: 10px;
+  top: 0.8em;
+  transform: translateY(-50%);
+  font-size: 14px;
+  line-height: 1;
+}
+[data-series="isomon"] ul > li ul > li::before {
+  display: none !important;
+}
+[data-series="isomon"] ul > li ul > li {
+  list-style: disc !important;
+  padding-left: 1rem !important;
+}
+[data-series="isomon"] h1, [data-series="isomon"] .article-title, [data-series="isomon"] .isomon-title {
+  color: #16a34a !important;
+}
+.card.isomon h3, .card.isomon .article-title, .card[data-series="isomon"] h3, .card[data-series="isomon"] .article-title {
+  color: #16a34a !important;
+}
+.isomon-series-title {
+  color: #16a34a !important;
+}
+.series-nav .isomon-series, .series-badge.isomon {
+  background-color: #dcfce7 !important;
+  color: #16a34a !important;
+}
+.isomon-title {
+  color: #16a34a !important;
+}
+@property --tw-rotate-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-rotate-y {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-rotate-z {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-skew-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-skew-y {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-space-y-reverse {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-space-x-reverse {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-border-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-gradient-position {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-gradient-from {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #0000;
+}
+@property --tw-gradient-via {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #0000;
+}
+@property --tw-gradient-to {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #0000;
+}
+@property --tw-gradient-stops {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-gradient-via-stops {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-gradient-from-position {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --tw-gradient-via-position {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 50%;
+}
+@property --tw-gradient-to-position {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-leading {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-font-weight {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-tracking {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-inset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-ring-inset {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-offset-width {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --tw-ring-offset-color {
+  syntax: "*";
+  inherits: false;
+  initial-value: #fff;
+}
+@property --tw-ring-offset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-outline-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-sepia {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-drop-shadow-size {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-sepia {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-duration {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ease {
+  syntax: "*";
+  inherits: false;
+}
+@layer properties {
+  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+    *, ::before, ::after, ::backdrop {
+      --tw-rotate-x: initial;
+      --tw-rotate-y: initial;
+      --tw-rotate-z: initial;
+      --tw-skew-x: initial;
+      --tw-skew-y: initial;
+      --tw-space-y-reverse: 0;
+      --tw-space-x-reverse: 0;
+      --tw-border-style: solid;
+      --tw-gradient-position: initial;
+      --tw-gradient-from: #0000;
+      --tw-gradient-via: #0000;
+      --tw-gradient-to: #0000;
+      --tw-gradient-stops: initial;
+      --tw-gradient-via-stops: initial;
+      --tw-gradient-from-position: 0%;
+      --tw-gradient-via-position: 50%;
+      --tw-gradient-to-position: 100%;
+      --tw-leading: initial;
+      --tw-font-weight: initial;
+      --tw-tracking: initial;
+      --tw-shadow: 0 0 #0000;
+      --tw-shadow-color: initial;
+      --tw-shadow-alpha: 100%;
+      --tw-inset-shadow: 0 0 #0000;
+      --tw-inset-shadow-color: initial;
+      --tw-inset-shadow-alpha: 100%;
+      --tw-ring-color: initial;
+      --tw-ring-shadow: 0 0 #0000;
+      --tw-inset-ring-color: initial;
+      --tw-inset-ring-shadow: 0 0 #0000;
+      --tw-ring-inset: initial;
+      --tw-ring-offset-width: 0px;
+      --tw-ring-offset-color: #fff;
+      --tw-ring-offset-shadow: 0 0 #0000;
+      --tw-outline-style: solid;
+      --tw-blur: initial;
+      --tw-brightness: initial;
+      --tw-contrast: initial;
+      --tw-grayscale: initial;
+      --tw-hue-rotate: initial;
+      --tw-invert: initial;
+      --tw-opacity: initial;
+      --tw-saturate: initial;
+      --tw-sepia: initial;
+      --tw-drop-shadow: initial;
+      --tw-drop-shadow-color: initial;
+      --tw-drop-shadow-alpha: 100%;
+      --tw-drop-shadow-size: initial;
+      --tw-backdrop-blur: initial;
+      --tw-backdrop-brightness: initial;
+      --tw-backdrop-contrast: initial;
+      --tw-backdrop-grayscale: initial;
+      --tw-backdrop-hue-rotate: initial;
+      --tw-backdrop-invert: initial;
+      --tw-backdrop-opacity: initial;
+      --tw-backdrop-saturate: initial;
+      --tw-backdrop-sepia: initial;
+      --tw-duration: initial;
+      --tw-ease: initial;
+    }
+  }
+}
+</style>
+<style data-vite-dev-id="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro?astro&#38;type=style&#38;index=0&#38;lang.css">#newsletter-popup[data-astro-cid-lwtrqefl]{box-shadow:0 10px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04)}#privacy-tooltip[data-astro-cid-lwtrqefl]{z-index:1000}@media (max-width: 320px){#privacy-tooltip[data-astro-cid-lwtrqefl]{width:240px;left:-50px}}@media (max-width: 1024px){#newsletter-popup[data-astro-cid-lwtrqefl],#newsletter-minimized[data-astro-cid-lwtrqefl]{right:1rem;width:calc(100vw - 2rem);max-width:320px}}@media (max-width: 640px){#newsletter-popup[data-astro-cid-lwtrqefl],#newsletter-minimized[data-astro-cid-lwtrqefl]{top:4rem;right:0.5rem;width:calc(100vw - 1rem);max-width:300px}}</style><script type="module" src="/@vite/client"></script>
+<script type="module" src="/@fs/D:/Coding Shenanigans/signals-and-systems/sastro/node_modules/.pnpm/astro@5.7.14_@types+node@22_a532d232f7e47dbbfcc215be9975b2c1/node_modules/astro/dist/runtime/client/dev-toolbar/entrypoint.js?v=0a8a90c2"></script>
+<script>window.__astro_dev_toolbar__ = {"root":"D:\\Coding Shenanigans\\signals-and-systems\\sastro\\","version":"5.7.14","debugInfo":"Astro                    v5.7.14\nNode                     v22.15.0\nSystem                   Windows (x64)\nPackage Manager          pnpm\nOutput                   static\nAdapter                  none\nIntegrations             @astrojs/mdx"}</script>
+<script type="module" src="/src/styles/global.css"></script>
+<script type="module" src="/src/components/SubscribePopup.astro?astro&type=style&index=0&lang.css"></script></head> <body class="min-h-screen bg-gray-50 text-gray-900 flex flex-col" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/layouts/BaseLayout.astro" data-astro-source-loc="60:69"> <!-- Consent Popup and GTM loader --> <div id="consent-root" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/layouts/BaseLayout.astro" data-astro-source-loc="62:6"></div> <script type="module">
+      // Minimal consent logic and GTM loader
+      const consentKey = 'ss-analytics-consent';
+      function loadGTM() {
+        if (document.getElementById('gtm-script')) return;
+        const s = document.createElement('script');
+        s.id = 'gtm-script';
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-T7M99JBN';
+        document.head.appendChild(s);
+        // noscript fallback
+        const iframe = document.createElement('iframe');
+        iframe.src = 'https://www.googletagmanager.com/ns.html?id=GTM-T7M99JBN';
+        iframe.height = 0;
+        iframe.width = 0;
+        iframe.style.display = 'none';
+        iframe.style.visibility = 'hidden';
+        iframe.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(iframe);
+      }
+      function showConsent() {
+        const root = document.getElementById('consent-root');
+        if (!root) return;
+        root.innerHTML = `
+          <div class='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60'>
+            <div class='bg-white rounded-lg shadow-lg p-6 max-w-md w-full text-gray-900' role='dialog' aria-modal='true' aria-labelledby='consent-title'>
+              <h2 id='consent-title' class='text-lg font-semibold mb-2'>Analytics Consent</h2>
+              <p class='mb-4'>We use Google Tag Manager (GA4) to collect anonymous usage data because I'm a nerd who loves data and patterns. This helps me improve the site and content. Declining is totally fine and won't affect your experience. No personal data is stored, and you can change your preference at any time using the link in the footer.</p>
+              <div class='flex gap-2 justify-end'>
+                <button id='decline-btn' class='px-4 py-2 rounded bg-gray-200 hover:bg-gray-300'>Decline</button>
+                <button id='accept-btn' class='px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700'>Accept</button>
+              </div>
+            </div>
+          </div>
+        `;
+        document.getElementById('accept-btn').onclick = () => {
+          localStorage.setItem(consentKey, 'granted');
+          root.innerHTML = '';
+          loadGTM();
+        };
+        document.getElementById('decline-btn').onclick = () => {
+          localStorage.setItem(consentKey, 'denied');
+          root.innerHTML = '';
+        };
+      }
+      if (typeof window !== 'undefined') {
+        const consent = localStorage.getItem(consentKey);
+        if (consent === 'granted') {
+          loadGTM();
+        } else if (!consent) {
+          showConsent();
+        }
+      }
+    </script> <header data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/layouts/BaseLayout.astro" data-astro-source-loc="117:13"> <!-- Navigation will be inserted here --> <nav class="bg-white shadow" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="6:30"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="7:55"> <div class="flex justify-between h-16" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="8:44"> <div class="flex" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="9:25"> <div class="flex-shrink-0 flex items-center" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="9:78"> <a href="/" class="text-xl font-bold text-gray-900" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="10:63">
+Signals & Systems
+</a> </div> <div class="hidden sm:ml-6 sm:flex sm:space-x-8" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="14:58"> <a href="/" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="15:172">
+Home
+</a> <a href="/series" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="18:178">
+Series
+</a> <a href="/articles" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="21:180">
+Articles
+</a> <a href="/about" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="24:177">
+About
+</a> </div> </div> <div class="hidden sm:ml-6 sm:flex sm:items-center" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="28:71"> <div class="ml-3 relative" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="29:36"> <a href="https://github.com/Tamok" target="_blank" rel="noopener noreferrer" class="p-1 rounded-full text-gray-600 hover:text-gray-800 focus:outline-none" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="30:166"> <span class="sr-only" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="31:35">GitHub</span> <!-- GitHub Icon --> <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="33:93"> <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="34:16"></path> </svg> </a> </div> </div> <div class="-mr-2 flex items-center sm:hidden" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="39:54"> <!-- Mobile menu button --> <button type="button" class="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500" aria-controls="mobile-menu" aria-expanded="false" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="41:284"> <span class="sr-only" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="42:33">Open main menu</span> <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="43:146"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="44:14"></path> </svg> <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="46:147"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="47:14"></path> </svg> </button> </div> </div> </div> <!-- Mobile menu, show/hide based on menu state. --> <div class="sm:hidden hidden" id="mobile-menu" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="55:50"> <div class="pt-2 pb-3 space-y-1" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="56:38"> <a href="/" class="bg-gray-50 border-blue-500 text-blue-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="57:122">Home</a> <a href="/series" class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="58:179">Series</a> <a href="/articles" class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="59:181">Articles</a> <a href="/about" class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Nav.astro" data-astro-source-loc="60:178">About</a> </div> </div> </nav> <script type="module" src="/src/components/Nav.astro?astro&type=script&index=0&lang.ts"></script> </header> <main class="flex-grow" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/layouts/BaseLayout.astro" data-astro-source-loc="122:29">   <div class="container mx-auto px-4 py-12 sm:px-6 lg:px-8" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="20:61"> <div class="max-w-3xl mx-auto" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="21:36"> <header class="mb-12 text-center" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="22:41"> <h1 class="text-4xl font-bold text-gray-900 mb-4 sm:text-5xl" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="22:111">
+devlog Series
+</h1> <p class="text-xl text-gray-600 leading-relaxed" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="25:58">
+A behind-the-scenes look at building the Signals & Systems platform, including technical decisions, 
+          challenges, and ethical considerations around vibecoding.
+</p> </header> <div class="space-y-8" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="31:30"> <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="33:121"> <div class="p-6" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="34:30"> <div class="flex items-center justify-between mb-3" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="35:67"> <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="35:191">
+devlog #1 </span> <time class="text-sm text-gray-500" datetime="2025-05-21T00:00:00.000Z" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="38:98"> May 21, 2025 </time> </div> <h2 class="text-xl font-semibold text-gray-900 mb-3" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="41:88"> <a href="/devlog/1-platform-setup" class="hover:text-blue-600 transition-colors duration-200" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="42:105"> devlog #1: Setting Up My Publishing Platform </a> </h2> <p class="text-gray-600 mb-4 leading-relaxed" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="46:61"> Exploring how I established Signals &amp; Systems, the technologies involved, and the decisions behind them. </p> <a href="/devlog/1-platform-setup" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="52:16">
+Read article
+<svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="54:97"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="55:20"></path> </svg> </a> </div> </article><article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="33:121"> <div class="p-6" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="34:30"> <div class="flex items-center justify-between mb-3" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="35:67"> <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="35:191">
+devlog #2 </span> <time class="text-sm text-gray-500" datetime="2025-05-22T00:00:00.000Z" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="38:98"> May 22, 2025 </time> </div> <h2 class="text-xl font-semibold text-gray-900 mb-3" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="41:88"> <a href="/devlog/2-interactive-components" class="hover:text-blue-600 transition-colors duration-200" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="42:105"> devlog #2: Interactive Components &amp; User Privacy </a> </h2> <p class="text-gray-600 mb-4 leading-relaxed" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="46:61"> Enhancing Content with Dynamic Elements While Respecting User Preferences </p> <a href="/devlog/2-interactive-components" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="52:16">
+Read article
+<svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="54:97"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="55:20"></path> </svg> </a> </div> </article><article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="33:121"> <div class="p-6" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="34:30"> <div class="flex items-center justify-between mb-3" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="35:67"> <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="35:191">
+devlog #3 </span> <time class="text-sm text-gray-500" datetime="2025-05-23T00:00:00.000Z" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="38:98"> May 23, 2025 </time> </div> <h2 class="text-xl font-semibold text-gray-900 mb-3" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="41:88"> <a href="/devlog/3-dynamic-content" class="hover:text-blue-600 transition-colors duration-200" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="42:105"> devlog #3: The Astro Content Collections Migration Epic </a> </h2> <p class="text-gray-600 mb-4 leading-relaxed" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="46:61"> My journey migrating from static files to a dynamic, type-safe content architecture using Astro Content Collections and MDX. </p> <a href="/devlog/3-dynamic-content" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="52:16">
+Read article
+<svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="54:97"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="55:20"></path> </svg> </a> </div> </article><article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="33:121"> <div class="p-6" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="34:30"> <div class="flex items-center justify-between mb-3" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="35:67"> <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="35:191">
+devlog #4 </span> <time class="text-sm text-gray-500" datetime="2025-05-26T15:31:00.000Z" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="38:98"> May 26, 2025 </time> </div> <h2 class="text-xl font-semibold text-gray-900 mb-3" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="41:88"> <a href="/devlog/4-deployment-and-debugging" class="hover:text-blue-600 transition-colors duration-200" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="42:105"> Devlog #4: Deployment &amp; Development Debugging </a> </h2> <p class="text-gray-600 mb-4 leading-relaxed" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="46:61"> Setting up GitHub Pages deployment with custom domains and implementing development-only debug patterns for better developer experience. </p> <a href="/devlog/4-deployment-and-debugging" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="52:16">
+Read article
+<svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="54:97"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="55:20"></path> </svg> </a> </div> </article><article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="33:121"> <div class="p-6" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="34:30"> <div class="flex items-center justify-between mb-3" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="35:67"> <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="35:191">
+devlog #5 </span> <time class="text-sm text-gray-500" datetime="2025-05-27T16:00:00.000Z" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="38:98"> May 27, 2025 </time> </div> <h2 class="text-xl font-semibold text-gray-900 mb-3" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="41:88"> <a href="/devlog/5-cover-redesign" class="hover:text-blue-600 transition-colors duration-200" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="42:105"> Devlog #5: Cover Redesign &amp; Grid System </a> </h2> <p class="text-gray-600 mb-4 leading-relaxed" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="46:61"> Redesigning the devlog cover images with a unified grid system and tackling an elusive XML parsing error that had me stumped. </p> <a href="/devlog/5-cover-redesign" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="52:16">
+Read article
+<svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="54:97"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="55:20"></path> </svg> </a> </div> </article><article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="33:121"> <div class="p-6" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="34:30"> <div class="flex items-center justify-between mb-3" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="35:67"> <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="35:191">
+devlog #6 </span> <time class="text-sm text-gray-500" datetime="2025-05-29T00:00:00.000Z" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="38:98"> May 29, 2025 </time> </div> <h2 class="text-xl font-semibold text-gray-900 mb-3" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="41:88"> <a href="/devlog/6-interactive-wiring-diagrams" class="hover:text-blue-600 transition-colors duration-200" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="42:105"> Devlog #6: Interactive Wiring Diagrams - Building a Better Technical Documentation Tool </a> </h2> <p class="text-gray-600 mb-4 leading-relaxed" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="46:61"> Deep dive into creating zoomable, interactive SVG wiring schematics that replace traditional text-based guides with visual clarity and enhanced user experience. </p> <a href="/devlog/6-interactive-wiring-diagrams" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="52:16">
+Read article
+<svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="54:97"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="55:20"></path> </svg> </a> </div> </article><article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="33:121"> <div class="p-6" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="34:30"> <div class="flex items-center justify-between mb-3" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="35:67"> <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="35:191">
+devlog #7 </span> <time class="text-sm text-gray-500" datetime="2025-06-01T00:00:00.000Z" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="38:98"> June 1, 2025 </time> </div> <h2 class="text-xl font-semibold text-gray-900 mb-3" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="41:88"> <a href="/devlog/7-citation-system-development" class="hover:text-blue-600 transition-colors duration-200" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="42:105"> Devlog #7: Building a Citation System for the AI Age - Balancing Generative AI with Academic Integrity </a> </h2> <p class="text-gray-600 mb-4 leading-relaxed" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="46:61"> How I built an interactive citation system that maintains academic rigor while optimizing content for AI discovery. From inline tooltips to validation scripts, here&#39;s the complete development journey. </p> <a href="/devlog/7-citation-system-development" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="52:16">
+Read article
+<svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="54:97"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="55:20"></path> </svg> </a> </div> </article><article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="33:121"> <div class="p-6" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="34:30"> <div class="flex items-center justify-between mb-3" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="35:67"> <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="35:191">
+devlog #8 </span> <time class="text-sm text-gray-500" datetime="2025-06-09T00:00:00.000Z" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="38:98"> June 9, 2025 </time> </div> <h2 class="text-xl font-semibold text-gray-900 mb-3" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="41:88"> <a href="/devlog/8-newsletter-system" class="hover:text-blue-600 transition-colors duration-200" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="42:105"> Devlog #8: Newsletter System - Privacy-First Email with Markdown Templates </a> </h2> <p class="text-gray-600 mb-4 leading-relaxed" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="46:61"> Building a complete newsletter subscription system using Buttondown&#39;s free plan, custom redirect pages, Markdown email templates, and privacy-first principles for authentic audience engagement. </p> <a href="/devlog/8-newsletter-system" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="52:16">
+Read article
+<svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="54:97"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/pages/series/devlog.astro" data-astro-source-loc="55:20"></path> </svg> </a> </div> </article> </div> </div> </div>   </main> <footer class="mt-auto" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/layouts/BaseLayout.astro" data-astro-source-loc="124:40"> <!-- Footer content will be inserted here --> <footer class="bg-white border-t border-gray-200" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="4:51"> <div class="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="5:77"> <nav class="flex flex-wrap justify-center -mx-5 -my-2" aria-label="Footer" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="6:80"> <div class="px-5 py-2" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="7:30"> <a href="/" class="text-base text-gray-500 hover:text-gray-900" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="8:73">
+Home
+</a> </div> <div class="px-5 py-2" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="12:30"> <a href="/series" class="text-base text-gray-500 hover:text-gray-900" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="13:79">
+Series
+</a> </div> <div class="px-5 py-2" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="17:30"> <a href="/articles" class="text-base text-gray-500 hover:text-gray-900" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="18:81">
+Articles
+</a> </div> <div class="px-5 py-2" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="22:30"> <a href="/about" class="text-base text-gray-500 hover:text-gray-900" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="23:78">
+About
+</a> </div> <div class="px-5 py-2" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="27:30"> <a href="/resources" class="text-base text-gray-500 hover:text-gray-900" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="28:82">
+Resources
+</a> </div> </nav> <div class="mt-8 flex justify-center space-x-6" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="33:53"> <a href="https://www.linkedin.com/in/jonathan-engeln/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-gray-500" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="34:146"> <span class="sr-only" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="35:31">LinkedIn</span> <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="36:89"> <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="37:12"></path> </svg> </a> <a href="https://github.com/Tamok" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-gray-500" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="40:126"> <span class="sr-only" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="41:31">GitHub</span> <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="42:89"> <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="43:12"></path> </svg> </a> </div> <div class="w-full flex justify-center items-center gap-6 mt-8" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="46:79"> <a href="/privacy" class="text-xs text-gray-500 underline hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="47:146">
+Privacy Policy
+</a> <a href="/cookies" class="text-xs text-gray-500 underline hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="50:146">
+Cookie Policy
+</a> <button id="consent-preferences-btn" class="text-xs text-gray-500 underline hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="53:164">
+Cookie & Analytics Preferences
+</button> </div> <p class="mt-8 text-center text-base text-gray-400" data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/Footer.astro" data-astro-source-loc="57:57">
+&copy; 2025 Signals & Systems. All rights reserved.
+</p> </div> </footer> <script type="module" src="/src/components/Footer.astro?astro&type=script&index=0&lang.ts"></script> </footer> <!-- Newsletter Subscription Popup --> <div id="newsletter-popup" class="fixed top-20 right-4 z-40 w-80 bg-white border border-gray-200 rounded-lg shadow-lg hidden" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="6:127"> <div class="p-4" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="7:20"> <!-- Header with controls --> <div class="flex items-center justify-between mb-3" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="9:57"> <h3 class="text-lg font-semibold text-gray-900" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="10:55">Stay Updated</h3> <div class="flex items-center gap-2" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="11:44"> <button id="minimize-popup" class="text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded p-1" title="Minimize" aria-label="Minimize newsletter popup" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="17:10"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="18:86"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="19:14"></path> </svg> </button> <button id="close-popup" class="text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded p-1" title="Close for 72 hours" aria-label="Close newsletter popup" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="27:10"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="28:86"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="29:14"></path> </svg> </button> </div> </div> <!-- Newsletter form --> <form action="https://buttondown.com/api/emails/embed-subscribe/jell" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/jell', 'popupwindow')" class="embeddable-buttondown-form" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="42:6"> <p class="text-sm text-gray-600 mb-3" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="42:50">
+Get notified when I publish new articles on technology, systems design, and digital experiences.
+</p> <div class="mb-3" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="46:25"> <label for="bd-email" class="block text-sm font-medium text-gray-700 mb-1" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="47:84">
+Email address
+</label> <input type="email" name="email" id="bd-email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="your@email.com" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="50:10"> </div> <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="63:8">
+Subscribe
+</button> <!-- Privacy notice with hover tooltip --> <div class="mt-3 text-xs text-gray-500 flex items-center gap-1 relative" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="67:80"> <span data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="68:15">Privacy-first newsletter.</span> <button type="button" id="privacy-tooltip-trigger" class="text-blue-500 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded" title="Privacy information" aria-label="Privacy information" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="75:10"> <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="76:72"> <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="77:14"></path> </svg> </button> <!-- Tooltip content --> <div id="privacy-tooltip" class="absolute bottom-full left-0 mb-2 w-64 bg-gray-900 text-white text-xs rounded-lg p-3 opacity-0 pointer-events-none transition-opacity duration-200 shadow-lg z-50" role="tooltip" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="86:10"> <div class="space-y-1" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="86:43"> <p class="font-medium" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="87:36">We respect your privacy:</p> <ul class="space-y-1 list-disc list-inside" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="88:57"> <li data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="89:19">No tracking pixels or open tracking</li> <li data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="90:19">No click tracking or reply tracking</li> <li data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="91:19">Only shared with Buttondown (our newsletter service)</li> <li data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="92:19">Easy unsubscribe anytime</li> </ul> </div> <!-- Arrow --> <div class="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="96:12"></div> </div> </div> </form> </div> </div> <!-- Minimized state --> <button id="newsletter-minimized" class="fixed top-20 right-4 z-40 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 hidden transition-colors" title="Newsletter subscription" aria-label="Show newsletter subscription" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="109:2"> <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="110:78"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" data-astro-cid-lwtrqefl data-astro-source-file="D:/Coding Shenanigans/signals-and-systems/sastro/src/components/SubscribePopup.astro" data-astro-source-loc="111:6"></path> </svg> </button> <script type="module" src="/src/components/SubscribePopup.astro?astro&type=script&index=0&lang.ts"></script>  <!-- Additional scripts -->  <!-- Development Debug Toggle (only in dev mode) --> <script type="module" src="/src/layouts/BaseLayout.astro?astro&type=script&index=0&lang.ts"></script>  </body></html>

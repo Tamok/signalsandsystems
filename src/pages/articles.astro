@@ -4,6 +4,7 @@ import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import { getAllArticles, getAllSeries } from "../utils/content";
 import { formatDateUTC } from '../utils/formatDate';
+import { getSeriesBadgeConfig } from '../utils/seriesBadge';
 
 const articles = await getAllArticles();
 const series = await getAllSeries();
@@ -26,22 +27,33 @@ const sortedArticles = [...articles].sort((a, b) => b.publishDate.getTime() - a.
       </header>
       
       <div class="space-y-10">
-        {sortedArticles.map((article) => (
-          <article class="bg-white rounded-lg shadow-md overflow-hidden">
+        {sortedArticles.map((article) => (          <article class="bg-white rounded-lg shadow-md overflow-hidden">
             <div class="p-6">
-              <div class="text-sm font-medium text-blue-600 mb-1">
+              <!-- Badge and Title -->
+              <div class="flex items-start justify-between mb-2">
+                <h2 class={`text-2xl font-bold flex-1${article.series && article.series.toLowerCase() === 'isomon' ? ' isomon-title' : ''}`}>
+                  <a href={`/${article.slug}`} class={article.series && article.series.toLowerCase() === 'isomon' ? 'isomon-title' : 'text-gray-900 hover:text-blue-600'}>
+                    {article.title}
+                  </a>
+                </h2>
                 {article.series && (
-                  <a href={`/series/${article.series.toLowerCase()}`} class="hover:text-blue-800">
-                    {article.series} Series
+                  <a href={`/series/${article.series.toLowerCase()}`} class="ml-3 flex-shrink-0">
+                    {(() => {
+                      const badgeConfig = getSeriesBadgeConfig(article.series.toLowerCase());
+                      return (
+                        <span class={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold border hover:opacity-80 transition-opacity ${badgeConfig.bgColor} ${badgeConfig.textColor} ${badgeConfig.borderColor}`}>
+                          {badgeConfig.name}
+                        </span>
+                      );
+                    })()}
                   </a>
                 )}
                 {!article.series && (
-                  <span>Article</span>
-                )}              </div>              <h2 class={`text-2xl font-bold mb-2${article.series && article.series.toLowerCase() === 'isomon' ? ' isomon-title' : ''}`}>
-                <a href={`/${article.slug}`} class={article.series && article.series.toLowerCase() === 'isomon' ? 'isomon-title' : 'text-gray-900 hover:text-blue-600'}>
-                  {article.title}
-                </a>
-              </h2>
+                  <span class="ml-3 inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold border bg-gray-50 text-gray-700 border-gray-200 flex-shrink-0">
+                    Article
+                  </span>
+                )}
+              </div>
               <p class="text-gray-600 mb-4">{article.description}</p>
               <div class="flex items-center justify-between">
                 <div class="text-sm text-gray-500">

@@ -1,11 +1,19 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import SeriesLayout from '../../layouts/SeriesLayout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import { getSeriesBySlug, getSeriesArticles } from '../../utils/content';
 import { formatDateUTC } from '../../utils/formatDate';
+import { getSeriesBadgeConfig } from '../../utils/seriesBadge';
+
+// Import the citation data
+let consolidatedCitations: any = { citations: [] };
+try {
+  consolidatedCitations = await import('../../data/consolidated-citations.json').then(m => m.default);
+} catch (error) {
+  console.error('Failed to load consolidated citations:', error);
+}
 
 // Generate static paths for all series
 export async function getStaticPaths() {
@@ -24,6 +32,15 @@ const sortedArticles = [...seriesArticles].sort(
   (a, b) => (a.order ?? 0) - (b.order ?? 0)
 );
 
+// Check if series has citations/resources
+const seriesCitations = consolidatedCitations.citations.filter((citation: any) => 
+  citation.usedInSeries.includes(seriesSlug)
+);
+const hasResources = seriesCitations.length > 0;
+
+// Get badge configuration for this series
+const badgeConfig = getSeriesBadgeConfig(seriesSlug);
+
 // If series doesn't exist, show a 404 or redirect
 if (!series) {
   return Astro.redirect('/404');
@@ -33,41 +50,61 @@ if (!series) {
 <BaseLayout 
   title={`${series.title} | Signals & Systems`}
   description={series.description}
->
-  <Nav slot="header" />
-  
+>  <Nav slot="header" />
   <div class="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
-      <header class="mb-12 text-center">
-        <h1 class={`text-4xl font-bold mb-4${series.slug && series.slug.toLowerCase() === 'isomon' ? ' isomon-title' : ''}`}>{series.title}</h1>
+        <header class="mb-12 text-center">
+        <!-- Series Badge -->
+        <div class="mb-4 flex justify-center">
+          <span class={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${badgeConfig.bgColor} ${badgeConfig.textColor} ${badgeConfig.borderColor}`}>
+            {badgeConfig.name}
+          </span>
+        </div>
+        <h1 class={`text-4xl font-bold mb-4${seriesSlug && seriesSlug.toLowerCase() === 'isomon' ? ' isomon-title' : ''}`}>{series.title}</h1>
         <p class="text-xl text-gray-600">
           {series.description}
         </p>
       </header>
       
-      <div class="space-y-10">
-        {sortedArticles.map((article) => (
-          <article class="bg-white rounded-lg shadow-md overflow-hidden">            <div class="p-6">
-              <h2 class={`text-2xl font-bold mb-2${article.series && article.series.toLowerCase() === 'isomon' ? ' isomon-title' : ''}`}>
-                <a href={`/${article.slug}`} class={article.series && article.series.toLowerCase() === 'isomon' ? 'isomon-title' : 'text-gray-900 hover:text-blue-600'}>
-                  {article.title}
-                </a>
-              </h2>
-              <p class="text-gray-700 mb-4">{article.description}</p>
-              <div class="flex items-center justify-between">
-                <span class="text-sm text-gray-500">
-                  {formatDateUTC(article.publishDate)}
-                </span>
-                <a href={`/${article.slug}`} class="text-sm font-medium text-blue-600 hover:text-blue-500">
-                  Read more →
-                </a>
+      <!-- Prominent Resources Button - only show if series has resources -->      <!-- Prominent Resources Button - only show if series has resources -->
+      {hasResources && (
+        <div class="mb-8 flex justify-center">
+          <a href={`/series/${seriesSlug}/resources`} class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span>View All Series Resources</span>
+          </a>
+        </div>
+      )}
+      
+      <!-- Articles section -->
+      <div class="mt-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-8">Articles in this Series</h2>        <div class="space-y-10 mt-8">
+          {sortedArticles.map((article) => (            <article class="bg-white rounded-lg shadow-md overflow-hidden">
+              <div class="p-6">
+                <!-- Article Badge and Title -->
+                <div class="flex items-start justify-between mb-2">
+                  <h2 class={`text-2xl font-bold flex-1${article.series && article.series.toLowerCase() === 'isomon' ? ' isomon-title' : ''}`}>
+                    <a href={`/${article.slug}`} class={article.series && article.series.toLowerCase() === 'isomon' ? 'isomon-title' : 'text-gray-900 hover:text-blue-600'}>
+                      {article.title}
+                    </a>
+                  </h2>
+                  <span class={`ml-3 inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold border flex-shrink-0 ${badgeConfig.bgColor} ${badgeConfig.textColor} ${badgeConfig.borderColor}`}>
+                    {badgeConfig.name}
+                  </span>
+                </div>
+                <p class="text-gray-700 mb-4">{article.description}</p>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-500">
+                    {formatDateUTC(article.publishDate)}
+                  </span>
+                </div>
               </div>
-            </div>
-          </article>
-        ))}
+            </article>
+          ))}
+        </div>
       </div>
     </div>
   </div>
-  
-  <Footer slot="footer" />
 </BaseLayout>
