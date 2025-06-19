@@ -5,12 +5,71 @@
 # Tags are used for categorization and searchability.
 # Latest changes are at the top.
 
+2025-06-18 - 17:30 - Published Devlog #10: Building an Accessible Web documenting comprehensive accessibility improvements and WCAG 2.1 AA compliance journey - #devlog #accessibility #wcag #documentation
+2025-06-18 - 17:25 - Created devlog-10-cover.svg with accessibility-focused visual design featuring universal access symbols, WCAG compliance indicators, and testing tools - #graphics #cover #devlog #accessibility
+2025-06-18 - 17:20 - Added comprehensive keyboard navigation guide to accessibility page with styled keyboard shortcuts and screen reader commands - #accessibility #keyboard #navigation #documentation
+2025-06-18 - 17:15 - Enhanced accessibility page with visual keyboard shortcut cheatsheet using properly styled <kbd> elements and responsive grid layout - #accessibility #ui #keyboard #documentation
+2025-06-18 - 17:10 - Improved color contrast across all components for WCAG 2.1 AA compliance: footer links, CalloutBox components, and social media icons - #accessibility #contrast #wcag #ui
+2025-06-18 - 17:05 - Updated Footer.astro color scheme from gray-500/400 to gray-700/600 for improved accessibility and better contrast ratios - #accessibility #footer #contrast #ui
+2025-06-18 - 17:00 - Enhanced CalloutBox.astro with darker text colors (900 shades) and improved icon contrast (700 shades) while preserving color theme - #accessibility #calloutbox #contrast #ui
+2025-06-18 - 16:55 - Added viewport meta tag to BaseLayout.astro for proper mobile scaling and text legibility across all devices - #accessibility #mobile #viewport #responsive
+2025-06-18 - 16:50 - Created comprehensive accessibility.astro page with WCAG commitment, contact information, and continuous improvement statement - #accessibility #policy #documentation #wcag
+2025-06-18 - 16:45 - Added accessibility link to Footer.astro navigation alongside privacy and cookie policy links for easy user access - #accessibility #footer #navigation #policy
+
+2025-06-15 - 16:00 - Published Devlog #9: Citation System Revamp documenting comprehensive UX and accessibility improvements - #devlog #documentation #citations #ux #accessibility
+2025-06-15 - 16:00 - Created devlog-9-cover.svg with visual comparison of before/after animation improvements and technical achievements - #graphics #cover #devlog
+2025-06-15 - 15:50 - Removed legacy citation system files: GlobalCitationList.astro, SeriesCitationList.astro, citationDrawers.js - #cleanup #legacy #refactoring
+2025-06-15 - 15:45 - Implemented smooth drawer animations using precise height calculation and requestAnimationFrame for 60fps performance - #animation #performance #ux
+2025-06-15 - 15:45 - Enhanced CSS transitions with cubic-bezier easing curves and hardware acceleration (will-change) properties - #css #performance #animation
+2025-06-15 - 15:40 - Added comprehensive accessibility features: ARIA attributes, keyboard navigation, screen reader support, focus management - #accessibility #aria #keyboard #a11y
+2025-06-15 - 15:40 - Implemented proper focus indicators and Escape key handling for drawer interactions - #accessibility #keyboard #ux
+2025-06-15 - 15:35 - Replaced class-based animation with direct style manipulation for better performance and smoother transitions - #performance #animation #optimization
+2025-06-15 - 15:35 - Added usage-drawer-content wrapper for accurate height measurement during animations - #structure #animation #measurement
+2025-06-15 - 15:30 - Enhanced user experience with faster hover response times (200ms) and improved interaction patterns - #ux #interaction #responsiveness
+2025-06-15 - 15:30 - Implemented one-at-a-time drawer behavior that automatically closes other drawers when opening new ones - #ux #interaction #consistency
+2025-06-15 - 15:25 - Improved event handling with better click detection for links/buttons and outside click management - #interaction #events #ux
+2025-06-15 - 15:25 - Added proper event listener cleanup and memory leak prevention in citation drawer initialization - #performance #memory #cleanup
+2025-06-15 - 15:20 - Updated both GlobalCitationListNew.astro and SeriesCitationListNew.astro components to use enhanced drawer system - #components #consistency #shared
+
+2025-06-10 - 14:00 - Added SGEO.astro component for Open Graph/SEO meta tags on articles and pages - #components #seo #meta
+2025-06-10 - 13:45 - Added WiringSchematic.astro for interactive SVG wiring diagrams with zoom and reset - #components #svg #diagram #ui
+
+2025-06-09 - 18:00 - Added CodeExample.astro for reusable code sample display (if not previously logged) - #components #code #ui
+2025-06-09 - 18:00 - Published Devlog #8: Newsletter System - Privacy-First Email with Markdown Templates, covering Buttondown integration, privacy-first design, and Markdown template strategy - #devlog #newsletter #privacy #templates
+2025-06-09 - 17:45 - Created devlog-8-cover.svg for Devlog #8, illustrating privacy-first newsletter architecture - #graphics #cover #devlog
+2025-06-09 - 17:30 - Launched SubscribePopup.astro: accessible, privacy-compliant newsletter popup with minimize/close, localStorage state, and ARIA support - #components #newsletter #a11y #popup
+2025-06-09 - 17:20 - Added newsletter-test.astro page for end-to-end popup testing and documentation - #testing #newsletter #docs
+2025-06-09 - 17:10 - Created custom subscribe/thank-you and subscribe/confirmed pages for Buttondown flow, with privacy and onboarding info - #newsletter #onboarding #privacy #ui
+2025-06-09 - 17:00 - Updated Privacy Policy and Cookie Policy to document newsletter data practices, localStorage keys, and Buttondown integration - #privacy #newsletter #docs #gdpr
+
+2025-06-08 - 17:30 - Added callout.astro for inline callout boxes (tips, insights, warnings) - #components #ui #callout
+2025-06-08 - 17:00 - Added StatsDisplay.astro for grid/row stat displays - #components #ui #stats
+2025-06-08 - 16:45 - Added quote.astro for blockquotes with author/source - #components #ui #quote
+2025-06-08 - 16:30 - Added DataChart.astro for Chart.js-powered charts in articles - #components #charts #ui
+
+2025-06-07 - 15:00 - Added FooterConsentManager.astro for persistent consent management button (later removed) - #components #consent #gdpr
+2025-06-07 - 14:45 - Added ConsentPopup.astro for analytics/cookie consent - #components #consent #gdpr
+
+2025-06-06 - 19:00 - Added copyCode.js for copy-to-clipboard on code blocks - #scripts #ui #code
+2025-06-06 - 18:30 - Added citation-tooltips.js and CitationTooltipIsland.astro for modular, accessible citation tooltips - #scripts #components #citations #a11y
+2025-06-06 - 18:00 - Added test-navigation.js for validating article/series navigation (appears unused, consider moving to docs/ or deleting) - #scripts #test #navigation
+2025-06-06 - 17:45 - Added shiki-test.mjs for code highlighting tests (appears unused, consider moving to docs/ or deleting) - #scripts #test #highlighting
+2025-06-06 - 17:30 - Added analytics.ts, consentPopup.ts, content.ts, formatDate.ts, seriesBadge.ts, codeHighlight.ts utility modules - #utils #analytics #consent #content #date #badges #highlighting
+
+2025-06-05 - 20:00 - Added/updated many SVG cover images (devlog-cover-template.svg, isomon-cover-template.svg, og-default.svg, etc.) - #assets #svg #cover
+2025-06-05 - 19:45 - Updated favicon to favicon.png for site branding - #assets #favicon
+2025-06-05 - 19:30 - Added _ARTICLE_TEMPLATE.mdx for new article scaffolding in devlog - #content #template #devlog
+2025-06-05 - 19:15 - Added test-page.astro and test-wiring.astro for UI/feature testing - #testing #ui #wiring
+2025-06-05 - 19:00 - Added test-write.txt in data for script output testing (appears unused, consider deleting) - #test #data
+
 2025-06-04 - 20:15 - Implemented newsletter subscription popup with Buttondown integration - dismissable with minimize/close states, 72-hour close duration, privacy-first design - #newsletter #popup #buttondown #privacy
 2025-06-04 - 20:15 - Added SubscribePopup.astro component with responsive design, accessibility features, and localStorage state management - #components #newsletter #responsive #a11y
 2025-06-04 - 20:15 - Updated Privacy Policy with comprehensive newsletter data collection, storage, and privacy practices sections - #privacy #newsletter #gdpr #docs
 2025-06-04 - 20:15 - Updated Cookie Policy to include newsletter popup localStorage key and third-party services (Buttondown) - #cookies #newsletter #privacy #docs
 2025-06-04 - 20:15 - Added explicit privacy statements about no email tracking (opens, clicks, pixels, replies) in both privacy policy and popup tooltip - #privacy #newsletter #tracking #transparency
 2025-06-04 - 20:15 - Created newsletter-test.astro page for testing popup functionality and documenting implementation details - #testing #newsletter #docs
+2025-06-04 - 18:00 - Created initial series JSON files for devlog, geo, isomon, tfp - #content #series #json
+2025-06-04 - 17:45 - Added/updated new series folders and article stubs for TFP, ISOMON, GEO - #content #series #structure
 
 2025-06-02 - 15:30 - Integrated analytics consent popup with expanded, transparent explanation (why GA4 is used, nerdy data love, opt-out reassurance) - #privacy #gdpr #consent
 2025-06-02 - 15:30 - Ensured Google Tag Manager and consent logic are present on every page via all layouts - #privacy #gdpr #analytics

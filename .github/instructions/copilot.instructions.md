@@ -269,6 +269,43 @@ export async function getAllArticles(): Promise<Article[]> {
 <a href={`/devlog/${article.slug}`}>Read article</a>
 ```
 
+### Dynamic Routing Best Practices
+- **Always prefer dynamic routes over static files** when content follows a pattern
+- Use dynamic routes (`[slug].astro`) instead of creating individual files for each series/collection
+- Dynamic routes provide consistency, maintainability, and single source of truth for data
+- Static files take precedence over dynamic routes in Astro - avoid conflicts by using one approach consistently
+
+```astro
+<!-- Preferred: Dynamic route that handles all series -->
+// src/pages/series/[slug].astro
+---
+import { getSeriesBySlug } from '../../utils/content';
+const { slug } = Astro.params;
+const series = await getSeriesBySlug(slug);
+---
+<BaseLayout title={`${series.title} | Site Name`} description={series.description}>
+  <!-- Dynamic content based on series data -->
+</BaseLayout>
+
+<!-- Avoid: Individual static files for each series -->
+// src/pages/series/devlog.astro (DELETE THIS APPROACH)
+// src/pages/series/geo.astro (DELETE THIS APPROACH)
+```
+
+#### Dynamic Route Benefits
+- **Single source of truth**: Content data lives in JSON/content collections, not scattered across files
+- **Maintainable**: Add new series by creating content files, not new page files
+- **Consistent**: All series follow the same layout and behavior patterns
+- **Flexible**: Easy to add conditional logic based on series properties
+- **DRY principle**: Write once, use for all series
+
+#### Implementation Guidelines
+- Store series metadata in content collections (JSON files)
+- Use `getStaticPaths()` to generate routes at build time
+- Handle missing series gracefully with 404 redirects
+- Pass series data through props for type safety
+- Implement conditional rendering based on series properties (e.g., citation systems, special styling)
+
 ### Collection-Agnostic Components
 - Build components that work with any content collection
 - Pass collection information through props rather than hardcoding

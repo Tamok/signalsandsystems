@@ -48,13 +48,76 @@ This document serves as a reference guide for all components and layouts in the 
 ### SGEO (Search and Generative Engine Optimization)
 - **File:** `/src/components/SGEO.astro`
 - **Description:** Handles meta tags for SEO, social sharing, and LinkedIn integration.
+
+## Citation System Components
+
+### CitationItem
+- **File:** `/src/components/ui/CitationItem.astro`
+- **Description:** Shared citation item component with smooth drawer animations and accessibility features.
 - **Props:**
-  - `title`: Page title
-  - `description`: Page description
-  - `image`: Image URL for social sharing
-  - `canonicalURL`: Canonical URL
-  - `publishDate`: Publication date (for articles)
-  - `type`: Content type ('website' or 'article')
+  - `citation`: Citation object with title, author, year, source, URL, tags, and usage information
+  - `containerClass`: CSS class for styling context (optional)
+- **Features:**
+  - Precise height-based drawer animations (60fps)
+  - Full WCAG 2.1 AA accessibility compliance
+  - Keyboard navigation (Enter/Space to toggle, Escape to close)
+  - Screen reader support with ARIA attributes
+  - Hover interactions with intelligent delays
+
+### GlobalCitationListNew
+- **File:** `/src/components/ui/GlobalCitationListNew.astro`
+- **Description:** Displays all citations from consolidated data source with tag filtering and sorting.
+- **Features:**
+  - Uses consolidated-citations.json data source
+  - Tag-based filtering with dynamic updates
+  - Multiple sorting options (author, title, year)
+  - Shared CitationItem component for consistency
+  - Enhanced drawer functionality with smooth animations
+
+### SeriesCitationListNew
+- **File:** `/src/components/ui/SeriesCitationListNew.astro`
+- **Description:** Displays citations specific to a series with usage tracking.
+- **Props:**
+  - `seriesSlug`: The slug identifier for the series
+- **Features:**
+  - Filters citations used in specific series
+  - Same tag filtering and sorting as global list
+  - Consistent UX with global citation list
+  - Shows usage across both series and individual articles
+
+### CitationTagFilter
+- **File:** `/src/components/ui/CitationTagFilter.astro`
+- **Description:** Interactive tag filter component for citation lists.
+- **Props:**
+  - `tags`: Array of available tags
+  - `selectedTag`: Currently selected tag (optional)
+  - `filterKey`: Unique identifier for filter state
+- **Features:**
+  - Client-side filtering with immediate updates
+  - Accessible button design with clear active states
+  - Integrated with citation list components
+
+### CitationList (Auto-Generation)
+- **File:** `/src/components/ui/CitationList.astro`
+- **Description:** Auto-generates citation lists from CitedText components in articles.
+- **Features:**
+  - Scans page for CitedText elements
+  - Automatically builds formatted reference list
+  - Demure styling consistent with platform design
+  - Used in article layouts for in-content citations
+
+### CitedText
+- **File:** `/src/components/CitedText.astro`
+- **Description:** Inline citation component for referencing sources within article content.
+- **Props:**
+  - `title`: Source title
+  - `author`: Source author (optional)
+  - `year`: Publication year (optional)
+  - `url`: Source URL (optional)
+- **Features:**
+  - Automatic citation list integration
+  - Accessible link styling
+  - Hover effects and focus indicators
 
 ### ChartComponent
 - **File:** `/src/components/ChartComponent.astro`
