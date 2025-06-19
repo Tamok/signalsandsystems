@@ -1,0 +1,67 @@
+---
+// Props: tags: string[], selectedTag: string, onTagClick: (tag: string) => void, filterKey: string
+interface Props {
+  tags: string[];
+  selectedTag: string;
+  filterKey: string;
+}
+const { tags, selectedTag, filterKey } = Astro.props;
+---
+<div class="mb-6 flex flex-wrap gap-2 items-center">
+  <span class="text-xs font-semibold text-gray-500">Filter by tag:</span>
+  {tags.map((tag: string) => (
+    <button
+      type="button"
+      class={`px-2 py-1 rounded text-xs border transition-colors duration-150 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 ${selectedTag === tag ? 'bg-blue-700 text-white border-blue-700 shadow-sm' : 'bg-white text-gray-700 hover:bg-blue-50'}`}
+      aria-pressed={selectedTag === tag}
+      aria-current={selectedTag === tag ? 'true' : undefined}
+      onclick={`window['__citationTagFilter_${filterKey}'] = '${selectedTag === tag ? '' : tag}'; window.dispatchEvent(new CustomEvent('citationTagFilterChanged', { detail: { filterKey: '${filterKey}', selectedTag: window['__citationTagFilter_${filterKey}'] } }));`}
+      id={`tag-btn-${filterKey}-${tag}`}
+    >
+      {tag}
+    </button>
+  ))}
+  <button 
+    type="button" 
+    class="ml-2 px-2 py-1 rounded text-xs border border-gray-300 bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors duration-150" 
+    onclick={`window['__citationTagFilter_${filterKey}'] = ''; window.dispatchEvent(new CustomEvent('citationTagFilterChanged', { detail: { filterKey: '${filterKey}', selectedTag: '' } }));`}
+    id={`clear-btn-${filterKey}`}
+  >
+    Clear filter
+  </button>
+</div>
+<script type="module">
+  if (typeof window !== 'undefined') {
+    if (window['__citationTagFilter_${filterKey}'] === undefined) window['__citationTagFilter_${filterKey}'] = '';
+    let selectedTag = window['__citationTagFilter_${filterKey}'];
+    const tagButtons = document.querySelectorAll('button[id^="tag-btn-${filterKey}-"]');
+    const clearButton = document.getElementById('clear-btn-${filterKey}');
+    
+    function updateTagButtonStates() {
+      tagButtons.forEach(btn => {
+        const tag = btn.textContent;
+        btn.setAttribute('aria-pressed', tag === selectedTag ? 'true' : 'false');
+        if (tag === selectedTag) {
+          btn.classList.add('bg-blue-700', 'text-white', 'border-blue-700', 'shadow-sm');
+          btn.classList.remove('bg-white', 'text-gray-700', 'hover:bg-blue-50');
+        } else {
+          btn.classList.remove('bg-blue-700', 'text-white', 'border-blue-700', 'shadow-sm');
+          btn.classList.add('bg-white', 'text-gray-700', 'hover:bg-blue-50');
+        }
+      });
+      
+      // Show/hide clear button
+      if (clearButton) {
+        clearButton.style.display = selectedTag ? '' : 'none';
+      }
+    }
+    
+    window.addEventListener('citationTagFilterChanged', (e) => {
+      if (e.detail && e.detail.filterKey === '${filterKey}') {
+        selectedTag = window['__citationTagFilter_${filterKey}'] || '';
+        updateTagButtonStates();
+      }
+    });
+    updateTagButtonStates();
+  }
+</script>

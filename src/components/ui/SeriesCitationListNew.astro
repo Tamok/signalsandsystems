@@ -1,0 +1,415 @@
+---
+// SeriesCitationListNew.astro - Displays citations for a specific series with usage information in a drawer
+import consolidatedCitations from '../../data/consolidated-citations.json';
+import CitationTagFilter from './CitationTagFilter.astro';
+import CitationItem from './CitationItem.astro';
+import Footer from '../Footer.astro';
+
+export interface Props {
+  seriesSlug: string;
+  sortBy?: 'author' | 'title' | 'year';
+  sortOrder?: 'asc' | 'desc';
+}
+
+const { seriesSlug, sortBy = 'title', sortOrder = 'asc' } = Astro.props;
+const { citations } = consolidatedCitations;
+
+// Filter citations used in this series
+const seriesCitations = citations.filter((citation: any) => 
+  citation.usedInSeries.includes(seriesSlug)
+);
+
+// Sort citations based on the provided criteria
+let sortedCitations = [...seriesCitations].sort((a, b) => {
+  let comparison = 0;
+  
+  switch (sortBy) {
+    case 'author':
+      comparison = (a.author || '').localeCompare(b.author || '');
+      break;
+    case 'year':
+      comparison = (parseInt(a.year) || 0) - (parseInt(b.year) || 0);
+      break;
+    case 'title':
+    default:
+      comparison = (a.title || '').localeCompare(b.title || '');
+      break;
+  }
+  
+  return sortOrder === 'desc' ? -comparison : comparison;
+});
+
+const allTags = Array.from(new Set(seriesCitations.flatMap((c) => c.tags || []))).sort((a, b) => a.localeCompare(b));
+const filterKey = `series-${seriesSlug}`;
+
+// Initialize selected tag for client-side filtering
+let selectedTag = '';
+if (typeof globalThis !== 'undefined' && 'window' in globalThis) {
+  const win = globalThis.window as any;
+  if (win[`__citationTagFilter_${filterKey}`] === undefined) {
+    win[`__citationTagFilter_${filterKey}`] = '';
+  }
+  selectedTag = win[`__citationTagFilter_${filterKey}`];
+}
+---
+
+<section aria-labelledby="series-citations-title" class="my-12">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
+    <h2 id="series-citations-title" class="text-lg font-bold text-gray-900 tracking-tight">
+      Series References
+    </h2>
+    <div class="flex items-center gap-2 text-sm">
+      <label for={`sort-select-${filterKey}`} class="text-gray-600 font-medium">Sort by:</label>
+      <select 
+        id={`sort-select-${filterKey}`}
+        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all cursor-pointer"
+      >
+        <option value="author-asc" selected={sortBy === 'author' && sortOrder === 'asc'}>Author (A-Z)</option>
+        <option value="author-desc" selected={sortBy === 'author' && sortOrder === 'desc'}>Author (Z-A)</option>
+        <option value="title-asc" selected={sortBy === 'title' && sortOrder === 'asc'}>Title (A-Z)</option>
+        <option value="title-desc" selected={sortBy === 'title' && sortOrder === 'desc'}>Title (Z-A)</option>
+        <option value="year-desc" selected={sortBy === 'year' && sortOrder === 'desc'}>Year (Newest)</option>
+        <option value="year-asc" selected={sortBy === 'year' && sortOrder === 'asc'}>Year (Oldest)</option>
+      </select>
+    </div>
+  </div>
+  <CitationTagFilter tags={allTags} selectedTag={selectedTag} filterKey={filterKey} />  <ol class="not-prose list-none p-0 m-0 space-y-2 text-sm text-gray-700 dark:text-gray-300" id={`citation-list-${filterKey}`}>
+    {sortedCitations
+      .filter((c) => !selectedTag || (c.tags && c.tags.includes(selectedTag)))
+      .map((c: any) => (
+        <CitationItem citation={c} containerClass={`citation-list-${filterKey}`} />
+      ))}
+  </ol>
+  
+  {sortedCitations.filter((c) => !selectedTag || (c.tags && c.tags.includes(selectedTag))).length === 0 && (
+    <div class="text-center py-8">
+      <p class="text-gray-500 italic">No references found for the selected tag.</p>
+    </div>
+  )}  <script type="module" define:vars={{ filterKey }}>
+    // Enhanced drawer functionality with smooth animations and accessibility
+    function initializeCitationDrawers(containerSelector) {
+      const container = document.querySelector(containerSelector);
+      if (!container) {
+        console.log('Container not found:', containerSelector);
+        return;
+      }
+      
+      const citationItems = container.querySelectorAll('.citation-item');
+      console.log('Found citation items:', citationItems.length);
+      
+      citationItems.forEach(item => {
+        const drawer = item.querySelector('.usage-drawer');
+        if (!drawer) {
+          console.log('No drawer found for item');
+          return;
+        }
+        
+        const content = drawer.querySelector('.usage-drawer-content');
+        if (!content) {
+          console.log('No drawer content found for item');
+          return;
+        }
+        
+        let isOpen = false;
+        let hoverTimeout = null;
+        let contentHeight = 0;
+        
+        // Measure content height for smooth animation
+        function measureContentHeight() {
+          if (contentHeight === 0) {
+            const originalHeight = drawer.style.height;
+            const originalOpacity = drawer.style.opacity;
+            
+            // Temporarily show to measure
+            drawer.style.height = 'auto';
+            drawer.style.opacity = '0';
+            drawer.style.visibility = 'hidden';
+            
+            contentHeight = content.offsetHeight;
+            
+            // Restore original state
+            drawer.style.height = originalHeight;
+            drawer.style.opacity = originalOpacity;
+            drawer.style.visibility = 'visible';
+          }
+          return contentHeight;
+        }
+        
+        function openDrawer() {
+          if (isOpen) return;
+          
+          // Close all other drawers first
+          citationItems.forEach(otherItem => {
+            if (otherItem !== item) {
+              const otherDrawer = otherItem.querySelector('.usage-drawer');
+              if (otherDrawer && otherDrawer.getAttribute('aria-expanded') === 'true') {
+                otherDrawer.style.height = '0px';
+                otherDrawer.style.opacity = '0';
+                otherDrawer.setAttribute('aria-expanded', 'false');
+              }
+            }
+          });
+          
+          isOpen = true;
+          drawer.setAttribute('aria-expanded', 'true');
+          
+          const targetHeight = measureContentHeight();
+          
+          // Start animation
+          requestAnimationFrame(() => {
+            drawer.style.height = targetHeight + 'px';
+            drawer.style.opacity = '1';
+          });
+        }
+        
+        function closeDrawer() {
+          if (!isOpen) return;
+          
+          isOpen = false;
+          drawer.setAttribute('aria-expanded', 'false');
+          
+          // Start closing animation
+          requestAnimationFrame(() => {
+            drawer.style.height = '0px';
+            drawer.style.opacity = '0';
+          });
+        }
+        
+        // Click to toggle
+        item.addEventListener('click', (e) => {
+          // Don't toggle if clicking on links or buttons
+          if (e.target.closest('a, button')) {
+            return;
+          }
+          
+          e.preventDefault();
+          if (isOpen) {
+            closeDrawer();
+          } else {
+            openDrawer();
+          }
+        });
+        
+        // Hover behavior with improved delays
+        item.addEventListener('mouseenter', () => {
+          clearTimeout(hoverTimeout);
+          hoverTimeout = setTimeout(() => {
+            if (!isOpen && item.matches(':hover')) {
+              openDrawer();
+            }
+          }, 200); // Reduced delay for better responsiveness
+        });
+        
+        item.addEventListener('mouseleave', () => {
+          clearTimeout(hoverTimeout);
+          if (isOpen) {
+            hoverTimeout = setTimeout(() => {
+              if (!item.matches(':hover') && !drawer.matches(':hover')) {
+                closeDrawer();
+              }
+            }, 150); // Slightly faster close
+          }
+        });
+        
+        // Keep drawer open when hovering over it
+        drawer.addEventListener('mouseenter', () => {
+          clearTimeout(hoverTimeout);
+        });
+        
+        drawer.addEventListener('mouseleave', () => {
+          if (isOpen) {
+            hoverTimeout = setTimeout(() => {
+              if (!item.matches(':hover') && !drawer.matches(':hover')) {
+                closeDrawer();
+              }
+            }, 150);
+          }
+        });
+        
+        // Enhanced keyboard accessibility
+        item.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            if (isOpen) {
+              closeDrawer();
+            } else {
+              openDrawer();
+            }
+          }
+          if (e.key === 'Escape' && isOpen) {
+            e.preventDefault();
+            closeDrawer();
+            item.focus(); // Return focus to the item
+          }
+        });
+        
+        // Make item focusable and announce state to screen readers
+        if (!item.hasAttribute('tabindex')) {
+          item.setAttribute('tabindex', '0');
+        }
+        
+        item.setAttribute('role', 'button');
+        item.setAttribute('aria-label', 'Citation details. Press Enter or Space to view usage information.');
+        
+        // Initialize closed state
+        drawer.style.height = '0px';
+        drawer.style.opacity = '0';
+        drawer.setAttribute('aria-expanded', 'false');
+      });
+      
+      // Close all drawers when clicking outside
+      function handleOutsideClick(e) {
+        if (!e.target.closest('.citation-item')) {
+          citationItems.forEach(item => {
+            const drawer = item.querySelector('.usage-drawer');
+            if (drawer && drawer.getAttribute('aria-expanded') === 'true') {
+              drawer.style.height = '0px';
+              drawer.style.opacity = '0';
+              drawer.setAttribute('aria-expanded', 'false');
+            }
+          });
+        }
+      }
+      
+      // Remove previous listener if it exists and add new one
+      document.removeEventListener('click', handleOutsideClick);
+      document.addEventListener('click', handleOutsideClick);
+    }
+    
+    if (typeof window !== 'undefined') {
+      const win = window;
+      if (win[`__citationTagFilter_${filterKey}`] === undefined) win[`__citationTagFilter_${filterKey}`] = '';
+      let selectedTag = win[`__citationTagFilter_${filterKey}`];
+      let currentSort = 'title-asc';
+      
+      const list = document.getElementById(`citation-list-${filterKey}`);
+      const sortSelect = document.getElementById(`sort-select-${filterKey}`);
+      
+      // Parse citation data from rendered elements
+      function getCitationData() {
+        if (!list) return [];
+        const items = Array.from(list.children);
+        return items.map(li => {
+          if (li.classList.contains('italic')) return null;
+          const spans = li.querySelectorAll('span');
+          const authorSpan = spans[0]?.textContent || '';
+          const titleSpan = spans[1]?.textContent || '';
+          const sourceSpan = spans[2]?.textContent || '';
+          
+          // Extract year from author field (assumes format "Author (Year)")
+          const yearMatch = authorSpan.match(/\((\d{4})\)$/);
+          const year = yearMatch ? parseInt(yearMatch[1]) : 0;
+          const author = authorSpan.replace(/\s*\(\d{4}\)$/, '').trim();
+            
+          // Extract tags from the citation item
+          const tags = [];
+          const tagElements = li.querySelectorAll('.citation-tags .inline-block');
+          tagElements.forEach(tag => {
+            tags.push(tag.textContent.trim());
+          });
+          
+          return {
+            element: li,
+            data: {
+              author: author,
+              title: titleSpan.trim(),
+              source: sourceSpan.trim(),
+              year: year,
+              tags: tags
+            }
+          };
+        }).filter(item => item !== null);
+      }
+        function updateList() {
+        selectedTag = win[`__citationTagFilter_${filterKey}`] || '';
+        if (!list) return;
+        
+        const citations = getCitationData();
+        
+        // Sort citations
+        const sortedCitations = citations.sort((a, b) => {
+          switch (currentSort) {
+            case 'author-asc':
+              return a.data.author.localeCompare(b.data.author);
+            case 'author-desc':
+              return b.data.author.localeCompare(a.data.author);
+            case 'title-asc':
+              return a.data.title.localeCompare(b.data.title);
+            case 'title-desc':
+              return b.data.title.localeCompare(a.data.title);
+            case 'year-asc':
+              if (a.data.year === 0 && b.data.year === 0) return a.data.author.localeCompare(b.data.author);
+              if (a.data.year === 0) return 1;
+              if (b.data.year === 0) return -1;
+              return a.data.year - b.data.year;
+            case 'year-desc':
+              if (a.data.year === 0 && b.data.year === 0) return a.data.author.localeCompare(b.data.author);
+              if (a.data.year === 0) return 1;
+              if (b.data.year === 0) return -1;
+              return b.data.year - a.data.year;
+            default:
+              return 0;
+          }
+        });
+        
+        // Clear list but preserve structure
+        const italicMessage = list.querySelector('li.italic');
+        list.innerHTML = '';
+        
+        // Add sorted items
+        let anyVisible = false;
+        sortedCitations.forEach(citation => {
+          const shouldShow = !selectedTag || (citation.data.tags && citation.data.tags.includes(selectedTag));
+          if (shouldShow) {
+            citation.element.style.display = '';
+            anyVisible = true;
+          } else {
+            citation.element.style.display = 'none';
+          }
+          list.appendChild(citation.element);
+        });
+        
+        // Add back the "no references" message if needed
+        if (!anyVisible) {
+          const noRefsDiv = document.createElement('div');
+          noRefsDiv.className = 'text-center py-8';
+          noRefsDiv.innerHTML = '<p class="text-gray-500 italic">No references found for the selected tag.</p>';
+          list.appendChild(noRefsDiv);
+        }
+          // Re-initialize drawer functionality
+        initializeCitationDrawers(`#citation-list-${filterKey}`);
+      }
+      
+      // Handle sort change
+      if (sortSelect) {
+        sortSelect.addEventListener('change', (e) => {
+          currentSort = e.target.value;
+          updateList();
+        });
+      }
+        // Handle tag filter change
+      window.addEventListener('citationTagFilterChanged', (e) => {
+        if (e.detail && e.detail.filterKey === filterKey) {
+          selectedTag = e.detail.selectedTag || '';
+          win[`__citationTagFilter_${filterKey}`] = selectedTag;
+          updateList();
+        }
+      });
+        // Initialize after DOM is ready
+      document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM loaded, initializing drawers');
+        initializeCitationDrawers(`#citation-list-${filterKey}`);
+      });
+      
+      // Also initialize immediately if DOM is already ready
+      if (document.readyState !== 'loading') {
+        console.log('DOM already ready, initializing drawers immediately');
+        setTimeout(() => {
+          initializeCitationDrawers(`#citation-list-${filterKey}`);
+        }, 100);
+      }
+    }
+  </script>
+</section>
+
+<Footer />
