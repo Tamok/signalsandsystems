@@ -3,6 +3,8 @@ import BaseLayout from './BaseLayout.astro';
 import SeriesNav from '../components/SeriesNav.astro';
 import Footer from '../components/Footer.astro';
 import { formatDateUTC } from '../utils/formatDate';
+import SeriesCitationListNew from '../components/ui/SeriesCitationListNew.astro';
+import { getSeriesBadgeConfig } from '../utils/seriesBadge';
 
 interface SeriesArticle {
   title: string;
@@ -43,20 +45,27 @@ const {
 const currentIndex = seriesArticles.findIndex(article => article.slug === currentArticleSlug);
 const prevArticle = currentIndex > 0 ? seriesArticles[currentIndex - 1] : null;
 const nextArticle = currentIndex < seriesArticles.length - 1 ? seriesArticles[currentIndex + 1] : null;
+
+// Get badge configuration for this series
+const badgeConfig = getSeriesBadgeConfig(seriesSlug);
 ---
 
 <BaseLayout 
-  title={`${title} | ${seriesTitle} Series`}
+  title={`${title} | ${seriesTitle}`}
   description={description}
   ogImage={ogImage}
   canonicalURL={typeof canonicalURL === 'string' ? canonicalURL : canonicalURL.toString()}
->
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+>  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="mb-8">
       <a href={`/series/${seriesSlug}`} class="text-blue-600 hover:text-blue-800 text-sm">
-        ← Back to {seriesTitle} Series
+        ← Back to {seriesTitle}
       </a>
-      <h2 class="text-2xl font-bold mt-2">{seriesTitle} Series</h2>
+      <div class="flex items-center gap-3 mt-2">
+        <h2 class="text-2xl font-bold">{seriesTitle}</h2>
+        <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badgeConfig.bgColor} ${badgeConfig.textColor}`}>
+          {badgeConfig.name}
+        </span>
+      </div>
     </div>
     
     <article class={`prose lg:prose-xl mx-auto`} data-series={seriesSlug.toLowerCase()}>
@@ -75,7 +84,6 @@ const nextArticle = currentIndex < seriesArticles.length - 1 ? seriesArticles[cu
         )}
       </header>
       <slot />
-      
       <div class="mt-12">
         <SeriesNav 
           seriesTitle={seriesTitle} 

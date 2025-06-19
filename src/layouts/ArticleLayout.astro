@@ -4,6 +4,7 @@ import AuthorBio from '../components/AuthorBio.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import CitationList from '../components/ui/CitationList.astro';
+import CitationTooltipIsland from '../components/ui/CitationTooltipIsland.astro';
 import { formatDateUTC } from '../utils/formatDate';
 import SeriesNav from '../components/SeriesNav.astro';
 
@@ -64,7 +65,9 @@ const {
   canonicalURL={typeof canonicalURL === 'string' ? canonicalURL : canonicalURL.toString()}
   includeSyntaxHighlighting={true}
 >
-  <Nav slot="header" />  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <Nav slot="header" />
+  <script type="module" src="/citation-tooltips-init.js"></script>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <article class={`prose lg:prose-xl mx-auto ${seriesSlug ? `series-${seriesSlug.toLowerCase()}` : ''}`} data-series={seriesSlug ? seriesSlug.toLowerCase() : undefined}>
       <header class="mb-8">
         <h1 class={`text-4xl font-bold mb-4${seriesSlug && seriesSlug.toLowerCase() === 'isomon' ? ' isomon-title' : ''}`}>{title}</h1>
