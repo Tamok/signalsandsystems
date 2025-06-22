@@ -4,7 +4,6 @@ import AuthorBio from '../components/AuthorBio.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import CitationList from '../components/ui/CitationList.astro';
-import CitationTooltipIsland from '../components/ui/CitationTooltipIsland.astro';
 import { formatDateUTC } from '../utils/formatDate';
 import SeriesNav from '../components/SeriesNav.astro';
 
@@ -64,9 +63,247 @@ const {
   ogImage={ogImage}
   canonicalURL={typeof canonicalURL === 'string' ? canonicalURL : canonicalURL.toString()}
   includeSyntaxHighlighting={true}
->
-  <Nav slot="header" />
-  <script type="module" src="/citation-tooltips-init.js"></script>
+>  <Nav slot="header" />  <script>
+    // Citation tooltips functionality - directly included following Astro best practices
+    const DEBUG = import.meta.env && import.meta.env.DEV;
+    if (DEBUG) console.log('[CITATION TOOLTIP] Script loaded');
+
+    function attachCitationListeners() {
+      const citedElements = document.querySelectorAll('.cited-text');
+      if (DEBUG) console.log(`[CITATION TOOLTIP] Attaching listeners to ${citedElements.length} .cited-text elements`);
+      
+      citedElements.forEach(element => {
+        const htmlElement = element as HTMLElement;
+        if ((htmlElement as any)._citationTooltipListenersAttached) return;
+        (htmlElement as any)._citationTooltipListenersAttached = true;
+        
+        const citationNumber = element.getAttribute('data-citation-number');
+        const source = element.getAttribute('data-source');
+        const url = element.getAttribute('data-url');
+        const author = element.getAttribute('data-author');
+        const year = element.getAttribute('data-year');
+        const title = element.getAttribute('data-title');
+        const publication = element.getAttribute('data-publication');
+        
+        // Skip if citation number isn't set yet
+        if (!citationNumber || citationNumber === '') {
+          if (DEBUG) console.log('[CITATION TOOLTIP] Skipping element without citation number, will retry later');
+          return;
+        }
+        
+        let tooltipLines: string[] = [];
+        if (citationNumber) tooltipLines.push(`Citation [${citationNumber}]`);
+        if (author && year) tooltipLines.push(`${author} (${year})`);
+        else if (author) tooltipLines.push(`${author}`);
+        else if (year) tooltipLines.push(`(${year})`);
+        if (title) tooltipLines.push(`<em>${title}</em>`);
+        if (publication) tooltipLines.push(publication);
+        else if (source && source !== author) tooltipLines.push(source);
+        if (url) {
+          tooltipLines.push('');
+          tooltipLines.push('🔗 Click to view source');
+        }
+          const tooltipContent = tooltipLines.join('\n');
+        let hoverTimeout: ReturnType<typeof setTimeout>;
+        let hideTimeout: ReturnType<typeof setTimeout>;
+        
+        // Hide tooltip function
+        function hideTooltip() {
+          const globalTooltip = document.getElementById('citation-tooltip-main');
+          if (globalTooltip) {
+            clearTimeout(hideTimeout);
+            hideTimeout = setTimeout(function () {
+              if (!globalTooltip) return;
+              globalTooltip.style.opacity = '0';
+              globalTooltip.style.transform = 'translateY(10px)';
+              setTimeout(() => {
+                if (globalTooltip) globalTooltip.style.display = 'none';
+              }, 300); // Match transition duration
+            }, 100);
+          }
+        }
+          element.addEventListener('mouseenter', function () {
+          if (DEBUG) console.log(`[CITATION TOOLTIP] mouseenter on citation #${citationNumber}`, {
+            element: element,
+            tooltipContent: tooltipContent,
+            hasContent: tooltipContent.length > 0
+          });          let globalTooltip = document.getElementById('citation-tooltip-main');
+          if (!globalTooltip) {
+            globalTooltip = document.createElement('div');
+            globalTooltip.id = 'citation-tooltip-main';
+            globalTooltip.style.cssText = `
+              position: fixed;
+              background: #1f2937;
+              color: white;
+              padding: 12px 16px;
+              border-radius: 8px;
+              font-size: 14px;
+              line-height: 1.5;
+              z-index: 99999;
+              max-width: 350px;
+              box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+              border: 1px solid #374151;
+              pointer-events: none;
+              opacity: 0;
+              transform: translateY(10px);
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+              white-space: pre-line;
+              display: none;
+              font-family: system-ui, -apple-system, sans-serif;
+            `;
+            document.body.appendChild(globalTooltip);
+            if (DEBUG) console.log('[CITATION TOOLTIP] Created new tooltip element');
+          }
+          
+          clearTimeout(hoverTimeout);
+          clearTimeout(hideTimeout);
+            hoverTimeout = setTimeout(function () {
+            if (!globalTooltip) return;
+            if (DEBUG) console.log('[CITATION TOOLTIP] Showing tooltip after delay', {
+              content: tooltipContent,
+              element: globalTooltip
+            });
+            
+            globalTooltip.innerHTML = tooltipContent.replace(/\n/g, '<br>');
+            globalTooltip.style.display = 'block';
+            
+            // Get tooltip dimensions after content is set
+            const tooltipRect = globalTooltip.getBoundingClientRect();
+            const tooltipWidth = tooltipRect.width;
+            const tooltipHeight = tooltipRect.height;
+            
+            const rect = element.getBoundingClientRect();
+            
+            // Position above the citation with some spacing
+            let left = rect.left + (rect.width / 2) - (tooltipWidth / 2);
+            let top = rect.top - tooltipHeight - 12; // 12px gap above
+            
+            // Ensure tooltip stays within viewport horizontally
+            if (left < 10) {
+              left = 10;
+            } else if (left + tooltipWidth > window.innerWidth - 10) {
+              left = window.innerWidth - tooltipWidth - 10;
+            }
+            
+            // If tooltip would go above viewport, position below instead
+            if (top < 10) {
+              top = rect.bottom + 12; // 12px gap below
+            }
+            
+            globalTooltip.style.left = left + 'px';
+            globalTooltip.style.top = top + 'px';
+            
+            // Smooth animation in
+            requestAnimationFrame(() => {
+              globalTooltip.style.opacity = '1';
+              globalTooltip.style.transform = 'translateY(0)';
+            });
+            
+            if (DEBUG) console.log('[CITATION TOOLTIP] Tooltip positioned', {
+              left: left,
+              top: top,
+              display: globalTooltip.style.display,
+              opacity: globalTooltip.style.opacity,
+              content: globalTooltip.innerHTML
+            });
+          }, 200);// Reduced delay for testing
+        });        element.addEventListener('mouseleave', function () {
+          if (DEBUG) console.log(`[CITATION TOOLTIP] mouseleave on citation #${citationNumber}`);
+          clearTimeout(hoverTimeout);
+          hideTooltip();
+        });
+        
+        // Store reference for scroll handler
+        (htmlElement as any)._tooltipHideFunction = hideTooltip;
+        
+        if (url) {
+          element.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (DEBUG) console.log(`[CITATION TOOLTIP] click on citation #${citationNumber}, opening: ${url}`);
+            window.open(url, '_blank', 'noopener,noreferrer');
+          });
+          htmlElement.style.cursor = 'pointer';
+        }
+      });    }
+
+    // Global scroll handler to hide tooltips when scrolling
+    let scrollTimeout: ReturnType<typeof setTimeout>;
+    function handleScroll() {
+      const globalTooltip = document.getElementById('citation-tooltip-main');
+      if (globalTooltip && globalTooltip.style.display === 'block') {
+        if (DEBUG) console.log('[CITATION TOOLTIP] Hiding tooltip due to scroll');
+        globalTooltip.style.opacity = '0';
+        globalTooltip.style.transform = 'translateY(10px)';
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          if (globalTooltip) globalTooltip.style.display = 'none';
+        }, 300);
+      }
+    }
+
+    // Add scroll listener
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Function to wait for citation numbers to be populated
+    function waitForCitationNumbers() {
+      const citedElements = document.querySelectorAll('.cited-text');
+      let allHaveNumbers = true;
+      
+      citedElements.forEach(element => {
+        const citationNumber = element.getAttribute('data-citation-number');
+        if (!citationNumber || citationNumber === '') {
+          allHaveNumbers = false;
+        }
+      });
+      
+      if (allHaveNumbers && citedElements.length > 0) {
+        if (DEBUG) console.log('[CITATION TOOLTIP] All citation numbers are populated, attaching listeners');
+        attachCitationListeners();
+      } else {
+        if (DEBUG) console.log('[CITATION TOOLTIP] Citation numbers not ready, retrying in 100ms');
+        setTimeout(waitForCitationNumbers, 100);
+      }
+    }
+
+    // Initial setup - wait for citation numbers to be populated
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', waitForCitationNumbers);
+    } else {
+      waitForCitationNumbers();
+    }
+
+    // For dynamically added content
+    const observer = new MutationObserver(function(mutations) {
+      let shouldReattach = false;
+      mutations.forEach(function(mutation) {
+        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+          for (let node of mutation.addedNodes) {
+            if (node.nodeType === 1) {
+              const element = node as Element;
+              if (element.classList?.contains('cited-text') || element.querySelector?.('.cited-text')) {
+                shouldReattach = true;
+                break;
+              }
+            }
+          }
+        } else if (mutation.type === 'attributes' && mutation.attributeName === 'data-citation-number') {
+          // Citation number was updated, reattach listeners
+          shouldReattach = true;
+        }
+      });
+      if (shouldReattach) {
+        if (DEBUG) console.log('[CITATION TOOLTIP] New content or citation numbers updated, reattaching listeners');
+        setTimeout(attachCitationListeners, 50); // Small delay to ensure DOM is settled
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['data-citation-number']
+    });
+  </script>
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <article class={`prose lg:prose-xl mx-auto ${seriesSlug ? `series-${seriesSlug.toLowerCase()}` : ''}`} data-series={seriesSlug ? seriesSlug.toLowerCase() : undefined}>
       <header class="mb-8">
