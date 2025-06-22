@@ -94,8 +94,9 @@ const key = url || `${title}-${author}-${year}-${source}-${publication}`;
 - `src/content/tfp/00-introduction-friction-principle.mdx`
 - `src/content/devlog/7-citation-system-development.mdx`
 
-### Deprecated
-- `src/components/ui/CitationProvider.astro` - Not needed with current approach
+### Deprecated/Removed
+- `src/components/ui/CitationProvider.astro` - Removed (not needed with current approach)
+- `src/utils/citations.ts` - Removed (empty file, functionality handled by CitationList.astro)
 
 ## Usage Guidelines
 
