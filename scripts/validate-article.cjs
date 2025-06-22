@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const http = require('http');
-const stringSimilarity = require('string-similarity');
+const { stringSimilarity } = require('string-similarity-js');
 const { URL } = require('url');
 
 console.log('🚀 Article Citation Validator Started');
@@ -131,12 +131,10 @@ async function fuzzyCitationCheck(citations, withUrls, urlChecks, minScore = 0.5
     if (!pageContent) {
       console.log(`${colors.yellow}⚠️  Could not fetch page for [${citation.citationNumber}] ${citation.title}${colors.reset}`);
       continue;
-    }
-    // Remove HTML tags for text search
+    }    // Remove HTML tags for text search
     const textContent = pageContent.replace(/<[^>]+>/g, ' ');
     // Try to match citation.text in the page
-    const best = stringSimilarity.findBestMatch(citation.text, [textContent]);
-    const score = best.bestMatch.rating;
+    const score = stringSimilarity(citation.text, textContent);
     if (score >= minScore) {
       console.log(`${colors.green}✔️  Citation text found on page [${citation.citationNumber}] (score: ${score.toFixed(2)})${colors.reset}`);
     } else {
