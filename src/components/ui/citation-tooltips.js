@@ -104,8 +104,10 @@ function observeCitations() {
   observer.observe(document.body, { childList: true, subtree: true });
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', observeCitations);
-} else {
-  observeCitations();
+export default function runCitationTooltips() {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', observeCitations);
+  } else {
+    observeCitations();
+  }
 }
