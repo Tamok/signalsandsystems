@@ -89,11 +89,12 @@
 </style>
 
 <script is:inline>
-  // Auto-populate citation list from CitedText elements
+  // Auto-populate citation list with smart deduplication
   document.addEventListener('DOMContentLoaded', function() {
     const citedElements = document.querySelectorAll('.cited-text');
     const citationList = document.getElementById('citation-list');
     const citationContainer = document.getElementById('citation-list-container');
+    
     // Remove duplicate 'References' titles if present
     const allTitles = document.querySelectorAll('.citation-list-title');
     if (allTitles.length > 1) {
@@ -101,48 +102,72 @@
         allTitles[i].remove();
       }
     }
+    
     if (!citationList || citedElements.length === 0) {
       if (citationContainer) {
         citationContainer.style.display = 'none';
       }
       return;
     }
-    // Group citations by unique metadata and collect only the first number
-    const citationMap = new Map();
-    citedElements.forEach(element => {
-      const citationNumber = element.getAttribute('data-citation-number');
-      const source = element.getAttribute('data-source');
+
+    // Generate citation key (same logic as CitedText)
+    function getCitationKey(element) {
       const url = element.getAttribute('data-url');
+      const title = element.getAttribute('data-title');
       const author = element.getAttribute('data-author');
       const year = element.getAttribute('data-year');
-      const title = element.getAttribute('data-title');
+      const source = element.getAttribute('data-source');
       const publication = element.getAttribute('data-publication');
-      const key = JSON.stringify({author, year, title, source, url, publication});
+      
+      if (url) return `url:${url}`;
+      return [title, author, year, source, publication].filter(Boolean).join('|');
+    }
+
+    // Collect unique citations in order of first appearance
+    const citationMap = new Map();
+    const citationOrder = [];
+    
+    citedElements.forEach(element => {
+      const key = getCitationKey(element);
       if (!citationMap.has(key)) {
-        citationMap.set(key, {
-          number: citationNumber,
-          source,
-          url,
-          author,
-          year,
-          title,
-          publication
-        });
+        const citation = {
+          key,
+          source: element.getAttribute('data-source'),
+          url: element.getAttribute('data-url'),
+          author: element.getAttribute('data-author'),
+          year: element.getAttribute('data-year'),
+          title: element.getAttribute('data-title'),
+          publication: element.getAttribute('data-publication'),
+          number: citationMap.size + 1,
+          elements: []
+        };
+        citationMap.set(key, citation);
+        citationOrder.push(citation);
       }
+      citationMap.get(key).elements.push(element);
     });
-    // Sort citations by their number
-    const sortedCitations = Array.from(citationMap.values()).sort((a, b) => {
-      return parseInt(a.number) - parseInt(b.number);
+
+    // Update all citation elements with correct numbers
+    citationOrder.forEach(citation => {
+      citation.elements.forEach(element => {
+        element.setAttribute('data-citation-number', citation.number);
+        const sup = element.querySelector('.citation-marker');
+        if (sup) sup.textContent = `[${citation.number}]`;
+      });
     });
+
+    // Build citation list
     citationList.innerHTML = '';
-    sortedCitations.forEach(citation => {
+    citationOrder.forEach(citation => {
       const li = document.createElement('li');
       li.style.position = 'relative';
-      // Only show the first citation number
+      
+      // Citation number
       const numsSpan = document.createElement('span');
       numsSpan.className = 'citation-numbers';
       numsSpan.textContent = citation.number + '. ';
       li.appendChild(numsSpan);
+      
       // Build citation text
       let citationText = '';
       if (citation.author && citation.year) {
@@ -152,16 +177,19 @@
       } else if (citation.source) {
         citationText += `${citation.source}. `;
       }
+      
       if (citation.title) {
         citationText += `<em>${citation.title}</em>. `;
       }
+      
       if (citation.publication) {
         citationText += `${citation.publication}.`;
       } else if (citation.source && citation.source !== citation.author) {
         citationText += `${citation.source}.`;
       }
+      
       if (citation.url) {
-        // Create clickable citation (no icon)
+        // Create clickable citation
         const link = document.createElement('a');
         link.href = citation.url;
         link.target = '_blank';
@@ -173,9 +201,11 @@
       } else {
         li.innerHTML += citationText.trim();
       }
+      
       citationList.appendChild(li);
     });
-    if (sortedCitations.length > 0) {
+
+    if (citationOrder.length > 0) {
       citationContainer.style.display = 'block';
     } else {
       citationContainer.style.display = 'none';

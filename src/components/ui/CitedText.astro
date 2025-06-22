@@ -8,7 +8,6 @@ export interface Props {
   publication?: string;
   type?: 'statistic' | 'quote' | 'fact' | 'projection' | 'book';
   citationId?: string;
-  citationNumber?: number;
 }
 
 const { 
@@ -19,27 +18,34 @@ const {
   title, 
   publication, 
   type = 'fact',
-  citationId,
-  citationNumber
+  citationId
 } = Astro.props;
 
 // Generate unique ID for citation if not provided
 const uniqueId = citationId || `citation-${Math.random().toString(36).substr(2, 9)}`;
+
+// Generate citation key for deduplication (same logic as CitationList)
+function getCitationKey() {
+  if (url) return `url:${url}`;
+  return [title, author, year, source, publication].filter(Boolean).join('|');
+}
+
+const citationKey = getCitationKey();
 ---
 
 <span 
   class={`cited-text cited-${type} ${url ? 'clickable' : ''}`}
   data-citation-id={uniqueId}
+  data-citation-key={citationKey}
   data-source={source}
   data-url={url}
   data-author={author}
   data-year={year}
   data-title={title}
-  data-publication={publication}
-  data-citation-number={citationNumber}
+  data-publication={publication}  data-citation-number=""
 >
   <slot />
-  <sup class="citation-marker">[{citationNumber || '1'}]</sup>
+  <sup class="citation-marker">[?]</sup>
 </span>
 
 <style>  .cited-text {

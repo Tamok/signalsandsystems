@@ -51,7 +51,7 @@ export const citationComponentExample = `<CitedText
   year="2023"
   title="GEO: Generative Engine Optimization"
   url="https://arxiv.org/abs/2311.09735"
-  citationNumber={1}
+ 
 >
   Research shows 40% improved visibility with proper GEO implementation
 </CitedText>`;
@@ -62,7 +62,7 @@ export const citationComponentExample = `<CitedText
 
 ## The Credibility Paradox
 
-As I developed the <a href="/geo/1-what-is-geo-and-why-higher-ed-needs-it-now" class="text-blue-600 hover:underline">GEO series</a>, I faced an uncomfortable irony. I was writing about how to optimize content for AI discovery, emphasizing the importance of <CitedText type="fact" author="JELL" year="2025" title="Signals & Systems: GEO Research Observations" citationNumber={1}>citations and references as trust signals that boost AI visibility by 35%</CitedText>. Yet my own platform lacked a proper citation system.
+As I developed the <a href="/geo/1-what-is-geo-and-why-higher-ed-needs-it-now" class="text-blue-600 hover:underline">GEO series</a>, I faced an uncomfortable irony. I was writing about how to optimize content for AI discovery, emphasizing the importance of <CitedText type="fact" author="JELL" year="2025" title="Signals & Systems: GEO Research Observations">citations and references as trust signals that boost AI visibility by 35%</CitedText>. Yet my own platform lacked a proper citation system.
 
 The problem became acute when I realized how easy it would be to fabricate impressive-sounding statistics. Want to claim that "87% of universities see improved enrollment through GEO strategies"? Just wrap it in academic-looking language and most readers would accept it at face value.
 
@@ -92,7 +92,7 @@ The `CitedText.astro` component wraps cited content with structured metadata and
   filename="CitedText Usage Example"
 />
 
-This creates <CitedText type="statistic" author="Aggarwal, P., et al." year="2023" title="GEO: Generative Engine Optimization" url="https://arxiv.org/abs/2311.09735" citationNumber={1}>properly attributed content with interactive tooltips</CitedText> that display full citation information on hover. Clicking the citation number opens the source in a new tab, ensuring readers can verify claims immediately.
+This creates <CitedText type="statistic" author="Aggarwal, P., et al." year="2023" title="GEO: Generative Engine Optimization" url="https://arxiv.org/abs/2311.09735">properly attributed content with interactive tooltips</CitedText> that display full citation information on hover. Clicking the citation number opens the source in a new tab, ensuring readers can verify claims immediately.
 
 The component supports different citation types (`statistic`, `quote`, `fact`, `projection`) with visual styling that helps readers understand the nature of the claim:
 
