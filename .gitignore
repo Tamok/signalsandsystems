@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # personal configuration files
 persona.json
+
+# research resources (PDFs etc)
+src/content/tfp/resources/
