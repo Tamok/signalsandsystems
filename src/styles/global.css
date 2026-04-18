@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Tailwind v4: opt into class-based dark mode. The `.dark` class is toggled
+   on <html> by the pre-hydration script in BaseLayout. `:where()` keeps the
+   variant's specificity at 0 so it composes with other utilities. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ========================================
    ACCESSIBILITY PRIMITIVES
    ======================================== */
@@ -466,4 +471,137 @@ article.series-devlog.prose ul > li::before {
 /* Always apply green to .isomon-title, regardless of parent context */
 .isomon-title {
   color: #16a34a !important; /* green-600 */
+}
+
+/* ========================================
+   DARK MODE OVERRIDES
+   Covers selectors in this file that hardcode light-palette colors.
+   Tailwind dark: variants handle the rest at call sites.
+   ======================================== */
+
+.dark .skip-link {
+  background: #1e40af;
+  color: #f9fafb;
+}
+
+.dark .prose h1 {
+  border-bottom-color: #374151;
+  color: #f3f4f6;
+}
+
+.dark .prose h2 {
+  border-bottom-color: #1f2937;
+  color: #f3f4f6;
+}
+
+.dark .prose h2::after {
+  background-color: #818cf8; /* indigo-400 */
+}
+
+.dark .prose h3,
+.dark .prose h4,
+.dark .prose h5,
+.dark .prose h6 {
+  color: #e5e7eb;
+}
+
+.dark .prose,
+.dark .prose p,
+.dark .prose li {
+  color: #d1d5db;
+}
+
+.dark .prose strong {
+  color: #f3f4f6;
+}
+
+.dark .prose a {
+  color: #93c5fd; /* blue-300 */
+}
+
+.dark .prose blockquote {
+  color: #9ca3af;
+  border-left-color: #4b5563;
+}
+
+.dark .lead {
+  color: #9ca3af;
+}
+
+.dark .prose ol > li {
+  border-left-color: #818cf8; /* indigo-400 */
+  background: linear-gradient(90deg, rgba(129, 140, 248, 0.14) 0%, rgba(167, 139, 250, 0.08) 100%);
+}
+
+.dark .prose ol > li::before {
+  color: #c7d2fe;
+  background: #1f2937;
+  border-color: #818cf8;
+}
+
+.dark .prose ol > li:hover,
+.dark .prose ol > li:focus-within {
+  background: linear-gradient(90deg, rgba(129, 140, 248, 0.22) 0%, rgba(167, 139, 250, 0.14) 100%);
+  border-left-color: #a5b4fc;
+}
+
+.dark .prose ol > li:hover::before,
+.dark .prose ol > li:focus-within::before {
+  color: #1e1b4b;
+  background: #a5b4fc;
+  border-color: #c7d2fe;
+}
+
+.dark .code-filename {
+  background-color: #1f2937;
+  color: #e5e7eb;
+  border-bottom-color: #374151;
+}
+
+.dark .code-block pre {
+  background: #0d1117;
+}
+
+.dark .line-numbers-container {
+  background-color: rgba(255, 255, 255, 0.04);
+  border-right-color: rgba(255, 255, 255, 0.08);
+  color: #9ca3af;
+}
+
+.dark [data-series="isomon"] h1,
+.dark [data-series="isomon"] .article-title,
+.dark [data-series="isomon"] .isomon-title,
+.dark .isomon-title {
+  color: #4ade80 !important; /* green-400 for better contrast on dark bg */
+}
+
+.dark .card.isomon h3,
+.dark .card.isomon .article-title,
+.dark .card[data-series="isomon"] h3,
+.dark .card[data-series="isomon"] .article-title {
+  color: #4ade80 !important;
+}
+
+.dark .isomon-series-title {
+  color: #4ade80 !important;
+}
+
+.dark .series-nav .isomon-series,
+.dark .series-badge.isomon {
+  background-color: #14532d !important; /* green-900 */
+  color: #bbf7d0 !important; /* green-200 */
+}
+
+/* Theme toggle button visual states */
+.theme-toggle .sun-icon {
+  display: inline-block;
+}
+.theme-toggle .moon-icon {
+  display: none;
+}
+.dark .theme-toggle .sun-icon {
+  display: none;
+}
+.dark .theme-toggle .moon-icon {
+  display: inline-block;
 }

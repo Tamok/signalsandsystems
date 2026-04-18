@@ -26,7 +26,23 @@ const {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="light" />
+    <meta name="color-scheme" content="light dark" />
+
+    <!-- Pre-hydration theme script: runs before CSS paints to avoid FOUC.
+         Order of resolution: localStorage → prefers-color-scheme → light. -->
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem('ss-theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var theme = stored === 'dark' || stored === 'light' ? stored : (prefersDark ? 'dark' : 'light');
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+          }
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (_) {}
+      })();
+    </script>
 
     <!-- Primary Meta Tags -->
     <title>{title}</title>
@@ -60,7 +76,7 @@ const {
     <slot name="head" />
     <!-- GTM will be injected dynamically after consent -->
   </head>
-  <body class="min-h-screen bg-gray-50 text-gray-900 flex flex-col">
+  <body class="min-h-screen bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 flex flex-col">
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- Consent Popup and GTM loader -->
     <div id="consent-root"></div>
@@ -91,12 +107,12 @@ const {
         if (!root) return;
         root.innerHTML = `
           <div class='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60'>
-            <div class='bg-white rounded-lg shadow-lg p-6 max-w-md w-full text-gray-900' role='dialog' aria-modal='true' aria-labelledby='consent-title'>
+            <div class='bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-md w-full text-gray-900 dark:text-gray-100' role='dialog' aria-modal='true' aria-labelledby='consent-title'>
               <h2 id='consent-title' class='text-lg font-semibold mb-2'>Analytics Consent</h2>
               <p class='mb-4'>We use Google Tag Manager (GA4) to collect anonymous usage data because I'm a nerd who loves data and patterns. This helps me improve the site and content. Declining is totally fine and won't affect your experience. No personal data is stored, and you can change your preference at any time using the link in the footer.</p>
               <div class='flex gap-2 justify-end'>
-                <button id='decline-btn' class='px-4 py-2 rounded bg-gray-200 hover:bg-gray-300'>Decline</button>
-                <button id='accept-btn' class='px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700'>Accept</button>
+                <button id='decline-btn' class='px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100'>Decline</button>
+                <button id='accept-btn' class='px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-400'>Accept</button>
               </div>
             </div>
           </div>
