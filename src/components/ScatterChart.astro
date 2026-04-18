@@ -58,21 +58,7 @@ const chartOptions = JSON.stringify({
       borderColor: '#ccc',
       borderWidth: 1,
       cornerRadius: 6,
-      displayColors: false,
-      callbacks: {
-        title: function(context) {
-          const point = context[0].raw;
-          return point.label || context[0].dataset.label || 'Data Point';
-        },
-        label: function(context) {
-          const point = context.raw;
-          return [
-            `${data.xLabel || 'X'}: ${point.x}`,
-            `${data.yLabel || 'Y'}: ${point.y}`,
-            `Category: ${context.dataset.label}`
-          ];
-        }
-      }
+      displayColors: false
     }
   },
   scales: {
