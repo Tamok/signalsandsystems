@@ -1,38 +1,24 @@
-// Content collections configuration for Signals & Systems
-import { defineCollection, z } from 'astro:content';
+// Content collections configuration for Signals & Systems.
+// Frontmatter shapes live in src/schemas/content.ts so scripts/validate.ts
+// can reuse them without importing from the astro:content virtual module.
 
-// Define a schema for articles
+import { defineCollection } from 'astro:content';
+import { articleFrontmatterSchema, seriesFrontmatterSchema } from '../schemas/content';
+
 const articleCollection = defineCollection({
   type: 'content',
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    publishDate: z.date(),
-    coverImage: z.string().optional(),
-    series: z.string().optional(),
-    order: z.number().optional(),
-    tags: z.array(z.string()).optional(),
-    draft: z.boolean().default(false)
-  })
+  schema: articleFrontmatterSchema
 });
 
-// Define a schema for series
 const seriesCollection = defineCollection({
   type: 'data',
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    startDate: z.string().transform((str) => new Date(str)),
-    coverImage: z.string().optional(),
-    tags: z.array(z.string()).optional()
-  })
+  schema: seriesFrontmatterSchema
 });
 
-// Export collections
 export const collections = {
-  'devlog': articleCollection,
-  'isomon': articleCollection,
-  'geo': articleCollection,
-  'tfp': articleCollection,
-  'series': seriesCollection,
+  devlog: articleCollection,
+  isomon: articleCollection,
+  geo: articleCollection,
+  tfp: articleCollection,
+  series: seriesCollection
 };

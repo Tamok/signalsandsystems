@@ -7,7 +7,9 @@
     "build": "astro build",
     "postbuild": "pagefind --site dist",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "validate": "tsx scripts/validate.ts",
+    "validate:changed": "tsx scripts/validate.ts --changed"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -22,6 +24,8 @@
   "packageManager": "pnpm@10.6.5+sha1.da220e966c2db3275efb5928cf8f3592681b106b",
   "devDependencies": {
     "@astrojs/mdx": "^4.3.0",
+    "@mdx-js/mdx": "^3.1.1",
+    "gray-matter": "^4.0.3",
     "pagefind": "^1.5.2",
     "remark-frontmatter": "^5.0.0",
     "remark-mdx": "^3.1.1",
@@ -30,6 +34,6 @@
     "tsx": "^4.20.3",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.1.0",
-    "zod": "^4.3.6"
+    "zod": "^3.25.67"
   }
 }
