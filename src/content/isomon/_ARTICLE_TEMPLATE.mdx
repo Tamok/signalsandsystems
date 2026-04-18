@@ -1,0 +1,40 @@
+---
+title: "<Title of ISOMON Article>"
+description: "<Short summary of the article>"
+publishDate: YYYY-MM-DD
+series: "isomon"
+order: <number>
+coverImage: "/images/isomon-<slug>-cover.svg"
+# tags: ["optional", "tags", "here"]
+# draft: false
+---
+
+import CalloutBox from '../../components/CalloutBox.astro';
+import ChartComponent from '../../components/ChartComponent.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import WiringSchematic from '../../components/WiringSchematic.astro';
+
+{/*
+Optionally define chart data, code snippets, or wiring diagrams here:
+export const chartData = { ... };
+export const codeExample = `...`;
+export const wiringDiagram = { ... };
+*/}
+
+<p class="lead">
+  <em>Optional lead paragraph introducing the node, sensor work, or field experiment.</em>
+</p>
+
+<h2 class="text-2xl font-bold mt-8 mb-4">Section Title</h2>
+<p>
+  Hardware context, sensor readings, or build steps go here. Prefer Astro components over raw HTML for anything interactive.
+</p>
+
+<CalloutBox type="info">
+  <p>Use callouts to flag safety notes, sourcing tips, or environmental constraints.</p>
+</CalloutBox>
+
+<h2 class="text-2xl font-bold mt-8 mb-4">Another Section</h2>
+<p>
+  Continue with more content, components, and sections as needed.
+</p>

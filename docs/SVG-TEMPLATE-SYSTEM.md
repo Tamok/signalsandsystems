@@ -9,7 +9,6 @@ The Signals & Systems platform uses a standardized SVG template system for creat
 ### File Organization
 - **Template**: `public/images/cover-template.svg` - Base template with grid system
 - **Implementations**: `public/images/devlog-{n}-cover.svg` - Article-specific covers
-- **Test Page**: `test-covers.html` - Visual validation tool
 
 ### Design Specifications
 
@@ -167,7 +166,6 @@ The template uses a sophisticated grid system with two main sections:
 #### Validation Tools
 - Browser developer tools for syntax checking
 - Online SVG validators for comprehensive validation
-- `test-covers.html` for visual verification
 
 ## Development Workflow
 

@@ -1,0 +1,160 @@
+---
+interface TimelineData {
+  events: {
+    date: string;
+    title: string;
+    description: string;
+    value: number;
+    type: 'improvement' | 'decline' | 'neutral';
+  }[];
+}
+
+interface Props {
+  data: TimelineData;
+  title?: string;
+  description?: string;
+  height?: number;
+  id?: string;
+}
+
+const {
+  data,
+  title,
+  description,
+  height = 400,
+  id = `timeline-${Math.random().toString(36).substring(2, 9)}`
+} = Astro.props;
+
+const timelineData = JSON.stringify(data);
+---
+
+<figure class="timeline-container mb-8">
+  {title && <h3 class="text-lg font-semibold mb-2">{title}</h3>}
+  {description && <p class="text-gray-600 text-sm mb-4">{description}</p>}
+  
+  <div class="bg-white p-6 border border-gray-200 rounded-lg shadow-sm" style={`height: ${height}px;`}>
+    <div id={id} class="w-full h-full"></div>
+  </div>
+  
+  <script is:inline src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  
+  <script define:vars={{ id, timelineData }}>
+    function initializeTimeline() {
+      if (typeof d3 === 'undefined') {
+        setTimeout(initializeTimeline, 100);
+        return;
+      }
+      
+      try {
+        const container = document.getElementById(id);
+        const data = JSON.parse(timelineData);
+        
+        // Clear any existing content
+        container.innerHTML = '';
+        
+        const margin = { top: 20, right: 30, bottom: 40, left: 50 };
+        const width = container.offsetWidth - margin.left - margin.right;
+        const height = container.offsetHeight - margin.top - margin.bottom;
+        
+        const svg = d3.select(container)
+          .append('svg')
+          .attr('width', width + margin.left + margin.right)
+          .attr('height', height + margin.top + margin.bottom);
+        
+        const g = svg.append('g')
+          .attr('transform', `translate(${margin.left},${margin.top})`);
+        
+        // Parse dates and set up scales
+        const parseDate = d3.timeParse('%Y-%m-%d');
+        data.events.forEach(d => {
+          d.parsedDate = parseDate(d.date);
+        });
+        
+        const xScale = d3.scaleTime()
+          .domain(d3.extent(data.events, d => d.parsedDate))
+          .range([0, width]);
+        
+        const yScale = d3.scaleLinear()
+          .domain(d3.extent(data.events, d => d.value))
+          .range([height, 0]);
+        
+        // Create line
+        const line = d3.line()
+          .x(d => xScale(d.parsedDate))
+          .y(d => yScale(d.value))
+          .curve(d3.curveMonotoneX);
+        
+        g.append('path')
+          .datum(data.events)
+          .attr('fill', 'none')
+          .attr('stroke', '#3b82f6')
+          .attr('stroke-width', 2)
+          .attr('d', line);
+        
+        // Add circles for events
+        g.selectAll('.event-circle')
+          .data(data.events)
+          .enter().append('circle')
+          .attr('class', 'event-circle')
+          .attr('cx', d => xScale(d.parsedDate))
+          .attr('cy', d => yScale(d.value))
+          .attr('r', 5)
+          .attr('fill', d => {
+            switch(d.type) {
+              case 'improvement': return '#10b981';
+              case 'decline': return '#ef4444';
+              default: return '#6b7280';
+            }
+          })
+          .on('mouseover', function(event, d) {
+            // Tooltip on hover
+            const tooltip = d3.select('body')
+              .append('div')
+              .attr('class', 'tooltip')
+              .style('opacity', 0)
+              .style('position', 'absolute')
+              .style('background', 'rgba(0,0,0,0.8)')
+              .style('color', 'white')
+              .style('padding', '8px')
+              .style('border-radius', '4px')
+              .style('font-size', '12px')
+              .style('pointer-events', 'none');
+            
+            tooltip.transition()
+              .duration(200)
+              .style('opacity', .9);
+            
+            tooltip.html(`<strong>${d.title}</strong><br/>${d.description}<br/>Value: ${d.value}`)
+              .style('left', (event.pageX + 10) + 'px')
+              .style('top', (event.pageY - 28) + 'px');
+          })
+          .on('mouseout', function() {
+            d3.selectAll('.tooltip').remove();
+          });
+        
+        // Add axes
+        g.append('g')
+          .attr('transform', `translate(0,${height})`)
+          .call(d3.axisBottom(xScale).tickFormat(d3.timeFormat('%Y-%m')));
+        
+        g.append('g')
+          .call(d3.axisLeft(yScale));
+        
+        console.log(`Timeline ${id} initialized successfully`);
+      } catch (error) {
+        console.error('Failed to create timeline:', error);
+        document.getElementById(id).innerHTML = `
+          <div class="flex items-center justify-center h-full">
+            <div class="text-red-500">Failed to load timeline. Please try again later.</div>
+          </div>
+        `;
+      }
+    }
+    
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeTimeline);
+    } else {
+      initializeTimeline();
+    }
+  </script>
+</figure>

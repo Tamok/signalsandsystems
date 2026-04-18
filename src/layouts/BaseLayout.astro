@@ -26,9 +26,11 @@ const {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
 
     <!-- Primary Meta Tags -->
-    <title>{title}</title>    <meta name="title" content={title} />
+    <title>{title}</title>
+    <meta name="title" content={title} />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
     <link rel="icon" type="image/png" href="/images/favicon.png" />
@@ -59,11 +61,14 @@ const {
     <!-- GTM will be injected dynamically after consent -->
   </head>
   <body class="min-h-screen bg-gray-50 text-gray-900 flex flex-col">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- Consent Popup and GTM loader -->
     <div id="consent-root"></div>
     <script type="module">
+      import { createFocusTrap } from '../scripts/focusTrap.ts';
       // Minimal consent logic and GTM loader
       const consentKey = 'ss-analytics-consent';
+      let releaseConsentFocusTrap = null;
       function loadGTM() {
         if (document.getElementById('gtm-script')) return;
         const s = document.createElement('script');
@@ -96,15 +101,31 @@ const {
             </div>
           </div>
         `;
+        const dialog = root.querySelector('[role="dialog"]');
+        const closeConsent = () => {
+          if (releaseConsentFocusTrap) {
+            releaseConsentFocusTrap();
+            releaseConsentFocusTrap = null;
+          }
+          root.innerHTML = '';
+        };
         document.getElementById('accept-btn').onclick = () => {
           localStorage.setItem(consentKey, 'granted');
-          root.innerHTML = '';
+          closeConsent();
           loadGTM();
         };
         document.getElementById('decline-btn').onclick = () => {
           localStorage.setItem(consentKey, 'denied');
-          root.innerHTML = '';
+          closeConsent();
         };
+        if (dialog) {
+          releaseConsentFocusTrap = createFocusTrap(dialog, {
+            onEscape: () => {
+              localStorage.setItem(consentKey, 'denied');
+              closeConsent();
+            },
+          });
+        }
       }
       if (typeof window !== 'undefined') {
         const consent = localStorage.getItem(consentKey);
@@ -120,9 +141,10 @@ const {
       <slot name="header" />
     </header>
     
-    <main class="flex-grow">
+    <main id="main-content" class="flex-grow" tabindex="-1">
       <slot />
-    </main>    <footer class="mt-auto">
+    </main>
+    <footer class="mt-auto">
       <!-- Footer content will be inserted here -->
       <slot name="footer" />
     </footer>

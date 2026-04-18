@@ -16,27 +16,35 @@ const {
   id = `wiring-${Math.random().toString(36).substring(2, 9)}`,
   zoomable = true
 } = Astro.props;
+
+const titleId = `${id}-title`;
+const descId = `${id}-desc`;
+const labelledBy = description ? `${titleId} ${descId}` : titleId;
 ---
 
 <figure class="wiring-schematic-container mb-8">
   {title && <h3 class="text-lg font-semibold mb-2">{title}</h3>}
   {description && <p class="text-gray-600 text-sm mb-4">{description}</p>}
-  
+
   {zoomable && (
     <div class="mb-2 text-xs text-gray-500 flex items-center gap-4">
-      <span>🔍 Zoom: Mouse wheel / Pinch to zoom</span>
-      <button class="reset-zoom-btn bg-blue-100 hover:bg-blue-200 px-2 py-1 rounded text-blue-700 text-xs">Reset View</button>
+      <span aria-hidden="true">🔍 Zoom: Mouse wheel / Pinch to zoom</span>
+      <button type="button" class="reset-zoom-btn bg-blue-100 hover:bg-blue-200 px-2 py-1 rounded text-blue-700 text-xs">Reset View</button>
     </div>
   )}
-  
+
   <div class={`bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden ${zoomable ? 'schematic-zoom-container' : ''}`} style={`width: 100%; max-width: ${width}px; margin: 0 auto;`}>
     <svg
       id={id}
       viewBox={`0 0 ${width} ${height}`}
       class={`w-full h-auto ${zoomable ? 'zoomable-schematic' : ''}`}
       xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-labelledby={labelledBy}
       style="cursor: grab;"
     >
+      <title id={titleId}>{title}</title>
+      {description && <desc id={descId}>{description}</desc>}
       <!-- Grid pattern -->
       <defs>
         <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
@@ -203,6 +211,17 @@ const {
         <text x="0" y="80" class="component-label">• Built-in pull-up resistors for I2C</text>
       </g>    </svg>
   </div>
+
+  <details class="mt-3 text-sm text-gray-600">
+    <summary class="cursor-pointer font-medium text-gray-700 hover:text-gray-900">View connection list</summary>
+    <div class="mt-2">
+      <slot name="data-table">
+        <p class="text-gray-500 italic">
+          A textual equivalent is not yet wired up for this schematic. Falling back to the description: {description ?? 'no description provided.'}
+        </p>
+      </slot>
+    </div>
+  </details>
 </figure>
 
 {zoomable && (

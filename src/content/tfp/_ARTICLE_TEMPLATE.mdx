@@ -1,0 +1,39 @@
+---
+title: "<Title of TFP Article>"
+description: "<Short summary of the article>"
+publishDate: YYYY-MM-DD
+series: "tfp"
+order: <number>
+coverImage: "/images/tfp-<slug>-cover.svg"
+# tags: ["optional", "tags", "here"]
+# draft: false
+---
+
+import CalloutBox from '../../components/CalloutBox.astro';
+import ChartComponent from '../../components/ChartComponent.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import CitedText from '../../components/ui/CitedText.astro';
+
+{/*
+Optionally define chart data or code snippets here:
+export const chartData = { ... };
+export const codeExample = `...`;
+*/}
+
+<p class="lead">
+  <em>Optional lead paragraph framing the friction or cognitive question the article addresses.</em>
+</p>
+
+<h2 class="text-2xl font-bold mt-8 mb-4">Section Title</h2>
+<p>
+  Argumentative claims should cite their sources — wrap supporting spans in <CitedText author="..." source="..." title="..." url="..." year="...">CitedText</CitedText> so the aggregator can pick them up.
+</p>
+
+<CalloutBox type="info">
+  <p>Use callouts to highlight the core tension, reframing, or experiment the section turns on.</p>
+</CalloutBox>
+
+<h2 class="text-2xl font-bold mt-8 mb-4">Another Section</h2>
+<p>
+  Continue with more content, components, and sections as needed.
+</p>

@@ -26,5 +26,6 @@ pnpm-debug.log*
 # personal configuration files
 persona.json
 
-# research resources (PDFs etc)
-src/content/tfp/resources/
+# research resources (PDFs, working notes, etc) — convention: any `_resources/`
+# directory inside a content collection is local-only and never shipped.
+src/content/*/_resources/

@@ -116,15 +116,28 @@
   document.addEventListener('DOMContentLoaded', function() {
     const STORAGE_KEY = 'ss-newsletter-popup';
     const CLOSE_DURATION = 72 * 60 * 60 * 1000; // 72 hours in milliseconds
-    
+
     const popup = document.getElementById('newsletter-popup');
     const minimizedButton = document.getElementById('newsletter-minimized');
     const closeButton = document.getElementById('close-popup');
     const minimizeButton = document.getElementById('minimize-popup');
     const privacyTrigger = document.getElementById('privacy-tooltip-trigger');
     const privacyTooltip = document.getElementById('privacy-tooltip');
-    
+
     if (!popup || !minimizedButton || !closeButton || !minimizeButton) return;
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key !== 'Escape') return;
+      if (popup.classList.contains('hidden')) return;
+      if (!popup.contains(document.activeElement)) return;
+      const state = {
+        closed: true,
+        closedUntil: Date.now() + CLOSE_DURATION,
+        minimized: false,
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      hideAll();
+    });
     
     // Check popup state
     function checkPopupState() {
