@@ -129,7 +129,7 @@ Explicitly disabled in both popup tooltip and privacy policy:
 ## Testing
 
 ### Development Testing
-Use `/newsletter-test` page to verify:
+Exercise the live `SubscribePopup` from any page in `pnpm dev` to verify:
 - Popup display and positioning
 - Minimize/close functionality
 - State persistence
