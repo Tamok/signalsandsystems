@@ -1,257 +1,261 @@
-# Signals & Systems Component Index
+# Component index
 
-This document serves as a reference guide for all components and layouts in the Signals & Systems platform.
+Reference for every component and layout currently in
+[src/](./src/). Each entry lists the file, what it does, props, and
+any accessibility contract worth knowing. Keep this file in sync when
+adding or modifying components — CI won't catch doc drift.
 
 ## Layouts
 
-### BaseLayout
-- **File:** `/src/layouts/BaseLayout.astro`
-- **Description:** The primary layout that includes global head elements, navigation, and footer.
-- **Props:**
-  - `title`: Page title
-  - `description`: Meta description
-  - `ogImage`: Open Graph image URL
-  - `canonicalURL`: Canonical URL for SEO
+### [BaseLayout](./src/layouts/BaseLayout.astro)
 
-### ArticleLayout
-- **File:** `/src/layouts/ArticleLayout.astro`
-- **Description:** Layout for standalone articles with author bio.
-- **Props:**
-  - `title`: Article title
-  - `description`: Article description
-  - `publishDate`: Publication date
-  - `updatedDate`: Last update date (optional)
-  - `coverImage`: Article cover image URL (optional)
-  - `ogImage`: Open Graph image URL (optional)
-  - `canonicalURL`: Canonical URL (optional)
+Global head, skip-to-content link, consent dialog, pre-hydration theme
+script, Nav/Footer slots, SubscribePopup.
 
-### SeriesLayout
-- **File:** `/src/layouts/SeriesLayout.astro`
-- **Description:** Layout for articles that are part of a series, with navigation between articles.
-- **Props:**
-  - Standard article props (see ArticleLayout)
-  - `seriesTitle`: Title of the series
-  - `seriesSlug`: URL slug for the series
-  - `seriesArticles`: Array of articles in the series
-  - `currentArticleSlug`: Slug of the current article
+**Props**
+- `title?: string` — page title
+- `description?: string` — meta description
+- `ogImage?: string` — Open Graph image URL
+- `canonicalURL?: URL | string` — defaults to `Astro.url`
+- `includeSyntaxHighlighting?: boolean` — adds Fira Code + copyCode.js
 
-## Components
+**A11y:** skip link is the first focusable element on every page;
+`<main id="main-content">` carries `tabindex="-1"` for skip targets.
+Consent dialog uses `role="dialog"`, `aria-modal`, and a focus trap
+wired via [src/scripts/focusTrap.ts](./src/scripts/focusTrap.ts).
 
-### Nav
-- **File:** `/src/components/Nav.astro`
-- **Description:** Main navigation bar with responsive mobile menu.
+### [ArticleLayout](./src/layouts/ArticleLayout.astro)
 
-### Footer
-- **File:** `/src/components/Footer.astro`
-- **Description:** Site footer with navigation and social links.
+Chrome for individual articles — cover, metadata, author bio,
+`<CitationList>`, series nav when applicable.
 
-### SGEO (Search and Generative Engine Optimization)
-- **File:** `/src/components/SGEO.astro`
-- **Description:** Handles meta tags for SEO, social sharing, and LinkedIn integration.
+**Props:** same as BaseLayout plus `publishDate`, `updatedDate?`,
+`coverImage?`, `series?`, `tags?`.
 
-## Citation System Components
+### [SeriesLayout](./src/layouts/SeriesLayout.astro)
 
-### CitationItem
-- **File:** `/src/components/ui/CitationItem.astro`
-- **Description:** Shared citation item component with smooth drawer animations and accessibility features.
-- **Props:**
-  - `citation`: Citation object with title, author, year, source, URL, tags, and usage information
-  - `containerClass`: CSS class for styling context (optional)
-- **Features:**
-  - Precise height-based drawer animations (60fps)
-  - Full WCAG 2.1 AA accessibility compliance
-  - Keyboard navigation (Enter/Space to toggle, Escape to close)
-  - Screen reader support with ARIA attributes
-  - Hover interactions with intelligent delays
+Used by series landing pages (`/series/[slug]`), not by individual
+articles.
 
-### GlobalCitationListNew
-- **File:** `/src/components/ui/GlobalCitationListNew.astro`
-- **Description:** Displays all citations from consolidated data source with tag filtering and sorting.
-- **Features:**
-  - Uses consolidated-citations.json data source
-  - Tag-based filtering with dynamic updates
-  - Multiple sorting options (author, title, year)
-  - Shared CitationItem component for consistency
-  - Enhanced drawer functionality with smooth animations
+## Site chrome
 
-### SeriesCitationListNew
-- **File:** `/src/components/ui/SeriesCitationListNew.astro`
-- **Description:** Displays citations specific to a series with usage tracking.
-- **Props:**
-  - `seriesSlug`: The slug identifier for the series
-- **Features:**
-  - Filters citations used in specific series
-  - Same tag filtering and sorting as global list
-  - Consistent UX with global citation list
-  - Shows usage across both series and individual articles
+### [Nav](./src/components/Nav.astro)
 
-### CitationTagFilter
-- **File:** `/src/components/ui/CitationTagFilter.astro`
-- **Description:** Interactive tag filter component for citation lists.
-- **Props:**
-  - `tags`: Array of available tags
-  - `selectedTag`: Currently selected tag (optional)
-  - `filterKey`: Unique identifier for filter state
-- **Features:**
-  - Client-side filtering with immediate updates
-  - Accessible button design with clear active states
-  - Integrated with citation list components
+Primary navigation, mobile menu, theme toggle.
 
-### CitationList (Auto-Generation)
-- **File:** `/src/components/ui/CitationList.astro`
-- **Description:** Auto-generates citation lists from CitedText components in articles.
-- **Features:**
-  - Scans page for CitedText elements
-  - Automatically builds formatted reference list
-  - Demure styling consistent with platform design
-  - Used in article layouts for in-content citations
+**A11y:** mobile menu button exposes `aria-expanded`/`aria-controls`;
+ESC and outside-click close the menu and restore focus to the button.
+Theme toggle is a `<button>` with `aria-pressed` reflecting the active
+theme, and `aria-label="Toggle dark mode"`.
 
-### CitedText
-- **File:** `/src/components/CitedText.astro`
-- **Description:** Inline citation component for referencing sources within article content.
-- **Props:**
-  - `title`: Source title
-  - `author`: Source author (optional)
-  - `year`: Publication year (optional)
-  - `url`: Source URL (optional)
-- **Features:**
-  - Automatic citation list integration
-  - Accessible link styling
-  - Hover effects and focus indicators
+### [Footer](./src/components/Footer.astro)
 
-### ChartComponent
-- **File:** `/src/components/ChartComponent.astro`
-- **Description:** Renders interactive charts using Chart.js.
-- **Props:**
-  - `type`: Chart type ('line', 'bar', 'pie', 'doughnut')
-  - `data`: Chart data object with labels and datasets
-  - `title`: Chart title (optional)
-  - `description`: Chart description (optional)
-  - `height`: Chart height in pixels (default: 400)
-  - `width`: Chart maximum width in pixels (default: 600)
-  - `options`: Additional Chart.js options
-- **Props:**
-  - `type`: Chart type ('line', 'bar', 'pie', 'doughnut')
-  - `data`: Chart data object
-  - `title`: Chart title (optional)
-  - `description`: Chart description (optional)
-  - `height`: Chart height in pixels (default: 400)
-  - `width`: Chart width in pixels (default: 600)
-  - `id`: Unique ID for the chart (auto-generated if not provided)
-  - `options`: Additional Chart.js options
+Footer nav, social links, policy links, "Cookie & Analytics
+Preferences" button that reopens the consent dialog.
 
-### CalloutBox
-- **File:** `/src/components/CalloutBox.astro`
-- **Description:** Styled box for highlighting important information.
-- **Props:**
-  - `type`: Box type ('info', 'warning', 'error', 'tip')
-  - `title`: Box title (optional)
+### [SGEO](./src/components/SGEO.astro)
 
-### SeriesNav
-- **File:** `/src/components/SeriesNav.astro`
-- **Description:** Navigation between articles in a series.
-- **Props:**
-  - `seriesTitle`: Title of the series
-  - `seriesSlug`: URL slug for the series
-  - `prevArticle`: Previous article object (null if first article)
-  - `nextArticle`: Next article object (null if last article)
-  - `allArticles`: Array of all articles in the series
-  - `currentSlug`: Slug of the current article
+Search and generative-engine optimization meta tags. Used by
+privacy/cookies/accessibility pages.
 
-### AuthorBio
-- **File:** `/src/components/AuthorBio.astro`
-- **Description:** Displays author information at the end of articles with social links to GitHub and LinkedIn.
+**Props:** `title`, `description`.
 
-### CodeBlock
-- **File:** `/src/components/CodeBlock.astro`
-- **Description:** Enhanced code block with syntax highlighting and copy-to-clipboard functionality.
-- **Props:**
-  - `code`: The code string to be displayed and highlighted
-  - `lang`: Programming language for syntax highlighting
-  - `filename`: Optional filename to display above the code (optional)
-  - `theme`: Color theme for highlighting (github-light or github-dark) (optional)
-  - `showLineNumbers`: Whether to display line numbers (optional)
+## Article UI
 
-### CodeExample
-- **File:** `/src/components/CodeExample.astro`
-- **Description:** Demo component that displays example code in various languages.
-- **Props:**
-  - `language`: Programming language for the example (javascript, typescript, python, astro) (optional)
-  - `showLineNumbers`: Whether to display line numbers (optional)
-  - `theme`: Color theme for highlighting (github-light or github-dark) (optional)
-  - `filename`: Optional filename to display above the code (optional)
+### [AuthorBio](./src/components/AuthorBio.astro)
 
-### WiringSchematic
-- **File:** `/src/components/WiringSchematic.astro`
-- **Description:** Renders interactive SVG wiring schematics for electronics projects.
-- **Props:**
-  - `title`: Schematic title (optional, default: "Wiring Schematic")
-  - `description`: Schematic description (optional)
-  - `width`: SVG width in pixels (default: 800)
-  - `height`: SVG height in pixels (default: 600)
-  - `id`: Unique ID for the SVG element (auto-generated if not provided)
-- **Features:**
-  - Color-coded wiring (power, ground, signal, I2C)
-  - Component representations with labels
-  - Connection dots and pin labels
-  - Built-in legend and notes
-  - Responsive SVG scaling
-- **Usage:** Ideal for documenting hardware connections in technical articles
+Author card (JELL) with GitHub/LinkedIn links. Rendered by
+ArticleLayout at the end of each article.
 
-## SVG Assets
+### [SeriesNav](./src/components/SeriesNav.astro)
 
-### Favicon
-- **File:** `/public/favicon.svg`
-- **Description:** Responsive site favicon with dark/light mode support
+Previous/next navigation and full article list for series.
 
-### Author Image
-- **File:** `/public/images/author-jell.svg`
-- **Description:** Author avatar with gradient background and social icons
+**Props:** `seriesTitle`, `seriesSlug`, `prevArticle`, `nextArticle`,
+`allArticles`, `currentSlug`.
 
-### Author Placeholder
-- **File:** `/public/images/author-placeholder.svg`
-- **Description:** Fallback author image with enhanced styling
+### [CalloutBox](./src/components/CalloutBox.astro)
 
-### OG Default Image
-- **File:** `/public/images/og-default.svg`
-- **Description:** Default Open Graph image for social sharing
+Styled info/warning/error/tip/insight/stat/note/success/next callouts.
 
-### Devlog Cover
-- **File:** `/public/images/devlog-1-cover.svg`
-- **Description:** Cover image for the first devlog article with code-themed design
+**Props:**
+- `type: 'info' | 'warning' | 'error' | 'tip' | 'insight' | 'stat' | 'note' | 'success' | 'next'` (default: `'info'`)
+- `title?: string` — overrides the per-type default title
 
-## Pages
+Each variant has light and dark color tokens; see the per-type maps in
+the source.
 
-### Home
-- **File:** `/src/pages/index.astro`
-- **Description:** Landing page with featured content.
+### [SubscribePopup](./src/components/SubscribePopup.astro)
 
-### Articles
-- **File:** `/src/pages/articles.astro`
-- **Description:** Lists all articles.
+Dismissible newsletter popup wired to the Buttondown form. Used once
+in BaseLayout.
 
-### Series
-- **File:** `/src/pages/series.astro`
-- **Description:** Lists all article series.
+## Charts and diagrams
 
-### Series Detail
-- **File:** `/src/pages/series/[seriesSlug].astro`
-- **Description:** Shows articles in a specific series.
+All chart components render Chart.js via Astro inline scripts (no
+client islands). They accept a `description` prop used as
+`aria-label` and to seed an SR-only data table.
 
-### About
-- **File:** `/src/pages/about.astro`
-- **Description:** Information about the author and platform.
+### [ChartComponent](./src/components/ChartComponent.astro)
+
+General-purpose Chart.js wrapper for line/bar/pie/doughnut.
+
+**Props:** `type`, `data`, `title?`, `description?`, `height?`,
+`width?`, `id?`, `options?`.
+
+### [ChartWithData](./src/components/ChartWithData.astro)
+
+Chart variant that renders a visible data table alongside the chart.
+Used heavily in `tfp/02-designing-for-deliberation`.
+
+### [DataChart](./src/components/DataChart.astro)
+
+Chart variant used in GEO articles.
+
+### [HeatmapChart](./src/components/HeatmapChart.astro)
+
+Heatmap visualization used in TFP articles.
+
+### [RadarChart](./src/components/RadarChart.astro)
+
+Radar/spider chart used in TFP articles.
+
+### [SankeyChart](./src/components/SankeyChart.astro)
+
+Sankey flow diagram used in TFP articles.
+
+### [ScatterChart](./src/components/ScatterChart.astro)
+
+Scatter plot used in TFP articles. *(Known: 2 pre-existing
+`implicitly any` warnings in the Chart.js callback signatures; tracked
+for a future follow-up.)*
+
+### [TimelineChart](./src/components/TimelineChart.astro)
+
+Horizontal timeline chart used in TFP articles.
+
+### [WiringSchematic](./src/components/WiringSchematic.astro)
+
+Interactive SVG wiring schematic for electronics content.
+
+**Props:** `title?`, `description?`, `width?`, `height?`, `id?`.
+
+**A11y:** `<title>` and `<desc>` children are wired via
+`aria-labelledby`; a `<details><summary>View as table</summary>` data
+table alternative accompanies the SVG.
+
+### [CodeBlock](./src/components/CodeBlock.astro)
+
+Shiki-highlighted code block with copy-to-clipboard and optional line
+numbers and filename header. Dark mode switches the background via
+`.dark .code-block pre` rules in
+[src/styles/global.css](./src/styles/global.css).
+
+**Props:** `code`, `lang`, `filename?`, `theme?`, `showLineNumbers?`.
+
+## Citation system
+
+See [docs/research-workflow.md](./docs/research-workflow.md) for the
+full authoring contract.
+
+### [CitedText](./src/components/ui/CitedText.astro)
+
+Inline `<CitedText>` component used in MDX to mark cited passages.
+
+**Props:** `title`, `author?`, `year?`, `url?`, `source?`, `type?`,
+`quote?`, `tags?`.
+
+### [CitationItem](./src/components/ui/CitationItem.astro)
+
+Single-citation drawer used by the list components.
+
+**A11y:** real `<button>` toggle with keyboard parity, drawer animates
+via height transitions, `aria-expanded` reflects open state.
+
+### [GlobalCitationList](./src/components/ui/GlobalCitationList.astro)
+
+All citations from [src/data/consolidated-citations.json](./src/data/consolidated-citations.json),
+with tag filtering and sort (author / title / year). Rendered on
+`/resources`.
+
+### [SeriesCitationList](./src/components/ui/SeriesCitationList.astro)
+
+Series-scoped citation list. Rendered on `/series/[slug]/resources`.
+
+**Props:** `seriesSlug`.
+
+### [CitationTagFilter](./src/components/ui/CitationTagFilter.astro)
+
+Client-side tag filter shared by Global/SeriesCitationList.
+
+**Props:** `tags`, `selectedTag?`, `filterKey`.
+
+### [CitationList](./src/components/ui/CitationList.astro)
+
+Auto-generated per-article citation list, built at render time from
+`<CitedText>` occurrences on the page.
+
+### [StatsDisplay](./src/components/ui/StatsDisplay.astro)
+
+Stat grid used in GEO articles.
+
+### [Quote](./src/components/ui/quote.astro)
+
+Pull-quote component used across GEO and TFP articles.
 
 ## Utilities
 
-### getAllArticles
-- **File:** `/src/utils/content.ts`
-- **Description:** Returns all articles as an array of Article objects. Replace with Astro content collections for production.
+### [src/utils/content.ts](./src/utils/content.ts)
 
-### getAllSeries
-- **File:** `/src/utils/content.ts`
-- **Description:** Returns all series as an array of Series objects. Replace with Astro content collections for production.
+Single entry point for cross-collection queries:
+`getAllArticles`, `getAllSeries`, `getSeriesArticles`,
+`getArticleBySlug`, `getSeriesBySlug`. All series values are lowercased
+at query time per [ADR 0003](./docs/adr/0003-series-case-normalized-in-code.md).
 
-### getSeriesArticles
-- **File:** `/src/utils/content.ts`
-- **Description:** Returns all articles in a given series. Replace with Astro content collections for production.
+### [src/utils/collections.ts](./src/utils/collections.ts)
+
+The `ARTICLE_COLLECTIONS` tuple. Adding a new collection requires a
+change here and in [src/content/config.ts](./src/content/config.ts) —
+the unified dynamic route picks it up automatically.
+
+### [src/schemas/content.ts](./src/schemas/content.ts)
+
+Shared zod schemas (`articleFrontmatterSchema`,
+`seriesFrontmatterSchema`) used both by `defineCollection` and by
+`scripts/validate.ts`. Keep them in lockstep.
+
+### [src/data/citations.schema.ts](./src/data/citations.schema.ts)
+
+Zod schema for `consolidated-citations.json`. The aggregator validates
+before writing.
+
+### [src/scripts/focusTrap.ts](./src/scripts/focusTrap.ts)
+
+Minimal focus-trap utility (no dependencies). Used by the consent
+dialog; reusable for any modal that needs capture/restore semantics.
+
+### [scripts/aggregate-citations.ts](./scripts/aggregate-citations.ts)
+
+Walks the MDX AST for every `.mdx` under `src/content/`, collects
+`<CitedText>` nodes, dedups, and emits the consolidated JSON.
+
+### [scripts/validate.ts](./scripts/validate.ts)
+
+Content validator: `--all` / `--changed` / `--file <path>` /
+`--fuzzy-citation-check` / `--no-links` / `--json`.
+
+## Pages
+
+Only listing the ones whose behavior isn't obvious from the filename.
+
+- [src/pages/[collection]/[slug].astro](./src/pages/%5Bcollection%5D/%5Bslug%5D.astro) —
+  unified dynamic route, loops over `ARTICLE_COLLECTIONS`.
+- [src/pages/search.astro](./src/pages/search.astro) — Pagefind UI.
+  Index is built by `pnpm postbuild` → `pagefind --site dist`.
+- [src/pages/resources.astro](./src/pages/resources.astro) — global
+  citation list.
+- [src/pages/series/[slug]/resources.astro](./src/pages/series/%5Bslug%5D/resources.astro)
+  — per-series citation list.
+- [src/pages/accessibility.astro](./src/pages/accessibility.astro) —
+  accessibility statement. Keep claims honest; update when coverage
+  changes.
