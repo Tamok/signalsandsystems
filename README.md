@@ -1,90 +1,58 @@
 # Signals & Systems
 
-A personal, self-hosted publishing platform designed for long-form, markdown-native articles enriched with interactive elements. Built with the latest web technologies, it emphasizes performance, accessibility, and developer experience.
+[![Typecheck](https://github.com/Tamok/signalsandsystems/actions/workflows/typecheck.yml/badge.svg)](./.github/workflows/typecheck.yml)
+[![Validate content](https://github.com/Tamok/signalsandsystems/actions/workflows/validate.yml/badge.svg)](./.github/workflows/validate.yml)
+[![Deploy](https://github.com/Tamok/signalsandsystems/actions/workflows/deploy.yml/badge.svg)](./.github/workflows/deploy.yml)
+[![Accessibility (advisory)](https://github.com/Tamok/signalsandsystems/actions/workflows/a11y.yml/badge.svg)](./.github/workflows/a11y.yml)
 
-## 📝 Project Overview
+A personal, self-hosted publishing platform for long-form articles with
+interactive MDX components. Astro 5 + MDX + Tailwind v4, deployed to GitHub
+Pages. Zero hydration by default, partial hydration where it's earned.
 
-**Signals & Systems** is more than a blog - it's a platform for exploring ideas at the intersection of technology, education, and ethics. With a focus on long-form content that can include interactive elements, the platform aims to provide a rich reading and learning experience.
+## Quick start
 
-### Key Features
-
-- **Content-First Design**: Clean typography and layout optimized for reading
-- **Interactive Elements**: MDX support for embedding custom components
-- **Responsive Design**: Optimized for all devices from mobile to desktop
-- **Performance Focused**: Fast load times with minimal JavaScript
-- **Series Support**: Group related articles with automatic navigation
-
-## 🚀 Technology Stack
-
-- **Framework**: [Astro](https://astro.build/) – A modern static site generator optimized for content-driven websites
-- **Markdown Extension**: [MDX](https://mdxjs.com/) – Allows embedding JSX components within Markdown content
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/) – Utility-first CSS framework
-- **Graphics**: SVG-based images for crisp visuals and optimal performance
-- **Charts**: Interactive data visualization with Chart.js
-- **Analytics**: Google Tag Manager integrated with GA4
-- **Hosting**: GitHub Pages with automated deployment via GitHub Actions
-
-## 🧱 Project Structure
-
-```
-/
-├── public/               # Static assets
-│   └── images/           # Images and media files
-├── src/
-│   ├── components/       # Reusable UI components
-│   │   ├── AuthorBio.astro
-│   │   ├── CalloutBox.astro
-│   │   ├── ChartComponent.astro
-│   │   ├── Footer.astro
-│   │   ├── Nav.astro
-│   │   ├── SeriesNav.astro
-│   │   └── SGEO.astro    # Search and Generative Engine Optimization
-│   ├── layouts/          # Page layout templates
-│   │   ├── ArticleLayout.astro
-│   │   ├── BaseLayout.astro
-│   │   └── SeriesLayout.astro
-│   ├── pages/            # Route definitions and page content
-│   │   ├── about.astro
-│   │   ├── articles.astro
-│   │   ├── index.astro
-│   │   ├── series.astro
-│   │   ├── devlog/
-│   │   └── series/
-│   └── styles/           # Global styles
-│       └── global.css    # Import for Tailwind CSS
-├── CHANGELOG.md          # Detailed changelog with timestamps
-├── COMPONENTS.md         # Component index and documentation
-├── copilot-instructions.md # Development guidelines for GitHub Copilot
-├── NEXT-STEPS.md         # Development roadmap and future plans
-├── astro.config.mjs      # Astro configuration
-└── package.json          # Project dependencies
+```sh
+pnpm install
+pnpm dev          # localhost:4321
+pnpm build        # production build to ./dist/ (runs Pagefind via postbuild)
+pnpm preview      # serve the build locally
+pnpm astro check  # type-check Astro + TS
+pnpm validate     # full content validation (frontmatter, MDX compile, links)
+pnpm validate:changed  # only files that differ from origin/main (CI-speed)
+pnpm tsx scripts/aggregate-citations.ts  # rebuild consolidated-citations.json
 ```
 
-## 🧞 Commands
+Requires Node 20 and pnpm 10. There is no separate test runner — "tests"
+means `astro check` + `pnpm validate` + manual dev-server verification.
 
-All commands are run from the root of the project, from a terminal:
+## Where things live
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`            | Installs dependencies                            |
-| `pnpm dev`                | Starts local dev server at `localhost:4321`      |
-| `pnpm build`              | Build your production site to `./dist/`          |
-| `pnpm preview`            | Preview your build locally, before deploying     |
-| `pnpm astro ...`          | Run CLI commands like `astro add`, `astro check` |
+- [CONTRIBUTING.md](./CONTRIBUTING.md) — editorial workflow and PR checklist.
+- [COMPONENTS.md](./COMPONENTS.md) — component index.
+- [CHANGELOG.md](./CHANGELOG.md) — timestamped feature log.
+- [NEXT-STEPS.md](./NEXT-STEPS.md) — roadmap.
+- [docs/](./docs/) — topic docs. See especially:
+  - [docs/research-workflow.md](./docs/research-workflow.md) — citation pipeline.
+  - [docs/maintainer-setup.md](./docs/maintainer-setup.md) — one-time GitHub config.
+  - [docs/adr/](./docs/adr/) — architectural decision records.
 
-## 📚 Content Strategy
+## Architecture in one paragraph
 
-The blog hosts articles that can either be part of a series or standalone pieces. Series automatically generate navigation links between articles as they are published. The platform is designed to be modular, fluid, information-driven, and high quality, while minimalist on both the front and back end.
+Content lives in typed Astro collections (`devlog`, `isomon`, `geo`, `tfp`
+for articles, `series` for series metadata). A single dynamic route at
+[src/pages/[collection]/[slug].astro](./src/pages/%5Bcollection%5D/%5Bslug%5D.astro)
+handles every article, iterating an `ARTICLE_COLLECTIONS` tuple defined in
+[src/utils/collections.ts](./src/utils/collections.ts). Cross-collection
+queries go through [src/utils/content.ts](./src/utils/content.ts). Inline
+citations are authored as `<CitedText>` MDX components and aggregated at
+build time into [src/data/consolidated-citations.json](./src/data/consolidated-citations.json).
+Layouts form a three-layer stack: `BaseLayout` (head, nav, footer) →
+`ArticleLayout` (chrome, author bio, series nav) → MDX content.
 
-## 📝 Devlog and Changelog
+## Author
 
-The [Devlog Series](https://signalsandsystems.jellwrites.com/series/devlog) documents the creation and evolution of this platform, providing insights into technical decisions, challenges, and ethical considerations. The [CHANGELOG.md](./CHANGELOG.md) maintains a detailed record of all significant features and actions with timestamps. 
-
-For future development plans and upcoming features, see [NEXT-STEPS.md](./NEXT-STEPS.md).
-
-## 👤 Author
-
-**Jonathan Engeln (JELL)** is an innovator, educator, and technologist exploring the confluence of AI, higher education, and ethical technology. Through _Signals & Systems_, JELL shares insights, experiments, and reflections on building meaningful digital experiences, and other random things.
+**Jonathan Engeln (JELL)** — writing at the intersection of AI, higher
+education, and ethical technology.
 
 - GitHub: [github.com/Tamok](https://github.com/Tamok)
 - LinkedIn: [linkedin.com/in/jonathan-engeln](https://www.linkedin.com/in/jonathan-engeln/)

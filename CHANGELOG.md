@@ -5,6 +5,24 @@
 # Tags are used for categorization and searchability.
 # Latest changes are at the top.
 
+## [Revival] — April 2026
+
+Nine-milestone rehabilitation pass. Entries summarize each milestone
+rather than listing every commit. See `git log main` for the fine-grained
+view. Pre-revival history resumes under "Pre-revival" below.
+
+2026-04-18 - M9 - Docs & co-ownership readiness: rewrote README, added CONTRIBUTING, refreshed COMPONENTS, ADRs 0002/0003, roadmap reset in NEXT-STEPS - #docs #adr #onboarding
+2026-04-17 - M8 - Dark mode: class-based toggle via @custom-variant dark, pre-hydration script for no-FOUC, Nav sun/moon button, full chrome + prose + callout dark variants - #feature #dark-mode #a11y
+2026-04-17 - M7 - Component rationalization: deleted 5 confirmed-dead components (CodeExample, ConsentPopup, FooterConsentManager, consentPopup util, ui/callout); ADR 0001 defers tailwind.config → @theme migration - #cleanup #refactor #adr
+2026-04-16 - M6 - CI guardrails: typecheck.yml, validate.yml, advisory a11y.yml with continue-on-error, deploy.yml gated on typecheck+validate, CODEOWNERS, PR template, issue template, maintainer-setup doc - #ci #github-actions
+2026-04-16 - M5 - Validation engine: TypeScript scripts/validate.ts replaces validate-article.cjs, shared zod schemas at src/schemas/content.ts, --all / --changed / --file modes, link checking with timeouts, draft-aware asset severity - #validation #ci
+2026-04-15 - M4 - Citation engine + Pagefind: regex → MDX AST walk in aggregate-citations.ts, zod-validated consolidated-citations.json, dead tooltip scaffolding removed, Pagefind integrated via postbuild + is:inline scripts, docs/research-workflow.md documents the full contract - #citations #search #pagefind
+2026-04-15 - M3 - Accessibility baseline: skip-to-content link, focus management on Nav + consent dialog, SVG a11y (WiringSchematic), chart description contract, CitationItem keyboard parity, accessibility.astro rewritten honestly - #a11y #wcag
+2026-04-14 - M2 - Content pipeline consolidation: ARTICLE_COLLECTIONS tuple in src/utils/collections.ts, unified [collection]/[slug].astro route, duplicated getCollection blocks collapsed, ISOMON/isomon case normalized at query seam per ADR 0003 - #refactor #content-collections
+2026-04-14 - M1 - Baseline stabilization: TFP 02↔03 rename swap landed via git mv, dead test/debug files and orphaned citation-tooltip scaffolding removed, untracked charts stashed pending M7 decision - #cleanup #stabilize
+
+## Pre-revival
+
 2025-06-18 - 17:30 - Published Devlog #10: Building an Accessible Web documenting comprehensive accessibility improvements and WCAG 2.1 AA compliance journey - #devlog #accessibility #wcag #documentation
 2025-06-18 - 17:25 - Created devlog-10-cover.svg with accessibility-focused visual design featuring universal access symbols, WCAG compliance indicators, and testing tools - #graphics #cover #devlog #accessibility
 2025-06-18 - 17:20 - Added comprehensive keyboard navigation guide to accessibility page with styled keyboard shortcuts and screen reader commands - #accessibility #keyboard #navigation #documentation
