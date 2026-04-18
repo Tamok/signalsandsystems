@@ -1,0 +1,39 @@
+---
+title: "<Title of GEO Article>"
+description: "<Short summary of the article>"
+publishDate: YYYY-MM-DD
+series: "geo"
+order: <number>
+coverImage: "/images/geo-<slug>-cover.svg"
+# tags: ["optional", "tags", "here"]
+# draft: false
+---
+
+import CalloutBox from '../../components/CalloutBox.astro';
+import ChartComponent from '../../components/ChartComponent.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import CitedText from '../../components/ui/CitedText.astro';
+
+{/*
+Optionally define chart data or code snippets here:
+export const chartData = { ... };
+export const codeExample = `...`;
+*/}
+
+<p class="lead">
+  <em>Optional lead paragraph framing the GEO question, audience, or benchmark.</em>
+</p>
+
+<h2 class="text-2xl font-bold mt-8 mb-4">Section Title</h2>
+<p>
+  Evidence-backed claims belong in <CitedText author="..." source="..." title="..." url="..." year="...">wrapped spans</CitedText> so the aggregator can surface them on the resources page.
+</p>
+
+<CalloutBox type="info">
+  <p>Use callouts to highlight data points, tooling choices, or open questions.</p>
+</CalloutBox>
+
+<h2 class="text-2xl font-bold mt-8 mb-4">Another Section</h2>
+<p>
+  Continue with more content, components, and sections as needed.
+</p>

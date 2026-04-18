@@ -1,5 +1,5 @@
 {
   "extends": "./node_modules/astro/tsconfigs/strict.json",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist", "**/*-clean.mdx", "**/article-*-clean.mdx"]
+  "exclude": ["dist", "scripts/archive", "**/*-clean.mdx", "**/article-*-clean.mdx"]
 }

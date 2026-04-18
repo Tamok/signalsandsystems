@@ -1,0 +1,72 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { getSeriesArticles } from '../../utils/content';
+import { ARTICLE_COLLECTIONS, type ArticleCollection } from '../../utils/collections';
+
+interface SeriesArticle {
+  title: string;
+  slug: string;
+  order: number;
+  publishDate: Date;
+}
+
+type ArticleEntry = CollectionEntry<ArticleCollection>;
+
+export async function getStaticPaths() {
+  const paths = await Promise.all(
+    ARTICLE_COLLECTIONS.map(async (collection) => {
+      const entries = (await getCollection(collection)) as ArticleEntry[];
+      return entries.map((entry) => ({
+        params: { collection, slug: entry.slug },
+        props: { collection, entry },
+      }));
+    })
+  );
+  return paths.flat();
+}
+
+const { collection, entry } = Astro.props as { collection: ArticleCollection; entry: ArticleEntry };
+const { Content } = await entry.render();
+
+const seriesSlug = entry.data.series?.toLowerCase();
+const currentArticleSlug = `${collection}/${entry.slug}`;
+let prevArticle: SeriesArticle | null = null;
+let nextArticle: SeriesArticle | null = null;
+let sortedArticles: SeriesArticle[] = [];
+
+if (seriesSlug) {
+  const seriesArticles = await getSeriesArticles(seriesSlug);
+  sortedArticles = seriesArticles.map(({ title, slug, order = 0, publishDate }) => ({
+    title,
+    slug: slug.replace(/^\//, ''),
+    order,
+    publishDate,
+  }));
+
+  const currentIndex = sortedArticles.findIndex((a) => a.slug === currentArticleSlug);
+  prevArticle = currentIndex > 0 ? sortedArticles[currentIndex - 1] : null;
+  nextArticle = currentIndex >= 0 && currentIndex < sortedArticles.length - 1
+    ? sortedArticles[currentIndex + 1]
+    : null;
+}
+---
+
+<ArticleLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  publishDate={entry.data.publishDate}
+  coverImage={entry.data.coverImage}
+  seriesTitle={entry.data.series}
+  seriesSlug={seriesSlug}
+  seriesArticles={sortedArticles}
+  currentArticleSlug={currentArticleSlug}
+  prevArticle={prevArticle}
+  nextArticle={nextArticle}
+>
+  <Content />
+</ArticleLayout>
+
+<script>
+  import '../../scripts/copyCode.js';
+</script>
