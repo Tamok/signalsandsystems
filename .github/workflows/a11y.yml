@@ -1,0 +1,56 @@
+name: Accessibility audit (advisory)
+
+# Runs pa11y-ci + Lighthouse CI against the built site.
+# Currently advisory: findings are reported but do not block the merge.
+# Flip `continue-on-error` to false after M9 to make this a required gate.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  a11y:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build site
+        run: pnpm build
+
+      - name: Install audit tools
+        run: npm install -g pa11y-ci @lhci/cli http-server
+
+      - name: Serve built site
+        run: |
+          http-server dist -p 4321 --silent &
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:4321 > /dev/null; then break; fi
+            sleep 1
+          done
+
+      - name: Run pa11y-ci
+        run: pa11y-ci --sitemap http://localhost:4321/sitemap-index.xml --sitemap-exclude "/pagefind/"
+
+      - name: Run Lighthouse CI
+        run: |
+          lhci autorun \
+            --collect.url=http://localhost:4321/ \
+            --collect.url=http://localhost:4321/articles \
+            --collect.url=http://localhost:4321/resources \
+            --assert.preset=lighthouse:recommended \
+            --assert.assertions.categories:accessibility=\"[\\\"error\\\", {\\\"minScore\\\": 0.95}]\" \
+            --assert.assertions.categories:performance=\"[\\\"error\\\", {\\\"minScore\\\": 0.90}]\"

@@ -1,0 +1,57 @@
+name: Accessibility issue
+description: Report an accessibility barrier on the site
+title: "[a11y] "
+labels: ["a11y", "bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! A clear report helps this get fixed fast.
+        See the current accessibility statement at
+        https://signalsandsystems.jellwrites.com/accessibility for what's
+        already known.
+  - type: input
+    id: url
+    attributes:
+      label: Page URL
+      placeholder: https://signalsandsystems.jellwrites.com/…
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What went wrong
+      description: What were you trying to do? What happened instead?
+    validations:
+      required: true
+  - type: dropdown
+    id: impact
+    attributes:
+      label: Impact
+      options:
+        - Blocker — unable to use the feature at all
+        - Major — feature is very hard to use
+        - Minor — feature works but is uncomfortable
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser, OS, assistive tech (screen reader, voice control, etc.) and version if known
+      placeholder: |
+        - Browser: Firefox 124 on Windows 11
+        - Assistive tech: NVDA 2024.1
+  - type: textarea
+    id: wcag
+    attributes:
+      label: Relevant WCAG criterion (optional)
+      description: If you know which WCAG 2.1 success criterion is violated, name it.
+      placeholder: 2.4.3 Focus Order (Level A)
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: I've checked the existing accessibility statement and this isn't already listed as a known gap.
+          required: true

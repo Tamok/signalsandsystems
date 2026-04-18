@@ -1,0 +1,30 @@
+name: Validate content
+
+# Pull-request gate. Main-branch full validate runs inside deploy.yml so a
+# deploy can't proceed without a green content validation.
+
+on:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate changed articles
+        run: pnpm validate:changed
