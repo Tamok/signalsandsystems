@@ -27,7 +27,7 @@
         </div>
       </div>      <div class="hidden sm:ml-6 sm:flex sm:items-center">
         <div class="ml-3 relative">
-          <a href="https://github.com/Tamok" target="_blank" rel="noopener noreferrer" class="p-1 rounded-full text-gray-600 hover:text-gray-800 focus:outline-none">
+          <a href="https://github.com/Tamok" target="_blank" rel="noopener noreferrer" class="p-1 rounded-full text-gray-600 hover:text-gray-800 focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2">
             <span class="sr-only">GitHub</span>
             <!-- GitHub Icon -->
             <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -63,28 +63,43 @@
 </nav>
 
 <script>
-  // Toggle mobile menu
-  const mobileMenuButton = document.querySelector('.mobile-menu-button');
+  const mobileMenuButton = document.querySelector<HTMLButtonElement>('.mobile-menu-button');
   const mobileMenu = document.getElementById('mobile-menu');
 
   if (mobileMenuButton && mobileMenu) {
+    const blockIcon = mobileMenuButton.querySelector<HTMLElement>('svg.block, svg.hidden:nth-of-type(1)');
+    const hiddenIcon = mobileMenuButton.querySelector<HTMLElement>('svg.hidden:nth-of-type(2), svg.block:nth-of-type(2)');
+
+    const isOpen = () => mobileMenuButton.getAttribute('aria-expanded') === 'true';
+
+    const setState = (open: boolean) => {
+      mobileMenuButton.setAttribute('aria-expanded', String(open));
+      mobileMenu.classList.toggle('hidden', !open);
+
+      const icons = mobileMenuButton.querySelectorAll<SVGElement>('svg');
+      icons.forEach((icon, idx) => {
+        const shouldShow = idx === 0 ? !open : open;
+        icon.classList.toggle('hidden', !shouldShow);
+        icon.classList.toggle('block', shouldShow);
+      });
+    };
+
     mobileMenuButton.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
-      
-      // Toggle aria-expanded
-      const expanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
-      mobileMenuButton.setAttribute('aria-expanded', String(!expanded));
-      
-      // Toggle button icon
-      const blockIcon = mobileMenuButton.querySelector('.block');
-      const hiddenIcon = mobileMenuButton.querySelector('.hidden');
-      
-      if (blockIcon && hiddenIcon) {
-        blockIcon.classList.toggle('hidden');
-        blockIcon.classList.toggle('block');
-        hiddenIcon.classList.toggle('hidden');
-        hiddenIcon.classList.toggle('block');
+      setState(!isOpen());
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && isOpen()) {
+        setState(false);
+        mobileMenuButton.focus();
       }
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!isOpen()) return;
+      const target = event.target as Node;
+      if (mobileMenu.contains(target) || mobileMenuButton.contains(target)) return;
+      setState(false);
     });
   }
 </script>
