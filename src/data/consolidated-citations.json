@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-06-15T08:26:04.129Z",
+  "lastUpdated": "2026-04-18T07:05:44.446Z",
   "citations": [
     {
       "author": "Frontiers",
@@ -45,7 +45,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -77,6 +77,56 @@
       ]
     },
     {
+      "author": "Gerlich, M.",
+      "source": "Societies",
+      "title": "AI Tools in Society: Impacts on Cognitive Offloading and the Future of Critical Thinking",
+      "type": "statistic",
+      "url": "https://www.mdpi.com/2075-4698/15/1/6",
+      "year": "2025",
+      "tags": [
+        "Cognitive decline",
+        "Automation complacency",
+        "Ai research",
+        "Critical thinking",
+        "Memory"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Cognitive Cost of Convenience: When AI Makes Us Dumber",
+          "slug": "tfp/01-cognitive-cost-convenience",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Tran, G.",
+      "source": "Institute for Security and Technology",
+      "title": "AI, Therefore I Am: Exploring Cognition in the Age of GenAI",
+      "type": "fact",
+      "url": "https://securityandtechnology.org/blog/ai-therefore-i-am-exploring-cognition-in-the-age-of-genai/",
+      "year": "2024",
+      "tags": [
+        "Cognitive decline",
+        "Automation complacency",
+        "Ai research",
+        "Critical thinking",
+        "Memory"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Cognitive Cost of Convenience: When AI Makes Us Dumber",
+          "slug": "tfp/01-cognitive-cost-convenience",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
       "author": "Surden, H.",
       "source": "Georgia State University Law Review",
       "title": "Artificial Intelligence and Law: An Overview",
@@ -95,7 +145,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -120,7 +170,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -145,7 +195,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -170,8 +220,33 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Ophir, E. et al.",
+      "source": "Proceedings of the National Academy of Sciences",
+      "title": "Cognitive control in media multitaskers",
+      "type": "fact",
+      "url": "https://www.pnas.org/doi/10.1073/pnas.0903620106",
+      "year": "2009",
+      "tags": [
+        "Cognitive decline",
+        "Automation complacency",
+        "Ai research",
+        "Critical thinking",
+        "Memory"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Cognitive Cost of Convenience: When AI Makes Us Dumber",
+          "slug": "tfp/01-cognitive-cost-convenience",
           "series": "tfp"
         }
       ]
@@ -195,7 +270,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -220,7 +295,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -270,7 +345,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -295,7 +370,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -320,7 +395,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -395,7 +470,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -420,7 +495,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -481,8 +556,33 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Sparrow, B. et al.",
+      "source": "Science",
+      "title": "Google Effects on Memory: Cognitive Consequences of Having Information at Our Fingertips",
+      "type": "fact",
+      "url": "https://science.sciencemag.org/content/333/6043/776",
+      "year": "2011",
+      "tags": [
+        "Cognitive decline",
+        "Automation complacency",
+        "Ai research",
+        "Critical thinking",
+        "Memory"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Cognitive Cost of Convenience: When AI Makes Us Dumber",
+          "slug": "tfp/01-cognitive-cost-convenience",
           "series": "tfp"
         }
       ]
@@ -506,7 +606,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -556,7 +656,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -617,7 +717,7 @@
           "series": "geo"
         },
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -642,7 +742,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -667,7 +767,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -692,7 +792,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -717,7 +817,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -742,7 +842,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -767,8 +867,33 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Storm, B. & Stone, S.",
+      "source": "Psychological Science",
+      "title": "Saving-Enhanced Memory: The Benefits of Saving on the Learning and Remembering of New Information",
+      "type": "statistic",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/0956797614559285",
+      "year": "2015",
+      "tags": [
+        "Cognitive decline",
+        "Automation complacency",
+        "Ai research",
+        "Critical thinking",
+        "Memory"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Cognitive Cost of Convenience: When AI Makes Us Dumber",
+          "slug": "tfp/01-cognitive-cost-convenience",
           "series": "tfp"
         }
       ]
@@ -840,7 +965,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -865,7 +990,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -890,7 +1015,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -940,7 +1065,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -1015,7 +1140,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -1040,8 +1165,58 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Lee, M. et al.",
+      "source": "Microsoft Research",
+      "title": "The Impact of Generative AI on Critical Thinking: Self-Reported Reductions in Cognitive Effort and Confidence Effects From a Survey of Knowledge Workers",
+      "type": "statistic",
+      "url": "https://www.microsoft.com/en-us/research/wp-content/uploads/2025/01/lee_2025_ai_critical_thinking_survey.pdf",
+      "year": "2025",
+      "tags": [
+        "Cognitive decline",
+        "Automation complacency",
+        "Ai research",
+        "Critical thinking",
+        "Memory"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Cognitive Cost of Convenience: When AI Makes Us Dumber",
+          "slug": "tfp/01-cognitive-cost-convenience",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Oakley, B. et al.",
+      "source": "SSRN",
+      "title": "The Memory Paradox: Why Our Brains Need Knowledge in an Age of AI",
+      "type": "quote",
+      "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5250447",
+      "year": "2025",
+      "tags": [
+        "Cognitive decline",
+        "Automation complacency",
+        "Ai research",
+        "Critical thinking",
+        "Memory"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Cognitive Cost of Convenience: When AI Makes Us Dumber",
+          "slug": "tfp/01-cognitive-cost-convenience",
           "series": "tfp"
         }
       ]
@@ -1065,7 +1240,7 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
           "series": "tfp"
         }
@@ -1090,8 +1265,83 @@
       ],
       "usedInArticles": [
         {
-          "title": "The Friction Principle: Why AI Needs Speed Bumps",
+          "title": "The Friction Principle: Why AI Needs Moments of Resistance",
           "slug": "tfp/00-introduction-friction-principle",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Kellen, V.",
+      "source": "LinkedIn",
+      "title": "Your Brain on AI Part 2: Universities, AI and Longevity",
+      "type": "insight",
+      "url": "https://www.linkedin.com/pulse/your-brain-ai-part-2-universities-longevity-vince-kellen-ph-d--d3nac/",
+      "year": "2025",
+      "tags": [
+        "Cognitive decline",
+        "Automation complacency",
+        "Ai research",
+        "Critical thinking",
+        "Memory"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Cognitive Cost of Convenience: When AI Makes Us Dumber",
+          "slug": "tfp/01-cognitive-cost-convenience",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "Kellen, V.",
+      "source": "LinkedIn",
+      "title": "Your Brain on AI: Avoiding Cognitive Atrophy",
+      "type": "quote",
+      "url": "https://www.linkedin.com/pulse/your-brain-ai-avoiding-cognitive-atrophy-vince-kellen-ph-d--q6gsc",
+      "year": "2025",
+      "tags": [
+        "Cognitive decline",
+        "Automation complacency",
+        "Ai research",
+        "Critical thinking",
+        "Memory"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Cognitive Cost of Convenience: When AI Makes Us Dumber",
+          "slug": "tfp/01-cognitive-cost-convenience",
+          "series": "tfp"
+        }
+      ]
+    },
+    {
+      "author": "ResearchGate",
+      "source": "ResearchGate",
+      "title": "Your Brain on ChatGPT: Accumulation of Cognitive Debt when Using an AI Assistant for Essay Writing Task",
+      "type": "statistic",
+      "url": "https://www.researchgate.net/publication/392560878_Your_Brain_on_ChatGPT_Accumulation_of_Cognitive_Debt_when_Using_an_AI_Assistant_for_Essay_Writing_Task",
+      "year": "2024",
+      "tags": [
+        "Cognitive decline",
+        "Automation complacency",
+        "Ai research",
+        "Critical thinking",
+        "Memory"
+      ],
+      "usedInSeries": [
+        "tfp"
+      ],
+      "usedInArticles": [
+        {
+          "title": "The Cognitive Cost of Convenience: When AI Makes Us Dumber",
+          "slug": "tfp/01-cognitive-cost-convenience",
           "series": "tfp"
         }
       ]
