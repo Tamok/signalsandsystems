@@ -1,0 +1,175 @@
+---
+interface SankeyData {
+  nodes: {
+    id: string;
+    name: string;
+    color?: string;
+  }[];
+  links: {
+    source: string;
+    target: string;
+    value: number;
+    color?: string;
+  }[];
+}
+
+interface Props {
+  data: SankeyData;
+  title?: string;
+  description?: string;
+  height?: number;
+  width?: number;
+  id?: string;
+}
+
+const {
+  data,
+  title,
+  description,
+  height = 400,
+  width = 700,
+  id = `sankey-${Math.random().toString(36).substring(2, 9)}`
+} = Astro.props;
+
+const sankeyData = JSON.stringify(data);
+---
+
+<figure class="sankey-container mb-8">
+  {title && <h3 class="text-lg font-semibold mb-2">{title}</h3>}
+  {description && <p class="text-gray-600 text-sm mb-4">{description}</p>}
+  
+  <div class="bg-white p-4 border border-gray-200 rounded-lg shadow-sm" style={`height: ${height}px; width: ${width}px; margin: 0 auto;`}>
+    <div id={id} class="w-full h-full"></div>
+  </div>
+  
+  <script is:inline src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script is:inline src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+  
+  <script define:vars={{ id, sankeyData }}>
+    function initializeSankey() {
+      if (typeof d3 === 'undefined' || typeof d3.sankey === 'undefined') {
+        setTimeout(initializeSankey, 100);
+        return;
+      }
+      
+      try {
+        const container = document.getElementById(id);
+        const data = JSON.parse(sankeyData);
+        
+        container.innerHTML = '';
+        
+        const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+        const width = container.offsetWidth - margin.left - margin.right;
+        const height = container.offsetHeight - margin.top - margin.bottom;
+        
+        const svg = d3.select(container)
+          .append('svg')
+          .attr('width', width + margin.left + margin.right)
+          .attr('height', height + margin.top + margin.bottom);
+        
+        const g = svg.append('g')
+          .attr('transform', `translate(${margin.left},${margin.top})`);
+        
+        // Create node lookup
+        const nodeMap = new Map(data.nodes.map(d => [d.id, d]));
+        
+        // Convert data to d3-sankey format
+        const sankeyData = {
+          nodes: data.nodes.map(d => ({ ...d })),
+          links: data.links.map(d => ({
+            source: data.nodes.findIndex(n => n.id === d.source),
+            target: data.nodes.findIndex(n => n.id === d.target),
+            value: d.value,
+            color: d.color || 'rgba(0,0,0,0.2)'
+          }))
+        };
+        
+        // Create sankey generator
+        const sankey = d3.sankey()
+          .nodeId(d => d.id)
+          .nodeWidth(20)
+          .nodePadding(10)
+          .extent([[0, 0], [width, height]]);
+        
+        const graph = sankey(sankeyData);
+        
+        // Add links
+        g.append('g')
+          .selectAll('path')
+          .data(graph.links)
+          .enter().append('path')
+          .attr('d', d3.sankeyLinkHorizontal())
+          .attr('stroke', d => d.color || 'rgba(0,0,0,0.2)')
+          .attr('stroke-width', d => Math.max(1, d.width))
+          .attr('fill', 'none')
+          .attr('opacity', 0.7)
+          .on('mouseover', function(event, d) {
+            const sourceNode = data.nodes.find(n => n.id === data.links[d.index].source);
+            const targetNode = data.nodes.find(n => n.id === data.links[d.index].target);
+            
+            const tooltip = d3.select('body')
+              .append('div')
+              .attr('class', 'tooltip')
+              .style('opacity', 0)
+              .style('position', 'absolute')
+              .style('background', 'rgba(0,0,0,0.8)')
+              .style('color', 'white')
+              .style('padding', '8px')
+              .style('border-radius', '4px')
+              .style('font-size', '12px')
+              .style('pointer-events', 'none');
+            
+            tooltip.transition()
+              .duration(200)
+              .style('opacity', .9);
+            
+            tooltip.html(`${sourceNode?.name || ''} → ${targetNode?.name || ''}<br/>Value: ${d.value}`)
+              .style('left', (event.pageX + 10) + 'px')
+              .style('top', (event.pageY - 28) + 'px');
+          })
+          .on('mouseout', function() {
+            d3.selectAll('.tooltip').remove();
+          });
+        
+        // Add nodes
+        const node = g.append('g')
+          .selectAll('rect')
+          .data(graph.nodes)
+          .enter().append('g');
+        
+        node.append('rect')
+          .attr('x', d => d.x0)
+          .attr('y', d => d.y0)
+          .attr('height', d => d.y1 - d.y0)
+          .attr('width', d => d.x1 - d.x0)
+          .attr('fill', d => d.color || '#3b82f6')
+          .attr('stroke', '#000')
+          .attr('stroke-width', 1);
+        
+        // Add node labels
+        node.append('text')
+          .attr('x', d => d.x0 < width / 2 ? d.x1 + 6 : d.x0 - 6)
+          .attr('y', d => (d.y1 + d.y0) / 2)
+          .attr('dy', '0.35em')
+          .attr('text-anchor', d => d.x0 < width / 2 ? 'start' : 'end')
+          .attr('font-size', '12px')
+          .text(d => d.name);
+        
+        console.log(`Sankey ${id} initialized successfully`);
+      } catch (error) {
+        console.error('Failed to create sankey diagram:', error);
+        document.getElementById(id).innerHTML = `
+          <div class="flex items-center justify-center h-full">
+            <div class="text-red-500">Failed to load sankey diagram. Please try again later.</div>
+          </div>
+        `;
+      }
+    }
+    
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeSankey);
+    } else {
+      initializeSankey();
+    }
+  </script>
+</figure>

@@ -1,0 +1,148 @@
+---
+interface ScatterData {
+  datasets: {
+    label: string;
+    data: {
+      x: number;
+      y: number;
+      label?: string;
+      size?: number;
+    }[];
+    backgroundColor?: string;
+    borderColor?: string;
+    borderWidth?: number;
+    pointRadius?: number;
+  }[];
+  xLabel?: string;
+  yLabel?: string;
+}
+
+interface Props {
+  data: ScatterData;
+  title?: string;
+  description?: string;
+  height?: number;
+  width?: number;
+  id?: string;
+}
+
+const {
+  data,
+  title,
+  description,
+  height = 400,
+  width = 600,
+  id = `scatter-${Math.random().toString(36).substring(2, 9)}`
+} = Astro.props;
+
+const chartData = JSON.stringify(data);
+const chartOptions = JSON.stringify({
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    title: {
+      display: !!title,
+      text: title || '',
+      font: {
+        size: 16
+      }
+    },
+    legend: {
+      display: true,
+      position: 'top'
+    },
+    tooltip: {
+      backgroundColor: 'rgba(0, 0, 0, 0.9)',
+      titleColor: '#fff',
+      bodyColor: '#fff',
+      borderColor: '#ccc',
+      borderWidth: 1,
+      cornerRadius: 6,
+      displayColors: false,
+      callbacks: {
+        title: function(context) {
+          const point = context[0].raw;
+          return point.label || context[0].dataset.label || 'Data Point';
+        },
+        label: function(context) {
+          const point = context.raw;
+          return [
+            `${data.xLabel || 'X'}: ${point.x}`,
+            `${data.yLabel || 'Y'}: ${point.y}`,
+            `Category: ${context.dataset.label}`
+          ];
+        }
+      }
+    }
+  },
+  scales: {
+    x: {
+      type: 'linear',
+      position: 'bottom',
+      title: {
+        display: !!data.xLabel,
+        text: data.xLabel || ''
+      }
+    },
+    y: {
+      title: {
+        display: !!data.yLabel,
+        text: data.yLabel || ''
+      }
+    }
+  }
+});
+---
+
+<figure class="scatter-container mb-8">
+  {title && <h3 class="text-lg font-semibold mb-2">{title}</h3>}
+  {description && <p class="text-gray-600 text-sm mb-4">{description}</p>}
+  
+  <div class="bg-white p-4 border border-gray-200 rounded-lg shadow-sm" style={`height: ${height}px; width: ${width}px; margin: 0 auto;`}>
+    <canvas id={id}></canvas>
+  </div>
+  
+  <script is:inline src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+  
+  <script define:vars={{ id, chartData, chartOptions }}>
+    function initializeScatter() {
+      if (typeof Chart === 'undefined') {
+        setTimeout(initializeScatter, 100);
+        return;
+      }
+      
+      try {
+        const canvas = document.getElementById(id);
+        if (!canvas) {
+          console.error(`Canvas with id ${id} not found`);
+          return;
+        }
+        
+        const ctx = canvas.getContext('2d');
+        const data = JSON.parse(chartData);
+        const options = JSON.parse(chartOptions);
+        
+        new Chart(ctx, {
+          type: 'scatter',
+          data: data,
+          options: options
+        });
+        
+        console.log(`Scatter plot ${id} initialized successfully`);
+      } catch (error) {
+        console.error('Failed to create scatter plot:', error);
+        document.getElementById(id).parentNode.innerHTML = `
+          <div class="flex items-center justify-center h-full">
+            <div class="text-red-500">Failed to load scatter plot. Please try again later.</div>
+          </div>
+        `;
+      }
+    }
+    
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeScatter);
+    } else {
+      initializeScatter();
+    }
+  </script>
+</figure>
