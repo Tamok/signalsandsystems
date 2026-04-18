@@ -12,6 +12,7 @@ import remarkParse from 'remark-parse';
 import remarkMdx from 'remark-mdx';
 import remarkFrontmatter from 'remark-frontmatter';
 import { visit } from 'unist-util-visit';
+import { CitationsFileSchema } from '../src/data/citations.schema.ts';
 
 const CONTENT_DIR = path.join(process.cwd(), 'src', 'content');
 const OUTPUT_DIR = path.join(process.cwd(), 'src', 'data');
@@ -232,11 +233,15 @@ function aggregateCitations() {
     citations: finalCitations
   };
 
+  // Validate against the zod schema before writing so the on-disk JSON never
+  // drifts silently from the shape downstream components expect.
+  const validated = CitationsFileSchema.parse(output);
+
   if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR);
 
   fs.writeFileSync(
     path.join(OUTPUT_DIR, 'consolidated-citations.json'),
-    JSON.stringify(output, null, 2)
+    JSON.stringify(validated, null, 2)
   );
 
   console.log(`Generated consolidated citations with ${finalCitations.length} unique citations`);
