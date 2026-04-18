@@ -27,4 +27,4 @@ pnpm-debug.log*
 persona.json
 
 # research resources (PDFs etc)
-src/content/tfp/resources/
+src/content/tfp/_resources/
