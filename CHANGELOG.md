@@ -11,6 +11,8 @@ Nine-milestone rehabilitation pass. Entries summarize each milestone
 rather than listing every commit. See `git log main` for the fine-grained
 view. Pre-revival history resumes under "Pre-revival" below.
 
+2026-04-18 - Post-revival - Tailwind @theme migration: @plugin "@tailwindcss/typography" in global.css, typography customizations ported, tailwind.config.mjs deleted, ADR 0001 marked superseded - #refactor #tailwind
+2026-04-18 - Post-revival - Removed ScatterChart dead tooltip callbacks (JSON.stringify strips functions); astro check goes from 2 errors to 0 - #fix #typescript
 2026-04-18 - M9 - Docs & co-ownership readiness: rewrote README, added CONTRIBUTING, refreshed COMPONENTS, ADRs 0002/0003, roadmap reset in NEXT-STEPS - #docs #adr #onboarding
 2026-04-17 - M8 - Dark mode: class-based toggle via @custom-variant dark, pre-hydration script for no-FOUC, Nav sun/moon button, full chrome + prose + callout dark variants - #feature #dark-mode #a11y
 2026-04-17 - M7 - Component rationalization: deleted 5 confirmed-dead components (CodeExample, ConsentPopup, FooterConsentManager, consentPopup util, ui/callout); ADR 0001 defers tailwind.config → @theme migration - #cleanup #refactor #adr

@@ -21,16 +21,13 @@ item is cheap and a Short item is expensive, reorder without guilt.
    - Log findings as issues using the a11y-report template.
    - Fix any AA contrast failures in the dark palette.
 
-3. **ScatterChart TypeScript warnings.**
-   - 2 pre-existing `ts(7006)` warnings from implicit `any` in
-     Chart.js callbacks. Either type them or `// @ts-expect-error` with
-     a link.
+3. ~~**ScatterChart TypeScript warnings.**~~ Done 2026-04-18 — tooltip
+   callbacks were dead code (stripped by JSON.stringify), removed.
 
-4. **Tailwind `@theme` migration (per ADR 0001).**
-   - Move typography customizations from
-     [tailwind.config.mjs](./tailwind.config.mjs) into `@theme` blocks
-     in [src/styles/global.css](./src/styles/global.css).
-   - Drop the config file once migration is complete.
+4. ~~**Tailwind `@theme` migration (per ADR 0001).**~~ Done 2026-04-18 —
+   `@plugin "@tailwindcss/typography";` in global.css, typography
+   customizations migrated, `tailwind.config.mjs` deleted. See ADR 0001
+   update.
 
 ## Short-term (next 2–3 sessions)
 
