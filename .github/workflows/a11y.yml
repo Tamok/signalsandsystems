@@ -41,7 +41,9 @@ jobs:
           done
 
       - name: Run pa11y-ci
-        run: pa11y-ci --sitemap http://localhost:4321/sitemap-index.xml --sitemap-exclude "/pagefind/"
+        # --config picks up .pa11yci.json which passes --no-sandbox to Chromium
+        # (required on Ubuntu runners that disallow unprivileged user namespaces).
+        run: pa11y-ci --config .pa11yci.json --sitemap http://localhost:4321/sitemap-index.xml --sitemap-exclude "/pagefind/"
 
       - name: Run Lighthouse CI
         run: |

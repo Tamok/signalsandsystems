@@ -7,12 +7,12 @@ interface Props {
 const { author, source } = Astro.props;
 ---
 
-<blockquote class="border-l-4 border-gray-300 pl-4 my-6 italic text-gray-700 bg-gray-50 py-3 pr-4 rounded-r-lg">
+<blockquote class="border-l-4 border-gray-300 pl-4 my-6 italic text-gray-700 dark:text-gray-200 bg-gray-50 py-3 pr-4 rounded-r-lg">
   <div class="text-lg leading-relaxed">
     <slot />
   </div>
   {(author || source) && (
-    <footer class="mt-2 text-sm text-gray-600 not-italic">
+    <footer class="mt-2 text-sm text-gray-600 dark:text-gray-300 not-italic">
       {author && <cite class="font-medium">{author}</cite>}
       {author && source && <span class="mx-1">—</span>}
       {source && <span>{source}</span>}

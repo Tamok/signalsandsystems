@@ -308,8 +308,8 @@ const {
     <article class={`prose lg:prose-xl mx-auto ${seriesSlug ? `series-${seriesSlug.toLowerCase()}` : ''}`} data-series={seriesSlug ? seriesSlug.toLowerCase() : undefined}>
       <header class="mb-8">
         <h1 class={`text-4xl font-bold mb-4${seriesSlug && seriesSlug.toLowerCase() === 'isomon' ? ' isomon-title' : ''}`}>{title}</h1>
-        <p class="text-gray-600 mb-4">{description}</p>
-        <div class="flex items-center text-sm text-gray-500">
+        <p class="text-gray-600 dark:text-gray-300 mb-4">{description}</p>
+        <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
           <time datetime={publishDate.toISOString()}>Published: {formatDateUTC(publishDate)}</time>
           {updatedDate && (
             <span class="ml-4">

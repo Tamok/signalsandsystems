@@ -15,11 +15,22 @@ item is cheap and a Short item is expensive, reorder without guilt.
      [docs/maintainer-setup.md](./docs/maintainer-setup.md).
    - Blocker: fix findings from the first few advisory runs.
 
-2. **Dark mode contrast re-audit.**
-   - Run axe + Pa11y against both themes on `/`, `/articles`, one
-     article per collection, `/resources`, `/search`.
-   - Log findings as issues using the a11y-report template.
-   - Fix any AA contrast failures in the dark palette.
+2. ~~**Dark mode contrast re-audit.**~~ Done 2026-04-18 — local
+   two-theme audit via `pnpm a11y` (pa11y × {light, dark} × 9 URLs)
+   surfaced the dark-mode-invisible text on home, article, and
+   accessibility pages (`text-gray-800/900` without `dark:` variants).
+   Fixed via `scripts/add-dark-variants.mjs` codemod across 29 files.
+   Also fixed CI Chrome sandbox failure (`.pa11yci.json` passes
+   `--no-sandbox`) and search input missing aria-label.
+
+   Known remaining findings, carried as follow-ups:
+   - Shiki code-block inline styles fail contrast in one or both
+     themes (blocks item #3 below).
+   - Citation list `list` / `nested-interactive` rule failures need
+     a drawer-toggle refactor (move `role="button"` off `<li>`).
+   - Article cards stay `bg-white` in dark mode by design; the
+     in-card `text-gray-600` is fine on white but flagged as a
+     false positive in the dark audit.
 
 3. ~~**ScatterChart TypeScript warnings.**~~ Done 2026-04-18 — tooltip
    callbacks were dead code (stripped by JSON.stringify), removed.

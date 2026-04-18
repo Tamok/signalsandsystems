@@ -2,6 +2,8 @@
 dist/
 # generated types
 .astro/
+# a11y audit artifacts
+a11y-report.json
 
 # dependencies
 node_modules/

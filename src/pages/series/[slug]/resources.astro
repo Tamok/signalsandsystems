@@ -32,12 +32,12 @@ const badgeConfig = getSeriesBadgeConfig(safeSlug);
     <div class="max-w-4xl mx-auto">
       <header class="mb-12 text-center">
         <div class="flex items-center justify-center gap-3 mb-4">
-          <h1 class="text-3xl font-bold text-gray-900 tracking-tight">{series.title} Resources</h1>
+          <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">{series.title} Resources</h1>
           <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badgeConfig.bgColor} ${badgeConfig.textColor}`}>
             {badgeConfig.name}
           </span>
         </div>
-        <p class="text-lg text-gray-600 mb-8">
+        <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">
           All references and resources cited in this series. 
           Click any citation to see where it's used.
         </p>

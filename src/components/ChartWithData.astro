@@ -27,7 +27,7 @@ const drawerId = `drawer-${chartId}`;
 
 <figure class="chart-with-data mb-8">
   {title && <h3 class="text-lg font-semibold mb-2">{title}</h3>}
-  {description && <p class="text-gray-600 text-sm mb-4">{description}</p>}
+  {description && <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">{description}</p>}
   
   <!-- Chart Container -->
   <div class="chart-container">
@@ -49,13 +49,13 @@ const drawerId = `drawer-${chartId}`;
     )}
     
     {dataSource && (
-      <div class="text-xs text-gray-500">
+      <div class="text-xs text-gray-500 dark:text-gray-400">
         <strong>Data Source:</strong> {dataSource}
       </div>
     )}
     
     {methodology && (
-      <div class="text-xs text-gray-500">
+      <div class="text-xs text-gray-500 dark:text-gray-400">
         <strong>Methodology:</strong> {methodology}
       </div>
     )}
@@ -74,7 +74,7 @@ const drawerId = `drawer-${chartId}`;
     
     <!-- Data Drawer -->
     <div id={drawerId} class="hidden mt-3 bg-gray-50 border border-gray-200 rounded-lg p-4">
-      <h4 class="text-sm font-semibold text-gray-800 mb-3">{rawDataTitle}</h4>
+      <h4 class="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-3">{rawDataTitle}</h4>
       <div class="text-xs font-mono bg-white border border-gray-300 rounded p-3 overflow-auto max-h-96">
         <pre>{JSON.stringify(data, null, 2)}</pre>
       </div>

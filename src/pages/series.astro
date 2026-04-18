@@ -18,8 +18,8 @@ const series = await getAllSeries();
   <div class="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
       <header class="mb-12 text-center">
-        <h1 class="text-4xl font-bold text-gray-900 mb-4">Series</h1>
-        <p class="text-xl text-gray-600">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">Series</h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300">
           Collections of related articles exploring topics in depth.
         </p>
       </header>
@@ -39,9 +39,9 @@ const series = await getAllSeries();
                     {badgeConfig.name}
                   </span>
                 </div>
-                <p class="text-gray-600 mb-4">{s.description}</p>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">{s.description}</p>
                 <div class="flex items-center justify-between">
-                  <div class="text-sm text-gray-500">
+                  <div class="text-sm text-gray-500 dark:text-gray-400">
                     <span>{s.articleCount} {s.articleCount === 1 ? 'Article' : 'Articles'}</span>
                     <span class="mx-2">•</span>
                     <span>Started {formatDateUTC(s.startDate)}</span>

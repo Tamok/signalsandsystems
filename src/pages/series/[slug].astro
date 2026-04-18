@@ -61,7 +61,7 @@ if (!series) {
           </span>
         </div>
         <h1 class={`text-4xl font-bold mb-4${seriesSlug && seriesSlug.toLowerCase() === 'isomon' ? ' isomon-title' : ''}`}>{series.title}</h1>
-        <p class="text-xl text-gray-600">
+        <p class="text-xl text-gray-600 dark:text-gray-300">
           {series.description}
         </p>
       </header>
@@ -80,7 +80,7 @@ if (!series) {
       
       <!-- Articles section -->
       <div class="mt-12">
-        <h2 class="text-2xl font-bold text-gray-900 mb-8">Articles in this Series</h2>        <div class="space-y-10 mt-8">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-8">Articles in this Series</h2>        <div class="space-y-10 mt-8">
           {sortedArticles.map((article) => (            <article class="bg-white rounded-lg shadow-md overflow-hidden">
               <div class="p-6">
                 <!-- Article Badge and Title -->
@@ -94,9 +94,9 @@ if (!series) {
                     {badgeConfig.name}
                   </span>
                 </div>
-                <p class="text-gray-700 mb-4">{article.description}</p>
+                <p class="text-gray-700 dark:text-gray-200 mb-4">{article.description}</p>
                 <div class="flex items-center justify-between">
-                  <span class="text-sm text-gray-500">
+                  <span class="text-sm text-gray-500 dark:text-gray-400">
                     {formatDateUTC(article.publishDate)}
                   </span>
                 </div>
