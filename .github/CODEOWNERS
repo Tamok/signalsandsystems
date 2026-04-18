@@ -1,0 +1,8 @@
+# Default code owner. Add additional owners as co-ownership grows:
+#   * @Tamok @co-owner-handle
+#
+# Path-scoped examples (uncomment as needed):
+#   src/content/** @Tamok
+#   sastro/.github/** @Tamok
+
+* @Tamok
