@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import SeriesCitationListNew from "../../../components/ui/SeriesCitationListNew.astro";
+import SeriesCitationList from "../../../components/ui/SeriesCitationList.astro";
 import Nav from "../../../components/Nav.astro";
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { getSeriesBySlug } from "../../../utils/content";
@@ -53,7 +53,7 @@ const badgeConfig = getSeriesBadgeConfig(safeSlug);
         </div>
       </header>
       
-      <SeriesCitationListNew seriesSlug={safeSlug} />
+      <SeriesCitationList seriesSlug={safeSlug} />
     </div>
   </div>
 </BaseLayout>
