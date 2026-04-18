@@ -1,6 +1,7 @@
 # ADR 0001 — Keep `tailwind.config.mjs`, defer the `@theme` migration
 
-- **Status:** Accepted
+- **Status:** Superseded (2026-04-18) — migration completed post-M9. See
+  note at end of document.
 - **Date:** 2026-04-17
 - **Context:** M7 of the revival plan flagged [tailwind.config.mjs](../../tailwind.config.mjs)
   as a migration candidate. Tailwind v4 encourages CSS-first theming via `@theme`
@@ -36,3 +37,15 @@ do the conversion in one coherent pass.
 
 Revisit once M8 lands. If the `@theme` migration doesn't happen alongside dark
 mode, log a follow-up issue rather than letting this decision rot.
+
+## 2026-04-18 update — migration completed
+
+Deferred rather than skipped. After M8 shipped dark mode using
+`@custom-variant dark` directly in [src/styles/global.css](../../src/styles/global.css),
+the remaining typography customizations in `tailwind.config.mjs` were
+straightforward to port: `@plugin "@tailwindcss/typography";` replaces
+the v3-style `plugins:` array, and the six-or-so typography rules that
+weren't already duplicated as `.prose` selectors moved into global.css
+under a "PROSE TYPOGRAPHY CUSTOMIZATIONS" header. `tailwind.config.mjs`
+is deleted. The decision above is therefore superseded: v4's CSS-first
+theming is now the only source of truth.
