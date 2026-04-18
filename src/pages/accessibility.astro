@@ -15,9 +15,9 @@ const lastUpdated = '2026-04-17';
   <div class="max-w-4xl mx-auto px-4 py-12">
     <article class="prose prose-lg mx-auto">
       <h1>Accessibility Statement</h1>
-      <p class="text-sm text-gray-600 mb-8">Last updated: {lastUpdated}</p>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-8">Last updated: {lastUpdated}</p>
 
-      <div class="bg-yellow-50 p-6 rounded-lg mb-8 not-prose">
+      <div class="bg-yellow-50 dark:bg-yellow-900/30 p-6 rounded-lg mb-8 not-prose">
         <h2 class="text-lg font-semibold mb-2">Our commitment</h2>
         <p class="text-sm">
           Signals &amp; Systems is committed to WCAG 2.1 AA as a target, not a boast.
@@ -37,11 +37,16 @@ const lastUpdated = '2026-04-17';
         <li>Visible focus indicators on interactive controls; the one <code>focus:outline-none</code> offender has been replaced with a <code>focus-visible</code> ring.</li>
       </ul>
 
+      <h2>What's in place today (continued)</h2>
+      <ul>
+        <li>Dark mode with a toggle in the primary nav, persisted in <code>localStorage</code>. Respects <code>prefers-color-scheme</code> on first visit and sets <code>data-theme</code> before paint to avoid flash.</li>
+      </ul>
+
       <h2>Known gaps</h2>
       <ul>
         <li>Automated a11y scans (pa11y-ci + Lighthouse) are not yet blocking in CI — they're being stood up as advisory-first so we fix the backlog before enforcing.</li>
         <li>Alt-text coverage on inline images in articles is inconsistent; it's being audited.</li>
-        <li>Dark mode is not shipped yet; contrast will be re-audited when it lands.</li>
+        <li>Dark mode contrast has been implemented but not yet re-audited with axe/Pa11y against every component state — the advisory a11y workflow will catch regressions as the dark palette settles.</li>
         <li>Chart components accept a <code>description</code> prop but don't currently enforce it — some older charts rely on title-only labelling.</li>
       </ul>
 

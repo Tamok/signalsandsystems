@@ -9,53 +9,54 @@ const {
   title 
 } = Astro.props;
 
-// Set colors based on type
+// Set colors based on type. Dark variants use -950 backgrounds and lighter
+// foreground tints so the callout remains legible without blowing out.
 const bgColor = {
-  info: "bg-blue-50",
-  warning: "bg-yellow-50",
-  error: "bg-red-50",
-  tip: "bg-green-50",
-  insight: "bg-purple-50",
-  stat: "bg-cyan-50",
-  note: "bg-gray-50",
-  success: "bg-emerald-50",
-  next: "bg-indigo-50"
+  info: "bg-blue-50 dark:bg-blue-950",
+  warning: "bg-yellow-50 dark:bg-yellow-950",
+  error: "bg-red-50 dark:bg-red-950",
+  tip: "bg-green-50 dark:bg-green-950",
+  insight: "bg-purple-50 dark:bg-purple-950",
+  stat: "bg-cyan-50 dark:bg-cyan-950",
+  note: "bg-gray-50 dark:bg-gray-800",
+  success: "bg-emerald-50 dark:bg-emerald-950",
+  next: "bg-indigo-50 dark:bg-indigo-950"
 }[type];
 
 const borderColor = {
-  info: "border-blue-600",
-  warning: "border-yellow-700",
-  error: "border-red-700",
-  tip: "border-green-700",
-  insight: "border-purple-700",
-  stat: "border-cyan-700",
-  note: "border-gray-700",
-  success: "border-emerald-700",
-  next: "border-indigo-700"
+  info: "border-blue-600 dark:border-blue-400",
+  warning: "border-yellow-700 dark:border-yellow-400",
+  error: "border-red-700 dark:border-red-400",
+  tip: "border-green-700 dark:border-green-400",
+  insight: "border-purple-700 dark:border-purple-400",
+  stat: "border-cyan-700 dark:border-cyan-400",
+  note: "border-gray-700 dark:border-gray-500",
+  success: "border-emerald-700 dark:border-emerald-400",
+  next: "border-indigo-700 dark:border-indigo-400"
 }[type];
 
 const textColor = {
-  info: "text-blue-900",
-  warning: "text-yellow-900",
-  error: "text-red-900",
-  tip: "text-green-900",
-  insight: "text-purple-900",
-  stat: "text-cyan-900",
-  note: "text-gray-900",
-  success: "text-emerald-900",
-  next: "text-indigo-900"
+  info: "text-blue-900 dark:text-blue-100",
+  warning: "text-yellow-900 dark:text-yellow-100",
+  error: "text-red-900 dark:text-red-100",
+  tip: "text-green-900 dark:text-green-100",
+  insight: "text-purple-900 dark:text-purple-100",
+  stat: "text-cyan-900 dark:text-cyan-100",
+  note: "text-gray-900 dark:text-gray-100",
+  success: "text-emerald-900 dark:text-emerald-100",
+  next: "text-indigo-900 dark:text-indigo-100"
 }[type];
 
 const iconColor = {
-  info: "text-blue-700",
-  warning: "text-yellow-700",
-  error: "text-red-700",
-  tip: "text-green-700",
-  insight: "text-purple-700",
-  stat: "text-cyan-700",
-  note: "text-gray-700",
-  success: "text-emerald-700",
-  next: "text-indigo-700"
+  info: "text-blue-700 dark:text-blue-300",
+  warning: "text-yellow-700 dark:text-yellow-300",
+  error: "text-red-700 dark:text-red-300",
+  tip: "text-green-700 dark:text-green-300",
+  insight: "text-purple-700 dark:text-purple-300",
+  stat: "text-cyan-700 dark:text-cyan-300",
+  note: "text-gray-700 dark:text-gray-300",
+  success: "text-emerald-700 dark:text-emerald-300",
+  next: "text-indigo-700 dark:text-indigo-300"
 }[type];
 
 // Set icon based on type

@@ -3,34 +3,50 @@
 // No props required as this is a global component
 ---
 
-<nav class="bg-white shadow">
+<nav class="bg-white dark:bg-gray-800 shadow dark:shadow-gray-900/50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-16">
       <div class="flex">        <div class="flex-shrink-0 flex items-center">
-          <a href="/" class="text-xl font-bold text-gray-900">
+          <a href="/" class="text-xl font-bold text-gray-900 dark:text-gray-100">
             Signals & Systems
           </a>
         </div>
         <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-          <a href="/" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+          <a href="/" class="border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-500 hover:text-gray-700 dark:hover:text-gray-100 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
             Home
           </a>
-          <a href="/series" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+          <a href="/series" class="border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-500 hover:text-gray-700 dark:hover:text-gray-100 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
             Series
           </a>
-          <a href="/articles" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+          <a href="/articles" class="border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-500 hover:text-gray-700 dark:hover:text-gray-100 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
             Articles
           </a>
-          <a href="/search" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+          <a href="/search" class="border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-500 hover:text-gray-700 dark:hover:text-gray-100 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
             Search
           </a>
-          <a href="/about" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+          <a href="/about" class="border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-500 hover:text-gray-700 dark:hover:text-gray-100 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
             About
           </a>
         </div>
-      </div>      <div class="hidden sm:ml-6 sm:flex sm:items-center">
+      </div>      <div class="hidden sm:ml-6 sm:flex sm:items-center sm:gap-3">
+        <button
+          type="button"
+          class="theme-toggle p-1 rounded-full text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2"
+          aria-label="Toggle dark mode"
+          aria-pressed="false"
+        >
+          <!-- Sun: visible in light mode, toggles to dark -->
+          <svg class="sun-icon h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M7.05 16.95l-1.414 1.414M18.364 18.364l-1.414-1.414M7.05 7.05L5.636 5.636" />
+            <circle cx="12" cy="12" r="4" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <!-- Moon: visible in dark mode, toggles to light -->
+          <svg class="moon-icon h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" />
+          </svg>
+        </button>
         <div class="ml-3 relative">
-          <a href="https://github.com/Tamok" target="_blank" rel="noopener noreferrer" class="p-1 rounded-full text-gray-600 hover:text-gray-800 focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2">
+          <a href="https://github.com/Tamok" target="_blank" rel="noopener noreferrer" class="p-1 rounded-full text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2">
             <span class="sr-only">GitHub</span>
             <!-- GitHub Icon -->
             <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -39,9 +55,23 @@
           </a>
         </div>
       </div>
-      <div class="-mr-2 flex items-center sm:hidden">
+      <div class="-mr-2 flex items-center gap-2 sm:hidden">
+        <button
+          type="button"
+          class="theme-toggle p-2 rounded-md text-gray-400 dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+          aria-label="Toggle dark mode"
+          aria-pressed="false"
+        >
+          <svg class="sun-icon h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M7.05 16.95l-1.414 1.414M18.364 18.364l-1.414-1.414M7.05 7.05L5.636 5.636" />
+            <circle cx="12" cy="12" r="4" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <svg class="moon-icon h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" />
+          </svg>
+        </button>
         <!-- Mobile menu button -->
-        <button type="button" class="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500" aria-controls="mobile-menu" aria-expanded="false">
+        <button type="button" class="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500" aria-controls="mobile-menu" aria-expanded="false">
           <span class="sr-only">Open main menu</span>
           <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -55,13 +85,13 @@
   </div>
 
   <!-- Mobile menu, show/hide based on menu state. -->
-  <div class="sm:hidden hidden" id="mobile-menu">
+  <div class="sm:hidden hidden bg-white dark:bg-gray-800" id="mobile-menu">
     <div class="pt-2 pb-3 space-y-1">
-      <a href="/" class="bg-gray-50 border-blue-500 text-blue-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Home</a>
-      <a href="/series" class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Series</a>
-      <a href="/articles" class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Articles</a>
-      <a href="/search" class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Search</a>
-      <a href="/about" class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">About</a>
+      <a href="/" class="bg-gray-50 dark:bg-gray-700 border-blue-500 text-blue-700 dark:text-blue-300 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Home</a>
+      <a href="/series" class="border-transparent text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500 hover:text-gray-800 dark:hover:text-gray-100 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Series</a>
+      <a href="/articles" class="border-transparent text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500 hover:text-gray-800 dark:hover:text-gray-100 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Articles</a>
+      <a href="/search" class="border-transparent text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500 hover:text-gray-800 dark:hover:text-gray-100 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Search</a>
+      <a href="/about" class="border-transparent text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500 hover:text-gray-800 dark:hover:text-gray-100 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">About</a>
     </div>
   </div>
 </nav>
@@ -71,9 +101,6 @@
   const mobileMenu = document.getElementById('mobile-menu');
 
   if (mobileMenuButton && mobileMenu) {
-    const blockIcon = mobileMenuButton.querySelector<HTMLElement>('svg.block, svg.hidden:nth-of-type(1)');
-    const hiddenIcon = mobileMenuButton.querySelector<HTMLElement>('svg.hidden:nth-of-type(2), svg.block:nth-of-type(2)');
-
     const isOpen = () => mobileMenuButton.getAttribute('aria-expanded') === 'true';
 
     const setState = (open: boolean) => {
@@ -106,4 +133,26 @@
       setState(false);
     });
   }
+
+  // Theme toggle. Pre-hydration script in BaseLayout already set the initial
+  // class/data-theme attribute; this just flips it on click and persists.
+  const themeButtons = document.querySelectorAll<HTMLButtonElement>('.theme-toggle');
+  const syncPressed = (theme: 'light' | 'dark') => {
+    themeButtons.forEach((btn) => btn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false'));
+  };
+  const currentTheme = (): 'light' | 'dark' =>
+    document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+  syncPressed(currentTheme());
+
+  themeButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const next = currentTheme() === 'dark' ? 'light' : 'dark';
+      document.documentElement.classList.toggle('dark', next === 'dark');
+      document.documentElement.setAttribute('data-theme', next);
+      try {
+        localStorage.setItem('ss-theme', next);
+      } catch (_) {}
+      syncPressed(next);
+    });
+  });
 </script>
