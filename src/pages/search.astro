@@ -1,0 +1,82 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<BaseLayout
+  title="Search | Signals & Systems"
+  description="Full-text search across every Signals & Systems article, series, and page."
+>
+  <Nav slot="header" />
+
+  <div class="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+      <header class="mb-8 text-center">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Search</h1>
+        <p class="text-lg text-gray-600">
+          Full-text search across every article and series. Results are generated
+          at build time &mdash; expect the index to reflect the most recent deploy.
+        </p>
+      </header>
+
+      <div id="search" class="pagefind-mount"></div>
+
+      <noscript>
+        <p class="mt-6 rounded-md bg-amber-50 border border-amber-200 p-4 text-sm text-amber-900">
+          Search requires JavaScript. You can still browse the
+          <a href="/articles" class="underline font-medium">full article list</a>
+          or the <a href="/series" class="underline font-medium">series index</a>.
+        </p>
+      </noscript>
+    </div>
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+
+<!-- Pagefind UI is generated during `pnpm postbuild` (pagefind --site dist) and
+     served as a plain asset alongside the built site. Load it with is:inline
+     so Vite does not try to resolve the URL at build time. -->
+<script is:inline src="/pagefind/pagefind-ui.js"></script>
+<script is:inline>
+  (function () {
+    function mount() {
+      var el = document.getElementById('search');
+      if (!el) return;
+      if (typeof PagefindUI === 'undefined') {
+        el.innerHTML =
+          '<p class="rounded-md bg-amber-50 border border-amber-200 p-4 text-sm text-amber-900">' +
+          'Search index is not available in this environment. Run <code>pnpm build</code> ' +
+          'to generate it, or visit the deployed site.</p>';
+        return;
+      }
+      new PagefindUI({
+        element: '#search',
+        showSubResults: true,
+        showImages: false,
+        resetStyles: false
+      });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', mount);
+    } else {
+      mount();
+    }
+  })();
+</script>
+
+<style is:global>
+  /* Tailwind-compatible tweaks so the Pagefind UI doesn't look out of place */
+  .pagefind-mount {
+    --pagefind-ui-primary: #2563eb;
+    --pagefind-ui-text: #1f2937;
+    --pagefind-ui-background: #ffffff;
+    --pagefind-ui-border: #e5e7eb;
+    --pagefind-ui-tag: #f3f4f6;
+    --pagefind-ui-border-radius: 0.5rem;
+    --pagefind-ui-font: inherit;
+  }
+</style>
