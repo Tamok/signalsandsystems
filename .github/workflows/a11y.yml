@@ -29,21 +29,30 @@ jobs:
       - name: Build site
         run: pnpm build
 
-      - name: Install audit tools
-        run: npm install -g pa11y-ci @lhci/cli http-server
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli
 
-      - name: Serve built site
+      - name: Run pa11y audit (light + dark)
+        # pnpm a11y runs scripts/a11y-audit.mjs which boots http-server,
+        # then audits each URL twice (prefers-color-scheme seeded via
+        # localStorage) so both themes are covered.
+        run: pnpm a11y
+
+      - name: Upload a11y report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11y-report
+          path: a11y-report.json
+          if-no-files-found: ignore
+
+      - name: Serve built site for Lighthouse
         run: |
-          http-server dist -p 4321 --silent &
+          npx http-server dist -p 4321 --silent &
           for i in $(seq 1 30); do
             if curl -sf http://localhost:4321 > /dev/null; then break; fi
             sleep 1
           done
-
-      - name: Run pa11y-ci
-        # --config picks up .pa11yci.json which passes --no-sandbox to Chromium
-        # (required on Ubuntu runners that disallow unprivileged user namespaces).
-        run: pa11y-ci --config .pa11yci.json --sitemap http://localhost:4321/sitemap-index.xml --sitemap-exclude "/pagefind/"
 
       - name: Run Lighthouse CI
         run: |

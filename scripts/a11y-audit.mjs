@@ -24,9 +24,22 @@ const PATHS = [
 
 const THEMES = ['light', 'dark'];
 
-const server = httpServer.createServer({ root: 'dist', cache: -1 });
-await new Promise((r) => server.listen(PORT, r));
-console.log(`serving dist/ at ${ORIGIN}`);
+let server = null;
+try {
+  server = httpServer.createServer({ root: 'dist', cache: -1 });
+  await new Promise((resolve, reject) => {
+    server.listen(PORT, resolve);
+    server.server.once('error', reject);
+  });
+  console.log(`serving dist/ at ${ORIGIN}`);
+} catch (err) {
+  if (err && err.code === 'EADDRINUSE') {
+    console.log(`reusing existing server at ${ORIGIN}`);
+    server = null;
+  } else {
+    throw err;
+  }
+}
 
 const findings = [];
 const summary = [];
@@ -61,7 +74,7 @@ try {
     }
   }
 } finally {
-  server.close();
+  if (server) server.close();
 }
 
 writeFileSync('a11y-report.json', JSON.stringify({ summary, findings }, null, 2));

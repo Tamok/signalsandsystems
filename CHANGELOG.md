@@ -11,6 +11,7 @@ Nine-milestone rehabilitation pass. Entries summarize each milestone
 rather than listing every commit. See `git log main` for the fine-grained
 view. Pre-revival history resumes under "Pre-revival" below.
 
+2026-04-18 - Post-revival - A11y CI uses dual-theme audit: `pnpm a11y` now powers the advisory a11y workflow (both themes via localStorage seed), replacing pa11y-ci (which couldn't override Chromium `prefers-color-scheme`). SeriesNav prev/next and SubscribePopup gained missing `dark:bg-*`/`dark:border-*` variants. Script tolerates pre-bound port for CI reuse. `.pa11yci.json` removed - #a11y #ci #dark-mode
 2026-04-18 - Post-revival - Dark mode contrast re-audit: local two-theme pa11y audit via `pnpm a11y` exposed dark-mode-invisible text (`text-gray-800/900` without dark variants); fixed with `scripts/add-dark-variants.mjs` codemod across 29 files, search input aria-label, CI Chrome `--no-sandbox` via `.pa11yci.json`, audit URL list corrected to real article slugs - #a11y #dark-mode #ci
 2026-04-18 - Post-revival - Tailwind @theme migration: @plugin "@tailwindcss/typography" in global.css, typography customizations ported, tailwind.config.mjs deleted, ADR 0001 marked superseded - #refactor #tailwind
 2026-04-18 - Post-revival - Removed ScatterChart dead tooltip callbacks (JSON.stringify strips functions); astro check goes from 2 errors to 0 - #fix #typescript

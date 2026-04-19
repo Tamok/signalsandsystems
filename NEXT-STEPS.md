@@ -31,6 +31,19 @@ item is cheap and a Short item is expensive, reorder without guilt.
    - Article cards stay `bg-white` in dark mode by design; the
      in-card `text-gray-600` is fine on white but flagged as a
      false positive in the dark audit.
+   - WiringSchematic SVG inline `<style>` / `<text>` element fills
+     (`#wiring-*-desc`, `#esp32 > text`) fail light-mode contrast —
+     needs CSS-variable-aware palette.
+   - Chart gradient IDs (`#gradient-0`, `#gradient-1`) duplicate when
+     multiple charts render on one page. Needs per-instance unique IDs.
+
+   Post-revival follow-up landed 2026-04-18: `pnpm a11y` is now the
+   CI audit runner (pa11y-ci couldn't override Chromium
+   `prefers-color-scheme` to force a light baseline; our script
+   seeds theme via localStorage + `evaluateOnNewDocument` so both
+   themes are actually covered). SeriesNav prev/next and the
+   Subscribe popup gained missing `dark:bg-*`/`dark:border-*`
+   variants in the same pass.
 
 3. ~~**ScatterChart TypeScript warnings.**~~ Done 2026-04-18 — tooltip
    callbacks were dead code (stripped by JSON.stringify), removed.
