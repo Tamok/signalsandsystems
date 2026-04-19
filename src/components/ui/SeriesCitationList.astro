@@ -99,173 +99,127 @@ if (typeof globalThis !== 'undefined' && 'window' in globalThis) {
       
       citationItems.forEach(item => {
         const drawer = item.querySelector('.usage-drawer');
-        if (!drawer) {
-          console.log('No drawer found for item');
-          return;
-        }
-        
+        const toggle = item.querySelector('.citation-toggle');
+        if (!drawer || !toggle) return;
+
         const content = drawer.querySelector('.usage-drawer-content');
-        if (!content) {
-          console.log('No drawer content found for item');
-          return;
-        }
-        
+        if (!content) return;
+
         let isOpen = false;
         let hoverTimeout = null;
         let contentHeight = 0;
-        
-        // Measure content height for smooth animation
+
         function measureContentHeight() {
           if (contentHeight === 0) {
             const originalHeight = drawer.style.height;
             const originalOpacity = drawer.style.opacity;
-            
-            // Temporarily show to measure
+
             drawer.style.height = 'auto';
             drawer.style.opacity = '0';
             drawer.style.visibility = 'hidden';
-            
+
             contentHeight = content.offsetHeight;
-            
-            // Restore original state
+
             drawer.style.height = originalHeight;
             drawer.style.opacity = originalOpacity;
             drawer.style.visibility = 'visible';
           }
           return contentHeight;
         }
-        
+
         function openDrawer() {
           if (isOpen) return;
-          
-          // Close all other drawers first
+
           citationItems.forEach(otherItem => {
             if (otherItem !== item) {
               const otherDrawer = otherItem.querySelector('.usage-drawer');
-              if (otherDrawer && otherDrawer.getAttribute('aria-expanded') === 'true') {
+              const otherToggle = otherItem.querySelector('.citation-toggle');
+              if (otherToggle && otherToggle.getAttribute('aria-expanded') === 'true') {
                 otherDrawer.style.height = '0px';
                 otherDrawer.style.opacity = '0';
-                otherDrawer.setAttribute('aria-expanded', 'false');
+                otherToggle.setAttribute('aria-expanded', 'false');
               }
             }
           });
-          
+
           isOpen = true;
-          drawer.setAttribute('aria-expanded', 'true');
-          
+          toggle.setAttribute('aria-expanded', 'true');
+
           const targetHeight = measureContentHeight();
-          
-          // Start animation
+
           requestAnimationFrame(() => {
             drawer.style.height = targetHeight + 'px';
             drawer.style.opacity = '1';
           });
         }
-        
+
         function closeDrawer() {
           if (!isOpen) return;
-          
+
           isOpen = false;
-          drawer.setAttribute('aria-expanded', 'false');
-          
-          // Start closing animation
+          toggle.setAttribute('aria-expanded', 'false');
+
           requestAnimationFrame(() => {
             drawer.style.height = '0px';
             drawer.style.opacity = '0';
           });
         }
-        
-        // Click to toggle
-        item.addEventListener('click', (e) => {
-          // Don't toggle if clicking on links or buttons
-          if (e.target.closest('a, button')) {
-            return;
-          }
-          
+
+        toggle.addEventListener('click', (e) => {
           e.preventDefault();
-          if (isOpen) {
+          if (isOpen) closeDrawer();
+          else openDrawer();
+        });
+
+        toggle.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && isOpen) {
+            e.preventDefault();
             closeDrawer();
-          } else {
-            openDrawer();
           }
         });
-        
-        // Hover behavior with improved delays
+
         item.addEventListener('mouseenter', () => {
           clearTimeout(hoverTimeout);
           hoverTimeout = setTimeout(() => {
-            if (!isOpen && item.matches(':hover')) {
-              openDrawer();
-            }
-          }, 200); // Reduced delay for better responsiveness
+            if (!isOpen && item.matches(':hover')) openDrawer();
+          }, 200);
         });
-        
+
         item.addEventListener('mouseleave', () => {
           clearTimeout(hoverTimeout);
           if (isOpen) {
             hoverTimeout = setTimeout(() => {
-              if (!item.matches(':hover') && !drawer.matches(':hover')) {
-                closeDrawer();
-              }
-            }, 150); // Slightly faster close
-          }
-        });
-        
-        // Keep drawer open when hovering over it
-        drawer.addEventListener('mouseenter', () => {
-          clearTimeout(hoverTimeout);
-        });
-        
-        drawer.addEventListener('mouseleave', () => {
-          if (isOpen) {
-            hoverTimeout = setTimeout(() => {
-              if (!item.matches(':hover') && !drawer.matches(':hover')) {
-                closeDrawer();
-              }
+              if (!item.matches(':hover') && !drawer.matches(':hover')) closeDrawer();
             }, 150);
           }
         });
-        
-        // Enhanced keyboard accessibility
-        item.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            if (isOpen) {
-              closeDrawer();
-            } else {
-              openDrawer();
-            }
-          }
-          if (e.key === 'Escape' && isOpen) {
-            e.preventDefault();
-            closeDrawer();
-            item.focus(); // Return focus to the item
+
+        drawer.addEventListener('mouseenter', () => {
+          clearTimeout(hoverTimeout);
+        });
+
+        drawer.addEventListener('mouseleave', () => {
+          if (isOpen) {
+            hoverTimeout = setTimeout(() => {
+              if (!item.matches(':hover') && !drawer.matches(':hover')) closeDrawer();
+            }, 150);
           }
         });
-        
-        // Make item focusable and announce state to screen readers
-        if (!item.hasAttribute('tabindex')) {
-          item.setAttribute('tabindex', '0');
-        }
-        
-        item.setAttribute('role', 'button');
-        item.setAttribute('aria-label', 'Citation details. Press Enter or Space to view usage information.');
-        
-        // Initialize closed state
+
         drawer.style.height = '0px';
         drawer.style.opacity = '0';
-        drawer.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-expanded', 'false');
       });
-      
-      // Close all drawers when clicking outside
+
       function handleOutsideClick(e) {
         if (!e.target.closest('.citation-item')) {
           citationItems.forEach(item => {
             const drawer = item.querySelector('.usage-drawer');
-            if (drawer && drawer.getAttribute('aria-expanded') === 'true') {
+            const toggle = item.querySelector('.citation-toggle');
+            if (toggle && toggle.getAttribute('aria-expanded') === 'true') {
               drawer.style.height = '0px';
               drawer.style.opacity = '0';
-              drawer.setAttribute('aria-expanded', 'false');
+              toggle.setAttribute('aria-expanded', 'false');
             }
           });
         }
