@@ -32,6 +32,11 @@ jobs:
       - name: Install Lighthouse CI
         run: npm install -g @lhci/cli
 
+      - name: Install Chrome for puppeteer
+        # pnpm blocks puppeteer's postinstall by default (ignored-build-scripts),
+        # so Chrome isn't fetched during `pnpm install`. Do it explicitly.
+        run: npx puppeteer browsers install chrome
+
       - name: Run pa11y audit (light + dark)
         # pnpm a11y runs scripts/a11y-audit.mjs which boots http-server,
         # then audits each URL twice (prefers-color-scheme seeded via
