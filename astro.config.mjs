@@ -9,5 +9,16 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
-  integrations: [mdx()]
+  integrations: [mdx()],
+  markdown: {
+    shikiConfig: {
+      // Dual themes emit CSS variables (--shiki-light / --shiki-dark).
+      // Activation rules live in src/styles/global.css and swap on .dark.
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark'
+      },
+      defaultColor: false
+    }
+  }
 });

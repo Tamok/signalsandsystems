@@ -31,22 +31,23 @@ export async function initializeHighlighter() {
 }
 
 /**
- * Highlight code with shiki
- * 
- * @param code - The code to highlight
- * @param lang - The language of the code
- * @param theme - The theme to use for highlighting (default: 'github-light')
- * @returns HTML string with highlighted code
+ * Highlight code with shiki.
+ * Emits dual-theme CSS variables (--shiki-light / --shiki-dark); the `theme`
+ * param is ignored (kept for backwards-compat with existing CodeBlock callers).
+ * Activation rules in src/styles/global.css pick the right palette per mode.
  */
-export async function highlightCode(code: string, lang: string, theme: string = 'github-light') {
+export async function highlightCode(code: string, lang: string, _theme?: string) {
   const highlighter = await initializeHighlighter();
   if (!highlighter) throw new Error('Shiki highlighter not initialized');
+  const dualTheme = {
+    themes: { light: 'github-light', dark: 'github-dark' },
+    defaultColor: false as const,
+  };
   try {
-    return highlighter.codeToHtml(code, { lang, theme });
+    return highlighter.codeToHtml(code, { lang, ...dualTheme });
   } catch (error) {
     console.error(`Error highlighting code: ${error}`);
-    // Fallback to plaintext if language is not supported
-    return highlighter.codeToHtml(code, { lang: 'plaintext', theme });
+    return highlighter.codeToHtml(code, { lang: 'plaintext', ...dualTheme });
   }
 }
 

@@ -375,6 +375,21 @@ body.debug-mode article::after {
 .dark .code-block pre {
   background: #0d1117 !important;
 }
+
+/* Shiki dual-theme activation. `shikiConfig.themes` with `defaultColor: false`
+   emits --shiki-light / --shiki-dark CSS variables on each token; these rules
+   pick the right palette based on the current theme class. */
+.astro-code,
+.astro-code span {
+  color: var(--shiki-light) !important;
+  background-color: var(--shiki-light-bg) !important;
+}
+.dark .astro-code,
+.dark .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
+
 .code-block code {
   font-family: 'Fira Code', monospace;
   font-size: 0.875rem;
