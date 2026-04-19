@@ -26,16 +26,16 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Install Chrome for puppeteer
+        # pnpm v10 blocks postinstalls by default; rebuild triggers
+        # puppeteer's install.mjs which downloads Chrome to ~/.cache/puppeteer.
+        run: pnpm rebuild puppeteer
+
       - name: Build site
         run: pnpm build
 
       - name: Install Lighthouse CI
         run: npm install -g @lhci/cli
-
-      - name: Install Chrome for puppeteer
-        # pnpm blocks puppeteer's postinstall by default (ignored-build-scripts),
-        # so Chrome isn't fetched during `pnpm install`. Do it explicitly.
-        run: npx puppeteer browsers install chrome
 
       - name: Run pa11y audit (light + dark)
         # pnpm a11y runs scripts/a11y-audit.mjs which boots http-server,
