@@ -168,6 +168,16 @@ const {
     <!-- Newsletter Subscription Popup -->
     <SubscribePopup />
 
+    <!-- Make scrollable code blocks keyboard-accessible.
+         WCAG 2.1 SC 2.1.1 requires keyboard reach for scroll containers. -->
+    <script is:inline>
+      document.querySelectorAll('pre[class]').forEach(function(pre) {
+        if (pre.scrollWidth > pre.clientWidth || pre.scrollHeight > pre.clientHeight) {
+          if (!pre.hasAttribute('tabindex')) pre.setAttribute('tabindex', '0');
+        }
+      });
+    </script>
+
     <!-- Additional scripts -->
     <slot name="after-footer" />
       <!-- Development Debug Toggle (only in dev mode) -->

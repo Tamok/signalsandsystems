@@ -27,7 +27,7 @@ const latestSeries = [...series].sort((a, b) => b.startDate.getTime() - a.startD
             <div class="p-6">
               <div class="flex items-start justify-between mb-2">
                 <h3 class={`text-xl font-semibold flex-1${article.series && article.series.toLowerCase() === 'isomon' ? ' isomon-title' : ''}`}>
-                  <a href={`/${article.slug}`} class={article.series && article.series.toLowerCase() === 'isomon' ? 'isomon-title' : 'text-blue-600 hover:text-blue-800'}>
+                  <a href={`/${article.slug}`} class={article.series && article.series.toLowerCase() === 'isomon' ? 'isomon-title' : 'text-blue-700 hover:text-blue-900'}>
                     {article.title}
                   </a>
                 </h3>
@@ -44,10 +44,10 @@ const latestSeries = [...series].sort((a, b) => b.startDate.getTime() - a.startD
                   </a>
                 )}
               </div>
-              <p class="text-gray-600 dark:text-gray-300 mb-4">
+              <p class="text-gray-700 dark:text-gray-300 mb-4">
                 {article.description}
               </p>
-              <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+              <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
                 <span>{formatDateUTC(article.publishDate)}</span>
                 <span class="mx-2">•</span>
                 <span>JELL</span>
@@ -67,7 +67,7 @@ const latestSeries = [...series].sort((a, b) => b.startDate.getTime() - a.startD
               <div class="p-6">
                 <div class="flex items-start justify-between mb-2">
                   <h3 class={`text-xl font-semibold${s.slug && s.slug.toLowerCase() === 'isomon' ? ' isomon-title' : ''}`}>
-                    <a href={`/series/${s.slug}`} class={s.slug && s.slug.toLowerCase() === 'isomon' ? 'isomon-title' : 'text-blue-600 hover:text-blue-800'}>
+                    <a href={`/series/${s.slug}`} class={s.slug && s.slug.toLowerCase() === 'isomon' ? 'isomon-title' : 'text-blue-700 hover:text-blue-900'}>
                       {s.title}
                     </a>
                   </h3>

@@ -54,14 +54,14 @@ const sortedArticles = [...articles].sort((a, b) => b.publishDate.getTime() - a.
                   </span>
                 )}
               </div>
-              <p class="text-gray-600 dark:text-gray-300 mb-4">{article.description}</p>
+              <p class="text-gray-700 dark:text-gray-300 mb-4">{article.description}</p>
               <div class="flex items-center justify-between">
-                <div class="text-sm text-gray-500 dark:text-gray-400">
+                <div class="text-sm text-gray-600 dark:text-gray-400">
                   <time datetime={article.publishDate.toISOString()}>
                     {formatDateUTC(article.publishDate)}
                   </time>
                 </div>
-                <a href={`/${article.slug}`} class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                <a href={`/${article.slug}`} class="text-blue-700 hover:text-blue-900 text-sm font-medium">
                   Read article →
                 </a>
               </div>

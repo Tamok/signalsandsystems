@@ -528,7 +528,7 @@ article.series-devlog.prose ul > li::before {
 
 /* Always apply green to .isomon-title, regardless of parent context */
 .isomon-title {
-  color: #16a34a !important; /* green-600 */
+  color: #166534 !important; /* green-800: 6.5:1 on white, 6.2:1 on gray-50 */
 }
 
 /* ========================================
@@ -662,4 +662,27 @@ article.series-devlog.prose ul > li::before {
 }
 .dark .theme-toggle .moon-icon {
   display: inline-block;
+}
+/* CitedText dark-mode overrides.
+   Scoped Astro styles can't target .dark ancestors, so these live here. */
+.dark .citation-marker {
+  color: #a5b4fc; /* indigo-300 — 9:1 on #1e293b */
+  background: #1e293b;
+}
+.dark .cited-statistic {
+  background: linear-gradient(120deg, rgba(96, 165, 250, 0.18) 0%, rgba(192, 132, 252, 0.18) 100%);
+}
+.dark .cited-quote {
+  background: linear-gradient(120deg, rgba(52, 211, 153, 0.18) 0%, rgba(96, 165, 250, 0.18) 100%);
+}
+.dark .cited-fact {
+  background: linear-gradient(120deg, rgba(251, 146, 60, 0.18) 0%, rgba(248, 113, 113, 0.18) 100%);
+}
+.dark .cited-book {
+  background: linear-gradient(120deg, rgba(156, 163, 175, 0.15) 0%, rgba(209, 213, 219, 0.12) 100%);
+  color: #e5e7eb;
+  border-bottom-color: #6b7280;
+}
+.dark .cited-text {
+  border-bottom-color: #818cf8; /* indigo-400 */
 }

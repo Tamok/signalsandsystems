@@ -37,15 +37,15 @@ const sortedArticles = [...allArticles].sort((a, b) => a.order - b.order);
       {sortedArticles.map((article) => (
         <li class="flex items-center">
           {article.slug === currentSlug ? (
-            <span class={seriesSlug.toLowerCase() === 'isomon' ? 'isomon-title text-blue-600 font-medium' : 'text-blue-600 font-medium'}>
+            <span class={seriesSlug.toLowerCase() === 'isomon' ? 'isomon-title text-blue-700 dark:text-blue-400 font-medium' : 'text-blue-700 dark:text-blue-400 font-medium'}>
               → {article.title}
-              <span class="text-sm text-gray-500 dark:text-gray-400 ml-2">
+              <span class="text-sm text-gray-600 dark:text-gray-400 ml-2">
                 ({formatDateUTC(article.publishDate)})
               </span>
             </span>          ) : (
-            <a href={`/${article.slug}`} class={seriesSlug.toLowerCase() === 'isomon' ? 'isomon-title text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400' : 'text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400'}>
+            <a href={`/${article.slug}`} class={seriesSlug.toLowerCase() === 'isomon' ? 'isomon-title text-gray-700 dark:text-gray-200 hover:text-blue-700 dark:hover:text-blue-400' : 'text-gray-700 dark:text-gray-200 hover:text-blue-700 dark:hover:text-blue-400'}>
               {article.title}
-              <span class="text-sm text-gray-500 dark:text-gray-400 ml-2">
+              <span class="text-sm text-gray-600 dark:text-gray-400 ml-2">
                 ({formatDateUTC(article.publishDate)})
               </span>
             </a>
