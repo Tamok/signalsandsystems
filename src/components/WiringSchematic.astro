@@ -50,23 +50,11 @@ const labelledBy = description ? `${titleId} ${descId}` : titleId;
         <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
           <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e5e7eb" stroke-width="0.5"/>
         </pattern>
-        
-        <!-- Component styles (colors meet WCAG 2.1 AA contrast against
-             #f3f4f6 component rects and the white schematic background) -->
-        <style>
-          .component-rect { fill: #f3f4f6; stroke: #374151; stroke-width: 2; }
-          .component-text { font-family: system-ui, sans-serif; font-size: 12px; fill: #1f2937; font-weight: 500; }
-          .component-label { font-family: system-ui, sans-serif; font-size: 10px; fill: #4b5563; }
-          .wire { stroke: #b91c1c; stroke-width: 2; fill: none; }
-          .wire-power { stroke: #b91c1c; stroke-width: 2; fill: none; }
-          .wire-ground { stroke: #000000; stroke-width: 2; fill: none; }
-          .wire-signal { stroke: #1d4ed8; stroke-width: 2; fill: none; }
-          .wire-i2c { stroke: #047857; stroke-width: 2; fill: none; }
-          .connection-dot { fill: #1f2937; }
-          .pin-label { font-family: system-ui, sans-serif; font-size: 9px; fill: #1f2937; }
-        </style>
       </defs>
       
+      <!-- Solid white background so contrast checkers see the correct
+           background color for SVG text elements regardless of page theme. -->
+      <rect width={width} height={height} fill="white" />
       <!-- Background grid -->
       <rect width={width} height={height} fill="url(#grid)" />
       

@@ -1,0 +1,278 @@
+---
+title: "Devlog #11: Automated WCAG Auditing: Zero Confirmed Errors"
+description: "Building an in-house pa11y + puppeteer audit pipeline, then hunting down every confirmed WCAG 2.1 AA failure across light and dark themes: SVG contrast traps, CSS custom property blindness, @media vs .dark-class mismatches, and ARIA 1.2 attribute changes."
+publishDate: 2026-04-22
+series: "devlog"
+order: 11
+coverImage: "/images/devlog-11-cover.svg"
+tags: ["accessibility", "wcag", "pa11y", "axe", "color-contrast", "svg", "dark-mode", "in-house-tooling"]
+draft: false
+---
+
+import CalloutBox from '../../components/CalloutBox.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+<p class="lead">
+  Devlog #10 established our accessibility aspirations and Lighthouse baseline. This installment is the engineering story: building an automated pa11y + puppeteer pipeline, then systematically eliminating every confirmed WCAG 2.1 AA failure across nine URLs × two themes, without adding a single new dependency or reaching for a third-party service.
+</p>
+
+## Why Lighthouse Wasn't Enough
+
+Lighthouse gives a useful single-page snapshot. But Signals &amp; Systems has eight distinct series/page types, a class-toggled dark mode, consent overlays, and a newsletter popup, all of which interact with contrast checkers in unexpected ways. A clean Lighthouse run on the homepage proves very little about an isomon article in dark mode.
+
+The goal was a repeatable audit covering every content type, both themes, with overlays suppressed, and with a clear signal-to-noise separation between *confirmed failures* and *uncertain items that tools can't resolve*.
+
+## Building the Pipeline
+
+### pa11y 9 and the Vanishing `beforeScript`
+
+The first obstacle: pa11y 9 removed the `beforeScript` option. Previous versions let you inject JavaScript before page load to seed `localStorage`. The upgrade changelog mentioned it quietly, and our existing setup broke silently. The consent overlay was covering every page and causing false positives on elements rendered beneath its fixed, z-indexed overlay.
+
+The fix: create our own Puppeteer browser and page, call `evaluateOnNewDocument` to seed the three keys before navigation, then pass the browser and page instances to pa11y via the `browser` and `page` options.
+
+<CodeBlock
+  language="javascript"
+  filename="scripts/a11y-audit.mjs (key section)"
+  code={`const browser = await puppeteer.launch({
+  args: ['--no-sandbox', '--disable-setuid-sandbox'],
+});
+
+// For each URL:
+const page = await browser.newPage();
+await page.evaluateOnNewDocument((t) => {
+  try {
+    localStorage.setItem('ss-theme', t);               // light | dark
+    localStorage.setItem('ss-analytics-consent', 'denied');
+    localStorage.setItem('ss-newsletter-popup', JSON.stringify({
+      closed: true, closedUntil: 9999999999999, minimized: false,
+    }));
+  } catch (_) {}
+}, theme);
+
+const result = await pa11y(url, {
+  standard: 'WCAG2AA',
+  runners: ['axe', 'htmlcs'],
+  browser,
+  page,
+  timeout: 45000,
+  wait: 500,
+});`}
+/>
+
+This seeds localStorage for theme, consent, and popup state before a single byte of page JavaScript runs. The theme key drives the pre-hydration script that toggles `.dark` on `<html>`, so axe and htmlcs see the correct computed colors for both themes.
+
+### Separating Confirmed Errors from Uncertain Items
+
+Axe 4.11 introduced `needsFurtherReview: true` on contrast findings where it cannot resolve CSS custom properties. Specifically: Shiki's dual-theme approach emits `--shiki-light` and `--shiki-dark` CSS variables on every code token. Our activation rules in `global.css` switch between them based on the `.dark` class, but axe cannot evaluate `var(--shiki-light)` at runtime.
+
+These are *not* genuine WCAG failures; the actual rendered colors pass with margin. But if we counted them naively, every page with code blocks would show dozens of "errors" that aren't errors. The audit script filters them:
+
+<CodeBlock
+  language="javascript"
+  filename="scripts/a11y-audit.mjs"
+  code={`const confirmedErrors = errors.filter(
+  (i) => !i.runnerExtras?.needsFurtherReview
+);
+const uncertainErrors = errors.filter(
+  (i) => i.runnerExtras?.needsFurtherReview
+);`}
+/>
+
+The summary table outputs separate columns. Exit code uses only `confirmedErrors.length`. This kept the signal clean: every "confirmed error" in the report was a real problem we needed to fix.
+
+## The Bugs We Found
+
+### 1. htmlcs Reads CSS `color`, Not SVG `fill`
+
+The isomon article embeds a `WiringSchematic` component, an SVG wiring diagram. Initial audit showed 43 confirmed errors from it in dark mode, all `WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Fail` with a reported ratio of 1.47:1.
+
+The SVG text elements used `.component-text`, `.component-label`, `.pin-label` CSS classes with explicit `fill: #1f2937`. That's a very dark color; it *should* pass on the white SVG background. What was happening?
+
+htmlcs computes contrast by calling `getComputedStyle(element).color`, the CSS `color` property, not SVG `fill`. In dark mode, `.dark .prose p { color: #d1d5db }` is inherited by every descendant of `.prose`, including SVG `<text>` elements. So htmlcs was seeing `#d1d5db` (light gray) on a white SVG background: 1.47:1.
+
+The fix was two-part:
+
+1. Add an explicit white background `<rect>` as the first child of the SVG so contrast checkers see a white background regardless of DOM context.
+2. Add `color: #1f2937` (mirroring `fill`) to every SVG text class, so the CSS `color` property is explicitly set and not inherited from the dark-mode prose rules.
+
+<CodeBlock
+  language="css"
+  filename="src/styles/global.css (SVG classes)"
+  code={`.component-text {
+  fill: #1f2937;
+  color: #1f2937; /* mirrors fill, prevents dark-mode .prose color inheritance */
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+}
+.pin-label {
+  fill: #1f2937;
+  color: #1f2937;
+  font-family: system-ui, sans-serif;
+  font-size: 9px;
+}`}
+/>
+
+<CalloutBox type="insight">
+**The pattern to remember:** whenever you embed SVG inline inside a `.prose` container with dark mode, any `<text>` element without explicit CSS `color` will inherit the dark-mode prose text color. That inherited value is what contrast checkers see, not your SVG `fill`. Mirror `fill` with `color` on every SVG text class.
+</CalloutBox>
+
+### 2. SVG `<style>` and `<desc>` Are Not Rendered Text (But htmlcs Checks Them)
+
+After fixing the SVG text contrast, two errors remained in dark/isomon: the `<style>` element inside `<defs>` and the `<desc>` element. htmlcs was computing contrast on the *text content of the CSS inside `<style>`* and the description string inside `<desc>`. Neither of these is ever rendered visually.
+
+This is an htmlcs bug; both elements are defined as non-rendered by the SVG spec. The pragmatic fix: move the SVG CSS out of the inline `<style>` block and into `global.css` (so no inline `<style>` element exists in the SVG), and add `svg desc { display: none; }` so htmlcs stops evaluating the description text as visible content.
+
+The `aria-labelledby` reference to `<desc>` still works: per ARIA 1.1 §5.2.7.5, referenced elements are included in accessible name computation even when `display: none`.
+
+### 3. `@media (prefers-color-scheme: dark)` ≠ `.dark` Class Toggle
+
+`CitationList.astro` styled its links using a scoped `@media (prefers-color-scheme: dark)` block. Signals &amp; Systems uses class-based dark mode: the `.dark` class is toggled on `<html>` via localStorage and a pre-hydration script. The media query never fires when the user sets dark mode through our toggle.
+
+Result: in dark mode, citation list links stayed at their light-mode color (`#6366f1`, indigo-500) against the dark page background, hitting 3.86:1 and failing WCAG AA.
+
+Two changes:
+
+- **Light mode fix**: `#6366f1` → `#4f46e5` (indigo-600), giving 5.8:1 on white.
+- **Dark mode fix**: add `.dark .demure-citation-list a { color: #a78bfa }` to `global.css`, bypassing the broken media query entirely.
+
+<CalloutBox type="warning">
+**Watch for this pattern:** any component that uses `@media (prefers-color-scheme: dark)` for styling will be invisible to class-based dark mode. All dark mode overrides need to use the `.dark` ancestor selector. Scoped Astro component styles can't target parent-class selectors, so the fix lives in `global.css`.
+</CalloutBox>
+
+### 4. CSS Custom Properties Are Opaque to htmlcs
+
+`StatsDisplay.astro` styled its source attribution links with `color: var(--stat-color)`, where `--stat-color` is an inline custom property set per stat item (`#3B82F6`, `#8B5CF6`, etc.). htmlcs cannot evaluate CSS custom properties; it sees an unresolvable value and falls back, producing a spurious low-contrast reading.
+
+Even if htmlcs could resolve them, several default stat colors (emerald-500 `#10B981`, orange-500 `#F97316`) fail WCAG AA on white anyway.
+
+Fix: hardcode accessible colors for the source link, independent of the accent color:
+
+<CodeBlock
+  language="css"
+  filename="src/components/ui/StatsDisplay.astro"
+  code={`.stat-source a {
+  /* Hardcoded: htmlcs cannot resolve var(--stat-color),
+     and some accent colors fail AA on white regardless.
+     blue-700 achieves 6.2:1 on white. */
+  color: #1d4ed8;
+}
+
+:global(.dark) .stat-source a {
+  color: #93c5fd; /* blue-300, 7.3:1 on gray-900 */
+}`}
+/>
+
+### 5. ARIA 1.2: `aria-label` Is Prohibited on `role="generic"`
+
+`CodeBlock.astro` had `aria-label="Filename: {filename}"` on a wrapper `<div>`. Two bugs in one attribute:
+
+1. `{filename}` was a literal string, not an Astro expression; it rendered as `"Filename: {filename}"`.
+2. In ARIA 1.2, plain `<div>` elements have implicit role `generic`, which prohibits `aria-label` (axe rule: `aria-prohibited-attr`).
+
+Fix: remove the `aria-label` entirely. The filename is visible as text in the `<div class="code-filename">` child, which is sufficient for screen readers without redundant labeling.
+
+### 6. Missing Dark Variant on `quote.astro` Background
+
+`quote.astro` had `bg-gray-50` with no `dark:bg-*` variant. In dark mode, the text was `dark:text-gray-200` (`#e5e7eb`) on the untouched `bg-gray-50` (`#f9fafb`): 1.21:1.
+
+Fix: add `dark:bg-gray-800 dark:border-gray-500`. Simple, but easy to miss without automated testing.
+
+### 7. The Audit Said "Clean" But the Code Blocks Were Illegible
+
+After landing all six fixes above, the audit reported zero confirmed errors. Then the first manual look at a devlog in light mode: code blocks were unreadable. Light gray text on a slightly-less-light gray background. How did the audit miss this?
+
+Astro 5 changed the class name on Shiki's `<pre>` element from `astro-code` (Astro 4) to `shiki`. The dual-theme activation rules in `global.css` still targeted `.astro-code`:
+
+<CodeBlock
+  language="css"
+  filename="src/styles/global.css (broken)"
+  code={`/* This selector never matches Astro 5 output. */
+.astro-code,
+.astro-code span {
+  color: var(--shiki-light) !important;
+  background-color: var(--shiki-light-bg) !important;
+}`}
+/>
+
+With the activation rules silent, code tokens had no color set. They inherited from the typography plugin's `.prose pre code` rule, which sets a light gray meant for dark `pre` backgrounds. Light text on light bg.
+
+The audit missed it for a subtle reason. Axe sees `var(--shiki-light)` in the cascade and emits `needsFurtherReview` for any element where it cannot resolve a CSS custom property, *regardless of whether the rule actually applies*. We filtered all `needsFurtherReview` items as "uncertain". The selector was broken, the rules never fired, but axe still saw the unresolvable variable in the cascade and flagged the spans as uncertain rather than as confirmed failures.
+
+The fix was a one-line selector update:
+
+<CodeBlock
+  language="css"
+  filename="src/styles/global.css"
+  code={`.astro-code,
+.astro-code span,
+.shiki,
+.shiki span {
+  color: var(--shiki-light) !important;
+  background-color: var(--shiki-light-bg) !important;
+}`}
+/>
+
+The lesson is sharper than the fix. **`needsFurtherReview` filtering is correct only when the rules involving CSS variables actually apply.** If they silently don't, the filter hides the real failure. When CSS-var activation is involved, manual visual verification is non-negotiable. The audit pipeline now has a Playwright verification step planned, but the durable lesson is to render every component variant in a real browser before declaring an audit clean.
+
+### 8. High-Contrast Shiki Themes for Comment Tokens
+
+Once activation worked, axe could resolve the actual rendered colors and immediately surfaced 26 new dark-mode failures: code-block comments. The `github-light` and `github-dark` Shiki themes both use `#6A737D` for comment tokens, which is 3.5:1 on the dark `#24292e` background, well below WCAG AA's 4.5:1 floor.
+
+Two Shiki instances had to change. Astro processes fenced code blocks via the config in [astro.config.mjs](https://github.com/Tamok/signalsandsystems/blob/main/sastro/astro.config.mjs), but the `<CodeBlock>` component runs its own Shiki instance in [src/utils/codeHighlight.ts](https://github.com/Tamok/signalsandsystems/blob/main/sastro/src/utils/codeHighlight.ts). Both moved to the high-contrast variants:
+
+<CodeBlock
+  language="javascript"
+  filename="astro.config.mjs"
+  code={`shikiConfig: {
+  themes: {
+    light: 'github-light-high-contrast',
+    dark: 'github-dark-high-contrast'
+  },
+  defaultColor: false
+}`}
+/>
+
+Comment tokens went from `#6A737D` to `#66707B` on light (4.86:1) and `#BDC4CC` on dark (~11.6:1). Every other token already passed.
+
+## The Audit Results
+
+After every fix above, including the Astro 5 selector unmask and the high-contrast theme switch:
+
+| Theme | URL count | Confirmed errors | Uncertain (CSS-var) |
+|---|---|---:|---:|
+| light | 9 | **0** | ~160 |
+| dark | 9 | **0** | ~160 |
+
+Zero confirmed errors across 18 URL × theme combinations. The remaining ~320 uncertain items are all Shiki CSS-variable tokens that axe cannot resolve at runtime; they are not WCAG failures.
+
+## Reviewing With Bots: The Branch + PR Workflow
+
+The audit pipeline only catches what it knows to look for. Some of the most useful catches in this work came from reading code, not running it. Now that the WCAG zero-error baseline is real, all non-trivial work goes through a branch + PR workflow with both Copilot and Codex set as automatic reviewers via [a small workflow](https://github.com/Tamok/signalsandsystems/blob/main/sastro/.github/workflows/auto-request-review.yml) that calls the GitHub `requested_reviewers` API on every PR open. The CI gates (typecheck, content validation, accessibility audit) are now blocking via a [branch-protection ruleset](https://github.com/Tamok/signalsandsystems/blob/main/sastro/docs/maintainer-setup.md), so a regression that breaks any of them blocks the merge before it reaches `main`.
+
+The very first PR through this workflow ([#3](https://github.com/Tamok/signalsandsystems/pull/3), the one that introduced the audit pipeline itself) caught five real issues that the audit could never have found:
+
+- **`puppeteer.launch` outside `try/finally`**: if Chrome download or system-deps initialization fails, the http-server leaks. Restructured to a single outer try with `browser` declared `let null` and closed in finally.
+- **`.prose :where(code)` clobbered Shiki block tokens**: the inline-code styling rule also matched `pre > code` from Shiki blocks, fighting with the new high-contrast backgrounds. Added `:not(pre *)` to the negation list.
+- **Generic SVG class names in `global.css`**: `.wire`, `.component-text`, `.pin-label` were unscoped and could collide with future non-SVG content. All scoped to `.wiring-schematic-container`.
+- **`svg desc { display: none }` was site-global**: the rule meant to suppress an htmlcs false positive on one schematic was hiding `<desc>`-based labelling on every SVG. Scoped to `.wiring-schematic-container svg desc`.
+- **CitationList dark-mode override missed by specificity**: `.dark .demure-citation-list a` (specificity 0,2,1) couldn't beat the scoped `.demure-citation-list[data-cid] a[data-cid]` rule (specificity 0,3,2). Moved the override into the component's own scoped style block as `:global(.dark) .demure-citation-list a`, picking up the same data-cid scoping and winning cleanly.
+
+None of these would fail axe. None would block a contrast assertion. They are correctness, scoping, and lifecycle issues, the kind of things a reviewer notices and a static analyzer doesn't.
+
+## Design Principles Applied
+
+Every fix followed the same philosophy: **in-house, lightweight, documented**.
+
+- No third-party accessibility SaaS subscriptions
+- No new npm dependencies (pa11y and puppeteer were already present)
+- Each fix is a targeted CSS or markup change with a comment explaining *why*
+- The audit script is a single plain JS file in `scripts/`: readable, hackable, no build step
+
+The `needsFurtherReview` filter is the most important architectural decision, with the caveat learned the hard way: it's only correct when the rules involving CSS variables actually apply. Combined with manual rendered-color verification on every variant, the filter keeps the signal clean.
+
+## What's Next
+
+The audit now runs in CI as a blocking gate on every pull request and on every push to `main`, alongside the typecheck and content validation gates. A regression in any of them blocks the GitHub Pages deploy. The accessibility statement at [/accessibility](/accessibility) reflects the audited state, no more "work in progress" or "known gaps" caveats.
+
+Beyond keeping the gate green, two follow-ups are worth scoping: a Playwright check that asserts non-trivial contrast on rendered code blocks (so the next Astro version bump or theme swap can't silently re-illegibilize them), and a per-instance unique ID for chart gradients so two charts on one page no longer collide on `#gradient-0`. Both are graceful-degradation issues, not WCAG failures, but the kind of housekeeping that pays off when you next touch the code.

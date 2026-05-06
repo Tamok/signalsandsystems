@@ -8,7 +8,11 @@ export async function initializeHighlighter() {
   if (!highlighterInstance) {
     const shiki = await import('shiki');
     highlighterInstance = await shiki.createHighlighter({
-      themes: ['github-light', 'github-dark'],      langs: [
+      // High-contrast variants required for WCAG 2.1 AA compliance on
+      // comment tokens; default github-light/dark share #6A737D for
+      // comments which fails 4.5:1 on both backgrounds.
+      themes: ['github-light-high-contrast', 'github-dark-high-contrast'],
+      langs: [
         'javascript',
         'typescript',
         'jsx',
@@ -40,7 +44,7 @@ export async function highlightCode(code: string, lang: string, _theme?: string)
   const highlighter = await initializeHighlighter();
   if (!highlighter) throw new Error('Shiki highlighter not initialized');
   const dualTheme = {
-    themes: { light: 'github-light', dark: 'github-dark' },
+    themes: { light: 'github-light-high-contrast', dark: 'github-dark-high-contrast' },
     defaultColor: false as const,
   };
   try {

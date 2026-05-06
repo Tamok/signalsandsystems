@@ -81,12 +81,12 @@ if (!series) {
       <!-- Articles section -->
       <div class="mt-12">
         <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-8">Articles in this Series</h2>        <div class="space-y-10 mt-8">
-          {sortedArticles.map((article) => (            <article class="bg-white rounded-lg shadow-md overflow-hidden">
+          {sortedArticles.map((article) => (            <article class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
               <div class="p-6">
                 <!-- Article Badge and Title -->
                 <div class="flex items-start justify-between mb-2">
                   <h2 class={`text-2xl font-bold flex-1${article.series && article.series.toLowerCase() === 'isomon' ? ' isomon-title' : ''}`}>
-                    <a href={`/${article.slug}`} class={article.series && article.series.toLowerCase() === 'isomon' ? 'isomon-title' : 'text-gray-900 hover:text-blue-600'}>
+                    <a href={`/${article.slug}`} class={article.series && article.series.toLowerCase() === 'isomon' ? 'isomon-title' : 'text-gray-900 dark:text-gray-100 hover:text-blue-700 dark:hover:text-blue-400'}>
                       {article.title}
                     </a>
                   </h2>
@@ -96,7 +96,7 @@ if (!series) {
                 </div>
                 <p class="text-gray-700 dark:text-gray-200 mb-4">{article.description}</p>
                 <div class="flex items-center justify-between">
-                  <span class="text-sm text-gray-500 dark:text-gray-400">
+                  <span class="text-sm text-gray-600 dark:text-gray-400">
                     {formatDateUTC(article.publishDate)}
                   </span>
                 </div>

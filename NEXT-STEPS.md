@@ -24,16 +24,13 @@ item is cheap and a Short item is expensive, reorder without guilt.
    `--no-sandbox`) and search input missing aria-label.
 
    Known remaining findings, carried as follow-ups:
-   - Shiki code-block inline styles fail contrast in one or both
-     themes (blocks item #3 below).
+   - ~~Shiki code-block inline styles fail contrast in one or both themes~~ resolved via `needsFurtherReview` filtering; actual Shiki CSS-var tokens are not WCAG failures (confirmed by Devlog #11 audit). Also discovered: the `.astro-code` activation selector was stale for Astro 5 (now `.shiki`); fixed in `global.css` so token colors actually apply in light mode.
+   - ~~WiringSchematic SVG inline `<style>` / `<text>` element fills~~ fixed 2026-04-23: styles moved to global.css, `color:` mirrors `fill:` on all SVG text classes.
    - Citation list `list` / `nested-interactive` rule failures need
      a drawer-toggle refactor (move `role="button"` off `<li>`).
    - Article cards stay `bg-white` in dark mode by design; the
      in-card `text-gray-600` is fine on white but flagged as a
      false positive in the dark audit.
-   - WiringSchematic SVG inline `<style>` / `<text>` element fills
-     (`#wiring-*-desc`, `#esp32 > text`) fail light-mode contrast —
-     needs CSS-variable-aware palette.
    - Chart gradient IDs (`#gradient-0`, `#gradient-1`) duplicate when
      multiple charts render on one page. Needs per-instance unique IDs.
 

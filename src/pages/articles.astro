@@ -27,12 +27,12 @@ const sortedArticles = [...articles].sort((a, b) => b.publishDate.getTime() - a.
       </header>
       
       <div class="space-y-10">
-        {sortedArticles.map((article) => (          <article class="bg-white rounded-lg shadow-md overflow-hidden">
+        {sortedArticles.map((article) => (          <article class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
             <div class="p-6">
               <!-- Badge and Title -->
               <div class="flex items-start justify-between mb-2">
                 <h2 class={`text-2xl font-bold flex-1${article.series && article.series.toLowerCase() === 'isomon' ? ' isomon-title' : ''}`}>
-                  <a href={`/${article.slug}`} class={article.series && article.series.toLowerCase() === 'isomon' ? 'isomon-title' : 'text-gray-900 hover:text-blue-600'}>
+                  <a href={`/${article.slug}`} class={article.series && article.series.toLowerCase() === 'isomon' ? 'isomon-title' : 'text-gray-900 dark:text-gray-100 hover:text-blue-700 dark:hover:text-blue-400'}>
                     {article.title}
                   </a>
                 </h2>
@@ -49,7 +49,7 @@ const sortedArticles = [...articles].sort((a, b) => b.publishDate.getTime() - a.
                   </a>
                 )}
                 {!article.series && (
-                  <span class="ml-3 inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold border bg-gray-50 text-gray-700 dark:text-gray-200 border-gray-200 flex-shrink-0">
+                  <span class="ml-3 inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold border bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 flex-shrink-0">
                     Article
                   </span>
                 )}
@@ -61,7 +61,7 @@ const sortedArticles = [...articles].sort((a, b) => b.publishDate.getTime() - a.
                     {formatDateUTC(article.publishDate)}
                   </time>
                 </div>
-                <a href={`/${article.slug}`} class="text-blue-700 hover:text-blue-900 text-sm font-medium">
+                <a href={`/${article.slug}`} class="text-blue-700 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 text-sm font-medium">
                   Read article →
                 </a>
               </div>

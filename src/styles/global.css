@@ -34,11 +34,22 @@
   content: none;
 }
 
-.prose :where(code):not(:where([class~="not-prose"] *)) {
-  background-color: var(--tw-prose-pre-bg);
+/* Inline code uses an explicit light-gray bg rather than --tw-prose-pre-bg
+   (which may resolve to a dark value from the syntax-highlighter theme and
+   would fail contrast with light-mode prose text).
+   The :not(pre *) guard keeps these rules from clobbering Shiki block tokens
+   inside <pre><code>; block code styling lives in the .shiki/.astro-code
+   activation rules further down. */
+.prose :where(code):not(:where([class~="not-prose"] *, pre *)) {
+  background-color: #e5e7eb; /* gray-200, 13:1 with gray-900 text */
   border-radius: 0.25rem;
   padding: 0.125rem 0.25rem;
   font-weight: 400;
+}
+
+.dark .prose :where(code):not(:where([class~="not-prose"] *, pre *)) {
+  background-color: #374151; /* gray-700, readable on dark bg */
+  color: #f3f4f6; /* gray-100 */
 }
 
 .prose :where(pre):not(:where([class~="not-prose"] *)) {
@@ -378,14 +389,25 @@ body.debug-mode article::after {
 
 /* Shiki dual-theme activation. `shikiConfig.themes` with `defaultColor: false`
    emits --shiki-light / --shiki-dark CSS variables on each token; these rules
-   pick the right palette based on the current theme class. */
+   pick the right palette based on the current theme class.
+   Astro 5 emits class="shiki" on the <pre> (Astro 4 used "astro-code"); we
+   match both so activation works regardless of the framework version. Without
+   the rule firing, tokens fall back to the typography-plugin pre-code color
+   (gray-200) which is illegible on a light pre background.
+   NOTE: axe flags these as color-contrast "needsFurtherReview" because it
+   cannot resolve CSS custom properties; those items are filtered from the
+   confirmed-failure count in scripts/a11y-audit.mjs. */
 .astro-code,
-.astro-code span {
+.astro-code span,
+.shiki,
+.shiki span {
   color: var(--shiki-light) !important;
   background-color: var(--shiki-light-bg) !important;
 }
 .dark .astro-code,
-.dark .astro-code span {
+.dark .astro-code span,
+.dark .shiki,
+.dark .shiki span {
   color: var(--shiki-dark) !important;
   background-color: var(--shiki-dark-bg) !important;
 }
@@ -497,11 +519,12 @@ article.series-devlog.prose ul > li::before {
   padding-left: 1rem !important;
 }
 
-/* ISOMON Series - Green styling for article titles everywhere using data-series attribute */
+/* ISOMON Series - Green styling for article titles everywhere using data-series attribute.
+   Uses green-800 (#166534) for 6.5:1 contrast on white / 6.1:1 on gray-50 (WCAG AA). */
 [data-series="isomon"] h1,
 [data-series="isomon"] .article-title,
 [data-series="isomon"] .isomon-title {
-  color: #16a34a !important; /* green-600 */
+  color: #166534 !important; /* green-800 */
 }
 
 /* Remove h2, h3, h4 from the selector so only .isomon-title is green for ISOMON */
@@ -511,19 +534,19 @@ article.series-devlog.prose ul > li::before {
 .card.isomon .article-title,
 .card[data-series="isomon"] h3,
 .card[data-series="isomon"] .article-title {
-  color: #16a34a !important;
+  color: #166534 !important; /* green-800 */
 }
 
 /* Series page titles for ISOMON */
 .isomon-series-title {
-  color: #16a34a !important; /* green-600 */
+  color: #166534 !important; /* green-800 */
 }
 
 /* Navigation elements for ISOMON series */
 .series-nav .isomon-series,
 .series-badge.isomon {
   background-color: #dcfce7 !important; /* green-100 */
-  color: #16a34a !important; /* green-600 */
+  color: #166534 !important; /* green-800 — 4.8:1 on green-100 */
 }
 
 /* Always apply green to .isomon-title, regardless of parent context */
@@ -686,3 +709,30 @@ article.series-devlog.prose ul > li::before {
 .dark .cited-text {
   border-bottom-color: #818cf8; /* indigo-400 */
 }
+
+/* WiringSchematic SVG class styles.
+   Previously inside an SVG <style> element, which htmlcs incorrectly
+   checks for contrast (the style element's CSS text is not rendered text).
+   Moved here so no inline <style> exists inside the SVG.
+   All selectors are scoped under .wiring-schematic-container so the generic
+   class names (.wire, .pin-label, .connection-dot, etc.) cannot collide with
+   non-schematic elements elsewhere in the site.
+   Colors meet WCAG 2.1 AA against #f3f4f6 rects and white SVG background.
+   `color` mirrors `fill` so contrast checkers that read CSS `color` (not
+   SVG fill) also see a passing value. */
+.wiring-schematic-container .component-rect { fill: #f3f4f6; stroke: #374151; stroke-width: 2; }
+.wiring-schematic-container .component-text { font-family: system-ui, sans-serif; font-size: 12px; fill: #1f2937; color: #1f2937; font-weight: 500; }
+.wiring-schematic-container .component-label { font-family: system-ui, sans-serif; font-size: 10px; fill: #374151; color: #374151; }
+.wiring-schematic-container .wire { stroke: #b91c1c; stroke-width: 2; fill: none; }
+.wiring-schematic-container .wire-power { stroke: #b91c1c; stroke-width: 2; fill: none; }
+.wiring-schematic-container .wire-ground { stroke: #000000; stroke-width: 2; fill: none; }
+.wiring-schematic-container .wire-signal { stroke: #1d4ed8; stroke-width: 2; fill: none; }
+.wiring-schematic-container .wire-i2c { stroke: #047857; stroke-width: 2; fill: none; }
+.wiring-schematic-container .connection-dot { fill: #1f2937; }
+.wiring-schematic-container .pin-label { font-family: system-ui, sans-serif; font-size: 9px; fill: #1f2937; color: #1f2937; }
+/* Hide WiringSchematic <desc> from contrast checkers: SVG spec defines <desc>
+   as non-rendered, but htmlcs still computes contrast on its text content.
+   Scoped to .wiring-schematic-container so other site SVGs can use <desc>
+   normally without being hidden. aria-labelledby still works on hidden
+   elements per ARIA 1.1 §5.2.7.5. */
+.wiring-schematic-container svg desc { display: none; }

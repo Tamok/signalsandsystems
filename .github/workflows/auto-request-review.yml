@@ -1,0 +1,33 @@
+name: Auto-request Copilot review
+
+# Adds copilot-pull-request-reviewer[bot] as a reviewer on every PR. Pairs
+# with branch protection's "require approval" rule so a Copilot review is the
+# default safety net before merge. Idempotent: re-requesting on an existing
+# review is a no-op.
+
+on:
+  pull_request:
+    # synchronize fires on every push to the PR branch so reviewers see the
+    # current diff each round, not just the initial commit.
+    types: [opened, reopened, ready_for_review, synchronize]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  request:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Request Copilot review
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            "/repos/$REPO/pulls/$PR/requested_reviewers" \
+            -f "reviewers[]=copilot-pull-request-reviewer[bot]" \
+            || echo "Could not request Copilot review (Copilot code review may be disabled at the repo or org level; see docs/maintainer-setup.md)."
