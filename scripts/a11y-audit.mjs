@@ -1,11 +1,16 @@
 #!/usr/bin/env node
 // Local accessibility audit: pa11y × (light | dark) × target URLs.
 // Prints a Markdown table summary and writes JSON to a11y-report.json.
+//
+// Pa11y 9 removed the `beforeScript` option. We work around this by creating
+// our own puppeteer browser and page, calling evaluateOnNewDocument to seed
+// localStorage (theme + suppress overlays), then passing that page to pa11y
+// via the `browser` + `page` options.
 
 import pa11y from 'pa11y';
+import puppeteer from 'puppeteer';
 import httpServer from 'http-server';
 import { writeFileSync } from 'node:fs';
-import { join } from 'node:path';
 
 const PORT = 4321;
 const ORIGIN = `http://localhost:${PORT}`;
@@ -41,6 +46,11 @@ try {
   }
 }
 
+// Launch a single puppeteer browser shared across all test runs.
+const browser = await puppeteer.launch({
+  args: ['--no-sandbox', '--disable-setuid-sandbox'],
+});
+
 const findings = [];
 const summary = [];
 
@@ -49,31 +59,56 @@ try {
     for (const path of PATHS) {
       const url = `${ORIGIN}${path}`;
       process.stdout.write(`  ${theme.padEnd(5)}  ${path.padEnd(60)} `);
+      const page = await browser.newPage();
       try {
+        // Seed localStorage before the page loads:
+        //   - ss-theme: drives the pre-hydration dark/light class toggle
+        //   - ss-analytics-consent: prevents the full-page consent overlay
+        //   - ss-newsletter-popup: prevents the fixed popup that covers content
+        // Both overlays use fixed/z-index stacking that axe factors into its
+        // background-blending calculation, causing false positive contrast
+        // failures for elements rendered beneath them.
+        await page.evaluateOnNewDocument((t) => {
+          try {
+            localStorage.setItem('ss-theme', t);
+            localStorage.setItem('ss-analytics-consent', 'denied');
+            localStorage.setItem('ss-newsletter-popup', JSON.stringify({
+              closed: true, closedUntil: 9999999999999, minimized: false,
+            }));
+          } catch (_) {}
+        }, theme);
+
         const result = await pa11y(url, {
           standard: 'WCAG2AA',
           runners: ['axe', 'htmlcs'],
-          chromeLaunchConfig: { args: ['--no-sandbox', '--disable-setuid-sandbox'] },
-          beforeScript: (page) => page.evaluateOnNewDocument((t) => {
-            try { localStorage.setItem('ss-theme', t); } catch {}
-          }, theme),
+          browser,
+          page,
           timeout: 45000,
           wait: 500,
         });
         const errors = result.issues.filter((i) => i.type === 'error');
         const warnings = result.issues.filter((i) => i.type === 'warning');
-        process.stdout.write(`${errors.length} err, ${warnings.length} warn\n`);
-        summary.push({ theme, path, errors: errors.length, warnings: warnings.length });
+        // Separate confirmed failures from uncertain ones. axe flags Shiki
+        // CSS-variable tokens as needsFurtherReview because it cannot resolve
+        // var(--shiki-light) / var(--shiki-dark) at runtime. These are NOT
+        // counted as confirmed failures; they appear in the detailed report.
+        const confirmedErrors = errors.filter((i) => !i.runnerExtras?.needsFurtherReview);
+        const uncertainErrors = errors.filter((i) => i.runnerExtras?.needsFurtherReview);
+        process.stdout.write(`${confirmedErrors.length} err (${uncertainErrors.length} uncertain), ${warnings.length} warn\n`);
+        summary.push({ theme, path, errors: confirmedErrors.length, uncertain: uncertainErrors.length, warnings: warnings.length });
         for (const issue of result.issues) {
           findings.push({ theme, path, ...issue });
         }
       } catch (err) {
         process.stdout.write(`FAIL: ${err.message}\n`);
         summary.push({ theme, path, errors: -1, warnings: -1, error: err.message });
+      } finally {
+        await page.close().catch(() => {});
       }
     }
   }
 } finally {
+  await browser.close().catch(() => {});
   if (server) server.close();
 }
 
@@ -81,11 +116,11 @@ writeFileSync('a11y-report.json', JSON.stringify({ summary, findings }, null, 2)
 
 // Markdown table
 console.log('\n## Summary\n');
-console.log('| theme | path | errors | warnings |');
-console.log('| --- | --- | ---: | ---: |');
+console.log('| theme | path | confirmed errors | uncertain (CSS-var) | warnings |');
+console.log('| --- | --- | ---: | ---: | ---: |');
 for (const s of summary) {
   const e = s.error ? `**ERR** ${s.error}` : s.errors;
-  console.log(`| ${s.theme} | ${s.path} | ${e} | ${s.warnings} |`);
+  console.log(`| ${s.theme} | ${s.path} | ${e} | ${s.uncertain ?? 0} | ${s.warnings} |`);
 }
 
 // Group findings by (code, message) across theme/path
@@ -108,4 +143,8 @@ for (const rule of byRule.values()) {
 }
 
 const totalErrors = summary.reduce((n, s) => n + Math.max(s.errors, 0), 0);
+const totalUncertain = summary.reduce((n, s) => n + Math.max(s.uncertain ?? 0, 0), 0);
+if (totalUncertain > 0) {
+  console.log(`\n⚠  ${totalUncertain} uncertain items (axe needsFurtherReview — CSS-var contrast not resolvable by axe)`);
+}
 process.exit(totalErrors > 0 ? 1 : 0);

@@ -27,11 +27,11 @@ const series = await getAllSeries();
       <div class="space-y-10">        {series.map((s) => {
           const badgeConfig = getSeriesBadgeConfig(s.slug);
           return (
-            <article class="bg-white rounded-lg shadow-md overflow-hidden">
+            <article class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
               <div class="p-6">
                 <div class="flex items-start justify-between mb-2">
                   <h2 class={`text-2xl font-bold${s.slug && s.slug.toLowerCase() === 'isomon' ? ' isomon-title' : ''}`}>
-                    <a href={`/series/${s.slug}`} class={s.slug && s.slug.toLowerCase() === 'isomon' ? 'isomon-title' : 'text-gray-900 hover:text-blue-600'}>
+                    <a href={`/series/${s.slug}`} class={s.slug && s.slug.toLowerCase() === 'isomon' ? 'isomon-title' : 'text-gray-900 dark:text-gray-100 hover:text-blue-700 dark:hover:text-blue-400'}>
                       {s.title}
                     </a>
                   </h2>
@@ -41,12 +41,12 @@ const series = await getAllSeries();
                 </div>
                 <p class="text-gray-600 dark:text-gray-300 mb-4">{s.description}</p>
                 <div class="flex items-center justify-between">
-                  <div class="text-sm text-gray-500 dark:text-gray-400">
+                  <div class="text-sm text-gray-600 dark:text-gray-400">
                     <span>{s.articleCount} {s.articleCount === 1 ? 'Article' : 'Articles'}</span>
                     <span class="mx-2">•</span>
                     <span>Started {formatDateUTC(s.startDate)}</span>
                   </div>
-                  <a href={`/series/${s.slug}`} class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                  <a href={`/series/${s.slug}`} class="text-blue-700 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 text-sm font-medium">
                     View series →
                   </a>
                 </div>

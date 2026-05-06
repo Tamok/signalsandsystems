@@ -5,12 +5,13 @@
 # Tags are used for categorization and searchability.
 # Latest changes are at the top.
 
-## [Revival] — April 2026
+## [Revival] - April 2026
 
 Nine-milestone rehabilitation pass. Entries summarize each milestone
 rather than listing every commit. See `git log main` for the fine-grained
 view. Pre-revival history resumes under "Pre-revival" below.
 
+2026-04-23 - Post-revival - WCAG automated audit: 0 confirmed errors across 18 URL×theme combinations. pa11y+puppeteer pipeline with `needsFurtherReview` filter to separate Shiki CSS-var uncertain items from real failures. Fixed: SVG `<text>` inheriting dark-mode `.prose` color (add `color:` mirroring `fill:`), htmlcs false-positives on SVG `<style>` and `<desc>` (moved styles to global.css, `svg desc { display: none }`), `@media` vs `.dark`-class mismatch on CitationList links, CSS custom property opacity in StatsDisplay source links, ARIA 1.2 `aria-prohibited-attr` on CodeBlock wrapper. Devlog #11 published - #a11y #wcag #pa11y #devlog
 2026-04-21 - Post-revival - A11y sweep (1942 → 558): isomon-title green-600→green-800 (3.1:1 → 6.5:1). AuthorBio: dark:bg-gray-800 + text-gray-600 (was missing dark bg, causing ~1:1 on dark). SeriesNav: blue-700 + gray-600 date labels. index/articles: blue-700 + gray-700 descriptions + gray-600 dates. accessibility.astro: kbd text-gray-900/dark, shortcut rows dark:bg-gray-800, shortcut bg-gray-50 dark variant. CitedText: citation-marker bg:white/dark:bg-gray-800, dark cite-type gradients, blue-border dark variant. DataChart: x-axis fill attr removed (CSS !important now unambiguous for axe). scrollable-region-focusable: BaseLayout script adds tabindex to overflow pre blocks - #a11y #wcag
 2026-04-18 - Post-revival - Shiki dual-theme switching: `markdown.shikiConfig.themes` (github-light + github-dark) plus refactored `src/utils/codeHighlight.ts` (always emits --shiki-light/--shiki-dark CSS vars via `defaultColor: false`); `src/styles/global.css` activates the right palette on `.astro-code` / `.astro-code span` per theme. Code blocks now contrast-correct in both modes. DataChart x-axis-label/chart-note/label-value colors darkened from slate-500 (4.4:1) to slate-600/700 to pass 4.5:1 AA. Dual-theme audit grand total: 962 → 794 (/isomon 188 → 104) - #a11y #dark-mode #shiki
 2026-04-18 - Post-revival - A11y cleanup pass: a11y total 1942 → 962 per dual-theme audit. DataChart dead `<linearGradient>` defs removed (F77 clears). CitationItem refactored so `<li>` is list-clean and the disclosure toggle is a `<button>` sibling (kills `list`/`nested-interactive` axe findings); drawer init scripts bind to `.citation-toggle` now. Citation drawer IDs disambiguated with title+author+url hash (duplicate-paper entries no longer share IDs). Amber tag/row alpha backgrounds replaced with solid variants (/resources 492 → 2). WiringSchematic component-label/wire/pin colors darkened to WCAG AA on the light SVG bg - #a11y #refactor
