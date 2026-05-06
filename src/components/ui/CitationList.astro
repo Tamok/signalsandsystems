@@ -68,6 +68,28 @@
     color: #3730A3;
     text-decoration: underline;
   }
+  /* Class-based dark mode (.dark toggled on <html>). The :global(.dark)
+     selector keeps the scoped data-cid attribute on .demure-citation-list
+     and a, so this rule has the same specificity as the light-mode rule
+     above and reliably overrides it. The companion @media block below
+     covers OS-level prefers-color-scheme for users who haven't visited
+     the toggle yet. */
+  :global(.dark) .citation-list-container {
+    border-top-color: #374151;
+  }
+  :global(.dark) .demure-citation-list li:hover {
+    background: #23272e;
+  }
+  :global(.dark) .citation-list-title {
+    background: linear-gradient(90deg, #a78bfa 0%, #6366f1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+  }
+  :global(.dark) .demure-citation-list a {
+    color: #a78bfa; /* violet-400, 6.0:1 on gray-900 */
+  }
   @media (prefers-color-scheme: dark) {
     .citation-list-container {
       border-top-color: #374151;

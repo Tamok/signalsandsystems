@@ -30,31 +30,34 @@ const PATHS = [
 const THEMES = ['light', 'dark'];
 
 let server = null;
-try {
-  server = httpServer.createServer({ root: 'dist', cache: -1 });
-  await new Promise((resolve, reject) => {
-    server.listen(PORT, resolve);
-    server.server.once('error', reject);
-  });
-  console.log(`serving dist/ at ${ORIGIN}`);
-} catch (err) {
-  if (err && err.code === 'EADDRINUSE') {
-    console.log(`reusing existing server at ${ORIGIN}`);
-    server = null;
-  } else {
-    throw err;
-  }
-}
-
-// Launch a single puppeteer browser shared across all test runs.
-const browser = await puppeteer.launch({
-  args: ['--no-sandbox', '--disable-setuid-sandbox'],
-});
-
+let browser = null;
 const findings = [];
 const summary = [];
 
 try {
+  try {
+    server = httpServer.createServer({ root: 'dist', cache: -1 });
+    await new Promise((resolve, reject) => {
+      server.listen(PORT, resolve);
+      server.server.once('error', reject);
+    });
+    console.log(`serving dist/ at ${ORIGIN}`);
+  } catch (err) {
+    if (err && err.code === 'EADDRINUSE') {
+      console.log(`reusing existing server at ${ORIGIN}`);
+      server = null;
+    } else {
+      throw err;
+    }
+  }
+
+  // Launch a single puppeteer browser shared across all test runs. Wrapped
+  // in the outer try so launch failures (Chrome download, missing system
+  // deps, etc.) still close the http-server in the finally below.
+  browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  });
+
   for (const theme of THEMES) {
     for (const path of PATHS) {
       const url = `${ORIGIN}${path}`;
@@ -108,7 +111,7 @@ try {
     }
   }
 } finally {
-  await browser.close().catch(() => {});
+  if (browser) await browser.close().catch(() => {});
   if (server) server.close();
 }
 

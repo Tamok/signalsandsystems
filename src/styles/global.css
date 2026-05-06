@@ -36,16 +36,19 @@
 
 /* Inline code uses an explicit light-gray bg rather than --tw-prose-pre-bg
    (which may resolve to a dark value from the syntax-highlighter theme and
-   would fail contrast with light-mode prose text). */
-.prose :where(code):not(:where([class~="not-prose"] *)) {
-  background-color: #e5e7eb; /* gray-200 — 13:1 with gray-900 text */
+   would fail contrast with light-mode prose text).
+   The :not(pre *) guard keeps these rules from clobbering Shiki block tokens
+   inside <pre><code>; block code styling lives in the .shiki/.astro-code
+   activation rules further down. */
+.prose :where(code):not(:where([class~="not-prose"] *, pre *)) {
+  background-color: #e5e7eb; /* gray-200, 13:1 with gray-900 text */
   border-radius: 0.25rem;
   padding: 0.125rem 0.25rem;
   font-weight: 400;
 }
 
-.dark .prose :where(code):not(:where([class~="not-prose"] *)) {
-  background-color: #374151; /* gray-700 — readable on dark bg */
+.dark .prose :where(code):not(:where([class~="not-prose"] *, pre *)) {
+  background-color: #374151; /* gray-700, readable on dark bg */
   color: #f3f4f6; /* gray-100 */
 }
 
@@ -707,30 +710,29 @@ article.series-devlog.prose ul > li::before {
   border-bottom-color: #818cf8; /* indigo-400 */
 }
 
-/* CitationList link: class-based dark mode override (component uses media query
-   which doesn't fire on the .dark class toggle). */
-.dark .demure-citation-list a {
-  color: #a78bfa; /* violet-400 — 6.0:1 on gray-900 */
-}
-
 /* WiringSchematic SVG class styles.
    Previously inside an SVG <style> element, which htmlcs incorrectly
    checks for contrast (the style element's CSS text is not rendered text).
    Moved here so no inline <style> exists inside the SVG.
+   All selectors are scoped under .wiring-schematic-container so the generic
+   class names (.wire, .pin-label, .connection-dot, etc.) cannot collide with
+   non-schematic elements elsewhere in the site.
    Colors meet WCAG 2.1 AA against #f3f4f6 rects and white SVG background.
    `color` mirrors `fill` so contrast checkers that read CSS `color` (not
    SVG fill) also see a passing value. */
-.component-rect { fill: #f3f4f6; stroke: #374151; stroke-width: 2; }
-.component-text { font-family: system-ui, sans-serif; font-size: 12px; fill: #1f2937; color: #1f2937; font-weight: 500; }
-.component-label { font-family: system-ui, sans-serif; font-size: 10px; fill: #374151; color: #374151; }
-.wire { stroke: #b91c1c; stroke-width: 2; fill: none; }
-.wire-power { stroke: #b91c1c; stroke-width: 2; fill: none; }
-.wire-ground { stroke: #000000; stroke-width: 2; fill: none; }
-.wire-signal { stroke: #1d4ed8; stroke-width: 2; fill: none; }
-.wire-i2c { stroke: #047857; stroke-width: 2; fill: none; }
-.connection-dot { fill: #1f2937; }
-.pin-label { font-family: system-ui, sans-serif; font-size: 9px; fill: #1f2937; color: #1f2937; }
-/* Hide SVG <desc> from contrast checkers: SVG spec defines it as non-rendered;
-   htmlcs incorrectly computes contrast on its text. aria-labelledby still works
-   on hidden elements per ARIA 1.1 §5.2.7.5. */
-svg desc { display: none; }
+.wiring-schematic-container .component-rect { fill: #f3f4f6; stroke: #374151; stroke-width: 2; }
+.wiring-schematic-container .component-text { font-family: system-ui, sans-serif; font-size: 12px; fill: #1f2937; color: #1f2937; font-weight: 500; }
+.wiring-schematic-container .component-label { font-family: system-ui, sans-serif; font-size: 10px; fill: #374151; color: #374151; }
+.wiring-schematic-container .wire { stroke: #b91c1c; stroke-width: 2; fill: none; }
+.wiring-schematic-container .wire-power { stroke: #b91c1c; stroke-width: 2; fill: none; }
+.wiring-schematic-container .wire-ground { stroke: #000000; stroke-width: 2; fill: none; }
+.wiring-schematic-container .wire-signal { stroke: #1d4ed8; stroke-width: 2; fill: none; }
+.wiring-schematic-container .wire-i2c { stroke: #047857; stroke-width: 2; fill: none; }
+.wiring-schematic-container .connection-dot { fill: #1f2937; }
+.wiring-schematic-container .pin-label { font-family: system-ui, sans-serif; font-size: 9px; fill: #1f2937; color: #1f2937; }
+/* Hide WiringSchematic <desc> from contrast checkers: SVG spec defines <desc>
+   as non-rendered, but htmlcs still computes contrast on its text content.
+   Scoped to .wiring-schematic-container so other site SVGs can use <desc>
+   normally without being hidden. aria-labelledby still works on hidden
+   elements per ARIA 1.1 §5.2.7.5. */
+.wiring-schematic-container svg desc { display: none; }
