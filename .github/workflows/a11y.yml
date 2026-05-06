@@ -1,8 +1,9 @@
-name: Accessibility audit (advisory)
+name: Accessibility audit
 
 # Runs pa11y-ci + Lighthouse CI against the built site.
-# Currently advisory: findings are reported but do not block the merge.
-# Flip `continue-on-error` to false after M9 to make this a required gate.
+# Blocking: confirmed WCAG 2.1 AA failures fail the workflow.
+# Uncertain items (axe needsFurtherReview, e.g. CSS-var contrast) are
+# filtered in scripts/a11y-audit.mjs and do not block.
 
 on:
   pull_request:
@@ -12,7 +13,6 @@ on:
 jobs:
   a11y:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
 

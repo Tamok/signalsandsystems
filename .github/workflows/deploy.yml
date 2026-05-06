@@ -35,8 +35,22 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm validate
 
+  a11y:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm rebuild puppeteer
+      - run: pnpm build
+      - run: pnpm a11y
+
   build:
-    needs: [typecheck, validate]
+    needs: [typecheck, validate, a11y]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
