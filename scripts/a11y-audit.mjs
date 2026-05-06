@@ -62,8 +62,13 @@ try {
     for (const path of PATHS) {
       const url = `${ORIGIN}${path}`;
       process.stdout.write(`  ${theme.padEnd(5)}  ${path.padEnd(60)} `);
-      const page = await browser.newPage();
+      // page is allocated inside the try so a newPage() failure (browser
+      // crash, OOM) is captured by the local catch instead of bubbling
+      // out. The summary then carries an error row for this (theme, path)
+      // and the report stays complete.
+      let page = null;
       try {
+        page = await browser.newPage();
         // Seed localStorage before the page loads:
         //   - ss-theme: drives the pre-hydration dark/light class toggle
         //   - ss-analytics-consent: prevents the full-page consent overlay
@@ -106,7 +111,7 @@ try {
         process.stdout.write(`FAIL: ${err.message}\n`);
         summary.push({ theme, path, errors: -1, warnings: -1, error: err.message });
       } finally {
-        await page.close().catch(() => {});
+        if (page) await page.close().catch(() => {});
       }
     }
   }
