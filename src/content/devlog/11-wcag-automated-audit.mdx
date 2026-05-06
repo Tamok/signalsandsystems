@@ -178,16 +178,87 @@ Fix: remove the `aria-label` entirely. The filename is visible as text in the `<
 
 Fix: add `dark:bg-gray-800 dark:border-gray-500`. Simple, but easy to miss without automated testing.
 
+### 7. The Audit Said "Clean" But the Code Blocks Were Illegible
+
+After landing all six fixes above, the audit reported zero confirmed errors. Then the first manual look at a devlog in light mode: code blocks were unreadable. Light gray text on a slightly-less-light gray background. How did the audit miss this?
+
+Astro 5 changed the class name on Shiki's `<pre>` element from `astro-code` (Astro 4) to `shiki`. The dual-theme activation rules in `global.css` still targeted `.astro-code`:
+
+<CodeBlock
+  language="css"
+  filename="src/styles/global.css (broken)"
+  code={`/* This selector never matches Astro 5 output. */
+.astro-code,
+.astro-code span {
+  color: var(--shiki-light) !important;
+  background-color: var(--shiki-light-bg) !important;
+}`}
+/>
+
+With the activation rules silent, code tokens had no color set. They inherited from the typography plugin's `.prose pre code` rule, which sets a light gray meant for dark `pre` backgrounds. Light text on light bg.
+
+The audit missed it for a subtle reason. Axe sees `var(--shiki-light)` in the cascade and emits `needsFurtherReview` for any element where it cannot resolve a CSS custom property, *regardless of whether the rule actually applies*. We filtered all `needsFurtherReview` items as "uncertain". The selector was broken, the rules never fired, but axe still saw the unresolvable variable in the cascade and flagged the spans as uncertain rather than as confirmed failures.
+
+The fix was a one-line selector update:
+
+<CodeBlock
+  language="css"
+  filename="src/styles/global.css"
+  code={`.astro-code,
+.astro-code span,
+.shiki,
+.shiki span {
+  color: var(--shiki-light) !important;
+  background-color: var(--shiki-light-bg) !important;
+}`}
+/>
+
+The lesson is sharper than the fix. **`needsFurtherReview` filtering is correct only when the rules involving CSS variables actually apply.** If they silently don't, the filter hides the real failure. When CSS-var activation is involved, manual visual verification is non-negotiable. The audit pipeline now has a Playwright verification step planned, but the durable lesson is to render every component variant in a real browser before declaring an audit clean.
+
+### 8. High-Contrast Shiki Themes for Comment Tokens
+
+Once activation worked, axe could resolve the actual rendered colors and immediately surfaced 26 new dark-mode failures: code-block comments. The `github-light` and `github-dark` Shiki themes both use `#6A737D` for comment tokens, which is 3.5:1 on the dark `#24292e` background, well below WCAG AA's 4.5:1 floor.
+
+Two Shiki instances had to change. Astro processes fenced code blocks via the config in [astro.config.mjs](https://github.com/Tamok/signalsandsystems/blob/main/sastro/astro.config.mjs), but the `<CodeBlock>` component runs its own Shiki instance in [src/utils/codeHighlight.ts](https://github.com/Tamok/signalsandsystems/blob/main/sastro/src/utils/codeHighlight.ts). Both moved to the high-contrast variants:
+
+<CodeBlock
+  language="javascript"
+  filename="astro.config.mjs"
+  code={`shikiConfig: {
+  themes: {
+    light: 'github-light-high-contrast',
+    dark: 'github-dark-high-contrast'
+  },
+  defaultColor: false
+}`}
+/>
+
+Comment tokens went from `#6A737D` to `#66707B` on light (4.86:1) and `#BDC4CC` on dark (~11.6:1). Every other token already passed.
+
 ## The Audit Results
 
-Before this work, the pipeline wasn't running at all. After building it and fixing the above:
+After every fix above, including the Astro 5 selector unmask and the high-contrast theme switch:
 
 | Theme | URL count | Confirmed errors | Uncertain (CSS-var) |
 |---|---|---:|---:|
-| light | 9 | **0** | 246 |
-| dark | 9 | **0** | 160 |
+| light | 9 | **0** | ~160 |
+| dark | 9 | **0** | ~160 |
 
-Zero confirmed errors. The 406 uncertain items are all Shiki CSS-variable tokens that axe cannot resolve at runtime; they are not WCAG failures.
+Zero confirmed errors across 18 URL × theme combinations. The remaining ~320 uncertain items are all Shiki CSS-variable tokens that axe cannot resolve at runtime; they are not WCAG failures.
+
+## Reviewing With Bots: The Branch + PR Workflow
+
+The audit pipeline only catches what it knows to look for. Some of the most useful catches in this work came from reading code, not running it. Now that the WCAG zero-error baseline is real, all non-trivial work goes through a branch + PR workflow with both Copilot and Codex set as automatic reviewers via [a small workflow](https://github.com/Tamok/signalsandsystems/blob/main/sastro/.github/workflows/auto-request-review.yml) that calls the GitHub `requested_reviewers` API on every PR open. The CI gates (typecheck, content validation, accessibility audit) are now blocking via a [branch-protection ruleset](https://github.com/Tamok/signalsandsystems/blob/main/sastro/docs/maintainer-setup.md), so a regression that breaks any of them blocks the merge before it reaches `main`.
+
+The very first PR through this workflow ([#3](https://github.com/Tamok/signalsandsystems/pull/3), the one that introduced the audit pipeline itself) caught five real issues that the audit could never have found:
+
+- **`puppeteer.launch` outside `try/finally`**: if Chrome download or system-deps initialization fails, the http-server leaks. Restructured to a single outer try with `browser` declared `let null` and closed in finally.
+- **`.prose :where(code)` clobbered Shiki block tokens**: the inline-code styling rule also matched `pre > code` from Shiki blocks, fighting with the new high-contrast backgrounds. Added `:not(pre *)` to the negation list.
+- **Generic SVG class names in `global.css`**: `.wire`, `.component-text`, `.pin-label` were unscoped and could collide with future non-SVG content. All scoped to `.wiring-schematic-container`.
+- **`svg desc { display: none }` was site-global**: the rule meant to suppress an htmlcs false positive on one schematic was hiding `<desc>`-based labelling on every SVG. Scoped to `.wiring-schematic-container svg desc`.
+- **CitationList dark-mode override missed by specificity**: `.dark .demure-citation-list a` (specificity 0,2,1) couldn't beat the scoped `.demure-citation-list[data-cid] a[data-cid]` rule (specificity 0,3,2). Moved the override into the component's own scoped style block as `:global(.dark) .demure-citation-list a`, picking up the same data-cid scoping and winning cleanly.
+
+None of these would fail axe. None would block a contrast assertion. They are correctness, scoping, and lifecycle issues, the kind of things a reviewer notices and a static analyzer doesn't.
 
 ## Design Principles Applied
 
@@ -198,8 +269,10 @@ Every fix followed the same philosophy: **in-house, lightweight, documented**.
 - Each fix is a targeted CSS or markup change with a comment explaining *why*
 - The audit script is a single plain JS file in `scripts/`: readable, hackable, no build step
 
-The `needsFurtherReview` filter is the most important architectural decision. Without it, the hundreds of Shiki false positives would drown real issues. With it, the audit exits with code 1 only when something genuinely broken is present.
+The `needsFurtherReview` filter is the most important architectural decision, with the caveat learned the hard way: it's only correct when the rules involving CSS variables actually apply. Combined with manual rendered-color verification on every variant, the filter keeps the signal clean.
 
 ## What's Next
 
-The audit is local-only right now. The next step (Milestone 6 in the revival plan) is wiring it into CI: a GitHub Actions workflow that runs `pnpm build && node scripts/a11y-audit.mjs` on every pull request, initially advisory, then blocking once the baseline is stable. That closes the loop from "we run this manually sometimes" to "broken accessibility blocks merge."
+The audit now runs in CI as a blocking gate on every pull request and on every push to `main`, alongside the typecheck and content validation gates. A regression in any of them blocks the GitHub Pages deploy. The accessibility statement at [/accessibility](/accessibility) reflects the audited state, no more "work in progress" or "known gaps" caveats.
+
+Beyond keeping the gate green, two follow-ups are worth scoping: a Playwright check that asserts non-trivial contrast on rendered code blocks (so the next Astro version bump or theme swap can't silently re-illegibilize them), and a per-instance unique ID for chart gradients so two charts on one page no longer collide on `#gradient-0`. Both are graceful-degradation issues, not WCAG failures, but the kind of housekeeping that pays off when you next touch the code.
