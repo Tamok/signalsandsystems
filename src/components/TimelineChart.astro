@@ -26,15 +26,41 @@ const {
 } = Astro.props;
 
 const timelineData = JSON.stringify(data);
+const ariaLabel = description ?? title ?? 'Timeline chart';
+const tableId = `${id}-data`;
 ---
 
-<figure class="timeline-container mb-8">
-  {title && <h3 class="text-lg font-semibold mb-2">{title}</h3>}
-  {description && <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">{description}</p>}
-  
+<figure class="timeline-container mb-8" role="group" aria-labelledby={title ? `${id}-title` : undefined} aria-describedby={description ? `${id}-desc` : tableId}>
+  {title && <h3 id={`${id}-title`} class="text-lg font-semibold mb-2">{title}</h3>}
+  {description && <p id={`${id}-desc`} class="text-gray-600 dark:text-gray-300 text-sm mb-4">{description}</p>}
+
   <div class="bg-white p-6 border border-gray-200 rounded-lg shadow-sm" style={`height: ${height}px;`}>
-    <div id={id} class="w-full h-full"></div>
+    <div id={id} class="w-full h-full" role="img" aria-label={ariaLabel}></div>
   </div>
+
+  <table id={tableId} class="sr-only">
+    <caption>{title ?? ariaLabel} - data table alternative</caption>
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Title</th>
+        <th scope="col">Type</th>
+        <th scope="col">Value</th>
+        <th scope="col">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {data.events.map((event) => (
+        <tr>
+          <th scope="row">{event.date}</th>
+          <td>{event.title}</td>
+          <td>{event.type}</td>
+          <td>{event.value}</td>
+          <td>{event.description}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
   
   <script is:inline src="https://cdn.jsdelivr.net/npm/d3@7"></script>
   

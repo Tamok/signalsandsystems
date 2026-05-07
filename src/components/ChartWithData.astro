@@ -25,9 +25,14 @@ const chartId = `chart-${Math.random().toString(36).substring(2, 9)}`;
 const drawerId = `drawer-${chartId}`;
 ---
 
-<figure class="chart-with-data mb-8">
-  {title && <h3 class="text-lg font-semibold mb-2">{title}</h3>}
-  {description && <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">{description}</p>}
+<figure
+  class="chart-with-data mb-8"
+  role="group"
+  aria-labelledby={title ? `${chartId}-title` : undefined}
+  aria-describedby={description ? `${chartId}-desc` : undefined}
+>
+  {title && <h3 id={`${chartId}-title`} class="text-lg font-semibold mb-2">{title}</h3>}
+  {description && <p id={`${chartId}-desc`} class="text-gray-600 dark:text-gray-300 text-sm mb-4">{description}</p>}
   
   <!-- Chart Container -->
   <div class="chart-container">
