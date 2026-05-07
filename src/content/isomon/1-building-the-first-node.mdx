@@ -154,12 +154,34 @@ Data transmission uses multiple pathways for reliability:
 
 The physical assembly leverages the DFRobot IO Shield to minimize wiring complexity and improve reliability:
 
-<WiringSchematic 
+<WiringSchematic
   title="ISOMON Node Wiring Diagram"
   description="Complete wiring schematic showing connections between ESP32-C6 FireBeetle, sensors, and display components"
   width={800}
   height={600}
-/>
+>
+  <table slot="data-table" class="text-xs w-full">
+    <caption class="sr-only">Wire-by-wire connection list for the ISOMON node</caption>
+    <thead>
+      <tr class="border-b">
+        <th scope="col" class="text-left pr-3 py-1">From (component / pin)</th>
+        <th scope="col" class="text-left pr-3 py-1">To (component / pin)</th>
+        <th scope="col" class="text-left py-1">Signal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><th scope="row" class="text-left pr-3 py-1 font-normal">USB-C Power 3.3V</th><td class="pr-3 py-1">ESP32 3.3V</td><td class="py-1">Power (red)</td></tr>
+      <tr><th scope="row" class="text-left pr-3 py-1 font-normal">ESP32 3.3V rail</th><td class="pr-3 py-1">Soil sensor VCC</td><td class="py-1">Power (red)</td></tr>
+      <tr><th scope="row" class="text-left pr-3 py-1 font-normal">ESP32 3.3V rail</th><td class="pr-3 py-1">SHT30 VCC</td><td class="py-1">Power (red)</td></tr>
+      <tr><th scope="row" class="text-left pr-3 py-1 font-normal">ESP32 GND</th><td class="pr-3 py-1">Soil sensor GND</td><td class="py-1">Ground (black)</td></tr>
+      <tr><th scope="row" class="text-left pr-3 py-1 font-normal">ESP32 GND</th><td class="pr-3 py-1">SHT30 GND</td><td class="py-1">Ground (black)</td></tr>
+      <tr><th scope="row" class="text-left pr-3 py-1 font-normal">Soil sensor SIG</th><td class="pr-3 py-1">ESP32 A0</td><td class="py-1">Analog signal (blue)</td></tr>
+      <tr><th scope="row" class="text-left pr-3 py-1 font-normal">ESP32 SCL</th><td class="pr-3 py-1">SHT30 SCL</td><td class="py-1">I2C clock (green)</td></tr>
+      <tr><th scope="row" class="text-left pr-3 py-1 font-normal">ESP32 SDA</th><td class="pr-3 py-1">SHT30 SDA</td><td class="py-1">I2C data (green)</td></tr>
+      <tr><th scope="row" class="text-left pr-3 py-1 font-normal">ESP32 (SPI via GDI)</th><td class="pr-3 py-1">ST7735 TFT display</td><td class="py-1">Display (multi-line, IO Shield GDI connector)</td></tr>
+    </tbody>
+  </table>
+</WiringSchematic>
 
 ### Connection Strategy
 

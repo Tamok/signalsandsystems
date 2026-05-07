@@ -253,6 +253,18 @@ The very first PR through this workflow ([#3](https://github.com/Tamok/signalsan
 
 None of these would fail axe. None would block a contrast assertion. They are correctness, scoping, and lifecycle issues, the kind of things a reviewer notices and a static analyzer doesn't.
 
+## Closing the Gap Between Claims and Reality
+
+After the audit landed, a manual read of the accessibility statement against the codebase turned up another category of issue: claims on the page that the code did not quite back up. The audit was happy because every rendered page passed automated checks, but several of the assertions about *what was in place* were partially aspirational. Closing those gaps was its own short-but-pointed pass:
+
+- The "ESC and outside-click close the consent dialog" claim was half-true: ESC worked, outside-click on the backdrop did not. Added a backdrop click handler that maps to the same decline-and-close action as ESC, so the two dismissal paths behave identically.
+- The "outside-click closes the mobile menu" claim was true, but unlike ESC it did not restore focus to the trigger. The first attempt unconditionally called `mobileMenuButton.focus()` on outside-click, which a Copilot review flagged: when the user clicks an interactive element outside the menu, focus has already moved to that element, and stealing it back overrides their intent. The final implementation only restores focus when keyboard focus was still inside the menu (or on the trigger) at click time. Mouse-driven outside-clicks on a different link or button leave that element focused; keyboard-driven dismissal lands the user back on the trigger.
+- "Visible focus-visible rings on every interactive control" was overstated. Most components used Tailwind's `focus:` prefix, which fires on both keyboard and mouse focus, rather than `focus-visible:`, which fires only when the browser believes a keyboard interaction is in progress. A site-wide migration converted every `focus:outline-none`, `focus:ring-*`, and `focus:border-blue-*` to its `focus-visible:` counterpart so rings only show when they are useful, not on every click.
+- "Charts expose an SR-only data table and an `aria-label`" was true for the general-purpose `ChartComponent`, but the seven other chart variants (`HeatmapChart`, `RadarChart`, `SankeyChart`, `ScatterChart`, `TimelineChart`, `DataChart`, `ChartWithData`) had none of it. Each wrapper now uses `<figure role="group">` with `aria-labelledby`/`aria-describedby`, sets an `aria-label` on the rendered surface (`<canvas>` or D3 container), and emits an `sr-only` data table whose row/column structure matches the chart type (heatmap by axis crossing, sankey by source/target/value, scatter by series and coordinate, etc.).
+- The wiring-schematic component shipped with a "View connection list" `<details>` element, but the slot it exposed for the data table was unfilled in production usage, so readers saw an apologetic "a textual equivalent is not yet wired up" fallback. The single live schematic now passes a populated table (from-pin, to-pin, signal type) through the slot, and the fallback message has been rewritten so future schematics that omit the slot describe themselves rather than apologize.
+
+The accessibility statement at [/accessibility](/accessibility) was rewritten alongside these fixes to match what the code now does, claim by claim.
+
 ## Design Principles Applied
 
 Every fix followed the same philosophy: **in-house, lightweight, documented**.

@@ -25,15 +25,35 @@ const {
 } = Astro.props;
 
 const heatmapData = JSON.stringify(data);
+const ariaLabel = description ?? title ?? 'Heatmap chart';
+const tableId = `${id}-data`;
 ---
 
-<figure class="heatmap-container mb-8">
-  {title && <h3 class="text-lg font-semibold mb-2">{title}</h3>}
-  {description && <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">{description}</p>}
-  
+<figure class="heatmap-container mb-8" role="group" aria-labelledby={title ? `${id}-title` : undefined} aria-describedby={description ? `${id}-desc` : tableId}>
+  {title && <h3 id={`${id}-title`} class="text-lg font-semibold mb-2">{title}</h3>}
+  {description && <p id={`${id}-desc`} class="text-gray-600 dark:text-gray-300 text-sm mb-4">{description}</p>}
+
   <div class="bg-white p-4 border border-gray-200 rounded-lg shadow-sm" style={`height: ${height}px; width: ${width}px; margin: 0 auto;`}>
-    <div id={id} class="w-full h-full"></div>
+    <div id={id} class="w-full h-full" role="img" aria-label={ariaLabel}></div>
   </div>
+
+  <table id={tableId} class="sr-only">
+    <caption>{title ?? ariaLabel} - data table alternative</caption>
+    <thead>
+      <tr>
+        <th scope="col">&nbsp;</th>
+        {data.xLabels.map((x) => <th scope="col">{x}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      {data.yLabels.map((y, rowIdx) => (
+        <tr>
+          <th scope="row">{y}</th>
+          {data.xLabels.map((_, colIdx) => <td>{data.data[rowIdx]?.[colIdx] ?? ''}</td>)}
+        </tr>
+      ))}
+    </tbody>
+  </table>
   
   <script is:inline src="https://cdn.jsdelivr.net/npm/d3@7"></script>
   

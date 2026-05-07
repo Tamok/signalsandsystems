@@ -8,6 +8,7 @@ export interface Props {
     data?: Array<{ x: string; y: number }>; // For line charts
   }>;
   title?: string;
+  description?: string;
   height?: number;
   width?: number;
   showLabels?: boolean;
@@ -17,13 +18,14 @@ export interface Props {
   note?: string;
 }
 
-const { 
-  type, 
-  data, 
-  title, 
-  height = 300, 
-  width = 600, 
-  showLabels = true, 
+const {
+  type,
+  data,
+  title,
+  description,
+  height = 300,
+  width = 600,
+  showLabels = true,
   showValues = true,
   animate = true,
   unit = '',
@@ -32,6 +34,8 @@ const {
 
 // Generate unique ID for this chart
 const chartId = `chart-${Math.random().toString(36).substr(2, 9)}`;
+const ariaLabel = description ?? title ?? `${type} chart`;
+const tableId = `${chartId}-data`;
 
 // Default colors if not provided
 const defaultColors = [
@@ -48,8 +52,15 @@ const chartData = data.map((item, index) => ({
 }));
 ---
 
-<div class="chart-container">
-  {title && <h3 class="chart-title">{title}</h3>}
+<figure
+  class="chart-container"
+  role="group"
+  aria-labelledby={title ? `${chartId}-title` : undefined}
+  aria-describedby={description ? `${chartId}-desc` : tableId}
+>
+  {title && <h3 id={`${chartId}-title`} class="chart-title">{title}</h3>}
+  {description && <p id={`${chartId}-desc`} class="text-gray-600 dark:text-gray-300 text-sm mb-4">{description}</p>}
+  <div class="chart-wrapper" role="img" aria-label={ariaLabel}>
     {type === 'bar' && (
     <div class="bar-chart" style={`height: ${height}px; width: ${width}px;`}>
       <div class="chart-area">
@@ -242,12 +253,41 @@ const chartData = data.map((item, index) => ({
     </div>
   )}
 
+  </div>
+
   {note && (
     <div class="chart-note">
       {note}
     </div>
   )}
-</div>
+
+  <table id={tableId} class="sr-only">
+    <caption>{title ?? ariaLabel} - data table alternative</caption>
+    <thead>
+      <tr>
+        <th scope="col">Label</th>
+        <th scope="col">Value{unit ? ` (${unit})` : ''}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {type === 'line'
+        ? data.flatMap((series) =>
+            (series.data ?? []).map((p) => (
+              <tr>
+                <th scope="row">{`${series.label}: ${p.x}`}</th>
+                <td>{p.y}</td>
+              </tr>
+            ))
+          )
+        : data.map((item) => (
+            <tr>
+              <th scope="row">{item.label}</th>
+              <td>{item.value ?? ''}</td>
+            </tr>
+          ))}
+    </tbody>
+  </table>
+</figure>
 
 <style>
   .chart-container {
