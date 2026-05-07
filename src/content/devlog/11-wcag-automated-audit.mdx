@@ -237,14 +237,7 @@ Comment tokens went from `#6A737D` to `#66707B` on light (4.86:1) and `#BDC4CC` 
 
 ## The Audit Results
 
-After every fix above, including the Astro 5 selector unmask and the high-contrast theme switch:
-
-| Theme | URL count | Confirmed errors | Uncertain (CSS-var) |
-|---|---|---:|---:|
-| light | 9 | **0** | ~160 |
-| dark | 9 | **0** | ~160 |
-
-Zero confirmed errors across 18 URL × theme combinations. The remaining ~320 uncertain items are all Shiki CSS-variable tokens that axe cannot resolve at runtime; they are not WCAG failures.
+After every fix above, including the Astro 5 selector unmask and the high-contrast theme switch, the audit reports **zero confirmed WCAG 2.1 AA errors** across all nine routes in both light and dark mode (18 audit invocations in total). The roughly 320 remaining items are flagged by axe as "needs further review" because they reference Shiki's `--shiki-light` / `--shiki-dark` CSS variables that axe cannot resolve at runtime. The variables resolve to the high-contrast theme colors in the browser, all of which pass WCAG AA, so these are uncertainty in the tool, not failures in the page.
 
 ## Reviewing With Bots: The Branch + PR Workflow
 
