@@ -62,7 +62,7 @@ if (typeof globalThis !== 'undefined' && 'window' in globalThis) {
       <label for={`sort-select-${filterKey}`} class="text-gray-600 dark:text-gray-300 font-medium">Sort by:</label>
       <select 
         id={`sort-select-${filterKey}`}
-        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all cursor-pointer"
+        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold hover:bg-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 transition-all cursor-pointer"
       >
         <option value="author-asc" selected={sortBy === 'author' && sortOrder === 'asc'}>Author (A-Z)</option>
         <option value="author-desc" selected={sortBy === 'author' && sortOrder === 'desc'}>Author (Z-A)</option>
