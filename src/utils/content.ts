@@ -1,5 +1,5 @@
 // Utility functions for dynamic content sourcing in Signals & Systems using Astro Content Collections.
-// One registry drives every cross-collection query — see collections.ts.
+// One registry drives every cross-collection query - see collections.ts.
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import { ARTICLE_COLLECTIONS, isArticleCollection, type ArticleCollection } from './collections';
 

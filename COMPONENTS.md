@@ -3,7 +3,7 @@
 Reference for every component and layout currently in
 [src/](./src/). Each entry lists the file, what it does, props, and
 any accessibility contract worth knowing. Keep this file in sync when
-adding or modifying components — CI won't catch doc drift.
+adding or modifying components - CI won't catch doc drift.
 
 ## Layouts
 
@@ -13,11 +13,11 @@ Global head, skip-to-content link, consent dialog, pre-hydration theme
 script, Nav/Footer slots, SubscribePopup.
 
 **Props**
-- `title?: string` — page title
-- `description?: string` — meta description
-- `ogImage?: string` — Open Graph image URL
-- `canonicalURL?: URL | string` — defaults to `Astro.url`
-- `includeSyntaxHighlighting?: boolean` — adds Fira Code + copyCode.js
+- `title?: string` - page title
+- `description?: string` - meta description
+- `ogImage?: string` - Open Graph image URL
+- `canonicalURL?: URL | string` - defaults to `Astro.url`
+- `includeSyntaxHighlighting?: boolean` - adds Fira Code + copyCode.js
 
 **A11y:** skip link is the first focusable element on every page;
 `<main id="main-content">` carries `tabindex="-1"` for skip targets.
@@ -26,7 +26,7 @@ wired via [src/scripts/focusTrap.ts](./src/scripts/focusTrap.ts).
 
 ### [ArticleLayout](./src/layouts/ArticleLayout.astro)
 
-Chrome for individual articles — cover, metadata, author bio,
+Chrome for individual articles - cover, metadata, author bio,
 `<CitationList>`, series nav when applicable.
 
 **Props:** same as BaseLayout plus `publishDate`, `updatedDate?`,
@@ -80,7 +80,7 @@ Styled info/warning/error/tip/insight/stat/note/success/next callouts.
 
 **Props:**
 - `type: 'info' | 'warning' | 'error' | 'tip' | 'insight' | 'stat' | 'note' | 'success' | 'next'` (default: `'info'`)
-- `title?: string` — overrides the per-type default title
+- `title?: string` - overrides the per-type default title
 
 Each variant has light and dark color tokens; see the per-type maps in
 the source.
@@ -215,7 +215,7 @@ at query time per [ADR 0003](./docs/adr/0003-series-case-normalized-in-code.md).
 ### [src/utils/collections.ts](./src/utils/collections.ts)
 
 The `ARTICLE_COLLECTIONS` tuple. Adding a new collection requires a
-change here and in [src/content/config.ts](./src/content/config.ts) —
+change here and in [src/content/config.ts](./src/content/config.ts) -
 the unified dynamic route picks it up automatically.
 
 ### [src/schemas/content.ts](./src/schemas/content.ts)
@@ -248,14 +248,14 @@ Content validator: `--all` / `--changed` / `--file <path>` /
 
 Only listing the ones whose behavior isn't obvious from the filename.
 
-- [src/pages/[collection]/[slug].astro](./src/pages/%5Bcollection%5D/%5Bslug%5D.astro) —
+- [src/pages/[collection]/[slug].astro](./src/pages/%5Bcollection%5D/%5Bslug%5D.astro) -
   unified dynamic route, loops over `ARTICLE_COLLECTIONS`.
-- [src/pages/search.astro](./src/pages/search.astro) — Pagefind UI.
+- [src/pages/search.astro](./src/pages/search.astro) - Pagefind UI.
   Index is built by `pnpm postbuild` → `pagefind --site dist`.
-- [src/pages/resources.astro](./src/pages/resources.astro) — global
+- [src/pages/resources.astro](./src/pages/resources.astro) - global
   citation list.
 - [src/pages/series/[slug]/resources.astro](./src/pages/series/%5Bslug%5D/resources.astro)
-  — per-series citation list.
-- [src/pages/accessibility.astro](./src/pages/accessibility.astro) —
+  - per-series citation list.
+- [src/pages/accessibility.astro](./src/pages/accessibility.astro) -
   accessibility statement. Keep claims honest; update when coverage
   changes.

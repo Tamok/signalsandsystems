@@ -63,7 +63,7 @@ function patchClassString(classStr) {
 
 function processFile(file) {
   const src = readFileSync(file, 'utf-8');
-  // Match: class="..." OR class='...'  — literal attribute only
+  // Match: class="..." OR class='...'  - literal attribute only
   // Skip dynamic: class={`...`} / class={expr}
   const re = /\bclass=(['"])([^'"]*)\1/g;
   let changed = false;

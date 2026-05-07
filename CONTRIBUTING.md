@@ -34,7 +34,7 @@ and styles.
    `series` (must match a series slug), `order`, `coverImage`, `tags`,
    `draft`. Drafts are excluded from production listings.
 4. **Import components at the top of the MDX**. There is no global
-   component registry — each MDX file imports what it needs. See
+   component registry - each MDX file imports what it needs. See
    [COMPONENTS.md](./COMPONENTS.md) for the catalog.
 5. **Add citations inline** with `<CitedText>`. Full contract in
    [docs/research-workflow.md](./docs/research-workflow.md).
@@ -83,7 +83,7 @@ issues with `#123` when applicable.
 
 Examples:
 ```
-feat(tfp): add article 02 — designing for deliberation
+feat(tfp): add article 02 - designing for deliberation
 fix(nav): restore focus to hamburger when closing mobile menu
 chore: rebuild citation index after tfp/01 edits
 ```
@@ -92,10 +92,10 @@ chore: rebuild citation index after tfp/01 edits
 
 Every PR runs three checks:
 
-- `Typecheck / astro-check` — [.github/workflows/typecheck.yml](./.github/workflows/typecheck.yml)
-- `Validate content / validate` — [.github/workflows/validate.yml](./.github/workflows/validate.yml)
-- `Accessibility audit (advisory) / a11y` — [.github/workflows/a11y.yml](./.github/workflows/a11y.yml)
-  (advisory — does not block merges yet)
+- `Typecheck / astro-check` - [.github/workflows/typecheck.yml](./.github/workflows/typecheck.yml)
+- `Validate content / validate` - [.github/workflows/validate.yml](./.github/workflows/validate.yml)
+- `Accessibility audit (advisory) / a11y` - [.github/workflows/a11y.yml](./.github/workflows/a11y.yml)
+  (advisory - does not block merges yet)
 
 Merging to `main` triggers [.github/workflows/deploy.yml](./.github/workflows/deploy.yml),
 which reruns typecheck + full validate, builds the site, indexes Pagefind,
@@ -120,7 +120,7 @@ At minimum:
 - `src/content/*/_resources/` is gitignored across every collection.
   Don't reference files there as if they ship with the repo.
 - Files matching `*-clean.mdx` are excluded from typecheck via
-  [tsconfig.json](./tsconfig.json) — they're scratch copies, not content.
+  [tsconfig.json](./tsconfig.json) - they're scratch copies, not content.
 - Dark mode: the pre-hydration script in
   [src/layouts/BaseLayout.astro](./src/layouts/BaseLayout.astro) runs
   before CSS paints. If you add chrome that reads `localStorage`, do it

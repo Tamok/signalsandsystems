@@ -181,7 +181,7 @@ view. Pre-revival history resumes under "Pre-revival" below.
 2025-05-27 - 19:31 - Created development workflow and testing procedures documentation for SVG covers - #docs #workflow #testing
 2025-05-27 - 19:30 - Added XML language support to shiki highlighter in codeHighlight.ts - resolves "Language `xml` not found" ShikiError during builds - #bugfix #technical #shiki
 2025-05-27 - 19:28 - Added mandatory CTA CalloutBox to devlog #5 with GitHub and LinkedIn links - matches pattern established in articles 1-4 for consistent user engagement - #content #cta #consistency
-2025-05-27 - 19:27 - Replaced all emdashes ("—") with standard dashes (" - ") across all devlog articles for consistent punctuation formatting - #content #formatting #consistency
+2025-05-27 - 19:27 - Replaced all emdashes ("-") with standard dashes (" - ") across all devlog articles for consistent punctuation formatting - #content #formatting #consistency
 2025-05-27 - 19:26 - Converted all "we/our/us" references to first-person "I/my/me" across devlog articles 1-5 to reflect sole authorship voice - #content #voice #consistency
 2025-05-27 - 19:25 - Fixed MDX syntax errors in devlog #3 that were preventing successful builds - improved paragraph and list formatting - #bugfix #mdx #build
 

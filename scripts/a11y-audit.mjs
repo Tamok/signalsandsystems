@@ -144,7 +144,7 @@ for (const rule of byRule.values()) {
   console.log(`### ${rule.code}`);
   console.log(`> ${rule.message}\n`);
   for (const h of rule.hits.slice(0, 5)) {
-    console.log(`- [${h.theme}] \`${h.path}\` — \`${h.selector}\``);
+    console.log(`- [${h.theme}] \`${h.path}\` - \`${h.selector}\``);
   }
   if (rule.hits.length > 5) console.log(`- ...and ${rule.hits.length - 5} more`);
   console.log();

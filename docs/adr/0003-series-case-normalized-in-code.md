@@ -1,4 +1,4 @@
-# ADR 0003 — Series case is normalized in code, not in content
+# ADR 0003 - Series case is normalized in code, not in content
 
 - **Status:** Accepted
 - **Date:** 2026-04-17
@@ -19,7 +19,7 @@ frontmatter untouched.
 - Published URLs and external links reference content slugs, not series
   values. Rewriting frontmatter would require an audit of downstream
   consumers (series landing pages, citation aggregation, series nav)
-  that already expect lowercase — inviting regressions for zero reader
+  that already expect lowercase - inviting regressions for zero reader
   benefit.
 - Git history for existing articles stays intact. Rename-swap commits
   in the TFP collection (M1) are already one "bisect hop" deep;
@@ -36,7 +36,7 @@ frontmatter untouched.
 ## Consequences
 
 - **Pro:** No destructive edits to historical content.
-- **Pro:** New articles are case-agnostic — frontmatter typos become
+- **Pro:** New articles are case-agnostic - frontmatter typos become
   harmless.
 - **Con:** Anyone reading a raw `.mdx` file sees the un-normalized
   value. If they don't know about the seam, they might assume case
@@ -50,7 +50,7 @@ frontmatter untouched.
 Flagged in [CONTRIBUTING.md](../../CONTRIBUTING.md) under "Code
 workflow": cross-collection queries must go through
 [src/utils/content.ts](../../src/utils/content.ts), not `getCollection`
-directly. The unified dynamic route enforces this by construction — it
+directly. The unified dynamic route enforces this by construction - it
 never handles raw frontmatter.
 
 ## Revisit
