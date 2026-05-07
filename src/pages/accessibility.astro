@@ -4,7 +4,7 @@ import SGEO from '../components/SGEO.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 
-const lastUpdated = '2026-05-06';
+const lastUpdated = '2026-05-07';
 ---
 <BaseLayout title="Accessibility - Signals & Systems">
   <Nav />
@@ -31,13 +31,13 @@ const lastUpdated = '2026-05-06';
       <ul>
         <li>Skip-to-content link as the first focusable element on every page.</li>
         <li>Semantic landmarks (<code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;footer&gt;</code>) and a consistent heading hierarchy.</li>
-        <li>Keyboard navigation throughout, including primary nav, mobile menu, theme toggle, and citation drawers. ESC and outside-click close the mobile menu and consent dialog; focus is restored to the trigger on close.</li>
-        <li>Consent dialog uses <code>role="dialog"</code> with a focus trap and ESC-to-decline.</li>
-        <li>Visible <code>focus-visible</code> rings on every interactive control. No <code>focus:outline-none</code> without a replacement.</li>
-        <li>Color contrast meets WCAG AA (4.5:1 for body text, 3:1 for large text) in both light and dark themes. Code blocks use github-light-high-contrast and github-dark-high-contrast Shiki themes so syntax tokens, including comments, pass AA.</li>
+        <li>Keyboard navigation throughout, including primary nav, mobile menu, theme toggle, and citation drawers. ESC and outside-click both close the mobile menu and the consent dialog; in every case focus is restored to the trigger so keyboard users do not lose their place.</li>
+        <li>Consent dialog uses <code>role="dialog"</code> with <code>aria-modal</code>, a focus trap, ESC-to-decline, and click-on-backdrop-to-decline.</li>
+        <li>Visible focus rings on every interactive control, scoped via <code>focus-visible:</code> so the ring only appears for keyboard navigation and never for mouse clicks. Every <code>focus-visible:outline-none</code> is paired with a replacement ring.</li>
+        <li>Color contrast meets WCAG AA (4.5:1 for body text, 3:1 for large text) in both light and dark themes. Code blocks use the github-light-high-contrast and github-dark-high-contrast Shiki themes so every syntax token, including comments, passes AA.</li>
         <li>Dark mode with a class-based toggle in the primary nav, persisted in <code>localStorage</code>. Respects <code>prefers-color-scheme</code> on first visit and sets the <code>.dark</code> class before paint to avoid flash.</li>
-        <li>Charts expose an SR-only data table and an <code>aria-label</code> derived from the chart description or title.</li>
-        <li>Wiring schematics expose <code>&lt;title&gt;</code>/<code>&lt;desc&gt;</code> via <code>aria-labelledby</code> and a textual connection list. SVG text uses explicit CSS <code>color</code> to mirror <code>fill</code>, so contrast checkers see the rendered color regardless of inherited dark-mode prose styles.</li>
+        <li>Every chart component (line, bar, pie, doughnut, radar, scatter, sankey, heatmap, timeline, geo data charts) wraps in <code>&lt;figure role="group"&gt;</code> with <code>aria-labelledby</code>/<code>aria-describedby</code>, sets an <code>aria-label</code> on the rendered surface, and emits an <code>sr-only</code> data table covering every plotted value.</li>
+        <li>Wiring schematics expose <code>&lt;title&gt;</code> and <code>&lt;desc&gt;</code> via <code>aria-labelledby</code>, and ship with a textual connection list (from-pin / to-pin / signal type) inside a <code>&lt;details&gt;</code> alternative. SVG text uses explicit CSS <code>color</code> to mirror <code>fill</code>, so contrast checkers see the rendered color regardless of inherited dark-mode prose styles.</li>
         <li>Every inline article image carries an <code>alt</code> attribute. Decorative images use empty alt; meaningful images describe what the reader should take away.</li>
         <li>Automated a11y audits run on every pull request and every push to <code>main</code>: pa11y (axe + htmlcs) across nine routes in both themes, plus Lighthouse CI with a 0.95 accessibility floor. Confirmed failures block the merge.</li>
       </ul>
