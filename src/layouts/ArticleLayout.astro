@@ -22,6 +22,10 @@ interface Props {
   coverImage?: string;
   ogImage?: string;
   canonicalURL?: string;
+  // Source-file metadata so the "Updated" line can link to GitHub blame
+  // for the underlying MDX. Both must be present for the link to render.
+  collection?: string;
+  articleSlug?: string;
   // Series navigation props (optional)
   seriesTitle?: string;
   seriesSlug?: string;
@@ -31,14 +35,16 @@ interface Props {
   nextArticle?: SeriesArticle | null;
 }
 
-const { 
-  title, 
-  description, 
+const {
+  title,
+  description,
   publishDate,
   updatedDate,
   coverImage,
   ogImage = coverImage || "/images/og-default.svg",
   canonicalURL = Astro.url,
+  collection,
+  articleSlug,
   seriesTitle,
   seriesSlug,
   seriesArticles,
@@ -46,6 +52,14 @@ const {
   prevArticle,
   nextArticle
 } = Astro.props;
+
+// The repo root is the sastro/ directory itself (verified via
+// git rev-parse --show-toplevel), so MDX articles live at
+// src/content/<collection>/<slug>.mdx in GitHub's tree, not under a
+// sastro/ prefix.
+const blameURL = collection && articleSlug
+  ? `https://github.com/Tamok/signalsandsystems/blame/main/src/content/${collection}/${articleSlug}.mdx`
+  : null;
 
   // Debug logging for development
   if (import.meta.env.DEV) {
@@ -313,7 +327,19 @@ const {
           <time datetime={publishDate.toISOString()}>Published: {formatDateUTC(publishDate)}</time>
           {updatedDate && (
             <span class="ml-4">
-              Updated: <time datetime={updatedDate.toISOString()}>{formatDateUTC(updatedDate)}</time>
+              Updated: {blameURL ? (
+                <a
+                  href={blameURL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="underline decoration-dotted hover:decoration-solid focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2"
+                  title="View change history on GitHub"
+                >
+                  <time datetime={updatedDate.toISOString()}>{formatDateUTC(updatedDate)}</time>
+                </a>
+              ) : (
+                <time datetime={updatedDate.toISOString()}>{formatDateUTC(updatedDate)}</time>
+              )}
             </span>
           )}
         </div>

@@ -22,19 +22,19 @@ pnpm validate:changed  # only files that differ from origin/main (CI-speed)
 pnpm tsx scripts/aggregate-citations.ts  # rebuild consolidated-citations.json
 ```
 
-Requires Node 20 and pnpm 10. There is no separate test runner — "tests"
+Requires Node 20 and pnpm 10. There is no separate test runner - "tests"
 means `astro check` + `pnpm validate` + manual dev-server verification.
 
 ## Where things live
 
-- [CONTRIBUTING.md](./CONTRIBUTING.md) — editorial workflow and PR checklist.
-- [COMPONENTS.md](./COMPONENTS.md) — component index.
-- [CHANGELOG.md](./CHANGELOG.md) — timestamped feature log.
-- [NEXT-STEPS.md](./NEXT-STEPS.md) — roadmap.
-- [docs/](./docs/) — topic docs. See especially:
-  - [docs/research-workflow.md](./docs/research-workflow.md) — citation pipeline.
-  - [docs/maintainer-setup.md](./docs/maintainer-setup.md) — one-time GitHub config.
-  - [docs/adr/](./docs/adr/) — architectural decision records.
+- [CONTRIBUTING.md](./CONTRIBUTING.md) - editorial workflow and PR checklist.
+- [COMPONENTS.md](./COMPONENTS.md) - component index.
+- [CHANGELOG.md](./CHANGELOG.md) - timestamped feature log.
+- [NEXT-STEPS.md](./NEXT-STEPS.md) - roadmap.
+- [docs/](./docs/) - topic docs. See especially:
+  - [docs/research-workflow.md](./docs/research-workflow.md) - citation pipeline.
+  - [docs/maintainer-setup.md](./docs/maintainer-setup.md) - one-time GitHub config.
+  - [docs/adr/](./docs/adr/) - architectural decision records.
 
 ## Architecture in one paragraph
 
@@ -51,7 +51,7 @@ Layouts form a three-layer stack: `BaseLayout` (head, nav, footer) →
 
 ## Author
 
-**Jonathan Engeln (JELL)** — writing at the intersection of AI, higher
+**Jonathan Engeln (JELL)** - writing at the intersection of AI, higher
 education, and ethical technology.
 
 - GitHub: [github.com/Tamok](https://github.com/Tamok)

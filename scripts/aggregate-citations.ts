@@ -62,7 +62,7 @@ function extractCitations(content: string, filePath: string): Record<string, str
     const meta: Record<string, string> = {};
     for (const attr of node.attributes || []) {
       if (attr.type !== 'mdxJsxAttribute' || !attr.name) continue;
-      // Skip spread attributes and expression-valued attributes — we only track literal strings,
+      // Skip spread attributes and expression-valued attributes - we only track literal strings,
       // matching the pre-AST regex behavior.
       if (typeof attr.value === 'string') {
         meta[attr.name] = attr.value;

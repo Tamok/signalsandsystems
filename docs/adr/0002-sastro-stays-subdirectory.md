@@ -1,4 +1,4 @@
-# ADR 0002 — `sastro/` stays as a subdirectory of the repo
+# ADR 0002 - `sastro/` stays as a subdirectory of the repo
 
 - **Status:** Accepted
 - **Date:** 2026-04-17

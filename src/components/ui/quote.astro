@@ -14,7 +14,7 @@ const { author, source } = Astro.props;
   {(author || source) && (
     <footer class="mt-2 text-sm text-gray-600 dark:text-gray-300 not-italic">
       {author && <cite class="font-medium">{author}</cite>}
-      {author && source && <span class="mx-1">—</span>}
+      {author && source && <span class="mx-1">-</span>}
       {source && <span>{source}</span>}
     </footer>
   )}

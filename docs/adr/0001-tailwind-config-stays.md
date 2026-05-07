@@ -1,6 +1,6 @@
-# ADR 0001 — Keep `tailwind.config.mjs`, defer the `@theme` migration
+# ADR 0001 - Keep `tailwind.config.mjs`, defer the `@theme` migration
 
-- **Status:** Superseded (2026-04-18) — migration completed post-M9. See
+- **Status:** Superseded (2026-04-18) - migration completed post-M9. See
   note at end of document.
 - **Date:** 2026-04-17
 - **Context:** M7 of the revival plan flagged [tailwind.config.mjs](../../tailwind.config.mjs)
@@ -38,7 +38,7 @@ do the conversion in one coherent pass.
 Revisit once M8 lands. If the `@theme` migration doesn't happen alongside dark
 mode, log a follow-up issue rather than letting this decision rot.
 
-## 2026-04-18 update — migration completed
+## 2026-04-18 update - migration completed
 
 Deferred rather than skipped. After M8 shipped dark mode using
 `@custom-variant dark` directly in [src/styles/global.css](../../src/styles/global.css),
