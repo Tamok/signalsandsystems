@@ -1,8 +1,8 @@
 ---
 import "../styles/global.css";
 import SubscribePopup from "../components/SubscribePopup.astro";
+import { getCollection } from "astro:content";
 import { ARTICLE_COLLECTIONS } from "../utils/collections";
-import { getSeriesBySlug } from "../utils/content";
 
 // Props interface
 interface Props {
@@ -26,6 +26,13 @@ const {
 // autodiscovery can offer it alongside the site-wide feed. Article
 // routes are /<collection>/<slug>/ and series pages are /series/<slug>/;
 // each maps directly to a series feed at /series/<slug>/feed.xml.
+//
+// Reads getCollection('series') directly rather than going through the
+// getSeriesBySlug helper. The helper is O(N x M) over all articles in
+// every collection because it computes articleCount; on a layout that
+// renders for every page the cost compounds. The 'series' collection
+// is small JSON files and is cheap to scan for a slug match, with
+// Astro's content cache deduping repeat reads inside the same build.
 const pathname = Astro.url.pathname;
 const seriesPathMatch = pathname.match(/^\/series\/([^/]+)/);
 const articleCollectionMatch = pathname.match(/^\/([^/]+)/);
@@ -34,9 +41,12 @@ const candidateSlug =
   (articleCollectionMatch && (ARTICLE_COLLECTIONS as readonly string[]).includes(articleCollectionMatch[1])
     ? articleCollectionMatch[1]
     : null);
-const matchedSeries = candidateSlug ? await getSeriesBySlug(candidateSlug) : null;
-const seriesFeedSlug = matchedSeries?.slug ?? null;
-const seriesFeedTitle = matchedSeries?.title ?? null;
+const seriesEntries = candidateSlug ? await getCollection('series') : [];
+const matchedSeries = candidateSlug
+  ? seriesEntries.find((entry) => entry.id.replace(/\.[^.]+$/, '') === candidateSlug)
+  : null;
+const seriesFeedSlug = matchedSeries ? matchedSeries.id.replace(/\.[^.]+$/, '') : null;
+const seriesFeedTitle = matchedSeries?.data.title ?? null;
 ---
 
 <!DOCTYPE html>
