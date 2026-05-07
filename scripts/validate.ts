@@ -181,6 +181,27 @@ async function validateMdxCompile(content: string, findings: Finding[]): Promise
   }
 }
 
+// House style: prose uses commas, semicolons, or regular hyphens. Em-dashes
+// drift back regularly via AI-assisted writing; flag every occurrence so a
+// reviewer either rewrites the sentence or replaces with a hyphen.
+function validateNoEmDash(content: string, findings: Finding[]): void {
+  const lines = content.split(/\r?\n/);
+  let inFence = false;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (/^\s*```/.test(line)) inFence = !inFence;
+    if (inFence) continue;
+    if (line.includes('—')) {
+      findings.push({
+        severity: 'error',
+        rule: 'no-em-dash',
+        message: 'em-dash (—) found; use a comma, semicolon, or hyphen',
+        line: i + 1,
+      });
+    }
+  }
+}
+
 function validateAssets(data: any, content: string, findings: Finding[]): void {
   const isDraft = data?.draft === true;
   const references = new Set<string>();
@@ -197,13 +218,13 @@ function validateAssets(data: any, content: string, findings: Finding[]): void {
 
   for (const ref of references) {
     if (!ref || /^https?:/i.test(ref) || ref.startsWith('data:')) continue;
-    // Ignore imported identifiers (Astro passes `src={coverImage}` objects — these
+    // Ignore imported identifiers (Astro passes `src={coverImage}` objects - these
     // look like JSX expressions, not strings, so they won't land in this set).
     const normalized = ref.startsWith('/') ? ref.slice(1) : ref;
     const candidate = path.join(PUBLIC_DIR, normalized);
     if (!fs.existsSync(candidate)) {
       findings.push({
-        // Drafts inherently have in-progress assets — surface the issue without
+        // Drafts inherently have in-progress assets - surface the issue without
         // blocking the build.
         severity: isDraft ? 'warning' : 'error',
         rule: 'broken-asset',
@@ -231,7 +252,7 @@ async function headCheck(url: string, timeoutMs = 6000): Promise<boolean> {
   try {
     const res = await fetch(url, { method: 'HEAD', signal: controller.signal });
     if (res.ok) return true;
-    // Some hosts 405 HEAD — retry GET
+    // Some hosts 405 HEAD - retry GET
     if (res.status === 405 || res.status === 403) {
       const res2 = await fetch(url, { method: 'GET', signal: controller.signal });
       return res2.ok;
@@ -292,6 +313,7 @@ async function validateArticle(file: string, opts: RunOptions): Promise<ArticleR
   const findings: Finding[] = [];
   const { data, content } = await validateFrontmatter(raw, findings);
   await validateMdxCompile(content, findings);
+  validateNoEmDash(content, findings);
   validateAssets(data, content, findings);
   if (opts.links) await validateLinks(content, findings);
   if (opts.fuzzy) await validateFuzzyCitations(content, findings);
