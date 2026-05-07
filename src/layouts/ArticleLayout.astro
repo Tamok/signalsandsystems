@@ -53,8 +53,12 @@ const {
   nextArticle
 } = Astro.props;
 
+// The repo root is the sastro/ directory itself (verified via
+// git rev-parse --show-toplevel), so MDX articles live at
+// src/content/<collection>/<slug>.mdx in GitHub's tree, not under a
+// sastro/ prefix.
 const blameURL = collection && articleSlug
-  ? `https://github.com/Tamok/signalsandsystems/blame/main/sastro/src/content/${collection}/${articleSlug}.mdx`
+  ? `https://github.com/Tamok/signalsandsystems/blame/main/src/content/${collection}/${articleSlug}.mdx`
   : null;
 
   // Debug logging for development

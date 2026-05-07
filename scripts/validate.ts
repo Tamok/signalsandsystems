@@ -184,8 +184,11 @@ async function validateMdxCompile(content: string, findings: Finding[]): Promise
 // House style: prose uses commas, semicolons, or regular hyphens. Em-dashes
 // drift back regularly via AI-assisted writing; flag every occurrence so a
 // reviewer either rewrites the sentence or replaces with a hyphen.
-function validateNoEmDash(content: string, findings: Finding[]): void {
-  const lines = content.split(/\r?\n/);
+// Scans the entire raw file (including frontmatter) so em-dashes in title or
+// description fields don't sneak through. Skips fenced code blocks where an
+// em-dash might be quoting the literal character.
+function validateNoEmDash(raw: string, findings: Finding[]): void {
+  const lines = raw.split(/\r?\n/);
   let inFence = false;
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
@@ -313,7 +316,7 @@ async function validateArticle(file: string, opts: RunOptions): Promise<ArticleR
   const findings: Finding[] = [];
   const { data, content } = await validateFrontmatter(raw, findings);
   await validateMdxCompile(content, findings);
-  validateNoEmDash(content, findings);
+  validateNoEmDash(raw, findings);
   validateAssets(data, content, findings);
   if (opts.links) await validateLinks(content, findings);
   if (opts.fuzzy) await validateFuzzyCitations(content, findings);
