@@ -152,7 +152,16 @@ for (const rule of byRule.values()) {
 
 const totalErrors = summary.reduce((n, s) => n + Math.max(s.errors, 0), 0);
 const totalUncertain = summary.reduce((n, s) => n + Math.max(s.uncertain ?? 0, 0), 0);
+// Rows where the audit itself failed (newPage / pa11y exception) carry
+// errors: -1 and never reached the issue inspection. Math.max above floors
+// these to 0 in the contrast count, but they must still fail the run, or
+// CI will report success while one or more URLs were never audited.
+const failedAudits = summary.filter((s) => s.errors < 0);
 if (totalUncertain > 0) {
-  console.log(`\n⚠  ${totalUncertain} uncertain items (axe needsFurtherReview — CSS-var contrast not resolvable by axe)`);
+  console.log(`\n⚠  ${totalUncertain} uncertain items (axe needsFurtherReview, CSS-var contrast not resolvable by axe)`);
 }
-process.exit(totalErrors > 0 ? 1 : 0);
+if (failedAudits.length > 0) {
+  console.log(`\n❌ ${failedAudits.length} URL+theme combo(s) failed to audit (newPage or pa11y exception):`);
+  for (const s of failedAudits) console.log(`  - [${s.theme}] ${s.path}: ${s.error}`);
+}
+process.exit(totalErrors > 0 || failedAudits.length > 0 ? 1 : 0);
