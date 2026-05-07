@@ -62,8 +62,13 @@ try {
     for (const path of PATHS) {
       const url = `${ORIGIN}${path}`;
       process.stdout.write(`  ${theme.padEnd(5)}  ${path.padEnd(60)} `);
-      const page = await browser.newPage();
+      // page is allocated inside the try so a newPage() failure (browser
+      // crash, OOM) is captured by the local catch instead of bubbling
+      // out. The summary then carries an error row for this (theme, path)
+      // and the report stays complete.
+      let page = null;
       try {
+        page = await browser.newPage();
         // Seed localStorage before the page loads:
         //   - ss-theme: drives the pre-hydration dark/light class toggle
         //   - ss-analytics-consent: prevents the full-page consent overlay
@@ -106,7 +111,7 @@ try {
         process.stdout.write(`FAIL: ${err.message}\n`);
         summary.push({ theme, path, errors: -1, warnings: -1, error: err.message });
       } finally {
-        await page.close().catch(() => {});
+        if (page) await page.close().catch(() => {});
       }
     }
   }
@@ -147,7 +152,16 @@ for (const rule of byRule.values()) {
 
 const totalErrors = summary.reduce((n, s) => n + Math.max(s.errors, 0), 0);
 const totalUncertain = summary.reduce((n, s) => n + Math.max(s.uncertain ?? 0, 0), 0);
+// Rows where the audit itself failed (newPage / pa11y exception) carry
+// errors: -1 and never reached the issue inspection. Math.max above floors
+// these to 0 in the contrast count, but they must still fail the run, or
+// CI will report success while one or more URLs were never audited.
+const failedAudits = summary.filter((s) => s.errors < 0);
 if (totalUncertain > 0) {
-  console.log(`\n⚠  ${totalUncertain} uncertain items (axe needsFurtherReview — CSS-var contrast not resolvable by axe)`);
+  console.log(`\n⚠  ${totalUncertain} uncertain items (axe needsFurtherReview, CSS-var contrast not resolvable by axe)`);
 }
-process.exit(totalErrors > 0 ? 1 : 0);
+if (failedAudits.length > 0) {
+  console.log(`\n❌ ${failedAudits.length} URL+theme combo(s) failed to audit (newPage or pa11y exception):`);
+  for (const s of failedAudits) console.log(`  - [${s.theme}] ${s.path}: ${s.error}`);
+}
+process.exit(totalErrors > 0 || failedAudits.length > 0 ? 1 : 0);
