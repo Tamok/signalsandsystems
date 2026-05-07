@@ -1,6 +1,8 @@
 ---
 import "../styles/global.css";
 import SubscribePopup from "../components/SubscribePopup.astro";
+import { ARTICLE_COLLECTIONS } from "../utils/collections";
+import { getSeriesBySlug } from "../utils/content";
 
 // Props interface
 interface Props {
@@ -19,6 +21,22 @@ const {
   canonicalURL = Astro.url,
   includeSyntaxHighlighting = false,
 } = Astro.props;
+
+// Derive the most-specific feed for the current page so feed-reader
+// autodiscovery can offer it alongside the site-wide feed. Article
+// routes are /<collection>/<slug>/ and series pages are /series/<slug>/;
+// each maps directly to a series feed at /series/<slug>/feed.xml.
+const pathname = Astro.url.pathname;
+const seriesPathMatch = pathname.match(/^\/series\/([^/]+)/);
+const articleCollectionMatch = pathname.match(/^\/([^/]+)/);
+const candidateSlug =
+  seriesPathMatch?.[1] ??
+  (articleCollectionMatch && (ARTICLE_COLLECTIONS as readonly string[]).includes(articleCollectionMatch[1])
+    ? articleCollectionMatch[1]
+    : null);
+const matchedSeries = candidateSlug ? await getSeriesBySlug(candidateSlug) : null;
+const seriesFeedSlug = matchedSeries?.slug ?? null;
+const seriesFeedTitle = matchedSeries?.title ?? null;
 ---
 
 <!DOCTYPE html>
@@ -50,6 +68,19 @@ const {
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
     <link rel="icon" type="image/png" href="/images/favicon.png" />
+
+    <!-- Feed autodiscovery: site-wide always, plus per-series when the
+         current path is under /series/<slug>/ or one of that series'
+         articles. Feed readers pick up whichever is most specific. -->
+    <link rel="alternate" type="application/rss+xml" title="Signals & Systems" href="/feed.xml" />
+    {seriesFeedSlug && (
+      <link
+        rel="alternate"
+        type="application/rss+xml"
+        title={`${seriesFeedTitle} | Signals & Systems`}
+        href={`/series/${seriesFeedSlug}/feed.xml`}
+      />
+    )}
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
