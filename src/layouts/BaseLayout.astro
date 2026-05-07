@@ -138,8 +138,9 @@ const {
         document.getElementById('decline-btn').onclick = declineAndClose;
         // Outside-click on the backdrop counts as decline. Bound on the
         // backdrop element rather than via document-level listener so it
-        // can't fire on unrelated clicks. The dialog itself uses
-        // stopPropagation via the e.target check below.
+        // can't fire on unrelated clicks. The e.target === backdrop guard
+        // skips clicks that bubbled up from the dialog itself, so only
+        // direct clicks on the dimmed area trigger dismissal.
         if (backdrop) {
           backdrop.addEventListener('click', (e) => {
             if (e.target === backdrop) declineAndClose();

@@ -31,7 +31,7 @@ const lastUpdated = '2026-05-07';
       <ul>
         <li>Skip-to-content link as the first focusable element on every page.</li>
         <li>Semantic landmarks (<code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;footer&gt;</code>) and a consistent heading hierarchy.</li>
-        <li>Keyboard navigation throughout, including primary nav, mobile menu, theme toggle, and citation drawers. ESC and outside-click both close the mobile menu and the consent dialog; in every case focus is restored to the trigger so keyboard users do not lose their place.</li>
+        <li>Keyboard navigation throughout, including primary nav, mobile menu, theme toggle, and citation drawers. ESC closes the mobile menu and the consent dialog and restores focus to the trigger. Outside-click also closes both, and the consent dialog restores focus through its focus trap; the mobile menu's outside-click restores focus to the trigger only when keyboard focus was still inside the menu, so a click on another interactive element does not get its focus stolen back.</li>
         <li>Consent dialog uses <code>role="dialog"</code> with <code>aria-modal</code>, a focus trap, ESC-to-decline, and click-on-backdrop-to-decline.</li>
         <li>Visible focus rings on every interactive control, scoped via <code>focus-visible:</code> so the ring only appears for keyboard navigation and never for mouse clicks. Every <code>focus-visible:outline-none</code> is paired with a replacement ring.</li>
         <li>Color contrast meets WCAG AA (4.5:1 for body text, 3:1 for large text) in both light and dark themes. Code blocks use the github-light-high-contrast and github-dark-high-contrast Shiki themes so every syntax token, including comments, passes AA.</li>

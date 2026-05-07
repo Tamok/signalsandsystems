@@ -130,11 +130,17 @@
       if (!isOpen()) return;
       const target = event.target as Node;
       if (mobileMenu.contains(target) || mobileMenuButton.contains(target)) return;
+      // If focus was inside the menu (or on the trigger) at click time,
+      // the user was navigating from the keyboard and dismissing via
+      // outside-click; restore focus to the trigger. If focus has already
+      // moved to the click target (e.g., they clicked another link or
+      // button), do not steal focus back - that overrides the user's
+      // intent to interact with the clicked element.
+      const focusInsideMenu =
+        mobileMenu.contains(document.activeElement) ||
+        document.activeElement === mobileMenuButton;
       setState(false);
-      // Outside-click closes the menu; restore focus to the trigger so
-      // keyboard users don't lose their place. Mirrors the ESC handler
-      // above so both dismissal paths behave the same.
-      mobileMenuButton.focus();
+      if (focusInsideMenu) mobileMenuButton.focus();
     });
   }
 
