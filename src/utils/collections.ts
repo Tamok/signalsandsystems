@@ -1,4 +1,4 @@
-export const ARTICLE_COLLECTIONS = ['devlog', 'isomon', 'geo', 'tfp'] as const;
+export const ARTICLE_COLLECTIONS = ['devlog', 'isomon', 'geo', 'tfp', 'wymber'] as const;
 
 export type ArticleCollection = (typeof ARTICLE_COLLECTIONS)[number];
 

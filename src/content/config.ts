@@ -20,5 +20,6 @@ export const collections = {
   isomon: articleCollection,
   geo: articleCollection,
   tfp: articleCollection,
+  wymber: articleCollection,
   series: seriesCollection
 };

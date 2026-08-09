@@ -26,6 +26,7 @@ import { execSync } from 'child_process';
 import { compile } from '@mdx-js/mdx';
 import matter from 'gray-matter';
 import { articleFrontmatterSchema } from '../src/schemas/content.ts';
+import { ARTICLE_COLLECTIONS } from '../src/utils/collections.ts';
 
 const CONTENT_DIR = path.join(process.cwd(), 'src', 'content');
 const PUBLIC_DIR = path.join(process.cwd(), 'public');
@@ -122,7 +123,9 @@ function listAllArticles(): string[] {
       else if (full.endsWith('.mdx')) out.push(full);
     }
   }
-  for (const collection of ['devlog', 'isomon', 'geo', 'tfp']) {
+  // Driven by the same registry the site routes off, so a new collection is
+  // never validated in only some of the places that know about it.
+  for (const collection of ARTICLE_COLLECTIONS) {
     const dir = path.join(CONTENT_DIR, collection);
     if (fs.existsSync(dir)) walk(dir);
   }
