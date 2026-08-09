@@ -1,0 +1,98 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Wymber series cover">
+  <defs>
+    <!-- Background gradient -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#134e4a"/>
+    </linearGradient>
+
+    <!-- Panel gradient -->
+    <linearGradient id="panelGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:rgba(45, 212, 191, 0.12)"/>
+      <stop offset="100%" style="stop-color:rgba(20, 184, 166, 0.22)"/>
+    </linearGradient>
+
+    <!-- Grid pattern -->
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+
+  <!-- Left panel: the device boundary -->
+  <g transform="translate(60, 60)">
+    <rect x="0" y="0" width="500" height="320" rx="12" fill="url(#panelGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text x="24" y="34" fill="white" font-size="18" font-weight="bold">On the device</text>
+
+    <!-- Plaintext record -->
+    <g transform="translate(40, 60)">
+      <rect x="0" y="0" width="180" height="80" rx="6" fill="rgba(45, 212, 191, 0.18)" stroke="#2dd4bf" stroke-width="1"/>
+      <text x="14" y="26" fill="#5eead4" font-size="12" font-family="monospace">plaintext</text>
+      <rect x="14" y="38" width="120" height="6" rx="3" fill="rgba(94, 234, 212, 0.55)"/>
+      <rect x="14" y="52" width="150" height="6" rx="3" fill="rgba(94, 234, 212, 0.35)"/>
+      <rect x="14" y="66" width="90" height="6" rx="3" fill="rgba(94, 234, 212, 0.35)"/>
+    </g>
+
+    <!-- Key + encrypt step -->
+    <g transform="translate(240, 78)">
+      <path d="M 0,22 L 46,22 L 38,14 M 46,22 L 38,30" fill="none" stroke="#5eead4" stroke-width="2"/>
+      <text x="2" y="12" fill="#99f6e4" font-size="11">encrypt</text>
+    </g>
+
+    <!-- Ciphertext record -->
+    <g transform="translate(300, 60)">
+      <rect x="0" y="0" width="160" height="80" rx="6" fill="rgba(15, 23, 42, 0.55)" stroke="#0d9488" stroke-width="1"/>
+      <text x="14" y="26" fill="#2dd4bf" font-size="12" font-family="monospace">ciphertext</text>
+      <text x="14" y="48" fill="rgba(148, 163, 184, 0.9)" font-size="11" font-family="monospace">a9 f2 0c 7d 41</text>
+      <text x="14" y="64" fill="rgba(148, 163, 184, 0.7)" font-size="11" font-family="monospace">3e bb 15 c0 8a</text>
+    </g>
+
+    <!-- Key stays local -->
+    <g transform="translate(40, 180)">
+      <rect x="0" y="0" width="420" height="100" rx="8" fill="rgba(15, 23, 42, 0.4)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+      <circle cx="30" cy="34" r="9" fill="none" stroke="#f59e0b" stroke-width="2"/>
+      <path d="M 39,34 L 66,34 M 58,34 L 58,42 M 66,34 L 66,44" fill="none" stroke="#f59e0b" stroke-width="2"/>
+      <text x="84" y="39" fill="#fbbf24" font-size="14" font-weight="bold">The key never leaves this box</text>
+      <text x="20" y="72" fill="rgba(255,255,255,0.65)" font-size="12">Local-first storage, client-side encryption, no server-side plaintext</text>
+    </g>
+  </g>
+
+  <!-- Right panel: the open question -->
+  <g transform="translate(620, 60)">
+    <rect x="0" y="0" width="520" height="320" rx="12" fill="url(#panelGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text x="24" y="34" fill="white" font-size="18" font-weight="bold">The part that stays open</text>
+
+    <g transform="translate(30, 60)">
+      <rect x="0" y="0" width="460" height="52" rx="6" fill="rgba(15, 23, 42, 0.45)" stroke="rgba(45, 212, 191, 0.4)" stroke-width="1"/>
+      <circle cx="26" cy="26" r="5" fill="#2dd4bf"/>
+      <text x="48" y="31" fill="rgba(255,255,255,0.85)" font-size="13">Content Security Policy, generated rather than hand written</text>
+
+      <rect x="0" y="64" width="460" height="52" rx="6" fill="rgba(15, 23, 42, 0.45)" stroke="rgba(45, 212, 191, 0.4)" stroke-width="1"/>
+      <circle cx="26" cy="90" r="5" fill="#2dd4bf"/>
+      <text x="48" y="95" fill="rgba(255,255,255,0.85)" font-size="13">Subresource integrity and a build hash manifest</text>
+
+      <rect x="0" y="128" width="460" height="52" rx="6" fill="rgba(15, 23, 42, 0.45)" stroke="rgba(245, 158, 11, 0.5)" stroke-width="1"/>
+      <circle cx="26" cy="154" r="5" fill="#f59e0b"/>
+      <text x="48" y="159" fill="rgba(255,255,255,0.85)" font-size="13">A client still cannot attest to its own integrity</text>
+
+      <text x="0" y="212" fill="rgba(255,255,255,0.6)" font-size="12">Every check is run by, or delivered from, the thing being checked.</text>
+      <text x="0" y="232" fill="rgba(255,255,255,0.6)" font-size="12">Out of band verification is the only real anchor.</text>
+    </g>
+  </g>
+
+  <!-- Title block -->
+  <g transform="translate(0, 420)">
+    <text x="600" y="40" text-anchor="middle" fill="white" font-size="48" font-weight="bold">Wymber</text>
+    <text x="600" y="76" text-anchor="middle" fill="#5eead4" font-size="24">Local-first, client-side-encrypted, built in the open</text>
+    <text x="600" y="106" text-anchor="middle" fill="#2dd4bf" font-size="18">Threat models, client integrity, and the distance between the document and the deployment</text>
+
+    <g transform="translate(500, 140)">
+      <rect x="0" y="0" width="200" height="40" rx="20" fill="rgba(45, 212, 191, 0.18)" stroke="#2dd4bf" stroke-width="1"/>
+      <circle cx="30" cy="20" r="6" fill="#2dd4bf"/>
+      <text x="50" y="25" fill="#5eead4" font-size="14" font-weight="bold">Series Active</text>
+    </g>
+  </g>
+</svg>

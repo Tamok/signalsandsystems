@@ -1,0 +1,41 @@
+---
+title: "<Title of Article>"
+description: "<Short summary of the article>"
+publishDate: YYYY-MM-DD
+series: "Wymber"
+order: <number>
+coverImage: "/images/<cover-image>.svg"
+# tags: ["optional", "tags", "here"]
+draft: true
+---
+
+{/*
+Underscore-prefixed files are skipped by both the Astro content collection and
+scripts/validate.ts, so this template never renders and never gets validated.
+
+Wymber entries describe a public repository. Every technical claim in an entry
+should be checkable against a file in that repository; if it cannot be checked,
+it does not go in.
+*/}
+
+import CalloutBox from '../../components/CalloutBox.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+<p class="lead">
+  <em>Optional lead paragraph introducing the article and its main theme.</em>
+</p>
+
+<h2 class="text-2xl font-bold mt-8 mb-4">Section Title</h2>
+<p>
+  Main content for this section goes here. Use <strong>HTML</strong> tags for formatting, and Astro components for interactivity.
+</p>
+
+<CalloutBox type="info">
+  <p>Use callouts to highlight important information, tips, or warnings.</p>
+</CalloutBox>
+
+<CodeBlock
+  code={codeExample}
+  lang="js"
+  filename="example.js"
+/>

@@ -30,6 +30,12 @@ export function getSeriesBadgeConfig(seriesSlug: string): SeriesBadgeConfig {
       bgColor: 'bg-amber-50',
       textColor: 'text-amber-700',
       borderColor: 'border-amber-200'
+    },
+    wymber: {
+      name: 'Wymber',
+      bgColor: 'bg-teal-50',
+      textColor: 'text-teal-700',
+      borderColor: 'border-teal-200'
     }
   };
 
