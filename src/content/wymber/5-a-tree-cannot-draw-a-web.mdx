@@ -1,0 +1,116 @@
+---
+title: "Wymber #5: A Tree Cannot Draw a Web"
+description: "The map was rendered by a mind-mapping library that only draws trees, while the data underneath was already a graph. Replacing the renderer meant admitting the view had been lossy from the start, running a spike to prove a replacement could feel right, and then finding a 424 KB script loading on the login screen."
+publishDate: 2026-06-03
+series: "Wymber"
+order: 5
+coverImage: "/images/wymber-series-cover.svg"
+tags: ["wymber", "graph", "cytoscape", "data-model", "accessibility", "adr"]
+draft: true
+---
+
+import CalloutBox from '../../components/CalloutBox.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+<p class="lead">
+  The last entry was about what a client can and cannot prove about itself. This one is about a complaint I could not shake: the map on screen never quite matched the thing it was supposed to represent. The library drawing it knew how to draw exactly one shape, and that shape was wrong for the data underneath it.
+</p>
+
+## The Map That Felt Wrong
+
+Wymber's map arrived with the 2026-05-30 revival commit, rendered by **MindElixir.js**, and for a while it was a genuine milestone. Before that there was a placeholder div where the map should be, and MindElixir was the first thing that made anything appear at all.
+
+But MindElixir is a **tree** library. One root, branches out. And what the product needs to represent was never a tree. An event anchors several emotions. A trigger reactivates an old event. A coping skill answers a trigger. One person shows up in a dozen places across the map. The core value is not drawing a tidy hierarchy, it is helping someone notice a connection they had not seen and then make it real by drawing the line themselves. That is a **web**, and a tree cannot draw a web. It can only draw a tree, and then decorate the parts that do not fit.
+
+I kept describing this to myself as "the map feels wrong", as though it were a vibe I had not pinned down. Reading the conversion function in `frontend/js/mindmap.js` turned the feeling into a fact.
+
+## The Lossy Conversion, Named
+
+`convertToMindElixirFormat()` picked `nodes[0]` as the root and flattened everything else underneath it as children. The real edges, the actual node-to-node relationships stored in the vault, were overlaid afterwards as decorative extra links drawn on top of a tree that had already been forced into existence. That is the definition of a lossy view: information exists in the data and does not survive the trip to the screen.
+
+Here is the detail that mattered most. **The vault was never a tree.** It stores `nodes[]` plus `edges[]`, arbitrary node to node, no root, no required hierarchy. The data had been graph-native the whole time. MindElixir was not wrong about the data, it was incapable of showing it. That distinction changes what kind of fix is required. If the data model had been the tree, fixing this would have meant migrating every vault, on every device, encrypted, with all the risk that implies. Because the data model was already right, replacing the renderer was a **view change, not a data migration**. Nothing in anyone's vault moved.
+
+<CalloutBox type="insight" title="A UI complaint with a structural cause">
+<p>"The map feels wrong" turned out to have an exact, nameable cause: a tree-shaped renderer sitting on top of graph-shaped data, discarding the parts of the data it had no vocabulary for. The fix was not a redesign. It was recognising that the view had been misrepresenting something already true underneath it.</p>
+</CalloutBox>
+
+## Own the Taxonomy, Rent the Renderer
+
+The decision is written up as [ADR-0002](https://github.com/Tamok/wymber/blob/main/docs/adr/0002-graph-model-and-discovery.md), accepted 2026-06-01, and its shape is two layers with deliberately opposite build-or-buy answers.
+
+**The semantic layer is owned.** Underneath the visible map sits a hidden taxonomy describing how the node types tend to relate, feeding a **discovery engine** that surfaces suggested links for the user to confirm or dismiss. Today it is rule-based: typed heuristics plus simple graph signals like shared neighbours and co-occurrence, deterministic, explainable, and nothing about it leaves the device. The interesting part is the seam it leaves behind. `suggestLinks(graph)` is where an on-device model could eventually plug in, reading locally-decrypted text and proposing content-aware connections, with the privacy story holding because the inference never leaves the device either. Whatever suggests a link, now or later, the rule is fixed: **suggestions are always opt-in and reversible. A suggested link is a question, never an automatic edit.** The user stays in control of their own meaning-making, and the software's job is to notice rather than to decide.
+
+**The rendering layer is rented.** Graph layout, hit-testing, pan and zoom, and performance at scale are solved problems, and solving them again buys nothing anyone would notice as a feature. The ADR calls building a renderer from scratch a tar pit: layout mathematics, performance, and especially accessibility are each their own multi-week project, and none of it is where the differentiation lives. The candidate was **Cytoscape.js**: graph-native, fully stylable, vanilla and buildless (which matters, because the frontend has no build step), and shipping graph-analysis primitives the discovery engine could reuse.
+
+One correction worth making rather than papering over. ADR-0002 refers to "the eight node types". Checking `frontend/js/config.js` as it stood when the renderer swap landed, `NODE_TYPES` defines **eleven**: event, emotion, body, person, place, trigger, coping, support, need, insight, growth. The brand research from May had recommended additions beyond the original eight, and the code picked them up before the ADR's prose caught up. It is a small thing, a document sitting one revision behind the code it describes, and worth naming rather than writing "eight" because the ADR said so.
+
+## Two Constraints That Were Not Negotiable
+
+Before any library was chosen, two requirements went into the ADR as disqualifying criteria rather than preferences.
+
+**Accessibility as a selection criterion.** A free-form graph is a harder screen-reader problem than a tree, which at least has an obvious traversal order. So the map had to ship with a parallel non-visual representation from day one: an outline or list view, plus a keyboard path to create a link, not bolted on after the visual version shipped. Any library that could not coexist with that requirement was disqualified before anything else about it was considered.
+
+**Trauma-informed by construction.** A dense web of connections can overwhelm rather than illuminate, so the map needed to default to calm: progressive disclosure instead of dumping every connection at once, no bouncing physics, no auto-layout that reshuffles nodes without warning, soft rounded shapes rather than a network-diagram aesthetic. The ADR states this plainly: the gentle look is a safety feature, not a decorating choice.
+
+## The Spike
+
+Rather than commit to Cytoscape on paper, a throwaway spike under `spikes/graph-cytoscape/` (commit `2f890ca`, 2026-06-01) answered exactly three questions and nothing more:
+
+1. **Feel:** can Cytoscape be skinned to look like gentle building blocks rather than a clinical network diagram?
+2. **Discovery:** can a *suggested* link render visibly distinct from a *real* one, with a click promoting one to the other?
+3. **Accessibility:** can a parallel outline view, plus a keyboard path to create a link, actually be stood up, proving the non-visual representation is reachable rather than theoretical?
+
+A pass meant adopting Cytoscape outright. Failing the feel test specifically meant falling back to a custom SVG renderer with a force layout, an outcome the ADR treats as a cost to be earned rather than a preference. The spike was deliberately not wired into the real app. Alpha stayed on MindElixir, untouched, while this ran in isolation.
+
+**Verdict: pass on all three.**
+
+1. **Feel.** `round-rectangle` nodes with the real pastel type colours on a warm canvas read as gentle building blocks. Cytoscape's style array gave full control without a fight.
+2. **Discovery.** Suggested links render as dashed, muted-purple edges, visibly distinct from solid real ones. Tapping an edge, or pressing the corresponding button in the outline, promotes a suggestion to a real edge through one shared `promote()` path. The graph and the outline update together because both read the same node and edge model rather than maintaining separate state.
+3. **Accessibility.** Cytoscape draws to a `canvas` element, which is invisible to assistive technology by construction, so the outline twin is not a nice addition. It is the only thing standing between a screen-reader user and the map at all. First Tab lands on the suggestion button with a visible focus ring, Enter confirms, and an `aria-live` region announces "Connected A to B."
+
+Two things were written down as carry-forward notes rather than fixed on the spot: `width/height: 'label'` sizing is deprecated in current Cytoscape and needed an explicit replacement, and `cytoscape.min.js` runs roughly **424 KB minified**. The ADR judged that footprint acceptable on one explicit condition: lazy-load it with the map view, not on first paint.
+
+## The Swap
+
+Two days later, commit `93cd70a` (2026-06-03, 16:58:24) did the real work: "Swap map renderer: MindElixir to Cytoscape (graph + accessible outline twin)." `frontend/js/mindmap.js` changed by 703 lines. `frontend/libs/cytoscape.min.js` was vendored in; `mind-elixir.min.js` and `mind-elixir.css` came out. The tree-conversion helpers that had made this problem legible in the first place, `extractNodeId`, `convertToMindElixirFormat`, `countNodes` and `walkNodes`, were deleted along with their tests, because there was no longer a tree to convert into.
+
+The commit message confirms the spike's carry-forward note about deprecated sizing was acted on: node box sizes are precomputed rather than relying on the deprecated `'label'` sizing, and a custom `wheelSensitivity` override was dropped, keeping the console clean. The module's public surface toward the rest of the codebase (`init`, `loadMap`, `addNode`, `editNode`, `applyTheme`, `destroy`) stayed identical, so nothing outside `mindmap.js` had to change to accommodate a completely different rendering engine underneath.
+
+## The Wrong Turn
+
+Here is the part worth writing down rather than glossing over. The spike had already identified the mitigation, in writing, in the ADR itself: lazy-load it with the map view rather than on first paint. **The swap commit did not do that.** `93cd70a` added a plain blocking script tag for `cytoscape.min.js` to `index.html`, which meant roughly 424 KB loaded on **every** page, including the unlock screen, the authentication screen and the soft-start screen, none of which ever show a map.
+
+It was caught about two and a half hours later, in `4fd8bfc` (2026-06-03, 19:22:00), "Web app: lazy-load the map library so the auth screens stay light." The commit message states the problem in terms hard to improve on: Cytoscape "was loaded by a blocking script tag on every page, including the auth/unlock/soft-start screens that never show a map." The fix adds a cached-promise dynamic script loader:
+
+<CodeBlock
+  language="javascript"
+  filename="frontend/js/mindmap.js (lazy load)"
+  code={`let cytoscapePromise = null;
+function ensureCytoscape() {
+    if (window.cytoscape) return Promise.resolve();
+    if (cytoscapePromise) return cytoscapePromise;
+    cytoscapePromise = new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = '/static/libs/cytoscape.min.js';
+        s.async = true;
+        s.onload = () => resolve();
+        s.onerror = () => { cytoscapePromise = null; reject(new Error('Could not load the map library')); };
+        document.head.appendChild(s);
+    });
+    return cytoscapePromise;
+}`}
+/>
+
+`init()` now awaits `ensureCytoscape()` before touching `window.cytoscape`, and the static script tag came out of `index.html` entirely. The service worker still precaches the bundle, so after a first visit the on-demand load is effectively instant and works offline; the commit bumped the cache version to account for the new shell.
+
+<CalloutBox type="warning" title="A finding recorded is not a finding applied">
+<p>The mitigation existed in writing before the bug did. The spike named it, the ADR recorded it, and two days later the implementation shipped without it anyway. Writing something down in a design document and carrying it through to the commit that implements the design are two separate acts, and only one of them happened on the first attempt. Nothing about this required new judgment to fix. It required rereading a decision that had already been made.</p>
+</CalloutBox>
+
+A blocking script tag is the default thing to write. Lazy-loading is the thing you have to remember to reach for, every time, even when you wrote the reminder to yourself two days earlier.
+
+## Where This Leaves the Map
+
+The outline twin is not a feature that can be treated as optional later. Because Cytoscape draws to a `canvas` element, there is no DOM for a screen reader to read and nothing to fall back on if the outline view ever drifts out of sync with the graph. It has to stay in lockstep with the node and edge model for as long as the map exists in this form.
+
+The data model was right from the start; the view had been misrepresenting it. Getting the renderer to match the data was the easy half. Making sure the accessible half of that renderer is load-bearing rather than aspirational is the part that still needs settling properly, and that is the next thing to write down.

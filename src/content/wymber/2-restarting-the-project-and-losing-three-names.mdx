@@ -1,0 +1,137 @@
+---
+title: "Wymber #2: Restarting the Project, and Losing Three Names"
+description: "Reviving a dormant codebase meant pinning dependencies, adding a test suite, and discovering that the JWT secret had never been applied. Then four rounds of name clearance killed three candidates before an availability-first method found one that survived."
+publishDate: 2026-05-31
+series: "Wymber"
+order: 2
+coverImage: "/images/wymber-series-cover.svg"
+tags: ["wymber", "naming", "brand-clearance", "testing", "reproducible-builds", "security"]
+draft: true
+---
+
+import CalloutBox from '../../components/CalloutBox.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+<p class="lead">
+  The first entry left the project at a FastAPI prototype with Argon2 password hashing, a JWT session, and one structural privacy problem: only node descriptions were encrypted, and the server held the plaintext password in a session dict so it could derive the encryption key on every request. Then the repository went quiet. Work resumed on 2026-05-30, and the first two days back covered more ground than the whole original build: an environment that had drifted out from under the code, a test suite added from nothing, a silent production security bug, and a name that needed four rounds of clearance before one survived.
+</p>
+
+## Waking a Dormant Repository
+
+The revival baseline landed first, at 02:18 on 2026-05-30, as commit `4ac4151`: "Establish revival baseline: tests, E2E, frontend modules, encrypted sessions." Forty files, 5,550 insertions. It does several things at once:
+
+- A test suite established across three layers, none of which existed before: pytest for the backend (`tests/test_auth.py`, `test_edges.py`, `test_nodes.py`, `test_settings.py`, `conftest.py`), Vitest for the frontend modules (`frontend/tests/analyze.test.js`, `config.test.js`, `utils.test.js`), and Playwright for end-to-end coverage (`e2e/auth.spec.js`, `mindmap.spec.js`, `features.spec.js`).
+- The `frontend/js/app.js` monolith split into focused modules: `mindmap.js` (456 lines), `analyze.js` (121), `export.js` (90), `utils.js` (123).
+- MindElixir, a mind-mapping library, vendored in as `frontend/libs/mind-elixir.min.js` and its stylesheet. **This is the first point in the project where the map renders anything at all.** Before this commit the mapping view was a placeholder div. `mindmap.js` instantiates it as `new window.MindElixir(this.config)`, with a custom `TraumaInformed` theme whose palette is drawn from the app's node-type colours.
+- `backend/env_config.py` gained a proper `Config` class reading `TEST_USERNAME`, `TEST_PASSWORD`, `DATABASE_PATH`, `JWT_SECRET_KEY`, `JWT_EXPIRES_HOURS`, `DEBUG` and `AUTO_CREATE_TEST_USER` from the environment, with Pydantic field validators added to `UserCreate`, `NodeCreate` and `NodeUpdate`.
+- The unused `ChatMessage` model, which had sat in the schema since the first evening without a single route referencing it, was removed.
+
+The most consequential change in that commit is easy to miss in a diff. `backend/main.py` replaced the old `session_passwords` dict, keyed by username and holding the user's **plaintext password**, with `session_keys: dict[str, bytes]`, holding the **derived Fernet key** instead. The new helper's docstring states the intent: "Derive encryption key from password and store it. Discard password."
+
+<CodeBlock
+  language="python"
+  filename="backend/main.py (session key management)"
+  code={`session_keys: dict[str, bytes] = {}
+
+def store_session_key(username: str, user: User, password: str):
+    """Derive encryption key from password and store it. Discard password."""
+    key = user.derive_key(password)
+    session_keys[username] = key
+
+def get_session_key(username: str) -> Optional[bytes]:
+    return session_keys.get(username)
+
+def require_session_key(username: str) -> bytes:
+    key = get_session_key(username)
+    if not key:
+        raise HTTPException(status_code=401, detail="Session expired")
+    return key`}
+/>
+
+<CalloutBox type="insight" title="A genuine improvement, and a partial one">
+<p>Before this change, a memory dump of the running server would surface a logged-in user's actual password. After it, the same dump surfaces a derived Fernet key instead: still key material, still sensitive, but no longer the password itself, and no longer something that could be tried against that person's other accounts. The server still holds key material in process memory, and it still loses that cache on restart. Both things are true at once, and the second one is the reason this was never going to be the end of the story.</p>
+</CalloutBox>
+
+Twelve hours later, at 14:01, `050f89e` ("Reproducible deps: lockfile + documented venv setup") dealt with a problem that had been in the way from the start. Its commit message names the cause directly: the global environment had drifted while the code sat untouched, and the app now faced "FastAPI 0.104 vs Starlette 1.0 / new Pydantic." Nothing in the repository had changed. The ground underneath it had moved. The fix was `requirements.lock`, forty fully pinned packages frozen from a known-good virtual environment, plus `.python-version` pinning 3.11. `requirements.txt` stayed the editable top-level list; the lock file became the thing that actually gets installed.
+
+## The Secret That Was Never Applied
+
+Seven minutes after the lockfile, `e418bfe` ("Enforce JWT secret in production; fix compose env mismatch") turned up something the codebase had been getting wrong since it was written. `backend/env_config.py` read a variable named `JWT_SECRET_KEY`. `docker-compose.yml` set a variable named `SECRET_KEY`. The two names did not match, so the value an operator thought they were configuring was never read, and every deployment fell back to the hardcoded default baked into `env_config.py`: the literal string `'dev-secret-key-change-in-production'`. Nothing errored. Nothing logged a warning. JWTs were signed with a constant published in the repository, silently, for as long as that mismatch existed.
+
+The fix adds a `Config.validate()` method that runs at import time in `backend/main.py`, before the app object is constructed, and raises `RuntimeError` if `APP_ENV` is `"production"` and the JWT secret is empty or still equal to the shipped default, or if `AUTO_CREATE_TEST_USER` is true in production (that flag creates an account with a known username and password).
+
+<CodeBlock
+  language="python"
+  filename="backend/env_config.py"
+  code={`def validate(self) -> None:
+    """Fail fast on insecure production config; warn (don't fail) in development."""
+    using_default_secret = (not self.JWT_SECRET_KEY) or (self.JWT_SECRET_KEY == DEFAULT_JWT_SECRET)
+    if self.IS_PRODUCTION:
+        if using_default_secret:
+            raise RuntimeError(
+                "JWT_SECRET_KEY must be set to a strong, unique value when APP_ENV=production."
+            )
+        if self.AUTO_CREATE_TEST_USER:
+            raise RuntimeError(
+                "AUTO_CREATE_TEST_USER must be false when APP_ENV=production "
+                "(it creates a known-credential account)."
+            )
+    elif using_default_secret:
+        warnings.warn(
+            "Using the default development JWT secret. Set JWT_SECRET_KEY and "
+            "APP_ENV=production before deploying.",
+            stacklevel=2,
+        )`}
+/>
+
+`docker-compose.yml` changed to use the name the code actually reads, and to refuse to start without it, via compose's required-variable syntax. The commit also added `.env.example` and `tests/test_config.py`, five tests, one per validation branch: production rejects the default secret, rejects an empty secret, rejects `AUTO_CREATE_TEST_USER=True`, accepts a strong secret, and development warns rather than failing.
+
+<CalloutBox type="warning" title="A pattern worth naming early">
+<p>This is the first time in the project's history that a piece of configuration claimed something the running system did not do. `docker-compose.yml` set `SECRET_KEY` as though that configured the JWT signing key, and it never did. The gap was invisible because nothing on either side had any reason to complain: the code found no variable and used its default, and compose set a variable nobody read. It will not be the last time this shape of problem shows up in this series.</p>
+</CalloutBox>
+
+The rest of May filled in around these fixes. The key-derivation function for new accounts moved to PBKDF2 at 600,000 iterations (`ee3d236`), staying backward compatible with existing accounts still on 100,000. Persistent safety affordances landed: a disclaimer, a grounding exercise, crisis resources (`418c58c`). Account creation gained a confirm field, a strength check, and an explicit no-recovery acknowledgement (`b400218`), because a forgotten password still meant permanent data loss and the interface had to say so out loud. `docs/CONTENT-GUIDELINES.md` arrived (`03bc97b`) to keep product copy inside wellness-tool language rather than medical claims. CI started running pytest, Vitest and Playwright on every pull request (`4a9f51d`), with an axe-core accessibility gate alongside it (`a6149ca`). Account deletion became confirmable, with visible data-flow transparency (`5545aa6`).
+
+## Losing Three Names
+
+The product was called TrauMapp'd. `8485fa9`, a research report dated the day the revival started, is the first document to say plainly that the name was a liability rather than a matter of taste. It sits one syllable from an existing product in the same category, TraumApp, which is enough for a likelihood-of-confusion argument on its own. The apostrophe-d cannot be said aloud, cannot go cleanly into a URL, and is easy to mistype. The double p reads ambiguously. And the word "trauma", spelled out on a home screen where anyone might glance at it, works against the people the product is for. The report's recommendation was to move that word out of the product name and into the tagline.
+
+The same report set design constraints that outlived the naming question entirely: the six SAMHSA trauma-informed principles translated into concrete product rules (no streaks, no guilt nudges, no loss-aversion mechanics, heavy content collapsed by default, an always-reachable grounding affordance, honouring `prefers-reduced-motion`), plus a set of AI guardrails requiring **no data egress by architecture**. That last constraint is where the next entry starts.
+
+What followed was four rounds of candidates, and the first three all failed the same deep-verification step, each for a different class of reason.
+
+| Candidate | Verdict | Why it died |
+|---|---|---|
+| Mendmap | CAUTION (`cd52f7f`) | One phoneme from "mindmap", the generic term for the exact product category: permanent search drag and a constant "did you mean mindmap". The wellness "Mend" niche was already occupied by several live products and live trademarks. |
+| Calluna | CAUTION (`812118d`) | The one on-point software trademark was dead (cancelled 2019) and app stores were clean, but the name died by accumulation: search results dominated by the Calluna typeface, a funded Norwegian biotech using the name, a live spa and wellness trademark, the `.com` already held, and every prime social handle taken, including GitHub. |
+| Velora | NO-GO (`a6a5172`) | The hardest rejection of the three: a live, funded AI mental-health app of the same name in the same vertical, plus a trademark-holding owner of the `.com`, the GitHub org taken, and other health apps already using the name. |
+
+Earlier passes had already ruled out a longer list on collision grounds: Cairn (crowded in both software and wellness, `.com` unobtainable, homophone problems), Constellate and Constella (live same-category apps), Vellum, Verra, Velune, Liora, Sonder, Mapwell, Mosaiq, Nestria, Wend, Calmly, Solenne (too close to a real app called Soluna), Marrow, Holloway, and Glade.
+
+## Turning the Method Around
+
+Three deep-verification failures in two days is a pattern, not bad luck, and `5e212f7` names the pattern and inverts it. Every candidate up to that point had been generated first, because it sounded right, and checked second. The fourth round reversed the order: roughly thirty coined candidates were pre-screened against app stores, `.com` availability, GitHub org names, and trademark search **before** any of them were proposed as a shortlist.
+
+<CalloutBox type="insight" title="The finding was the point, not just the winner">
+<p>Most of the pretty, wellness-sounding coinages turned out to be taken, and almost every collision was a live mental-health app: Looma, Embra, Nooma, Soomi, Pebbl, Tovi, Klyne, Nuvio, Nestra, Steddy, Kalmu, Soluna, Knotly, Untangle. The category has been mined hard enough that the nicer a candidate sounds, the likelier it already belongs to someone. Three names out of roughly thirty cleared every gate.</p>
+</CalloutBox>
+
+Those three: **Wymber**, the top pick; **Zevuli**, fully invented, with no collisions on any gate, kept as a clean fallback; and **Quolm**, which passed every availability check and was rejected anyway, on tone, for being a homophone of "qualm."
+
+## Wymber, Conditionally
+
+`ca3ec7a` ran the same deep-verification pass on Wymber that the first three candidates had failed. It did not come back clean either, only clean enough: **CAUTION, conditional GO**. No exact-match trademark, product or app turned up, and the obvious handles were open. Three findings kept it short of an unqualified yes. A defunct Portuguese wellness app called Wymbe, out of business since roughly March 2023, is one consonant away and was still listed and installable on Google Play, with its trademark status unverified; the document calls checking that "the single decisive check." `wymber.com` turned out to be registered, not to a rival product but to a domainer. And an active company called WymBee exists as a homophone in a different industry, which threatens search results more than trademark standing.
+
+The name's etymology is the one piece of positive colour the research turned up: Wymber is a rare English surname descended from *Wīgmǣr*, "war-famous", pronounced "WIM-ber", rhyming with timber, amber and ember. The verification document is careful to flag that resonance as a branding association rather than an etymological root, and the distinction is worth keeping. The name did not mean "ember" before somebody noticed it sounded like one.
+
+Every one of these verification documents, across all four rounds, opens with the same self-description: a "preliminary skeptical sanity check, not legal advice", built on a January 2026 knowledge cutoff plus web checks run in May 2026. Each notes that the authoritative registries it would need to actually clear a name, USPTO TSDR, EUIPO, WIPO, registrar WHOIS, were blocked to automated access, and flags those items "verify at official source" rather than confirmed. Each ends with a numbered checklist of exactly those official-source checks still to do.
+
+**Nothing in the repository records any of them as completed.** What this process produced was a filter that removed options with obvious structural problems, not a legal clearance opinion, and the record does not show the remaining open questions, the Wymbe trademark status chief among them, being resolved before the name shipped.
+
+## Provisional, on Purpose
+
+`b5232de`, "Rebrand product name to Wymber (provisional)", is a small commit: eleven files, seventeen insertions, seventeen deletions. It swaps the user-facing name across the app, the README, `CLAUDE.md` and the Copilot instructions file, and its message records the rename as provisional pending formal clearance. It also records a deliberate choice to leave internal slugs alone: the `traumappd.db` database path, the backend package name, the data directory. Renaming those carried more risk than benefit for a name that might still change, so they stayed, to be cleaned up later once the name held.
+
+One thing the find-and-replace missed. `392a8c1`, filed the same day, is titled "Rebrand: fix product name in export headers/filenames (escaped apostrophe was missed)." The old name contained an apostrophe, which appeared escaped inside a string literal in the export code, so a plain text search across the codebase skipped over it and left the old name intact in exported file headers and downloaded filenames. A small, honest reminder that renaming something whose name contains its own punctuation takes more than one pass.
+
+The rename landed provisionally, with an open trademark question still on the table, three rejected candidates behind it, and a set of architectural guardrails from the original research report still waiting to be built. The changes that came next went straight at that last piece, and they moved the application's data before they touched anything else about its name.

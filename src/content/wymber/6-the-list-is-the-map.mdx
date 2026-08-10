@@ -1,0 +1,153 @@
+---
+title: "Wymber #6: The List Is the Map"
+description: "Cytoscape draws to a canvas, which is invisible to assistive technology, and no amount of ARIA fixes that. So the list view is not a fallback for the map, it is the primary non-visual surface, and any feature that lands on the canvas without landing in the list is by definition unfinished."
+publishDate: 2026-06-08
+series: "Wymber"
+order: 6
+coverImage: "/images/wymber-series-cover.svg"
+tags: ["wymber", "accessibility", "wcag", "screen-readers", "keyboard-navigation", "adr"]
+draft: true
+---
+
+import CalloutBox from '../../components/CalloutBox.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+<p class="lead">
+  The last entry ended on a commitment made almost in passing: once the map moved to Cytoscape, the outline twin stopped being optional. Cytoscape draws to a `canvas` element, and a canvas is invisible to a screen reader no matter how it is labelled. ADR-0004 writes that commitment down as architecture, and it is unusual in this series for one reason: the model it describes was already shipped before the document describing it existed.
+</p>
+
+## Documenting What Already Exists
+
+ADR-0004, "Accessibility as architecture", was accepted 2026-06-08. The commit is `75f3341`, and it touches exactly two files: the new ADR (129 lines) and `CLAUDE.md` (six lines added, one removed, to add the decision to the running list). No application code changed. That is the point of writing it now rather than earlier: the outline twin, the focus handling, the live regions, all of it was already in the repository.
+
+That is a different posture from the plan-then-build split in earlier entries. Usually the ADR comes first and the code catches up, sometimes imperfectly. Here the code came first and the document is catching up, which means every claim in it is checkable against something that runs rather than something intended.
+
+One housekeeping note, flagged rather than papered over: the commit subject cites issue #33, and the ADR body says "#34 closed on it". Both numbers are in the source, and I am not going to pretend to know which is the typo.
+
+## The Two Facts That Force the Issue
+
+The ADR opens with two facts that leave little room for negotiation.
+
+First, the map draws to `canvas`. Cytoscape renders the whole graph as pixels, and a canvas has no accessibility tree underneath it. Assistive technology does not see nodes or edges, it sees a blank rectangle. A free-form graph is already a harder read for a screen reader than a tree would be; a canvas one is not hard, it is absent. **There is no ARIA attribute that fixes this.** You can label the canvas. You cannot label what is drawn inside it.
+
+Second, there is no server to fall back on. Every surface, including the unlock screen that gates access to all the data, is client-rendered. There is no accessible server-rendered version waiting behind a toggle. If the client is not accessible, nothing is.
+
+<CalloutBox type="insight" title="Why this is architecture and not a checklist">
+<p>A checklist gets revisited per feature, and per-feature revisits are exactly where accessibility rots: someone ships a canvas-only interaction under deadline and means to circle back. Naming the canvas problem as structural, in an ADR, changes the default. A reviewer does not have to argue that a feature <em>should</em> be accessible. They can point at the outline twin rule and reject a canvas-only change on architectural grounds.</p>
+</CalloutBox>
+
+The ADR also states the stake plainly: Wymber is a privacy-first tool for people putting hard things somewhere private, and a screen-reader user who cannot operate it has been excluded from exactly the tool built for people who need somewhere private to put things. WCAG 2.1 AA is described as the floor, not the design.
+
+## The List Is the Surface, Not the Fallback
+
+The core move is a parallel outline view, `#map-outline`, labelled "Your map as a list", sitting below the canvas in `frontend/index.html`. The word worth avoiding is "fallback", because the ADR is explicit that it is not one: the outline is the primary non-visual surface, built by `MindMap.renderOutline({nodes, edges})` in `frontend/js/mindmap.js` from the same node and edge model the canvas reads.
+
+Every node in the outline is a real button element, not a styled span pretending to be one:
+
+<CodeBlock
+  language="javascript"
+  filename="frontend/js/mindmap.js (renderOutline)"
+  code={`nodes.forEach((n) => {
+    const li = document.createElement('li');
+    li.className = 'map-outline-item';
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'map-outline-node';
+    btn.dataset.nodeId = String(n.id);
+
+    btn.addEventListener('click', () => this.handleNodeSelection(n));
+    li.appendChild(btn);
+
+    const links = [...adj.get(n.id)].map((id) => byId.get(id)?.title).filter(Boolean);
+    if (links.length) {
+        const conn = document.createElement('span');
+        conn.className = 'map-outline-connections';
+        conn.textContent = 'Connected to: ' + links.join(', ');
+        li.appendChild(conn);
+    }
+    list.appendChild(li);
+});`}
+/>
+
+That `btn.addEventListener('click', () => this.handleNodeSelection(n))` line is the one to keep coming back to. It is the exact same handler the canvas nodes call. There is one code path for "a node got selected", reached from two renderers. That is not a minor implementation choice, it is what stops the two views from drifting apart over time: nobody can add canvas-only selection logic without also touching the shared handler.
+
+Connections read as plain text, `"Connected to: "` followed by the linked titles, so a screen-reader user gets the same relational information a sighted user gets from the lines on the canvas. Selection state comes through `syncOutlineSelection()`, toggling `aria-pressed` on each button.
+
+The detail worth dwelling on is `refreshOutlineHint()`. It does not just relabel the list when link mode turns on, it changes what each button *says it will do*:
+
+<CodeBlock
+  language="javascript"
+  filename="frontend/js/mindmap.js"
+  code={`refreshOutlineHint() {
+    if (!this.outlineEl) return;
+    const linking = this.toolbarMode === 'link';
+    this.outlineEl.querySelectorAll('.map-outline-node').forEach((b) => {
+        const t = b.querySelector('.map-outline-title')?.textContent || 'node';
+        const ty = b.querySelector('.map-outline-type')?.textContent || '';
+        b.setAttribute('aria-label', linking
+            ? ty + ': ' + t + '. Choose to connect.'
+            : ty + ': ' + t + '. Select.');
+    });
+}`}
+/>
+
+A sighted user infers link mode from a toolbar state, a cursor change, a highlighted button. A screen-reader user gets the same information from the accessible name itself changing from "Select" to "Choose to connect." **The interaction model, not just the node titles, is legible without seeing the canvas.** That is harder to get right than exposing content, and it is the part of the ADR worth pointing at if someone asks what accessible means beyond labelling elements correctly.
+
+The canvas container itself is `role="application"` with a descriptive label and is focusable, but the ADR is careful to frame it as never the *only* path to anything. Decorative pieces like the breathing orb and the type chips are `aria-hidden`.
+
+## Focus: One Ring, Suppressed for the Mouse, `inert` for the Rest
+
+The focus model is a single global treatment: a `--focus` outline colour and a `--focus-ring` shadow, applied through `:focus-visible` so keyboard users get a crisp ring, and `:focus:not(:focus-visible)` so mouse users do not get an outline on every click. Opening a surface moves focus into it rather than leaving it stranded: the node detail drawer focuses its title field on open, modals focus their first field.
+
+The drawer detail is easy to underrate. Closing the drawer sets `drawer.inert = true`; opening it sets `drawer.inert = false`. `inert` does not just visually hide the drawer, it removes it from the tab order and the accessibility tree entirely while closed, so a keyboard user tabbing through the page never lands on a focus stop that does nothing because it is offscreen.
+
+Escape is worth being precise about. The keydown handler in `frontend/js/app.js` calls `closeAllOverlays()` on Escape, from anywhere, even mid-typing in a field, and `closeAllOverlays()` is written to be safe to call when nothing is open: it closes modals, stops the breathing timer, clears the node detail, and removes any notification nudges, none of which error if they are already closed. So Escape always does something predictable and never does something destructive by surprise. The ADR calls predictable exit a trauma-informed requirement, and reading the code, that is a fair description: the one key someone under stress is most likely to reach for reliably gets them out, whatever is on screen.
+
+## Live Regions, Deliberately Not Urgent Ones
+
+State changes get spoken rather than left to be discovered on the next Tab press. A shared `announceToScreenReader()` in `mindmap.js` builds the announcement from scratch each time:
+
+<CodeBlock
+  language="javascript"
+  filename="frontend/js/mindmap.js"
+  code={`announceToScreenReader(message) {
+    const el = document.createElement('div');
+    el.setAttribute('aria-live', 'polite');
+    el.setAttribute('aria-atomic', 'true');
+    el.className = 'sr-only';
+    el.textContent = message;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1000);
+}`}
+/>
+
+It fires on selection, on add, on remove, and on the two edge operations: "Connected A to B" and "Unlinked A and B", plus "already connected" when a link exists. Alongside it are standing live regions elsewhere: password-strength feedback is `aria-live="polite"`, the breathing guide during a grounding exercise is `aria-live="polite"`, toast notifications carry `role="status"`, and form errors carry `role="alert"`.
+
+<CalloutBox type="warning" title="Polite, never assertive, by default">
+<p>The ADR's alternatives section considers and rejects `aria-live="assertive"` for edits, on the grounds that nothing would be missed. The reasoning it gives is the right one: an assertive region interrupts whatever the screen reader is currently reading, mid-sentence if necessary. For a tool meant to be used by someone mid-thought, possibly mid-distress, interrupting them to announce that a node connected is the wrong trade. Announcements wait their turn.</p>
+</CalloutBox>
+
+## Keyboard-First, and Tokens Instead of Patches
+
+The pointer is treated as an enhancement rather than a requirement. Shortcuts are surfaced in the footer (`Ctrl+N` for a new node, `Delete` to remove, `Tab` to navigate, `Esc` to close), and the outline twin is specifically what makes the *map* keyboard-operable, since the rest of the app is ordinary tabbable HTML by construction, with no custom widgets built to trap or swallow keys.
+
+The cross-cutting decision underneath all of this is that contrast, focus, motion and sizing live in design tokens rather than being reapplied per component: the `--focus` and `--focus-ring` pair, three themes (`light`, `dark`, and a `soft` theme that is deliberately lower-contrast and low-stimulation, selectable in settings), a font-size scale via `[data-font-size]` at 14, 16, 18 and 20px, an `.sr-only` utility, and a global `prefers-reduced-motion` block collapsing every transition to near zero. The gentle 0.3s motion elsewhere is itself opt-out. Expressing this as tokens means a new component inherits the accessible defaults instead of needing someone to remember to add them.
+
+## What the ADR Argues Against
+
+The alternatives section is where the reasoning is sharpest, and the best idea in the document is the rejection of a separate accessibility mode: keeping the outline as a toggled-on "accessibility view" instead of an always-present twin. The stated reason is that **a separate-but-equal mode rots, because sighted developers do not exercise it day to day**, so it falls out of sync with whatever the canvas actually does. Keeping the list always rendered and always reading the same model is what keeps it correct, because it is what everyone is looking at during ordinary development.
+
+The other two rejections are shorter and worth stating. Making the canvas itself screen-reader accessible, through ARIA layered over canvas or off-DOM hit regions matched to pixel coordinates, was rejected because canvas has no native semantics to build on, and a hand-maintained shadow accessibility tree is more fragile than one honest list. And deferring accessibility to a post-launch hardening pass was named directly as the failure mode the ADR exists to prevent: retrofitting semantics onto a canvas-first map afterwards is a rebuild, not a patch.
+
+## What Is Shipped, and What Is Not
+
+Everything described above is shipped: the outline twin and keyboard link-creation, the focus model, the live-region announcements, reduced motion, the three themes, font scaling. That is the part with code to point at.
+
+What is tracked and still open, all children of accessibility epic #37:
+
+- **#126**, native arrow-key navigation on the canvas layer itself. The ADR classes this as an enhancement rather than a gap, on the reasoning that keyboard and screen-reader users already have a complete path through the outline twin. Its own phrasing is that the canvas is the nicety and the list is the guarantee.
+- **#35**, formalising contrast, focus-visible and reduced-motion as audited design tokens rather than tokens that happen to be correct.
+- **#36**, a manual assistive-technology audit (NVDA, VoiceOver, TalkBack) of the core journeys.
+
+The honest place to end is #36. Automated checks and a carefully hand-built semantic model are necessary, and the model described here is a good one. But nothing in the repository shows a real screen reader having been driven through the real product on a real task. The ADR says this itself: automated checks and a hand-built model are necessary and not sufficient, and real assistive technology on real journeys is the proof. That proof does not exist yet. It is not a caveat added after the fact; it is the last thing written into the ADR.

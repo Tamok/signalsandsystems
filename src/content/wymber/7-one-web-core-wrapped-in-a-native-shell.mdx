@@ -1,0 +1,179 @@
+---
+title: "Wymber #7: One Web Core, Wrapped in a Native Shell"
+description: "Three copies of the vault crypto would be three audit surfaces and three chances at a silent nonce bug. So the Android app runs the exact same JavaScript, and the native budget goes only where native genuinely wins: durable storage, biometric unlock, and the OS share sheet."
+publishDate: 2026-07-10
+series: "Wymber"
+order: 7
+coverImage: "/images/wymber-series-cover.svg"
+tags: ["wymber", "mobile", "capacitor", "android", "biometrics", "adr"]
+draft: true
+---
+
+import CalloutBox from '../../components/CalloutBox.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+<p class="lead">
+  Wymber needs an Android app, and the instinct when you say that out loud is "make it as native as possible". Fingerprint unlock, native share, the works. But the earlier entries in this series already answered a question that mobile has to live inside: the vault crypto is a single audited implementation with no server and no second copy anywhere. Once that constraint exists, "how native" stops being a question of feel and becomes one of arithmetic.
+</p>
+
+## The Spectrum, and the Constraint That Fixes a Point on It
+
+"Native" is not one decision. It runs from "load the site in a browser tab" to "rewrite the whole thing in Kotlin and Swift", and the right point on that line is fixed by ADR-0001: the entire product, envelope encryption, PBKDF2 key derivation, AES-256-GCM, recovery codes, the versioned vault format and its migrations, lives in `frontend/js/crypto.js`. That file is the thing users are asked to trust, and it has to stay a single audited implementation.
+
+Three copies of that logic, one in JavaScript, one in Kotlin, one in Swift, is not three times the native polish. It is three audit surfaces and three independent chances at a silent GCM nonce bug, a KDF parameter mismatch, or a vault-format migration that behaves differently on one platform than the other two. Wymber's whole pitch rests on being auditable under AGPL, and that claim gets *weaker*, not stronger, the more the crypto is duplicated. That reasoning is the sharpest line in [ADR-0005](https://github.com/Tamok/wymber/blob/main/docs/adr/0005-mobile-native-shell-single-web-core.md): the constraint on the crypto decides the mobile architecture, and everything else follows.
+
+<CalloutBox type="insight" title="The question is not how native, it is which parts must stay single-source">
+<p>Once the crypto has to be one audited implementation, the native budget is only for the pieces that genuinely require the operating system: durable storage the WebView cannot guarantee, a Keystore-gated unlock, and a share sheet that actually hands the user a file. Everything else stays exactly what it already was.</p>
+</CalloutBox>
+
+### The Decision: Capacitor, Not a Rewrite, Not a Bare Wrapper
+
+Wymber ships as a native shell around the existing `frontend/` directory, unchanged, via **Capacitor**. The WebView runs the same JavaScript as the web build: same `crypto.js`, same vault store, same Cytoscape graph, same `#map-outline` twin from ADR-0004. Native code is spent only where it earns its place: durable storage, biometric unlock, passkeys later, share and export, and app-store distribution.
+
+Three alternatives were considered and rejected. **A Trusted Web Activity** is Android-only and runs the site inside the user's own Chrome: no native unlock, and the vault stranded in ordinary browser storage rather than app-private storage. **Tauri 2 for mobile** is appealing, single web core like Capacitor and lighter, but its own team says mobile is not yet first-class, which is too much risk for an app holding this kind of data and going through App Review. **A full native rewrite** is the duplication trap the ADR exists to avoid.
+
+Capacitor is the mature web-to-both-stores path, and it is comfortable with a no-build, vanilla ES-module frontend that has no bundler step to fight.
+
+## The One Architectural Change: Native Owns the Sealed Vault at Rest
+
+Everything else stays the same, except one seam. Inside a mobile WebView, OPFS and IndexedDB are not trustworthy as the system of record for a file the product cannot afford to lose. WKWebView caps each OPFS file at 10 MB, and the vault is one blob. `navigator.storage.persist()` is weak on iOS. The operating system can reclaim WebView storage under disk pressure. Some Android WebView builds restrict OPFS outright.
+
+So `VaultPersistence` gains a native backend. On native platforms it writes the sealed blob to app-private native storage through the Capacitor Filesystem plugin, with key material held behind the iOS Keychain or Android Keystore rather than browser storage. **The WebView still does all of the crypto; native code only ever holds the opaque, already-encrypted result.** Zero-knowledge holds because only ciphertext crosses the seam.
+
+## The July Work, in the Order It Happened
+
+### CI, and the Bug CI Found by Actually Running the App
+
+`0cb4aad` added `.github/workflows/mobile.yml`, path-filtered so a web-only change never triggers an Android build: a debug APK on any `mobile/**` pull request, a signed release AAB and APK on manual dispatch or a `mobile-v*` tag.
+
+Running the debug APK on a headless emulator, rather than trusting a green build, surfaced a real bug: the app came up blank and unstyled. `frontend/` references every asset with absolute `/static/...` URLs, which is how the FastAPI dev server and the production Cloudflare Pages build both serve it. Capacitor serves `webDir` at the WebView root, so every `/static/*` request returned 404: no CSS, no JS, no create-vault form.
+
+The fix is `scripts/prepare-web.mjs`, a staging step mirroring `frontend/` into `mobile/www/` at both `/` and `/static/`, so the mobile build matches the convention the web deploy already uses instead of inventing a special case.
+
+### Biometric Unlock: A Key-Release Model, Not a Boolean
+
+`12dde36` added an in-tree `BiometricVaultPlugin.java`, 233 lines, with no third-party biometric dependency to audit. The model matters more than the line count: the vault's Data Encryption Key is wrapped by an AES-256-GCM key living in the Android Keystore, gated by `BIOMETRIC_STRONG` authentication through a `CryptoObject`. This is a key-release design rather than an "is the user authenticated" flag. Without a successful biometric prompt, the wrapped DEK on disk is ciphertext and there is nothing to fake past.
+
+<CodeBlock
+  language="java"
+  filename="mobile/android/app/src/main/java/app/wymber/BiometricVaultPlugin.java"
+  code={`private SecretKey generateKeystoreKey() throws Exception {
+    KeyGenerator kg = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEYSTORE);
+    KeyGenParameterSpec.Builder b = new KeyGenParameterSpec.Builder(KEY_ALIAS,
+            KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
+            .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+            .setKeySize(256)
+            .setUserAuthenticationRequired(true)
+            .setInvalidatedByBiometricEnrollment(true);
+    kg.init(b.build());
+    return kg.generateKey();
+}`}
+/>
+
+`setInvalidatedByBiometricEnrollment(true)` means a new fingerprint or face enrolled on the device permanently invalidates the wrap. That is deliberate: it closes the obvious attack of adding a second, attacker-controlled fingerprint to an unlocked phone. The vault itself is untouched when that happens and the password still works, so nobody is locked out. On the web-core side, `crypto.js` gained `unwrapDekRaw` and `unlockVaultWithDek`, and `local-repo.js` gained `getRawDek` and `unlockWithDek`, so the raw DEK crosses the Capacitor bridge only at enrolment and unlock, into the same WebView that already holds it in memory for the session.
+
+### The Wrong Turn, and the Two-Minute Catch
+
+`d3ed8a0`, two minutes after `12dde36`, is a three-line diff with an honest subject: "remove conflict markers committed in #160 squash (build.gradle)". During a stacked-PR conflict resolution, `git add -u` staged a file that still had unresolved markers in it. Literal conflict markers went straight into `mobile/android/app/build.gradle`, around the `androidx.biometric:biometric:1.1.0` dependency line, which meant the file was no longer valid Groovy and every Android build would have failed until someone noticed.
+
+Nothing subtle here, just a mechanical slip in a conflict-resolution step. What makes it worth naming rather than glossing over is the timestamp: 17:02:23 to 17:04:46. Two minutes between the bad commit and the fix, before anything else landed on top of it.
+
+### An Export That Reported Success While Delivering Nothing
+
+`a985e74` is the most interesting bug of the batch, because the app was actively misreporting rather than failing visibly. The web export path is an anchor element with a `download` attribute pointing at a blob URL. Inside a Capacitor WebView, that path does nothing at all, and the app still displayed a toast saying the vault had been downloaded. For a recovery file that exists specifically so a locked-out user has a way back in, a silent no-op wearing a success message is close to the worst shape a bug can take.
+
+The fix is `frontend/js/native-share.js`. On native, `downloadBlob` stages the export into the app's cache directory and hands it to the operating system's share sheet through Capacitor's Share plugin, so the user picks a real destination:
+
+<CodeBlock
+  language="javascript"
+  filename="frontend/js/native-share.js"
+  code={`export async function nativeSaveFile(filename, text) {
+    const { uri } = await fs().writeFile({
+        path: 'exports/' + filename,
+        data: text,
+        directory: 'CACHE',
+        encoding: 'utf8',
+        recursive: true,
+    });
+    try {
+        await share().share({
+            title: filename,
+            files: [uri],
+            dialogTitle: 'Save or share your export',
+        });
+        return true;
+    } catch (e) {
+        // The Share plugin rejects when the user dismisses the sheet.
+        if (/cancel/i.test(e?.message || '')) return false;
+        throw e;
+    }
+}`}
+/>
+
+The success toast now fires only when the file was actually delivered. Dismissing the share sheet returns `false` rather than throwing, so backing out is not treated as an error either.
+
+<CalloutBox type="warning" title="A success toast is a claim about the world, not about the code path">
+<p>The download function ran to completion. It did nothing, because the browser API it called has no effect inside a WebView. That is the trap: the code succeeded by its own internal logic while producing no observable result. Confirming user-facing success has to mean confirming the effect, not merely that no exception was thrown.</p>
+</CalloutBox>
+
+### Scaffolding Hygiene, from a Merge-Gate Review
+
+`00cf23b`, the next day, is smaller: committing the Capacitor share Gradle wiring that `npx cap sync` regenerates, so the checked-in Android project stays self-consistent; deleting the leftover Capacitor template tests `ExampleInstrumentedTest` and `ExampleUnitTest`, which asserted the scaffold package `com.getcapacitor.app` and would fail against the real application ID `app.wymber`; and adding a note that the `INTERNET` permission exists only because the Capacitor WebView bridge needs it, not because the app makes network calls.
+
+### "Absent" and "Unreadable" Are Different States
+
+`927914a`, also 2026-07-11, deserves the most space after the architecture itself. `native-persistence.js`'s `loadVault` caught any read failure and returned `null`, on the theory that a read failure meant no vault existed yet. That is true for a genuinely fresh install. It is not true for a transient I/O error, a permission hiccup, or storage pressure, all of which surface the same generic error a missing file does. And a `null` return routed the app straight into the create-vault flow, whose first write would overwrite whatever was actually on disk. **A momentary read glitch could destroy the one file the product exists to protect, silently.**
+
+The fix distinguishes the signal from the noise instead of treating one reading as the only reading:
+
+<CodeBlock
+  language="javascript"
+  filename="frontend/js/native-persistence.js"
+  code={`export function isNotFoundError(err) {
+    if (err?.code === 'ENOENT') return true;
+    const msg = String(err?.message ?? err ?? '').toLowerCase();
+    return msg.includes('does not exist')
+        || msg.includes('not found')
+        || msg.includes('no such file');
+}
+
+async loadVault() {
+    try {
+        const { data } = await filesystem().readFile({ path: FILE, directory: DIRECTORY, encoding: ENCODING });
+        this._readFailed = false;
+        return typeof data === 'string' ? data : await data.text();
+    } catch (err) {
+        if (isNotFoundError(err)) {
+            this._readFailed = false;
+            return null; // no vault on this device yet
+        }
+        this._readFailed = true;
+        throw new StorageUnavailableError('Could not read the vault from device storage.', err);
+    }
+}`}
+/>
+
+Only Capacitor's own "File does not exist." message, plus `ENOENT` and its POSIX spellings, count as "no vault". Everything else surfaces as a distinct `StorageUnavailableError`. `saveVault` then refuses to write at all if this session's read failed, and writes atomically, staging to a temp file and renaming over the target, so a mid-write failure cannot leave a half-written vault either. On boot, a storage-unavailable read shows a retryable panel instead of falling through to Create, with copy that is deliberately calm rather than alarming. The commit added `frontend/tests/native-persistence.test.js`, 204 lines, covering exactly this: a non-not-found read error must never reach the create flow.
+
+The lesson generalises past this one file. **"Absent" and "unreadable" are different states, and any code path collapsing them into one is a data-loss bug waiting for the right kind of bad luck.**
+
+<CalloutBox type="info" title="Two bugs, one shape">
+<p>The export bug and the persistence bug are the same mistake in different clothes: a code path that ran to completion and reported a result it had not actually established. One claimed a file had been delivered when nothing happened. The other claimed no vault existed when it had merely failed to look. Both were found by asking what the code had actually proven rather than what it had returned.</p>
+</CalloutBox>
+
+## Store Posture, and a Document That Corrects Itself
+
+Wymber is not a bare web view. It has offline local data, an unlock flow, native biometrics and a real share integration, which clears Apple's Guideline 4.2 minimum-functionality bar that sinks thin wrappers. "No account, no telemetry, nothing leaves the device" is a clean answer to both stores' health-data scrutiny, provided no analytics or crash-reporting SDK is ever added that makes it untrue.
+
+One caveat the ADR names explicitly, because it is a real consequence of the local-first architecture: on mobile, deleting the app deletes the vault, and operating-system cloud backup of app-private data is not reliable enough to count on. That makes the recovery-code and export story matter *more* on mobile, not less, which is what both July fixes were ultimately in service of.
+
+Two documentation notes, reported plainly without reading intent into either. First, the ADR's own text corrects itself in place: an earlier draft claimed `webDir` pointed straight at `../frontend` with "zero sync ritual", and the final text explains why that does not hold, since the `/static` URL convention makes a one-line copy step unavoidable in every environment. Second, the ADR's header reads `Status: Accepted (2026-06-14)`, but the file was added by commit `8a03f1b`, dated 2026-07-10. There is no explanation for the gap in the repository and no later commit corrects the header.
+
+Separately, `docs/mobile/roadmap.md` carries its own correction: an M3 milestone description that used to say mobile "shares the sync layer" now reads "Shares the vault, not a sync layer", because ADR-0001 made the data local and moved sync to a future, separate, paid layer in its own private repository. And `docs/mobile/store-listing.md` has an open item worth noting rather than resolving: the Play Console data-safety answer is "No data collected", and the privacy policy URL "must also be reachable inside the app; verify before submitting". That verification is unchecked as of this writing.
+
+## Where This Leaves the Shell
+
+The web core did not get smaller or simpler to accommodate mobile. It stayed exactly as it was, crypto, graph and outline twin all unchanged, and the native layer around it grew only where the operating system does something the browser cannot: hold a file the system will not reclaim, gate a key behind hardware-backed biometrics, and hand a user an actual file rather than a broken download link.
+
+The wrong turns this month, conflict markers in a build file, a fake success toast, and a read error that could have overwritten the one file that matters, were all caught quickly, which is a different claim from saying they did not happen. Store submission has not happened yet.

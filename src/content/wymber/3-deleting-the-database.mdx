@@ -1,0 +1,153 @@
+---
+title: "Wymber #3: Deleting the Database"
+description: "The original architecture needed a server to hold your plaintext password so it could decrypt your data for you. ADR-0001 replaced all of it with a single encrypted file the client owns. This is what it took to remove 1,243 lines of working authentication code."
+publishDate: 2026-06-01
+series: "Wymber"
+order: 3
+coverImage: "/images/wymber-series-cover.svg"
+tags: ["wymber", "local-first", "architecture", "encryption", "adr", "privacy"]
+draft: true
+---
+
+import CalloutBox from '../../components/CalloutBox.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+<p class="lead">
+  The last entry ended with a revived, renamed application still carrying its original architecture underneath: a FastAPI server, an accounts table, and a database holding encrypted maps. This entry is about deleting all three, on purpose, and what it took to do that safely.
+</p>
+
+## The Shape of the Problem
+
+The server-centric design inherited from the September build had a specific, uncomfortable property: the server had to see the plaintext password. Not store it forever, not necessarily log it, but see it, because that plaintext was the input to whatever derived the key that decrypted the data. The account-creation acknowledgement screen I described last time, the one making users confirm there was no password recovery, was not a copywriting decision. It was there because the architecture made a forgotten password unrecoverable, and no amount of gentler wording changes that.
+
+[ADR-0001](https://github.com/Tamok/wymber/blob/main/docs/adr/0001-local-first-encrypted-file.md) names the problem in three parts, and each one does separate work.
+
+The design forces you to host and secure a stateful server so that one person can keep their own data. That is a hosting bill and an attack surface for a tool that, for most of its life, has had a very small number of users.
+
+It weakens the privacy story, because **the server processes the plaintext in order to encrypt it**. You can build a very good server here. You can hash passwords with Argon2, store a derived key instead of the raw password, encrypt sensitive fields at rest. None of that changes the fact that at some point in the request lifecycle the plaintext password passes through server memory.
+
+And it has what the ADR calls a cruel failure mode: a forgotten password means the encrypted data is unrecoverable, with no recovery path. For most applications "forgot password" is an inconvenience solved by an email link. For a tool whose whole premise is holding something personal, an unrecoverable password is the tool failing at the moment it is least able to afford failing.
+
+## Two Things That Were Already True
+
+Two facts about the existing code, both named in the ADR, made the change cheap.
+
+`frontend/js/export.js` already serialised the entire map, every node and every edge, into a versioned JSON document (`version: '2.1'`), and `importMap()` already knew how to rebuild a full map from it. An earlier pass of the project had built a complete, round-trippable representation of a map as a portable file, purely so people could back up or move their data. It was never designed as a persistence layer. It was one anyway.
+
+The second fact was `frontend/js/api.js`. A single thin seam: one `request()` method underneath one-line `get`, `post`, `put` and `delete` wrappers. Every part of the UI that needed data went through that seam and nowhere else. That is not a dramatic architectural discovery, it is ordinary separation of concerns, but it meant the persistence layer could be swapped without touching a single call site. The UI did not know or care whether `api.get('/mindmap')` reached a server or read a file.
+
+Put those together and the server stops being load-bearing. A document format that describes a complete map already exists. A seam that can serve that document from anywhere already exists. The missing piece was making the document safe to hand to the client, which means encrypting it well enough that the file can sit in browser storage, or a cloud drive, or an email attachment, without a server guarding it.
+
+<CalloutBox type="insight" title="The escape hatch was already built">
+<p>Neither `export.js` nor `api.js` was written with local-first storage in mind. One was a backup feature, the other was routine plumbing. The pivot did not require inventing new capabilities. It required noticing that two existing ones, combined, already did most of the job.</p>
+</CalloutBox>
+
+## The Decision: One Encrypted File, No Server Required
+
+ADR-0001 sets the unit of data as a single encrypted file, a vault, created, read and written entirely by the client. A password, a recovery code, or later a passkey unlocks it. The file is portable: export it from one browser, import it into another device, or into a self-hosted copy. The server stops being required for the core product.
+
+The encryption design is the crux, because password-based encryption has an obvious naive version and a considerably better one, and the difference matters here specifically.
+
+The naive version derives a key straight from the password and encrypts the document with it. It works, and it has a bad property: changing the password means re-encrypting the entire document, and adding a second unlock method means either keeping two full encrypted copies or redesigning the format. Neither is acceptable for something meant to grow more unlock methods over time.
+
+So the vault uses **envelope encryption**. A random Data Encryption Key, the DEK, encrypts the document with AES-256-GCM. The DEK is then wrapped, encrypted separately, by one Key-Encryption-Key per unlock method: a `KEK_password`, a `KEK_recovery`, and eventually a `KEK_passkey`. All the wrapped copies live together in a versioned header. Any one of them unlocks the same DEK, so any one of them decrypts the same document. Changing the password re-wraps the DEK under a new password-derived KEK and leaves the document, and every other wrapped copy, untouched.
+
+The key derivation function is PBKDF2-SHA256, chosen deliberately as the dependency-free, buildless floor: it is native to WebCrypto, so it runs in the browser and in Node tests without a WASM binary or a build step. Argon2id is named in the ADR as the planned upgrade, and because the KDF is recorded explicitly in the vault header, swapping it later is a localised, backward-compatible change rather than a format break. The cipher is AES-256-GCM throughout, which is authenticated encryption: tampering with the ciphertext fails decryption outright rather than producing plausible garbage.
+
+<CodeBlock
+  language="javascript"
+  filename="frontend/js/crypto.js"
+  code={`/** Derive an AES-GCM KEK from a secret (password/recovery code) via PBKDF2. */
+async function deriveKEK(secret, salt, iterations) {
+    const base = await subtle.importKey('raw', enc.encode(secret), 'PBKDF2', false, ['deriveBits']);
+    const bits = await subtle.deriveBits(
+        { name: 'PBKDF2', salt, iterations, hash: 'SHA-256' }, base, 256
+    );
+    return importAesKey(new Uint8Array(bits));
+}
+
+async function wrapDEK(dek, secret, iterations) {
+    const salt = randomBytes(16);
+    const kek = await deriveKEK(secret, salt, iterations);
+    const wrapped = await aesEncrypt(kek, dek);
+    return { salt: toB64(salt), ...wrapped };
+}`}
+/>
+
+`DEFAULT_ITERATIONS` in `crypto.js` is 600,000, with a comment describing it as the OWASP-recommended PBKDF2-SHA256 count. That is the same hardening reasoning the server-side KDF had already adopted, applied client-side instead.
+
+## The Recovery Sheet Is Not Optional
+
+This is the part of the ADR I would point at first if someone asked what actually changed in the thinking. The recovery code is not a feature behind a settings toggle. It is generated automatically, every time, at vault creation, and it wraps the DEK exactly the way the password does. The ADR states the reasoning plainly: losing a map because a distressed user forgot a password would be actively harmful. Given what this tool is for, the person most likely to forget a password under stress is the person for whom losing the data matters most.
+
+The code is 24 characters, generated from 24 random bytes mapped through a 32-character Crockford base32 alphabet, formatted as six groups of four. Twenty-four characters at five bits each is 120 bits of entropy, comfortably strong enough that the recovery code is not the weak link. The source comment next to the alphabet notes that 256 divides evenly by 32, so mapping a random byte with a modulo introduces no bias toward any character.
+
+<CodeBlock
+  language="javascript"
+  filename="frontend/js/crypto.js"
+  code={`const CROCKFORD = '0123456789ABCDEFGHJKMNPQRSTVWXYZ'; // 32 chars; 256 mod 32 == 0, unbiased
+
+/** A human-friendly, high-entropy recovery code: XXXX-XXXX-XXXX-XXXX-XXXX-XXXX. */
+export function generateRecoveryCode() {
+    const r = randomBytes(24);
+    let out = '';
+    for (let i = 0; i < 24; i++) out += CROCKFORD[r[i] % 32];
+    return out.replace(/(.{4})(?=.)/g, '$1-');
+}`}
+/>
+
+The word "required" in the ADR's section heading is doing real work. This is not a checkbox anyone can decline. It answers the cruel failure mode directly: forgetting a password no longer means losing the data, because a second, independently strong key into the same vault exists from the moment the vault does.
+
+## What Local-First Means for Storage
+
+The client persists only ciphertext at rest. In the browser that is OPFS, the Origin Private File System, with an IndexedDB fallback where OPFS is unavailable. `VaultPersistence` in `frontend/js/persistence.js` writes a single file named `wymber.vault` when OPFS is present, or falls back to an IndexedDB database (`wymber`, object store `kv`, key `vault`). Either way, what reaches disk is the serialised vault: format tag, version, cipher name, KDF parameters, the wrapped keys, and the encrypted payload. Nothing decrypted ever touches storage.
+
+Decryption happens in memory, on unlock, and stays there for the session. `LocalRepo` in `frontend/js/local-repo.js` holds the unwrapped key as `this.dekKey`, set when `unlock()` succeeds, and `lock()` sets it straight back to `null` along with clearing the in-memory document store. The plan is to auto-lock on idle, so a vault does not sit decrypted indefinitely if someone steps away from the device. None of this is exotic. It is the ordinary discipline of not leaving sensitive material lying around longer than it has to be there.
+
+## What It Took to Remove the Server
+
+Here is where the accounting matters, because "delete the server" is easy to say, and the sequence is the part worth respecting: build the replacement, prove it, and only then remove what it replaces.
+
+The first commit, `844a7b3`, landed 2026-06-01 at 19:21:28. Five files, **602 insertions, zero deletions**:
+
+| File | Lines |
+|---|---|
+| `docs/adr/0001-local-first-encrypted-file.md` | +105 |
+| `frontend/js/crypto.js` | +181 |
+| `frontend/js/vault-store.js` | +151 |
+| `frontend/tests/crypto.test.js` | +85 |
+| `frontend/tests/vault-store.test.js` | +80 |
+
+The commit message says plainly that the new modules are not yet wired into `app.js`, so the running app is unchanged. The vault crypto and the document store were built next to the thing they were going to replace, fully tested, and left disconnected. Nothing about the live application changed that evening, and the work could have stopped there indefinitely without breaking anything.
+
+Roughly seven hours later, `54807b9` landed at 02:58:10 on 2026-06-02, and this is the commit that did the deleting. Fourteen files, **44 insertions, 1,243 deletions**. Gone in one commit: the SQLite layer in `backend/database.py`, JWT session handling via `python-jose`, the in-memory `session_keys` dict from the last entry, `backend/config.py` and `backend/env_config.py` entirely, `frontend/js/api.js` and `frontend/js/auth.js`, and every data-mutating endpoint the server exposed (`/api/setup`, `/api/login`, `/api/logout`, `/api/mindmap`, `/api/node`, `/api/edge`, `/api/settings`, `/api/account`). `backend/main.py` was stripped down to serving static files and a health check.
+
+Gone with them was the entire backend test suite covering those endpoints: `test_auth.py`, `test_nodes.py`, `test_edges.py`, `test_settings.py`, `test_config.py`, `test_kdf.py` and `conftest.py`. I want to be straight about what that means. A large, working, tested authentication system was deleted. Those were not broken tests being cleaned up. They were passing tests for a feature that, after that commit, no longer existed, and deleting passing tests reads differently from deleting a red suite. The one new file, `test_server.py`, asserts something much smaller: that the app shell still serves, and that the legacy API is actually gone rather than merely unused.
+
+A third commit, `d486316`, followed five minutes later at 03:03:26, and it is the cleanup that makes the second commit's claims true rather than aspirational. It rewrote `CLAUDE.md` to describe the local-first model, stripped the `JWT_SECRET_KEY` requirement and the data volume mount out of `docker-compose.yml` and the `Dockerfile`, and deleted `.env.example` because there was no longer any environment configuration to seed. `requirements.txt` and `requirements.lock` lost `sqlalchemy`, `python-jose`, `passlib`, `python-multipart`, `cryptography` and `python-dotenv`. **Six dependencies left the project**, because the code that needed them was gone. A privacy tool got smaller, and a smaller privacy tool is a better one: fewer packages to patch, fewer transitive dependencies to audit, less surface to reason about.
+
+<CalloutBox type="info" title="602 in, then 1,243 out">
+<p>The replacement was built and tested first, wired to nothing, in a commit that changed the running app not at all. Only then did the deletion land, seven hours later, removing more than twice as many lines as the build-out added. Sequencing it that way meant there was always a working server to fall back to, right up until the moment it was removed on purpose, with the replacement already proven.</p>
+</CalloutBox>
+
+## What the Hosting Story Becomes
+
+With no accounts and no database, the MVP web app collapses to a static PWA on free static hosting: no application server, no hosting cost, and a privacy claim that moves from "the server tries not to look at your plaintext" to "there is no server that could look at it." Fly.io is dropped from the plan entirely, since there is no stateful process left that needs it. The existing `Dockerfile` stays, but its purpose changes: it is there for people who want to self-host, not for a required backend.
+
+Sync between devices is explicitly post-MVP, described in the ADR as a paid, greyed-out "coming soon" feature: a dumb, authenticated blob store that accepts the opaque encrypted vault and hands it back on request, never holding a key capable of reading it.
+
+## A Tradeoff Found by Reading the Code
+
+Reading `crypto.js` closely turns up a consequence of the envelope design that is not a bug, exactly, but deserves stating as plainly as the ADR states its threat model. `changePassword(vault, oldPassword, newPassword)` unwraps the DEK using only the `password` entry, wraps it fresh under the new password, and writes back `keys = { ...vault.keys, password: await wrapDEK(dek, newPassword, ...) }`. It spreads the existing key set and overwrites only the `password` field. **The `recovery` entry is untouched.**
+
+That is exactly what envelope encryption is supposed to do: any wrapped copy of the DEK unlocks the same document, and touching one should not require touching the others. It also means the recovery code is a second, permanently equal key into the vault, and changing the password does not revoke it. If a recovery sheet is ever seen by someone else, photographed, or left somewhere, changing the password afterward does not close that door. Only creating a new vault, or rotating the recovery entry separately, which the current code does not do, would. This is not a mistake in the design. It is the direct shape of choosing recovery-by-parity over recovery-by-server, and pretending otherwise would misrepresent what "no server, no recovery bottleneck" actually buys.
+
+## The Trust Problem Moved, It Did Not Disappear
+
+The last thing worth being straight about is the threat model ADR-0001 states for itself, because it would be easy to write this entry as though deleting the server settled the privacy question. It did not. It relocated it.
+
+Before, you had to trust a server operator with your plaintext password, at least momentarily, on every login. Now, running as a web app, you have to trust that the site served you the honest JavaScript sitting in the repository, on every page load. A compromised host or CDN could ship code that captures a password the moment it is typed, and no amount of client-side cryptography defends against a client that is lying about what it is. The ADR is candid about that limit: the web cannot fully solve "malicious app author". The mitigations it names are a strict Content-Security-Policy and Subresource Integrity, neither of which is built. That is the honest loose thread here.
+
+What is true today is the tier structure the ADR describes: this design fully solves the honest-but-curious case, where a host or operator who is not actively trying to steal data cannot get at it even by accident. Anyone who needs to defend against an actively malicious host has the desktop app or a self-hosted copy as the high-trust option.
+
+Deleting 1,243 lines of code that worked is a strange thing to feel good about. What makes it defensible is that the replacement does less by design rather than less by accident, and the specific thing it can no longer do, see your plaintext password, was the thing most worth making impossible. What it still cannot guarantee, an honest JavaScript delivery every time, is not solved by more deletion.
