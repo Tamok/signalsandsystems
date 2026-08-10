@@ -1,0 +1,99 @@
+---
+title: "Wymber #4: Anyone Can Host a Look-Alike"
+description: "Open-sourcing a privacy tool is a durability promise: your file stays yours even if the project disappears. It is also a threat, because a convincing clone can capture your password at unlock. ADR-0003 works through what is actually possible, and what a client can never prove about itself."
+publishDate: 2026-06-02
+series: "Wymber"
+order: 4
+coverImage: "/images/wymber-series-cover.svg"
+tags: ["wymber", "security", "threat-modeling", "phishing", "supply-chain", "adr"]
+draft: true
+---
+
+import CalloutBox from '../../components/CalloutBox.astro';
+
+<p class="lead">
+  ADR-0001 deleted the server, the accounts, and the database, and put everything into an encrypted file the client owns. It ended on an uncomfortable observation: removing the server does not remove the trust problem, it relocates it. You no longer have to trust a company with your data. You have to trust that the JavaScript your browser downloaded is the JavaScript in the repository. Today's decision is the direct answer to that sentence.
+</p>
+
+## The Question, and Why the Answer Is No
+
+The question ADR-0003 sets out to answer is concrete, and worth stating before explaining why the answer is not what was asked for. Can the `.wymber` file recognise whether the client opening it is the legitimate, current source, as opposed to a modified one? And can it be made foolproof that a malicious actor cannot read a file's contents or capture the password at the moment someone unlocks?
+
+Both are reasonable things to want. Neither is achievable, and the document spends its first section explaining why before it proposes anything at all.
+
+## The Property That Cuts Both Ways
+
+Wymber is open source under AGPL-3.0, and that licence choice was never incidental. A `.wymber` file has to stay openable with the public code even if the project disappears. That is a large part of the point of not building a server: the data outlives the hosting bill and whatever happens to the project later. Rehostability is not a side effect of being open source, it is most of the reason for it.
+
+The same property is the threat. Anyone can host a look-alike. A clone at a domain one character off from the real one, styled identically, running its own JavaScript, can ask for a password exactly the way the real site does and keep what it is given. Client-side encryption does not defend against that, because the substitute code is the thing doing the encrypting. Open source is why a `.wymber` file is durable and why a fake client is trivial to stand up. The ADR does not try to make that tension go away. It works through what is left once you accept it.
+
+## Two Facts That Do Not Move
+
+Before any decision, the document states two bounding facts, and the rest of the design falls out of them almost mechanically.
+
+**A file cannot attest the code that opens it.** A `.wymber` file is passive data. It cannot inspect, measure, or gate the application reading it. Anything embedded in the file, a flag, a signature, an expected hash, is bytes that the reading client may honour, ignore, or fake, and a malicious client obviously picks the third option. There is no version of "the file recognises the app" that survives contact with a client willing to lie about what it is.
+
+**A client cannot prove its own honesty.** This one is subtler and more important. Ship a self-check where the app computes its own hash on load and shows a green "legitimate client" badge if it matches, and a modified client keeps that exact code path, computes whatever it likes, and shows the same green badge while doing something else entirely. This is not a case where a better implementation closes the hole. Self-attestation is spoofable **by construction**: the thing being checked and the thing doing the checking are the same object, so anything that object says about itself is exactly as trustworthy as the object is, which was the question in the first place. Real assurance has to come from outside the page being checked.
+
+<CalloutBox type="insight" title="Why this is not a weak-implementation problem">
+<p>A self-attestation badge does not fail because someone wrote the check carelessly. It fails because the check and the thing checked are the same code path, so a modified client that lies about its own integrity is not a bug in the check. It is the check working exactly as designed, on behalf of the wrong author. No amount of careful engineering fixes that. Only moving the verification outside the client does.</p>
+</CalloutBox>
+
+## What Cryptography Can Do, and What It Flatly Cannot
+
+It helps to separate two goals that get run together in casual conversation, and the ADR names them, which earns its keep.
+
+**(A)** is confidentiality of the `.wymber` file itself: someone stealing the file at rest or intercepting it in transit. **(B)** is preventing a malicious client from capturing secrets at the moment of unlock, the phishing and supply-chain problem.
+
+Cryptography solves (A) completely. Envelope encryption already means a stolen `.wymber` file is unreadable without the password or the recovery code: a random AES-256-GCM data key, wrapped separately per unlock method, with the password and recovery code both run through PBKDF2 at 600,000 iterations today (Argon2id is tracked separately as issue #100). A strong password, or the high-entropy recovery code, makes brute force infeasible at any realistic budget. Goal (A) is met today, and it is the only part of this decision that gets written in the past tense.
+
+Cryptography cannot touch (B) at all. No amount of mathematics stops a person from typing their real password into a website that looks exactly like the real one. That sentence is the hinge the rest of ADR-0003 turns on, because it means "is this client legitimate" is not a cryptography question. It is a question about how you know, from outside, what code you are actually running, and the honest answer for a web page is that you mostly cannot, not by yourself, and not from inside the page.
+
+## A Layered Plan, Honest About Which Layer Does What
+
+Given all that, the decision is a five-layer plan. What matters, and it is easy to blur once a plan is exciting, is that only Layer 0 is done. Everything from Layer 1 up is a commitment to build, not a description of what exists.
+
+| Layer | What it does | Serves | Status |
+|---|---|---|---|
+| 0 | Envelope encryption makes a stolen file useless without the secret | Confidentiality (A) | Done |
+| 1 | Make the *official* client verifiable rather than self-attesting | Anti-phishing (B) | Planned |
+| 2 | Out-of-band attestation, verification from outside the page | Anti-phishing (B) | Planned, epic-scale |
+| 3 | Passkeys as the primary, origin-bound unlock method | Anti-phishing (B) | Planned |
+| 4 | A signed desktop app as the highest-trust client | Anti-phishing (B) | Planned |
+| 5 | Honest UX and a standing claims discipline | Trust generally | Planned |
+
+**Layer 1** is about the official deploy specifically. The plan is a reproducible build with a committed manifest of SHA-384 hashes for every shipped asset, regenerated on each release, so anyone holding the repository and the manifest can confirm the served bundle matches the audited source. On top of that, Subresource Integrity on every script and style referenced from `index.html`, plus the `Integrity-Policy` header, which makes integrity metadata mandatory rather than optional: a browser honouring it refuses to run any resource that does not match its expected hash. And a strict Content-Security-Policy: no inline script, `connect-src 'self'` since the app makes no outbound calls and there is nowhere for stolen data to go, sources pinned rather than left open. None of this exists yet. It is the work this decision commits to.
+
+Layer 1's limit is stated in the ADR rather than left implicit: this layer protects the *official* deploy and does nothing about a clone running its own HTML on a different origin. A perfectly reproducible, perfectly pinned official site does not stop a look-alike from existing elsewhere. That gap is exactly why the plan does not stop here.
+
+**Layer 2** is the only layer that provides genuine, non-circular assurance, because it is the only one where the checking happens somewhere other than the client being checked. The precedent is Meta and Cloudflare's Code Verify, an open-source browser extension comparing the code a page actually loaded against a manifest published through Cloudflare as an independent transparency source, external to the site itself. Wymber already runs on Cloudflare, so the shape fits: publish the integrity manifest as a third-party-anchored source of truth, and eventually ship or endorse an extension in that mould. This is explicitly not alpha scope. It is tracked as an epic, which is a way of saying it is real, it is the point, and it is the furthest out.
+
+**Layer 3** may be the highest-leverage item on the list, and it requires nobody to install anything unusual. Passkeys, via WebAuthn, are origin-bound by construction: a passkey registered to one origin cannot be used by a page served from another, because the browser itself enforces the binding and refuses. Making passkeys the primary unlock method means the strongest available path does not function on a clone at all. Password and recovery code stay as fallbacks, alongside a standing warning to use them only at the trusted origin. The ADR calls this the single most effective in-product anti-phishing step.
+
+**Layer 4** treats the web as what it is, inherently phishable, because a URL bar is not a strong enough signal for most people under pressure. A signed, installed desktop application, tracked as issue #38 and built on Tauri, updated only from a known source, is the highest-trust option, offered without abandoning the easy web path.
+
+**Layer 5** is discipline as much as engineering: a visible build hash and version, a "verify this client" page documenting exactly how to check it by hand, and all of it framed as transparency rather than as proof. A persistent, gentle reminder to unlock only at the real origin. And a commitment to hold to regardless of how the rest lands: never claim a web page can prove its own integrity, and never present an in-app badge as protection against a clone, because it cannot be either of those things.
+
+<CalloutBox type="warning" title="What the in-app badge is allowed to say">
+<p>A build hash and a link to the published manifest are good transparency. A self-reported "legit" or "modified" indicator is not security, because a malicious clone shows the same green checkmark. The plan treats the badge as a convenience for people who want to verify by hand, never as a claim that the client has proven anything about itself.</p>
+</CalloutBox>
+
+## The Rejections Carry the Argument
+
+The alternatives section is short and does real work, because each rejected option is the thing an engineer reaches for first.
+
+Embedding a client signature inside the `.wymber` file was the most obvious non-starter: the file is passive data, and an attacker distributing a fake client signs their own copy with their own key. A client self-hash check alone was rejected as a security control for the reason already covered, and survives only as a transparency feature in Layer 5. Subresource Integrity on its own was rejected as *the answer*, though not as a component, because it protects the official deploy and says nothing about a clone hosted elsewhere: necessary, not sufficient. And obfuscation or DRM aimed at protecting the client was rejected outright, as hostile to the auditability that open source exists to provide, and ineffective against a determined cloner anyway.
+
+## The Sentence Worth Sitting With
+
+The ADR's context section states the stakes in its own words: overclaiming here "would itself be a trauma of broken trust." Wymber is a private space for someone to map and make sense of their own experience, and that framing is deliberate and narrow: a personal reflection tool, not therapy, not counselling, not a diagnostic instrument. If a badge or a claim implies more safety than the architecture delivers, and someone relies on that claim at the moment it matters, the failure is not abstract.
+
+That is the frame the document closes on, and it is written for the person using this rather than for another engineer:
+
+> Because Wymber is open source, anyone can host it. That's good for durability, but it means **you** must make sure you're on the real client before you unlock. We make the official client **verifiable** (reproducible builds, published hashes, strict CSP), we're moving unlock to **passkeys** (which a fake site can't use), and a **signed desktop app** is the highest-trust option. What we will never pretend is that a web page can prove its own honesty: it can't, so never enter your Wymber password anywhere but the site you trust.
+
+## Where This Leaves Things
+
+Nothing in this entry is built. Layer 0 already existed before today, and Layers 1 through 5 are a plan being recorded rather than a status report. Layer 2, the only layer offering genuine, non-circular assurance rather than an improved version of "trust the client a bit more," is also the furthest out: an epic, explicitly outside alpha scope, depending on tooling that does not exist.
+
+That gap is not a flaw in the plan so much as an honest measure of how hard the actual problem is. A file cannot vouch for its reader, and a reader cannot vouch for itself. The only real fix runs through something outside both, and building that well takes longer than adding a header. Writing the plan down today, with its layers ordered by how much they actually prove rather than by how easy they are to ship, is what makes it possible to be held to it later.

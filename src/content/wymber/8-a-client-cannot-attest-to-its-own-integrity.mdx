@@ -1,0 +1,136 @@
+---
+title: "Wymber #8: A Client Cannot Attest to Its Own Integrity"
+description: "Writing an honest threat model exposed a 68-day gap between what an architecture document claimed and what the deployment actually served. Closing it took one day and nearly shipped a silent bug. None of it solves the underlying problem, because every check is performed by the thing being checked."
+publishDate: 2026-08-09
+series: "Wymber"
+order: 8
+coverImage: "/images/wymber-series-cover.svg"
+tags: ["wymber", "security", "threat-modeling", "csp", "subresource-integrity", "verification"]
+draft: true
+---
+
+import CalloutBox from '../../components/CalloutBox.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+<p class="lead">
+  2026-08-09 went like this: write a document, fix what the document found wrong, then fix a document that had gone wrong about the fix. By the end of it one thing was clearer than it had been for the previous sixty-eight days. An architecture decision record describing what a system will do, and a deployment describing what it actually does, are not the same artifact, and the only reliable way to catch them drifting apart is to force one to describe the other, honestly, on a fixed date.
+</p>
+
+## An Adversary Table With Mostly Good News in It
+
+Wymber has no accounts, no database, and no server-side storage of anything a user writes. That fact does most of the work in `docs/threat-model.md`: with nothing held on the project's servers, most conventional "what can an attacker steal from us" questions collapse to "nothing, there is nothing there to steal." The document works through nine adversaries instead, each asking what a specific attacker can actually get, and each answer has to be checkable against a named file or it does not go in.
+
+Most rows are reassuring in the way local-first architecture tends to be. A hostile network gets nothing, because the vault never transits: there is no sync endpoint, and the service worker leaves `/api/` alone. Project maintainers get nothing, structurally, because there is no channel for a user's map to reach them. Legal process against the project gets essentially nothing, because there is nothing on the project's side to compel.
+
+Two rows are harder, and the document says so rather than rounding up. A device thief who gets the ciphertext vault can brute-force it offline, and because this is a local file with no server in the loop, **there is no rate limiting, no lockout, and no alerting on repeated guesses.** A weak password does not survive that asymmetry regardless of how many PBKDF2 iterations sit between a guess and a key. And a family member or partner with the *unlocked* device gets everything on screen, which the document calls the hardest and most honest case for this product, mitigated only by auto-lock: fifteen minutes by default, configurable down to five, up to sixty, or to **Never**. Choosing Never knowingly removes the only defence that adversary faces.
+
+The row that matters most for the rest of this entry is a fifth: a compromised host, CDN, or supply-chain attacker gets the password, the recovery code, or the decrypted map, at the moment of unlock. Client-side encryption defends against a server that gets breached. It does nothing against a client that has been substituted, because the substituted client is the thing doing the encrypting.
+
+<CalloutBox type="info" title="Why the table has to be honest to be useful">
+<p>A threat model that only lists what an attacker cannot get is marketing with footnotes. The rule this document holds itself to is that every claim traces to a file someone can open, which means the moment you go to write a sentence like "Wymber ships a strict CSP", you have to go and look at what is actually being served before you are allowed to write it. That rule did the real work described below.</p>
+</CalloutBox>
+
+## Sixty-Eight Days
+
+Here is what looking found. [ADR-0003](https://github.com/Tamok/wymber/blob/main/docs/adr/0003-client-integrity-and-anti-phishing.md) was accepted on 2026-06-02. It lays out a layered plan for making the client verifiable instead of self-attesting: Layer 0, envelope encryption, done. Layer 1, a reproducible build, a published hash manifest, Subresource Integrity, and a strict Content-Security-Policy. Layers 2 through 5, out-of-band attestation, passkeys, a signed desktop app, and honest build-hash UX, named as future work.
+
+For sixty-eight days, that ADR described Layer 1 as part of an accepted decision without distinguishing what had been built from what had been planned. What the deployment served in that window was `landing/_headers` carrying four baseline response headers: `X-Frame-Options: DENY`, a `Content-Security-Policy` whose entire content was `frame-ancestors 'none'`, `X-Content-Type-Options: nosniff`, and a `Permissions-Policy` denying camera, microphone and geolocation. The app's generated headers, from `scripts/build-pages.mjs`, carried the same four. No `connect-src 'self'`. No `Integrity-Policy`. No Subresource Integrity anywhere in the built HTML. No published manifest, no build-hash display, no verify page, no out-of-band check of any kind.
+
+The threat model's own section 4 put it flatly: **"This is not the strict CSP described in ADR-0003."** And its summary: "today, a compromised host is not detectable by the app itself, and there is no independent way for a user to confirm the code they're running matches the published source, short of manually diffing it against the repository. That gap is real, tracked, and not yet closed."
+
+It is worth being plain about how the gap was found, because that is the point of this entry. It was not an audit. Nobody filed a report. There was no incident. Writing the threat model required describing the deployment as it actually stood, adversary by adversary, and the moment a sentence approaching "Wymber ships a strict CSP" needed writing, the document's own rule forced a check. The gap had been sitting there the whole time. Describing the system honestly is what made it visible.
+
+The same review pass added `docs/compliance-posture.md` and `docs/adr/0006-optional-recovery-tradeoffs.md`. ADR-0006 keeps the user-held recovery code as the only recovery root and declines provider escrow permanently, for a reason worth sitting with: it rejects social or Shamir recovery specifically because a trauma map's trusted contacts, the people you would hand a key share to, often overlap with the people named *in* the map as sources of harm. Asking someone to nominate recovery contacts can mean asking them to hand a piece of the map to someone the map is about.
+
+That ADR's status changed mid-review, from "Accepted" to "Proposed (2026-08-09), pending owner review", because the draft had recorded a decision that had not actually been made. A small instance of the same discipline the rest of this entry is about: catch the document claiming more than is true, and fix the document.
+
+## The Fix, the Same Day
+
+Closing the gap took one day: the pull request that found it, then a second one that closed it, 32 files and 1,727 insertions, resolving issues #111 (reproducible build, SRI, published hash manifest), #112 (strict CSP plus `Integrity-Policy`) and #114 (in-app build indicator and a verify page).
+
+`scripts/integrity-manifest.mjs` walks the built `dist/` directory and hashes every shipped file with SHA-384. It writes `dist/integrity-manifest.json` on every build, so the app origin always describes what is live. The committed `landing/integrity-manifest.json` changes only on an explicit `--publish`, a deliberate release snapshot rather than a tracked file that churns on every test run. Comparing the two origins is the actual mechanism: if either were serving something the other did not expect, the manifests would stop agreeing.
+
+`frontend/js/build-info.js` exposes a frozen `BUILD` object whose `commit` field is rewritten to the real short git SHA at build time, and a `buildLabel()` function that `frontend/tests/build-info.test.js` asserts never contains a judgment word (`verified`, `secure`, `legit`, `safe`, `trusted`) or an emoji. That test is Layer 5 of ADR-0003, honest UX framed as transparency rather than a guarantee, encoded as an assertion rather than left as a promise in a document.
+
+`landing/verify.html` leads with the one thing that actually protects a user, and it is not a technical check: only unlock at an address you typed or bookmarked yourself, and never enter your password or recovery code anywhere else, however convincing the page looks. Then the build stamp, the two-origin manifest comparison, and how to reproduce the build locally. Its closing section, titled "What this does not prove", is the most important part of the page. A web page can never prove its own honesty, and a fake copy could show a build stamp or a badge every bit as convincingly as the real one. **If the build pipeline producing both manifests were itself compromised, both origins would agree with each other and both would still be wrong.** Agreement rules out one origin being tampered with alone. It is not proof of the pipeline that built both.
+
+The `Integrity-Policy` header shipped split: enforced on the landing origin, report-only on the app origin. The reason is `frontend/js/mindmap.js`, which still lazy-loads Cytoscape through a classic `script` element with no `integrity` attribute, so enforcing today would block that load and break the map. `build-info.js` ships an `integrityFor(url)` helper reading the expected SHA-384 out of the injected import map, written defensively to return `null` rather than throw. Nothing calls it yet. It exists as the seam for the one-line change that would let enforcement happen safely.
+
+## Where the Fix Broke Something
+
+Here is the part that makes this worth writing rather than reporting a green checklist.
+
+The first version of the landing's `script-src` was `'none'`. The premise seemed sound, and the commit even wrote it down: the landing is static marketing content, it ships zero script tags, so it needs no script source. That premise was wrong. `landing/index.html` has three script elements. Two are `application/ld+json` structured-data blocks that never execute. One, at the end of the file, is a bare inline script driving the screenshot carousel's previous and next buttons:
+
+<CodeBlock
+  language="html"
+  filename="landing/index.html"
+  code={`<script>
+  document.querySelectorAll('[data-carousel]').forEach((c) => {
+    const track = c.querySelector('.carousel-track');
+    const step = () => track.clientWidth + 18;
+    c.querySelector('.carousel-prev')?.addEventListener('click', () => track.scrollBy({ left: -step() }));
+    c.querySelector('.carousel-next')?.addEventListener('click', () => track.scrollBy({ left: step() }));
+  });
+</script>`}
+/>
+
+`script-src 'none'` blocked it outright. The follow-up commit, `fc77bc9`, "landing CSP must hash the carousel script, not forbid all scripts", records that Chromium confirms the block, reporting that executing the inline script violates `script-src 'none'`, and states what would have happened: that policy "would have left those arrows silently dead in production, a keyboard-accessibility regression with no visible error."
+
+<CalloutBox type="warning" title="The failure mode is the point, not the bug">
+<p>A CSP violation on an inline script makes the browser refuse to execute that block. It produces a violation report in the DevTools console. It throws no uncaught JavaScript exception a visitor would ever see, and there is no toast, no error banner, nothing on the page announcing that anything went wrong. The code that would have attached the click handlers never runs, so the two arrow buttons go inert. Nothing surfaces to an ordinary visitor.</p>
+</CalloutBox>
+
+## Generating the Hash Instead of Typing It
+
+The actual fix is not a corrected hash typed in by hand. A hand-typed hash is exactly as fragile the next time anyone edits that script, and the landing has no build step at all: it deploys straight from the `landing/` directory, so there is nowhere to compute a fresh hash automatically at deploy time. `scripts/landing-csp.mjs` generates the CSP line in `landing/_headers` from the inline scripts the landing actually ships. `scripts/csp.mjs`, the shared logic underneath, extracts SHA-256 hashes of inline script blocks and deliberately skips `application/ld+json` data blocks, which HTML never executes and CSP never gates.
+
+One detail in `scripts/csp.mjs` is worth naming, because it is the kind of bug that only appears cross-platform: it normalises CRLF to LF before hashing. On a Windows checkout with `core.autocrlf` converting line endings, hashing the raw bytes on disk produces a hash the browser never computes, because the browser normalises newlines while tokenising the HTML before it ever sees the script's text. Hash the wrong bytes and you get a header that looks correct and matches nothing a real browser produces.
+
+The comment block at the top of the corrected `landing/_headers` explains the reasoning in the repository's own words:
+
+<CodeBlock
+  language="text"
+  filename="landing/_headers"
+  code={`# script-src allows exactly one inline hash and nothing else: no 'unsafe-inline', no host source,
+# no external script may load at all. That single hash is index.html's carousel-arrow script, and
+# it is GENERATED by scripts/landing-csp.mjs rather than typed, because the landing has no build
+# step and a hand-copied hash silently rots. A drift test fails if the two disagree.
+#
+# Adding a second inline script, or any external one, means regenerating this header first: an
+# unhashed inline script does not error visibly, it just never runs.`}
+/>
+
+The drift test, `frontend/tests/csp.test.js`, is what makes leaving a generated hash alone safe rather than merely convenient. It recomputes every inline script's hash straight from the pages themselves, independently of `landing-csp.mjs`, so a green result proves the header matches what a browser actually receives rather than proving the generator agrees with itself. It asserts three things: every inline script a browser will execute has a hash present, `application/ld+json` blocks get none, and the header carries exactly the hashes the landing needs with no stale leftovers from a deleted or edited script. The test's own comment states the stakes: a script blocked by a stale hash "throws no error a visitor would see, it just silently stops working."
+
+## Correcting the Correction
+
+Two more commits landed the same afternoon, and both are the same failure pattern that opened this entry, twice in one day.
+
+`landing/_headers` still carried the old code comment claiming the landing ships zero script tags, the exact premise the carousel discovery had already disproved a few commits earlier. It was rewritten.
+
+`docs/threat-model.md` section 4 still described the strict CSP and the manifest as not shipped, because it had been written before the fix landed and nobody had gone back once the fix was in. It was rewritten to say they are shipped **in the codebase**, with a caveat worth keeping verbatim: "All of this is on `develop` and reaches production at the next promotion to `main`, until then wymber.app still serves the older baseline headers, so read this bullet as 'shipped in the codebase', not 'live for users right now'." The commit message states the standard it was working to: "a threat model that overclaims its own freshness is the one document that cannot afford to."
+
+<CalloutBox type="insight" title="A green document is not the same as a true one">
+<p>The threat model needed correcting twice in one day for the same underlying reason it needed writing in the first place: something shipped, and the artifacts describing it did not automatically catch up. A code comment and a threat-model section both went stale from the same pull request that fixed the thing they were describing. Nothing about writing a fix makes the surrounding documentation true by proximity.</p>
+</CalloutBox>
+
+A separate accessibility pass the same day hit a version of the identical failure class from another angle. Canvas arrow-key navigation shipped inert on its first attempt: the key handler was bound to the inner render div, which is not focusable, while the actual tabbable element is its parent container, and `keydown` bubbles up rather than down. The follow-up commit records that the feature "never saw a single arrow press while all 13 direction-picker unit tests passed", because those tests exercised the pure scoring function and never the wiring that would let a keypress reach it. A green test suite describing something the running system did not do, in an unrelated part of the codebase, on the same day.
+
+## What Still Is Not True
+
+Stated plainly rather than rounded up. **Passkeys are not implemented**; there is no `navigator.credentials` call anywhere in the frontend, so Layer 3 of ADR-0003, named at the time as the single most effective in-product anti-phishing step, does not exist. Out-of-band attestation is not built. Neither is a signed desktop app. Argon2id has not replaced PBKDF2-SHA256 at 600,000 iterations. Nothing imports `build-info.js` yet, so the in-app build indicator is not wired into any visible UI. `Integrity-Policy` stays report-only on the app origin until `mindmap.js` gets its `integrity` attribute. `style-src 'unsafe-inline'` is still allowed on both origins, which the corrected threat model names directly as "a real remaining gap and not a rounding error". And issues #111, #112 and #114 are all still open on GitHub despite being implemented, which is a fact worth stating without speculating about the reason.
+
+None of it is live either. `main` is at `01c802d`, `origin/develop` is seven commits ahead, and `main`'s `landing/_headers` still carries only the four baseline headers this entry opened with. Everything described above is merged to `develop`, awaiting promotion.
+
+## A Client Cannot Attest to Its Own Integrity
+
+The corrected threat model ends its section on this adversary with the sentence this whole series has been moving toward:
+
+> Net: a user can now independently confirm that the code they are running matches the published source, and the browser itself enforces most of the substitution surface. What remains unclosed is the honest core of the problem, and it does not go away with more headers: **a client cannot attest to its own integrity.** Every check described above is performed by, or delivered from, the thing being checked. That is why ADR-0003 treats out-of-band verification as the only real anchor, and why this section will still exist after #115 ships.
+
+ADR-0003 said the same thing on the day it was accepted, sixty-eight days before any of this work existed: the only way to verify a web client is from outside it. `landing/verify.html` says it again, to a reader with no technical background: a web page can never prove its own honesty.
+
+Real work happened on 2026-08-09. A sixty-eight-day gap between an accepted decision and a shipped deployment closed in a day, tested, with a near-miss caught before it reached anyone. But the manifest is served by the same origin it vouches for. The drift test runs in the same CI that builds the thing it checks. The verify page is delivered by the server whose honesty is the question being asked.
+
+None of that is a flaw in the work. It is the shape of the problem that is still open, and the one layer nobody has built is the only one that would have to live somewhere other than inside the thing it is checking.

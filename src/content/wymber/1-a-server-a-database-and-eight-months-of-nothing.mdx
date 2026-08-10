@@ -1,0 +1,118 @@
+---
+title: "Wymber #1: A Server, a Database, and Eight Months of Nothing"
+description: "The first version of Wymber was a conventional server application: FastAPI, SQLite, Argon2 password hashing, JWT sessions, and a Docker container. Four commits in one evening, then nothing for eight months. What the original architecture actually did, and where it kept the keys."
+publishDate: 2025-09-26
+series: "Wymber"
+order: 1
+coverImage: "/images/wymber-series-cover.svg"
+tags: ["wymber", "architecture", "fastapi", "sqlite", "encryption", "origins"]
+draft: true
+---
+
+import CalloutBox from '../../components/CalloutBox.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+<p class="lead">
+  This is the first entry in a series about Wymber, a privacy-first tool for laying out what happened and how it connects, on your own device. At the time of this entry it was called TrauMapp'd. The whole first version exists in four commits made on a single evening: a spec, a working application, and two small fixes. Then the repository went quiet for eight months. This entry is about what that first version actually did, mechanically, before any of the later decisions that reshaped it.
+</p>
+
+## A Spec Before a Single Line of Code
+
+The very first commit, `c70733d`, contains no application code at all. It adds a `.gitignore`, a GitHub Copilot instructions file (`.github/instructions/copilot.instructions.md`, 448 lines), and `traumappd-complete-spec.md`, a single markdown file running just over 4,000 lines. The spec describes the product, the data model, the trauma-informed design principles, and the phased build plan before a single endpoint existed. Whatever else changed later, the project started as a document, not a prototype.
+
+The second commit, `af7a158`, titled "Phase 1: Complete foundation with backend, frontend, authentication, and Docker setup," is where the spec became code: 13 files and 2,205 insertions, all at once. There is no incremental history to read here, no series of small commits showing the design taking shape. The backend, the auth flow, the encryption, the Docker packaging, and a static frontend all landed together, forty minutes after the spec.
+
+## What Phase 1 Actually Was
+
+The backend was a single 378-line FastAPI application, `backend/main.py`, with endpoints for setup, login, logout, an auth check, and full CRUD on nodes and edges plus a settings endpoint. Data lived in SQLite (`sqlite:///./data/traumappd.db`) via SQLAlchemy, in `backend/database.py`. Four tables: `User`, `Node`, `Edge`, and `ChatMessage`. That last one is worth noting for what it wasn't. The schema had a `content_encrypted` column and a `to_dict` method ready to decrypt it, but no route in `main.py` ever created, read, or referenced a `ChatMessage`. It sat in the schema, unused, until the 2026 revival removed it outright.
+
+Passwords were hashed with Argon2 through passlib (`CryptContext(schemes=["argon2"], deprecated="auto")`), a reasonable choice for a project starting in late 2025. Sessions were JWTs signed with HS256 and a 24-hour expiry.
+
+The signing key tells you something about how far ahead anyone was looking at this stage. `backend/main.py` set `SECRET_KEY = os.getenv("SECRET_KEY", secrets.token_urlsafe(32))`, so with no environment variable present the key was a fresh random value generated at process start, and restarting the container invalidated every outstanding session token. Meanwhile `docker-compose.yml` supplied that variable with a default of the literal string `your-secret-key-here`, which meant a deployment that ran through compose without overriding it signed its tokens with a constant published in the repository. Neither path would have been noticed in a single-evening build with no users. Both are the kind of detail that only becomes a problem once something depends on the server staying up, or on the tokens meaning anything.
+
+## The Password in the Dictionary
+
+The most consequential design choice in Phase 1 is a short piece of code in `backend/main.py`: a module-level dictionary that held every logged-in user's plaintext password for as long as their session lasted.
+
+<CodeBlock
+  language="python"
+  filename="backend/main.py (af7a158)"
+  code={`# Store passwords temporarily in session for encryption
+# In production, consider a more secure session management
+session_passwords = {}
+
+def store_session_password(username: str, password: str):
+    session_passwords[username] = password
+
+def get_session_password(username: str) -> str:
+    return session_passwords.get(username)`}
+/>
+
+`store_session_password` was called from `/api/login`, right after `verify_password` succeeded. `get_session_password` was called from every endpoint that needed to decrypt or encrypt a node description: `get_mindmap`, `create_node`, `update_node`. Logout deleted the entry.
+
+This is what falls out of asking a server to do password-derived encryption on a user's behalf across multiple requests, without a client-side key. The server cannot decrypt anything on request three unless it remembers what it learned on request one, and the only thing worth remembering is the password itself. The comment in the code, "In production, consider a more secure session management," reads less like an oversight than a note left for a pass that had not happened yet.
+
+<CalloutBox type="insight" title="Why this pattern is structural, not sloppy">
+<p>Deriving a per-user encryption key from a password (here, PBKDF2 over the password plus a stored salt) means the server needs the password, not just a hash of it, to do the derivation. A server-side session that outlives a single request has to keep that password somewhere between requests. A dictionary in process memory is actually one of the more contained ways to do it: it never touches disk, and it dies with the process. The privacy cost is not carelessness. It is what the server-holds-the-key architecture requires.</p>
+</CalloutBox>
+
+## What Was Encrypted, and What Wasn't
+
+The encryption itself was competently built. `User.derive_key` in `backend/database.py` ran PBKDF2-HMAC-SHA256 at 100,000 iterations over the password, salted with a random 32-byte value generated at account setup and stored in the `encryption_salt` column, then base64-urlsafe-encoded the result into a Fernet key.
+
+<CodeBlock
+  language="python"
+  filename="backend/database.py (af7a158)"
+  code={`def derive_key(self, password: str) -> bytes:
+    """Derive encryption key from password"""
+    kdf = PBKDF2HMAC(
+        algorithm=hashes.SHA256(),
+        length=32,
+        salt=self.encryption_salt,
+        iterations=100000,
+    )
+    key = base64.urlsafe_b64encode(kdf.derive(password.encode()))
+    return key`}
+/>
+
+But `encrypt_field` and `decrypt_field` were only ever called on two columns: a node's `description` and a chat message's `content`. Everything else in the `Node` and `Edge` tables, the title, the node type, the x and y position, the colour, the icon, and the label on every edge, was stored as plain SQLite text. So the shape of a person's map, who and what was on it by name, how the entries were categorised, and how they connected to each other, sat in the clear in the database file. Only the long-form description text underneath each node was sealed behind the derived key.
+
+That is a description of where the line was drawn rather than an accusation. Encrypting titles and coordinates would have meant decrypting them on every render just to draw the map, which is a real cost when the server is doing the decrypting on every request anyway. The design sealed the part of the data most likely to hold the sensitive substance, the free text, and left the structural metadata readable. It is a defensible tradeoff for a first pass. It is also, read plainly, a database that told most of the story about someone's map before you cracked a single encrypted field.
+
+## A Container That Couldn't Start
+
+Fifteen minutes after the foundation commit, `18134cc` fixed two things at once, and only one of them was cosmetic. The cosmetic one: the host port mapping in `docker-compose.yml` moved from 8000 to 8080, with the container's internal port staying at 8000, to dodge a local conflict. CORS `allow_origins` moved to `http://localhost:8080` to match.
+
+The real bug was in the imports. `backend/main.py` imported from its sibling modules with bare names: `from database import ...` and `from config import ...`. That works when you run the script from inside the `backend/` directory. But the Dockerfile's `CMD` was `python -m uvicorn backend.main:app`, which treats `backend` as a package and expects package-qualified imports. Under that invocation `from database import ...` fails, because there is no top-level `database` module on the path, only `backend.database`. The commit changed the imports to `from backend.database import ...` and `from backend.config import ...`, and added an empty `backend/__init__.py` to make `backend` an actual package. Until this commit, the container as built by the Dockerfile could not have started at all. The foundation commit shipped a Docker setup that did not run in Docker.
+
+## A Login Bug, and a Map That Wasn't There Yet
+
+The fourth and final commit of the evening, `5db53b3`, touched one file: `frontend/js/app.js`, eleven lines. The symptom was that logging back in after logging out did not work. The fix added explicit `api.clearToken()` calls before a login attempt and when the login screen was shown, alongside explicit `localStorage.setItem('token', token)` on successful login and `localStorage.removeItem('token')` on logout. A stale token sitting in `localStorage` after logout was enough to block the next login from succeeding cleanly. Small bug, small fix, and the last commit for eight months.
+
+It is worth being precise about what existed when the evening ended, because it was not the product yet. `frontend/index.html` had a working login screen and an app shell, but the `#mindmap-container` div held only a placeholder:
+
+<CodeBlock
+  language="html"
+  filename="frontend/index.html (af7a158)"
+  code={`<div id="mindmap-container" class="mindmap-container">
+    <div class="mindmap-placeholder">
+        <h2>Welcome to Your Trauma Map</h2>
+        <p>This is your private space for mapping and understanding your experiences.</p>
+        <p>Click "Add Node" above to start creating your map.</p>
+    </div>
+</div>`}
+/>
+
+No map-rendering library was wired up. The accounts, the login flow, the JWT handling, and the Docker packaging were all finished and (after the port fix) functional, but the thing the product was named for, an actual visual map of nodes and connections, did not exist yet as anything more than a placeholder message.
+
+<CalloutBox type="info" title="One seam worth keeping an eye on">
+<p>`frontend/js/api.js` (90 lines) was already a thin wrapper: a single `APIClient` class with one `request(method, endpoint, data)` method around `fetch`, and one-line `get`, `post`, `put` and `delete` helpers calling it. Everything else in the frontend went through that one seam. It is a small detail from the first evening, but a thin, centralised request layer is exactly the kind of thing that makes a later rewrite of whatever sits on the other end of those calls cheaper than it would otherwise be.</p>
+</CalloutBox>
+
+## Eight Months
+
+The last commit of 2025 is `5db53b3`, timestamped 2025-09-26 20:49:06 -0700. The next commit in the repository's history, `4ac4151`, is timestamped 2026-05-30 02:18:13 -0700. That is roughly eight months with no commits of any kind between them. A git log can tell you that a gap exists. It cannot tell you why, and I am not going to guess.
+
+What the repository held when it went quiet was a complete, self-consistent, reasonably competent first version of a conventional web application: hashed passwords, salted key derivation, partial field-level encryption, a working container once the import path was fixed, and a frontend that could authenticate a user and show them an empty map.
+
+Every privacy weakness in it follows directly from the architecture it chose, which was a server holding the keys on the user's behalf. The password in server memory, the unencrypted structure of the map, the single point of failure in a forgotten password: none of these are mistakes against the pattern. They are the pattern, implemented correctly. That is the part worth sitting with, and it is why the next entry, eight months later, ends up somewhere very different on the question of where the keys should live.
